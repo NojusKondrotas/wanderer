@@ -1,0 +1,23 @@
+{
+  "name": "wanderer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NojusKondrotas/wanderer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NojusKondrotas/wanderer/issues"
+  },
+  "homepage": "https://github.com/NojusKondrotas/wanderer#readme",
+  "devDependencies": {
+    "electron": "^37.2.3"
+  }
+}
