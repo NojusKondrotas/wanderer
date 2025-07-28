@@ -7,9 +7,28 @@
     <link rel="stylesheet" href="whiteboard-style.css">
 </head>
 <body>
-    <div id="titlebar"></div>
-    <div id="whiteboard"></div>
-    <div id="context-menu"></div>
+    <div id="titlebar">
+        <button class="window-control" id="minimize-window">hi</button>
+        <button class="window-control" id="mazimize-window"></button>
+        <button class="window-control" id="close-window"></button>
+        <div class="window-control" id="global-configuration-menu"></div>
+    </div>
+    <div id="general-context-menu">
+        <button class="option-control" id="new-note">New Note</button>
+        <button class="option-control" id="new-notepad">New Notepad</button>
+        <button class="option-control" id="paste">Paste</button>
+        <button class="option-control" id="cut">Cut</button>
+        <button class="option-control" id="copy">Copy</button>
+    </div>
+    <div id="note-and-notepad-context-menu">
+        <button class="option-control" id="connect">Connect</button>
+        <button class="option-control" id="style">Style</button>
+        <button class="option-control" id="disconnect">Disconnect</button>
+    </div>
+
+    <div id="whiteboard">
+        <button style="position: absolute; top: 250px; left: 400px;">rando button</button>
+    </div>
 
     <script src="renderer.js"></script>
 </body>
