@@ -14,23 +14,16 @@ let tmp_elementOffset = {x: 0, y:0}, tmp_elementOrigin = {x: 0, y:0}
 
 let isContextMenuOpen = false
 
-function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, childCount, radius, angleOffset){
+function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     contextMenuBlueprint.style.left = `${centerX}px`
     contextMenuBlueprint.style.top = `${centerY}px`
 
     Array.from(contextMenuBlueprint.children).forEach((option, i) => {
-        const angleDeg = angleOffset + i * (360 / childCount);
+        const angleDeg = angleOffset + i * angleSize;
         const angleRad = angleDeg * Math.PI / 180;
 
-        let x = radius * Math.cos(angleRad);
-        let y = radius * Math.sin(angleRad);
-        if(childCount === 3){
-            y -= 25
-        }
-        if(childCount === 5){
-            x -= 10
-            y -= 10
-        }
+        let x = radius * Math.cos(angleRad) + xOffset;
+        let y = radius * Math.sin(angleRad) + yOffset;
 
         option.style.left = `${x}px`;
         option.style.top = `${y}px`;
@@ -43,11 +36,11 @@ Array.from(whiteboard.children).forEach(child => {
         e.stopPropagation()
         selectedElement = child
 
-        const bodyRect = document.body.getBoundingClientRect(),
-                elemRect = child.getBoundingClientRect(),
-                offsetX   = elemRect.left - bodyRect.left,
-                offsetY   = elemRect.top - bodyRect.top;
-        generateCircularContextMenu(offsetX + elemRect.width / 2, offsetY + elemRect.height / 2, noteAndNotepadContextMenu, 3, 85, 90)
+        // const bodyRect = document.body.getBoundingClientRect(),
+        //         elemRect = child.getBoundingClientRect(),
+        //         offsetX   = elemRect.left - bodyRect.left,
+        //         offsetY   = elemRect.top - bodyRect.top;
+        generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 90, 70, 0, 0, -34)
 
         generalContextMenu.style.display = 'none'
         noteAndNotepadContextMenu.style.display = 'block'
@@ -59,7 +52,7 @@ whiteboard.addEventListener('contextmenu', (e) => {
     e.preventDefault()
     e.stopPropagation()
 
-    generateCircularContextMenu(e.clientX, e.clientY, generalContextMenu, 5, 85, 234)
+    generateCircularContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
 
     noteAndNotepadContextMenu.style.display = 'none'
     generalContextMenu.style.display = 'block'
