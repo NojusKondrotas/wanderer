@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="whiteboard-style.css">
 </head>
 <body>
-    <div id="titlebar">
-        <button class="window-control" id="minimize-window">hi</button>
-        <button class="window-control" id="mazimize-window"></button>
-        <button class="window-control" id="close-window"></button>
-        <div class="window-control" id="global-configuration-menu"></div>
+    <div class="titlebar">
+        <div id="titlebar-visual">
+            <button class="window-control" id="fullscreen-window">1</button>
+            <button class="window-control" id="maximize-window">2</button>
+            <button class="window-control" onclick="window.close()" id="close-window">3</button>
+            <button class="window-control" id="global-configuration-menu">4</button>
+            <button class="window-control" id="lock-titlebar">5</button>
+        </div>
     </div>
     <div id="general-context-menu">
         <button class="option-control" id="new-note">New Note</button>

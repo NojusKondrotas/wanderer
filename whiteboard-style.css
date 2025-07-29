@@ -13,8 +13,48 @@ body {
 }
 
 
-#titlebar {
-    display: none;
+.titlebar {
+    position: fixed;
+    width: 100vw;
+    height: 40px;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+}
+
+#titlebar-visual {
+    display: flex;
+    justify-content: space-evenly;
+    position: relative;
+    height: 80px;
+    top: -120px;
+    background-color: rgba(143, 170, 176, 0.5);
+
+    transition: transform 85ms ease-out;
+}
+
+.titlebar:hover #titlebar-visual {
+    transform: translateY(120px);
+}
+
+.window-control {
+    width: 48px;
+    height: 48px;
+
+    border: 0;
+    border-radius: 24px;
+    background-color: rgba(176, 219, 219, 0);
+
+    transition: transform 50ms ease, background-color 50ms ease;
+
+    z-index: 100;
+}
+
+.window-control:is(:hover, :focus) {
+    background-color: rgba(176, 219, 219, 0.4);
+    transform: rotate(90deg);
 }
 
 #general-context-menu {
@@ -50,23 +90,4 @@ body {
 
 .option-control:is(:hover, :focus) {
     transform: translate(-50%, -50%) scale(1.15);
-}
-
-.window-control {
-    width: 32px;
-    height: 32px;
-
-    border: 0;
-    border-radius: 10px;
-    background-color: rgba(250, 250, 250, 0);
-
-    transition: background-color 175ms ease;
-
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-}
-
-.window-control:is(:hover, :focus) {
-    background-color: rgba(250, 250, 250, 1);
 }
