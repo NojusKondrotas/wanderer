@@ -31,14 +31,14 @@ body {
     align-items: stretch;
     position: relative;
     height: 80px;
-    top: -120px;
+    transform: translateY(-80px);
     background-color: rgba(143, 170, 176, 0.5);
 
     transition: transform 85ms ease-out;
 }
 
 .titlebar:hover #titlebar-visual {
-    transform: translateY(120px);
+    transform: translateY(0px);
 }
 
 .window-control {
@@ -51,7 +51,7 @@ body {
     flex: 1;
 
     background-color: rgba(0, 0, 0, 0);
-    border: 2px solid red;
+    border: 0;
 
     transition: transform 100ms ease;
 

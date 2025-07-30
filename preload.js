@@ -6,6 +6,4 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   isMaximized: () => ipcRenderer.invoke('is-maximized'),
   setMaximized: (flag) => ipcRenderer.invoke('set-maximized', flag),
   closeWindow: () => ipcRenderer.invoke('close-window'),
-  isTitlebarLocked: () => ipcRenderer.invoke('is-titlebar-locked'),
-  toggleTitlebarLock: (flag) => ipcRenderer.invoke('toggle-titlebar-lock', flag),
 })

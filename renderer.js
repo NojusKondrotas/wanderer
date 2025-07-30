@@ -1,4 +1,5 @@
-const titlebar = document.getElementById('titlebar')
+const titlebar = document.querySelector('.titlebar')
+const titlebarVisual = document.getElementById('titlebar-visual')
 const whiteboard = document.getElementById('whiteboard')
 const generalContextMenu = document.getElementById('general-context-menu')
 const noteAndNotepadContextMenu = document.getElementById('note-and-notepad-context-menu')
@@ -11,6 +12,8 @@ const elementOffsets = new WeakMap()
 let selectedElement = null
 let isDraggingElement = false
 let tmp_elementOffset = {x: 0, y:0}, tmp_elementOrigin = {x: 0, y:0}
+
+let isTitlebarLocked = false
 
 let isContextMenuOpen = false
 
@@ -87,9 +90,15 @@ document.getElementById('maximize-window').addEventListener('click', () => {
 
 document.getElementById('close-window').addEventListener('click', () => window.wandererAPI.closeWindow())
 
-document.getElementById('lock-titlebar').addEventListener('click', () => {
-    window.wandererAPI.isTitlebarLocked().then((isLocked) => {
-        if(isLocked) window.wandererAPI.toggleTitlebarLock(false)
-        else window.wandererAPI.toggleTitlebarLock(true)
-    })
-})
+function toggleTitlebarLock(){
+    if(isTitlebarLocked){
+        titlebarVisual.style.removeProperty('transform');
+
+        isTitlebarLocked = false
+    }
+    else{
+        titlebarVisual.style.setProperty('transform', 'translateY(0px)')
+
+        isTitlebarLocked = true
+    }
+}

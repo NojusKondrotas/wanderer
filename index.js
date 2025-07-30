@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-const path = require('path')
+const path = require('path');
+const { title } = require('process');
 
 let whiteboard, isWhiteboardTitlebarLocked = false;
 function initialiseApp(){
@@ -45,10 +46,3 @@ ipcMain.handle('set-maximized', (e, flag) => {
 })
 
 ipcMain.handle('close-window', () => whiteboard.close())
-
-ipcMain.handle('is-titlebar-locked', () => isWhiteboardTitlebarLocked)
-
-ipcMain.handle('toggle-titlebar-lock', (e, flag) => {
-    if(flag) return // logic
-    else return // logic
-})
