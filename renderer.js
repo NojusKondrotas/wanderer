@@ -33,7 +33,17 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
     });
 }
 
+function updateElementPosition(el) {
+    const elOffset = elementOffsets.get(el)
+    const x = boardOffset.x + elOffset.x
+    const y = boardOffset.y + elOffset.y
+
+    el.style.transform = `translate(${x}px, ${y}px)`
+}
+
 Array.from(whiteboard.children).forEach(child => {
+    elementOffsets.set(child, {x:0, y:0})
+
     child.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -48,6 +58,26 @@ Array.from(whiteboard.children).forEach(child => {
         generalContextMenu.style.display = 'none'
         noteAndNotepadContextMenu.style.display = 'block'
         isContextMenuOpen = true
+    })
+
+    child.addEventListener('mousedown', (e) => {
+        if(e.button !== 2){
+            e.stopPropagation()
+
+            if(isContextMenuOpen){
+                generalContextMenu.style.display = 'none'
+                noteAndNotepadContextMenu.style.display = 'none'
+                selectedElement = null
+                isContextMenuOpen = false
+                return;
+            }
+
+            tmp_elementOrigin = {x:e.clientX, y:e.clientY}
+            tmp_elementOffset = elementOffsets.get(child)
+
+            isDraggingElement = true
+            selectedElement = child
+        }
     })
 })
 
@@ -71,7 +101,41 @@ whiteboard.addEventListener('mousedown', (e) => {
             isContextMenuOpen = false
             return;
         }
+
+        isDraggingBoard = true
+        boardOrigin = {x:e.clientX, y:e.clientY}
     }
+})
+
+whiteboard.addEventListener('mousemove', (e) => {
+    if(isDraggingBoard){
+        const dx = e.clientX - boardOrigin.x
+        const dy = e.clientY - boardOrigin.y
+
+        boardOffset.x += dx
+        boardOffset.y += dy
+        boardOrigin = { x: e.clientX, y: e.clientY }
+        Array.from(whiteboard.children).forEach(child => {
+            updateElementPosition(child)
+        })
+    }
+    else if(isDraggingElement){
+        const dx = e.clientX - tmp_elementOrigin.x
+        const dy = e.clientY - tmp_elementOrigin.y
+
+        elementOffsets.set(selectedElement, {x: tmp_elementOffset.x + dx, y: tmp_elementOffset.y + dy})
+
+        updateElementPosition(selectedElement)
+    }
+})
+
+document.addEventListener('mouseup', () => {
+    if(selectedElement){
+        selectedElement = null
+        isDraggingElement = false
+    }
+
+    isDraggingBoard = false
 })
 
 document.getElementById('fullscreen-window').addEventListener('click', () => {
