@@ -9,11 +9,17 @@
 <body>
     <div class="titlebar">
         <div id="titlebar-visual">
-            <button class="window-control" id="fullscreen-window">1</button>
-            <button class="window-control" id="maximize-window">2</button>
-            <button class="window-control" onclick="window.close()" id="close-window">3</button>
-            <button class="window-control" id="global-configuration-menu">4</button>
-            <button class="window-control" id="lock-titlebar">5</button>
+            <div class="titlebar-stretcher"></div>
+            <div class="window-control-wrapper"><button class="window-control" id="fullscreen-window"><img src="res/fullscreen-window.png"></button></div>
+            <div class="titlebar-stretcher"></div>
+            <div class="window-control-wrapper"><button class="window-control" id="maximize-window"><img src="res/maximize-window.png"></button></div>
+            <div class="titlebar-stretcher"></div>
+            <div class="window-control-wrapper" onclick="window.close()"><button class="window-control" id="close-window"><img src="res/close-window.png"></button></div>
+            <div class="titlebar-stretcher"></div>
+            <div class="window-control-wrapper"><button class="window-control" id="global-configuration-menu"><img src="res/global-configuration.png"></button></div>
+            <div class="titlebar-stretcher"></div>
+            <div class="window-control-wrapper"><button class="window-control" id="lock-titlebar"><img src="res/titlebar-unlocked.png"></button></div>
+            <div class="titlebar-stretcher"></div>
         </div>
     </div>
     <div id="general-context-menu">
