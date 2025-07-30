@@ -21,6 +21,7 @@ body {
     left: 0;
     margin: 0;
     padding: 0;
+    
     z-index: 10;
 }
 
@@ -41,26 +42,6 @@ body {
 }
 
 .window-control {
-    width: 22.4px;
-    height: 22.4px;
-    padding: 0;
-
-    background-color: rgba(0, 0, 0, 0);
-    border: 0;
-
-    transition: transform 100ms ease;
-
-    z-index: 100;
-}
-
-.window-control > img {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-.window-control-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -68,9 +49,23 @@ body {
     padding: 0;
 
     flex: 1;
+
+    background-color: rgba(0, 0, 0, 0);
+    border: 2px solid red;
+
+    transition: transform 100ms ease;
+
+    z-index: 100;
 }
 
-.window-control-wrapper:is(:hover, :focus) .window-control {
+.window-control > img {
+    width: 22.4px;
+    height: 22.4px;
+    margin: 0;
+    padding: 0;
+}
+
+.window-control:is(:hover, :focus) {
     transform: scale(1.5);
 }
 
@@ -80,17 +75,17 @@ body {
 }
 
 #general-context-menu {
+    display: none;
     position: relative;
     width: 0;
     height: 0;
-    display: none;
 }
 
 #note-and-notepad-context-menu {
+    display: none;
     position: relative;
     width: 0;
     height: 0;
-    display: none;
 }
 
 .option-control {

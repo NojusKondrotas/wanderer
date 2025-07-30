@@ -70,3 +70,26 @@ whiteboard.addEventListener('mousedown', (e) => {
         }
     }
 })
+
+document.getElementById('fullscreen-window').addEventListener('click', () => {
+    window.wandererAPI.isFullscreen().then((isFull) => {
+        if(isFull) window.wandererAPI.setFullscreen(false)
+        else window.wandererAPI.setFullscreen(true)
+    })
+})
+
+document.getElementById('maximize-window').addEventListener('click', () => {
+    window.wandererAPI.isMaximized().then((isMax) => {
+        if(isMax) window.wandererAPI.setMaximized(false)
+        else window.wandererAPI.setMaximized(true)
+    })
+})
+
+document.getElementById('close-window').addEventListener('click', () => window.wandererAPI.closeWindow())
+
+document.getElementById('lock-titlebar').addEventListener('click', () => {
+    window.wandererAPI.isTitlebarLocked().then((isLocked) => {
+        if(isLocked) window.wandererAPI.toggleTitlebarLock(false)
+        else window.wandererAPI.toggleTitlebarLock(true)
+    })
+})
