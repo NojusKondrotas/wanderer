@@ -18,14 +18,13 @@ let isTitlebarLocked = false
 let isContextMenuOpen = false
 
 let wasNewElementAdded = false
+let currClipboardID = 0
 
-function configureNewChild(child){
-    const wbRect = whiteboard.getBoundingClientRect()
-        
+function configureNewChild(child, xOffset = 0, yOffset = 0){
     child.contentEditable = 'false'
     child.style.userSelect = 'none'
     const rect = child.getBoundingClientRect()
-    elementOffsets.set(child, {x: rect.left - wbRect.left - boardOffset.x, y: rect.top - wbRect.top - boardOffset.y})
+    elementOffsets.set(child, {x: rect.left - boardOffset.x + xOffset, y: rect.top - boardOffset.y + yOffset})
 
     child.addEventListener('contextmenu', (e) => {
         e.preventDefault()
@@ -105,8 +104,8 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
 
 function updateElementPosition(el) {
     const elOffset = elementOffsets.get(el)
-    const x = boardOffset.x + elOffset.x
-    const y = boardOffset.y + elOffset.y
+    let x = boardOffset.x + elOffset.x
+    let y = boardOffset.y + elOffset.y
 
     el.style.transform = `translate(${x}px, ${y}px)`
 }
@@ -116,6 +115,34 @@ function turnOffContextMenu(){
     noteAndNotepadContextMenu.style.display = 'none'
     selectedElement = null
     isContextMenuOpen = false
+}
+
+function generateRandom(minRange = 0x1000, maxRange = 0xffffffff){
+    return Math.floor(Math.random() * maxRange + minRange)
+}
+
+function IDClipboardContent(content, minRange = 0x1000, maxRange = 0xffffffff){
+    currClipboardID = generateRandom(minRange, maxRange).toString(16)
+    
+    let text = `[${currClipboardID}]` + content
+    
+    return text
+}
+
+function parseClipboardElement(elementIDHTML){
+    let HTMLContent, isHTML = false
+    if(element[0] === '['){
+        if(element.substring(1, element.indexOf(']')) === currClipboardID)
+            HTMLContent = element.substring(element.indexOf(']') + 1)
+        else return
+    }
+    
+    const template = document.createElement('template');
+    template.innerHTML = HTMLContent.trim();
+
+    const newElement = template.content.firstChild;
+
+    return {isHTML: isHTML, parsedString: newElement}
 }
 
 Array.from(whiteboard.children).forEach(child => configureNewChild(child))
@@ -213,29 +240,30 @@ document.getElementById('new-note').addEventListener('click', (e) => {
 
     const newNote = document.createElement('div')
     newNote.classList.add('note')
-    
-    const relativeX = e.clientX - wbRect.left - boardOffset.x
-    const relativeY = e.clientY - wbRect.top - boardOffset.y
 
-    elementOffsets.set(newNote, {x: relativeX, y: relativeY})
-    
-    whiteboard.appendChild(newNote)
+    configureNewChild(newNote, e.clientX, e.clientY)
 
     updateElementPosition(newNote)
-
-    configureNewChild(newNote)
+    
+    whiteboard.appendChild(newNote)
 })
 
 document.getElementById('copy').addEventListener('mousedown', (e) => {
     e.stopPropagation()
-    navigator.clipboard.writeText(selectedElement.outerHTML)
+    
+    text = IDClipboardContent(selectedElement.outerHTML)
 
-    turnOffContextMenu
+    navigator.clipboard.writeText(text)
+
+    turnOffContextMenu()
 })
 
 document.getElementById('cut').addEventListener('mousedown', (e) => {
     e.stopPropagation()
-    navigator.clipboard.writeText(selectedElement.outerHTML)
+    
+    text = IDClipboardContent(selectedElement.outerHTML)
+
+    navigator.clipboard.writeText(text)
     selectedElement.remove()
 
     turnOffContextMenu()
@@ -244,5 +272,18 @@ document.getElementById('cut').addEventListener('mousedown', (e) => {
 document.getElementById('paste').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
+    let clipboardContent
+
+    let {isHTML, parsedString} = parseClipboardElement(clipboardContent)
+    if(!isHTML){
+        // add note
+        return
+    }
+    
+    whiteboard.appendChild(newElement)
+
+    updateElementPosition(newElement)
+
+    configureNewChild(newElement)
     // logic
 })
