@@ -17,43 +17,20 @@ let isTitlebarLocked = false
 
 let isContextMenuOpen = false
 
-function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
-    contextMenuBlueprint.style.left = `${centerX}px`
-    contextMenuBlueprint.style.top = `${centerY}px`
+let wasNewElementAdded = false
 
-    Array.from(contextMenuBlueprint.children).forEach((option, i) => {
-        const angleDeg = angleOffset + i * angleSize;
-        const angleRad = angleDeg * Math.PI / 180;
-
-        let x = radius * Math.cos(angleRad) + xOffset;
-        let y = radius * Math.sin(angleRad) + yOffset;
-
-        option.style.left = `${x}px`;
-        option.style.top = `${y}px`;
-    });
-}
-
-function updateElementPosition(el) {
-    const elOffset = elementOffsets.get(el)
-    const x = boardOffset.x + elOffset.x
-    const y = boardOffset.y + elOffset.y
-
-    el.style.transform = `translate(${x}px, ${y}px)`
-}
-
-Array.from(whiteboard.children).forEach(child => {
+function configureNewChild(child){
+    const wbRect = whiteboard.getBoundingClientRect()
+        
     child.contentEditable = 'false'
-    elementOffsets.set(child, {x:0, y:0})
+    let rect = child.getBoundingClientRect()
+    elementOffsets.set(child, {x: rect.left - wbRect.left, y: rect.top - wbRect.top})
 
     child.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
         selectedElement = child
 
-        // const bodyRect = document.body.getBoundingClientRect(),
-        //         elemRect = child.getBoundingClientRect(),
-        //         offsetX   = elemRect.left - bodyRect.left,
-        //         offsetY   = elemRect.top - bodyRect.top;
         generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 90, 70, 0, 0, -34)
 
         generalContextMenu.style.display = 'none'
@@ -96,7 +73,7 @@ Array.from(whiteboard.children).forEach(child => {
             range = document.createRange()
             range.setStart(pos.offsetNode, pos.offset)
             range.collapse(true)
-            
+
             if (range) {
                 const sel = window.getSelection()
                 sel.removeAllRanges()
@@ -107,7 +84,33 @@ Array.from(whiteboard.children).forEach(child => {
         isWritingElement = true
         isDraggingElement = false
     })
-})
+}
+
+function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
+    contextMenuBlueprint.style.left = `${centerX}px`
+    contextMenuBlueprint.style.top = `${centerY}px`
+
+    Array.from(contextMenuBlueprint.children).forEach((option, i) => {
+        const angleDeg = angleOffset + i * angleSize;
+        const angleRad = angleDeg * Math.PI / 180;
+
+        let x = radius * Math.cos(angleRad) + xOffset;
+        let y = radius * Math.sin(angleRad) + yOffset;
+
+        option.style.left = `${x}px`;
+        option.style.top = `${y}px`;
+    });
+}
+
+function updateElementPosition(el) {
+    const elOffset = elementOffsets.get(el)
+    const x = boardOffset.x + elOffset.x
+    const y = boardOffset.y + elOffset.y
+
+    el.style.transform = `translate(${x}px, ${y}px)`
+}
+
+Array.from(whiteboard.children).forEach(child => configureNewChild(child))
 
 whiteboard.addEventListener('contextmenu', (e) => {
     e.preventDefault()
@@ -199,3 +202,21 @@ function toggleTitlebarLock(){
         isTitlebarLocked = true
     }
 }
+
+document.getElementById('new-note').addEventListener('click', (e) => {
+    const wbRect = whiteboard.getBoundingClientRect()
+
+    const newNote = document.createElement('div')
+    newNote.classList.add('note')
+    
+    const relativeX = e.clientX - wbRect.left - boardOffset.x
+    const relativeY = e.clientY - wbRect.top - boardOffset.y
+
+    elementOffsets.set(newNote, {x: relativeX, y: relativeY})
+    
+    whiteboard.appendChild(newNote)
+
+    updateElementPosition(newNote)
+
+    configureSingleChild(newNote)
+})
