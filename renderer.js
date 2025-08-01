@@ -25,7 +25,7 @@ function configureNewChild(child){
     child.contentEditable = 'false'
     child.style.userSelect = 'none'
     const rect = child.getBoundingClientRect()
-    elementOffsets.set(child, {x: rect.left - wbRect.left, y: rect.top - wbRect.top})
+    elementOffsets.set(child, {x: rect.left - wbRect.left - boardOffset.x, y: rect.top - wbRect.top - boardOffset.y})
 
     child.addEventListener('contextmenu', (e) => {
         e.preventDefault()
