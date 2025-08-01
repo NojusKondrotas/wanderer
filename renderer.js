@@ -23,15 +23,16 @@ function configureNewChild(child){
     const wbRect = whiteboard.getBoundingClientRect()
         
     child.contentEditable = 'false'
-    let rect = child.getBoundingClientRect()
+    const rect = child.getBoundingClientRect()
     elementOffsets.set(child, {x: rect.left - wbRect.left, y: rect.top - wbRect.top})
 
     child.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
         selectedElement = child
+        console.log(selectedElement)
 
-        generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 90, 70, 0, 0, -34)
+        generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 60, 80, 30, 0, -10)
 
         generalContextMenu.style.display = 'none'
         noteAndNotepadContextMenu.style.display = 'block'
@@ -219,4 +220,9 @@ document.getElementById('new-note').addEventListener('click', (e) => {
     updateElementPosition(newNote)
 
     configureSingleChild(newNote)
+})
+
+document.getElementById('copy').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(selectedElement.outerHTML)
 })
