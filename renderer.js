@@ -111,6 +111,13 @@ function updateElementPosition(el) {
     el.style.transform = `translate(${x}px, ${y}px)`
 }
 
+function turnOffContextMenu(){
+    generalContextMenu.style.display = 'none'
+    noteAndNotepadContextMenu.style.display = 'none'
+    selectedElement = null
+    isContextMenuOpen = false
+}
+
 Array.from(whiteboard.children).forEach(child => configureNewChild(child))
 
 whiteboard.addEventListener('contextmenu', (e) => {
@@ -127,10 +134,7 @@ whiteboard.addEventListener('contextmenu', (e) => {
 whiteboard.addEventListener('mousedown', (e) => {
     if(e.button !== 2){
         if(isContextMenuOpen){
-            generalContextMenu.style.display = 'none'
-            noteAndNotepadContextMenu.style.display = 'none'
-            selectedElement = null
-            isContextMenuOpen = false
+            turnOffContextMenu()
             return;
         }
 
@@ -225,4 +229,20 @@ document.getElementById('new-note').addEventListener('click', (e) => {
 document.getElementById('copy').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     navigator.clipboard.writeText(selectedElement.outerHTML)
+
+    turnOffContextMenu
+})
+
+document.getElementById('cut').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(selectedElement.outerHTML)
+    selectedElement.remove()
+
+    turnOffContextMenu()
+})
+
+document.getElementById('paste').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    // logic
 })
