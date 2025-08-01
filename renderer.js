@@ -23,16 +23,17 @@ function configureNewChild(child){
     const wbRect = whiteboard.getBoundingClientRect()
         
     child.contentEditable = 'false'
+    child.style.userSelect = 'none'
     const rect = child.getBoundingClientRect()
     elementOffsets.set(child, {x: rect.left - wbRect.left, y: rect.top - wbRect.top})
 
     child.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
+        if(isWritingElement) return
         selectedElement = child
-        console.log(selectedElement)
 
-        generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 60, 80, 30, 0, -10)
+        generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 60, -18, 0, -10)
 
         generalContextMenu.style.display = 'none'
         noteAndNotepadContextMenu.style.display = 'block'
@@ -42,6 +43,7 @@ function configureNewChild(child){
     child.addEventListener('mousedown', (e) => {
         if(e.button !== 2){
             e.stopPropagation()
+            if(isWritingElement) return
 
             if(isContextMenuOpen){
                 generalContextMenu.style.display = 'none'
@@ -50,8 +52,6 @@ function configureNewChild(child){
                 isContextMenuOpen = false
                 return;
             }
-
-            if(isWritingElement) return
             
             child.contentEditable = 'false'
             isWritingElement = false
@@ -219,7 +219,7 @@ document.getElementById('new-note').addEventListener('click', (e) => {
 
     updateElementPosition(newNote)
 
-    configureSingleChild(newNote)
+    configureNewChild(newNote)
 })
 
 document.getElementById('copy').addEventListener('mousedown', (e) => {
