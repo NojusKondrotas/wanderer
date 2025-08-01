@@ -10,7 +10,7 @@ let boardOffset = {x: 0, y:0}, boardOrigin = {x: 0, y: 0}
 const elementOffsets = new WeakMap()
 
 let selectedElement = null
-let isDraggingElement = false
+let isDraggingElement = false, isWritingElement = false
 let tmp_elementOffset = {x: 0, y:0}, tmp_elementOrigin = {x: 0, y:0}
 
 let isTitlebarLocked = false
@@ -42,6 +42,7 @@ function updateElementPosition(el) {
 }
 
 Array.from(whiteboard.children).forEach(child => {
+    child.contentEditable = 'false'
     elementOffsets.set(child, {x:0, y:0})
 
     child.addEventListener('contextmenu', (e) => {
@@ -72,12 +73,39 @@ Array.from(whiteboard.children).forEach(child => {
                 return;
             }
 
+            if(isWritingElement) return
+            
+            child.contentEditable = 'false'
+            isWritingElement = false
+
             tmp_elementOrigin = {x:e.clientX, y:e.clientY}
             tmp_elementOffset = elementOffsets.get(child)
 
             isDraggingElement = true
             selectedElement = child
         }
+    })
+
+    child.addEventListener('dblclick', (e) => {
+        child.contentEditable = 'true'
+
+        setTimeout(() => {
+            child.focus()
+
+            const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
+            range = document.createRange()
+            range.setStart(pos.offsetNode, pos.offset)
+            range.collapse(true)
+            
+            if (range) {
+                const sel = window.getSelection()
+                sel.removeAllRanges()
+                sel.addRange(range)
+            }
+        }, 0)
+
+        isWritingElement = true
+        isDraggingElement = false
     })
 })
 
@@ -101,6 +129,11 @@ whiteboard.addEventListener('mousedown', (e) => {
             isContextMenuOpen = false
             return;
         }
+
+        isWritingElement = false
+        Array.from(whiteboard.children).forEach((child) => {
+            child.contentEditable = 'false'
+        })
 
         isDraggingBoard = true
         boardOrigin = {x:e.clientX, y:e.clientY}
