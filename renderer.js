@@ -4,6 +4,7 @@ const whiteboard = document.getElementById('whiteboard')
 const generalContextMenu = document.getElementById('general-context-menu')
 const noteAndNotepadContextMenu = document.getElementById('note-and-notepad-context-menu')
 const optionsMenu = document.getElementById('global-configuration-menu')
+const optionCtrls = document.getElementsByClassName('option-control')
 
 const titlebarFullscreenCtrl = document.getElementById('fullscreen-window')
 const titlebarMaximizeCtrl = document.getElementById('maximize-window')
@@ -37,7 +38,7 @@ function configureNewChild(child){
         if(isWritingElement) return
         selectedElement = child
 
-        generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 60, -18, 0, -10)
+        generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 70, -18, 0, -10)
         contextMenuCenter = {x:e.clientX, y:e.clientY}
 
         generalContextMenu.style.display = 'none'
@@ -186,6 +187,39 @@ function parseClipboardElement(elementIDHTML){
 }
 
 Array.from(whiteboard.children).forEach(child => {configureNewChild(child); elementOffsets.set(child, { x: 0, y: 0 })})
+
+document.addEventListener('mousemove', (e) => {
+    // Only update scales if the context menu is open
+    if (!isContextMenuOpen) return;
+
+    Array.from(optionCtrls).forEach(ctrl => {
+        const rect = ctrl.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const distance = Math.sqrt(Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2));
+
+        if (distance > 100) {
+            ctrl.style.transform = 'translate(-50%, -50%) scale(1)';
+            return;
+        }
+
+        let factor
+        if(distance < 20) factor = 1.2
+        else{
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+
+            let t = (distance - 20) / (100 - 20);
+            t = Math.min(Math.max(t, 0), 1);
+
+            factor = 1 + 0.2 * (1 - easeOutCubic(t));
+        }
+        ctrl.style.transform = `translate(-50%, -50%) scale(${factor})`;
+    });
+});
+
 
 whiteboard.addEventListener('contextmenu', (e) => {
     e.preventDefault()
