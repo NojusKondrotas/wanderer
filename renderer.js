@@ -1,7 +1,6 @@
 const optionsMenu = document.getElementById('global-configuration-menu')
 
 let wasNewElementAdded = false
-let currClipboardID = 0
 
 function configureNewChild(child){
     if(!child.classList.contains('note')) return
@@ -92,37 +91,6 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     newNote.textContent = content
 
     createNewElement(container, newNote, xOffset, yOffset)
-}
-
-function generateRandom(minRange = 0x1000, maxRange = 0xffffffff){
-    return Math.floor(Math.random() * maxRange + minRange)
-}
-
-function IDClipboardContent(content, minRange = 0x1000, maxRange = 0xffffffff){
-    currClipboardID = generateRandom(minRange, maxRange).toString(16)
-    
-    let text = `[${currClipboardID}]` + content
-    
-    return text
-}
-
-function parseClipboardElement(elementIDHTML){
-    let HTMLContent, isHTML = false
-    
-    if(elementIDHTML[0] === '['){
-        if(elementIDHTML.substring(1, elementIDHTML.indexOf(']')) === currClipboardID)
-            HTMLContent = elementIDHTML.substring(elementIDHTML.indexOf(']') + 1)
-        else return {isHTML: isHTML, parsedString: elementIDHTML}
-    }
-    else return {isHTML: isHTML, parsedString: elementIDHTML}
-    isHTML = true
-    
-    const template = document.createElement('template');
-    template.innerHTML = HTMLContent.trim();
-
-    const newElement = template.content;
-
-    return {isHTML: isHTML, parsedString: newElement}
 }
 
 Array.from(whiteboard.children).forEach(child => {configureNewChild(child); elementOffsets.set(child, { x: 0, y: 0 })})
