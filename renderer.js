@@ -110,6 +110,22 @@ function updateElementPosition(el) {
     el.style.transform = `translate(${x}px, ${y}px)`
 }
 
+function createNewElement(container, el, xOffset = 0, yOffset = 0){
+    configureNewChild(el, xOffset, yOffset)
+
+    updateElementPosition(el)
+    
+    container.appendChild(el)
+}
+
+function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
+    const newNote = document.createElement('div')
+    newNote.classList.add('note')
+    newNote.textContent = content
+
+    createNewElement(container, newNote, xOffset, yOffset)
+}
+
 function turnOffContextMenu(){
     generalContextMenu.style.display = 'none'
     noteAndNotepadContextMenu.style.display = 'none'
@@ -131,16 +147,19 @@ function IDClipboardContent(content, minRange = 0x1000, maxRange = 0xffffffff){
 
 function parseClipboardElement(elementIDHTML){
     let HTMLContent, isHTML = false
-    if(element[0] === '['){
-        if(element.substring(1, element.indexOf(']')) === currClipboardID)
-            HTMLContent = element.substring(element.indexOf(']') + 1)
-        else return
+    
+    if(elementIDHTML[0] === '['){
+        if(elementIDHTML.substring(1, elementIDHTML.indexOf(']')) === currClipboardID)
+            HTMLContent = elementIDHTML.substring(elementIDHTML.indexOf(']') + 1)
+        else return {isHTML: isHTML, parsedString: elementIDHTML}
     }
+    else return {isHTML: isHTML, parsedString: elementIDHTML}
+    isHTML = true
     
     const template = document.createElement('template');
     template.innerHTML = HTMLContent.trim();
 
-    const newElement = template.content.firstChild;
+    const newElement = template.content;
 
     return {isHTML: isHTML, parsedString: newElement}
 }
@@ -235,18 +254,7 @@ function toggleTitlebarLock(){
     }
 }
 
-document.getElementById('new-note').addEventListener('click', (e) => {
-    const wbRect = whiteboard.getBoundingClientRect()
-
-    const newNote = document.createElement('div')
-    newNote.classList.add('note')
-
-    configureNewChild(newNote, e.clientX, e.clientY)
-
-    updateElementPosition(newNote)
-    
-    whiteboard.appendChild(newNote)
-})
+document.getElementById('new-note').addEventListener('click', (e) => createNewNote(whiteboard, e.clientX, e.clientY))
 
 document.getElementById('copy').addEventListener('mousedown', (e) => {
     e.stopPropagation()
@@ -269,21 +277,15 @@ document.getElementById('cut').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('paste').addEventListener('mousedown', (e) => {
+document.getElementById('paste').addEventListener('mousedown', async (e) => {
     e.stopPropagation()
 
-    let clipboardContent
+    let clipboardContent = await navigator.clipboard.readText();
 
     let {isHTML, parsedString} = parseClipboardElement(clipboardContent)
-    if(!isHTML){
-        // add note
-        return
-    }
-    
-    whiteboard.appendChild(newElement)
+    if(!isHTML) return createNewNote(whiteboard, parsedString, e.clientX, e.clientY)
 
-    updateElementPosition(newElement)
-
-    configureNewChild(newElement)
-    // logic
+    Array.from(parsedString.children).forEach(child => {
+        createNewElement(whiteboard, child, e.clientX, e.clientY)
+    })
 })
