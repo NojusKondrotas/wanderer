@@ -28,3 +28,34 @@ function turnOffContextMenu(){
     selectedElement = null
     isContextMenuOpen = false
 }
+
+document.addEventListener('mousemove', (e) => {
+    if (!isContextMenuOpen) return
+
+    Array.from(optionCtrls).forEach(ctrl => {
+        const rect = ctrl.getBoundingClientRect()
+        const centerX = rect.left + rect.width / 2
+        const centerY = rect.top + rect.height / 2
+
+        const distance = Math.sqrt(Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2))
+
+        if (distance > 100) {
+            ctrl.style.transform = 'translate(-50%, -50%) scale(1)'
+            return
+        }
+
+        let factor
+        if(distance < 20) factor = 1.2
+        else{
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3)
+            }
+
+            let t = (distance - 20) / (100 - 20)
+            t = Math.min(Math.max(t, 0), 1)
+
+            factor = 1 + 0.2 * (1 - easeOutCubic(t))
+        }
+        ctrl.style.transform = `translate(-50%, -50%) scale(${factor})`
+    })
+})

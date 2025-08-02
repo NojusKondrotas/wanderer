@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>wanderer</title>
-    <link rel="stylesheet" href="whiteboard-style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="titlebar">
         <div id="titlebar-visual">
             <div class="titlebar-stretcher"></div>
-            <button class="window-control" id="fullscreen-window"><img src="res/fullscreen-window.png"></button>
+            <button class="window-control" id="fullscreen-window"><img src="../res/fullscreen-window.png"></button>
             <div class="titlebar-stretcher"></div>
-            <button class="window-control" id="maximize-window"><img src="res/maximize-window.png"></button>
+            <button class="window-control" id="maximize-window"><img src="../res/maximize-window.png"></button>
             <div class="titlebar-stretcher"></div>
-            <button class="window-control" id="close-window"><img src="res/close-window.png"></button>
+            <button class="window-control" id="close-window"><img src="../res/close-window.png"></button>
             <div class="titlebar-stretcher"></div>
-            <button class="window-control" id="global-configuration-menu"><img src="res/global-configuration.png"></button>
+            <button class="window-control" id="global-configuration-menu"><img src="../res/global-configuration.png"></button>
             <div class="titlebar-stretcher"></div>
-            <button class="window-control" id="lock-titlebar"><img src="res/titlebar-unlocked.png"></button>
+            <button class="window-control" id="lock-titlebar"><img src="../res/titlebar-unlocked.png"></button>
             <div class="titlebar-stretcher"></div>
         </div>
     </div>
@@ -39,7 +39,7 @@
 
     <div id="whiteboard">
         <div class="svg-container">
-            <svg height="200" width="300" draggable="false">
+            <svg height="200" width="300">
                 <line x1="0" y1="0" x2="300" y2="200" style="stroke:red;stroke-width:2" />
             </svg>
         </div>
@@ -47,6 +47,10 @@
         <div class="note"></div>
     </div>
 
-    <script src="renderer.js"></script>
+    <script src="../ui/context-menu.js"></script>
+    <script src="../ui/whiteboard-positioning.js"></script>
+    <script src="../ui/titlebar.js"></script>
+    <script src="../runtime/clipboard.js"></script>
+    <script src="../renderer.js"></script>
 </body>
 </html>
