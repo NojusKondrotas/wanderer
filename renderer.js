@@ -5,6 +5,11 @@ const generalContextMenu = document.getElementById('general-context-menu')
 const noteAndNotepadContextMenu = document.getElementById('note-and-notepad-context-menu')
 const optionsMenu = document.getElementById('global-configuration-menu')
 
+const titlebarFullscreenCtrl = document.getElementById('fullscreen-window')
+const titlebarMaximizeCtrl = document.getElementById('maximize-window')
+const titlebarCloseCtrl = document.getElementById('close-window')
+const titlebarLockCtrl = document.getElementById('lock-titlebar')
+
 let isDraggingBoard = false
 let boardOffset = {x: 0, y:0}, boardOrigin = {x: 0, y: 0}
 const elementOffsets = new WeakMap()
@@ -225,23 +230,27 @@ document.addEventListener('mouseup', () => {
     isDraggingBoard = false
 })
 
-document.getElementById('fullscreen-window').addEventListener('click', () => {
+titlebarFullscreenCtrl.addEventListener('click', () => {
     window.wandererAPI.isFullscreen().then((isFull) => {
         if(isFull) window.wandererAPI.setFullscreen(false)
         else window.wandererAPI.setFullscreen(true)
     })
+
+    titlebarFullscreenCtrl.blur()
 })
 
-document.getElementById('maximize-window').addEventListener('click', () => {
+titlebarMaximizeCtrl.addEventListener('click', () => {
     window.wandererAPI.isMaximized().then((isMax) => {
         if(isMax) window.wandererAPI.setMaximized(false)
         else window.wandererAPI.setMaximized(true)
     })
+
+    titlebarMaximizeCtrl.blur()
 })
 
-document.getElementById('close-window').addEventListener('click', () => window.wandererAPI.closeWindow())
+titlebarCloseCtrl.addEventListener('click', () => window.wandererAPI.closeWindow())
 
-function toggleTitlebarLock(){
+titlebarLockCtrl.addEventListener('click', () => {
     if(isTitlebarLocked){
         titlebarVisual.style.removeProperty('transform');
 
@@ -252,7 +261,9 @@ function toggleTitlebarLock(){
 
         isTitlebarLocked = true
     }
-}
+
+    titlebarLockCtrl.blur()
+})
 
 document.getElementById('new-note').addEventListener('click', (e) => createNewNote(whiteboard, e.clientX, e.clientY))
 
