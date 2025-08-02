@@ -27,6 +27,7 @@ let wasNewElementAdded = false
 let currClipboardID = 0
 
 function configureNewChild(child){
+    if(!child.classList.contains('note')) return
     child.contentEditable = 'false'
     child.style.userSelect = 'none'
 
@@ -109,17 +110,21 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
 
 function updateElementPosition(el) {
     const elOffset = elementOffsets.get(el)
-    if (!elOffset) elementOffsets.set(el, { x: 0, y: 0 });
+    if (!elOffset) elementOffsets.set(el, { x: 0, y: 0 })
 
     let x = boardOffset.x + elOffset.x
     let y = boardOffset.y + elOffset.y
 
-    el.style.transform = `translate(${x}px, ${y}px)`
+    if (el instanceof SVGElement) {
+        el.setAttribute('transform', `translate(${x}, ${y})`)
+    } else if (el instanceof HTMLElement) {
+        el.style.transform = `translate(${x}px, ${y}px)`
+    }
 }
 
 function createNewElement(container, el, centerX = 0, centerY = 0){
-    el.style.visibility = 'hidden'
     container.appendChild(el)
+    el.style.visibility = 'hidden'
 
     const rect = el.getBoundingClientRect()
 
@@ -180,7 +185,7 @@ function parseClipboardElement(elementIDHTML){
     return {isHTML: isHTML, parsedString: newElement}
 }
 
-Array.from(whiteboard.children).forEach(child => configureNewChild(child))
+Array.from(whiteboard.children).forEach(child => {configureNewChild(child); elementOffsets.set(child, { x: 0, y: 0 })})
 
 whiteboard.addEventListener('contextmenu', (e) => {
     e.preventDefault()
@@ -311,4 +316,10 @@ document.getElementById('paste').addEventListener('mousedown', async (e) => {
     Array.from(parsedString.children).forEach(child => {
         createNewElement(whiteboard, child, contextMenuCenter.x, contextMenuCenter.y)
     })
+})
+
+document.getElementById('connect-interelement').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    
 })
