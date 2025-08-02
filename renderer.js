@@ -21,15 +21,14 @@ let tmp_elementOffset = {x: 0, y:0}, tmp_elementOrigin = {x: 0, y:0}
 let isTitlebarLocked = false
 
 let isContextMenuOpen = false
+let contextMenuCenter = {x:0, y:0}
 
 let wasNewElementAdded = false
 let currClipboardID = 0
 
-function configureNewChild(child, xOffset = 0, yOffset = 0){
+function configureNewChild(child){
     child.contentEditable = 'false'
     child.style.userSelect = 'none'
-    const rect = child.getBoundingClientRect()
-    elementOffsets.set(child, {x: rect.left - boardOffset.x + xOffset, y: rect.top - boardOffset.y + yOffset})
 
     child.addEventListener('contextmenu', (e) => {
         e.preventDefault()
@@ -38,6 +37,7 @@ function configureNewChild(child, xOffset = 0, yOffset = 0){
         selectedElement = child
 
         generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 60, -18, 0, -10)
+        contextMenuCenter = {x:e.clientX, y:e.clientY}
 
         generalContextMenu.style.display = 'none'
         noteAndNotepadContextMenu.style.display = 'block'
@@ -109,18 +109,29 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
 
 function updateElementPosition(el) {
     const elOffset = elementOffsets.get(el)
+    if (!elOffset) elementOffsets.set(el, { x: 0, y: 0 });
+
     let x = boardOffset.x + elOffset.x
     let y = boardOffset.y + elOffset.y
 
     el.style.transform = `translate(${x}px, ${y}px)`
 }
 
-function createNewElement(container, el, xOffset = 0, yOffset = 0){
-    configureNewChild(el, xOffset, yOffset)
+function createNewElement(container, el, centerX = 0, centerY = 0){
+    el.style.visibility = 'hidden'
+    container.appendChild(el)
+
+    const rect = el.getBoundingClientRect()
+
+    const boardSpaceX = centerX - boardOffset.x - rect.width / 2
+    const boardSpaceY = centerY - boardOffset.y - rect.height / 2
+
+    elementOffsets.set(el, { x: boardSpaceX, y: boardSpaceY })
+    configureNewChild(el)
 
     updateElementPosition(el)
-    
-    container.appendChild(el)
+
+    el.style.visibility = 'visible'
 }
 
 function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
@@ -176,6 +187,7 @@ whiteboard.addEventListener('contextmenu', (e) => {
     e.stopPropagation()
 
     generateCircularContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
+    contextMenuCenter = {x:e.clientX, y:e.clientY}
 
     noteAndNotepadContextMenu.style.display = 'none'
     generalContextMenu.style.display = 'block'
@@ -265,7 +277,7 @@ titlebarLockCtrl.addEventListener('click', () => {
     titlebarLockCtrl.blur()
 })
 
-document.getElementById('new-note').addEventListener('click', (e) => createNewNote(whiteboard, e.clientX, e.clientY))
+document.getElementById('new-note').addEventListener('click', (e) => createNewNote(whiteboard, '', contextMenuCenter.x, contextMenuCenter.y))
 
 document.getElementById('copy').addEventListener('mousedown', (e) => {
     e.stopPropagation()
@@ -294,9 +306,9 @@ document.getElementById('paste').addEventListener('mousedown', async (e) => {
     let clipboardContent = await navigator.clipboard.readText();
 
     let {isHTML, parsedString} = parseClipboardElement(clipboardContent)
-    if(!isHTML) return createNewNote(whiteboard, parsedString, e.clientX, e.clientY)
+    if(!isHTML) return createNewNote(whiteboard, parsedString, contextMenuCenter.x, contextMenuCenter.y)
 
     Array.from(parsedString.children).forEach(child => {
-        createNewElement(whiteboard, child, e.clientX, e.clientY)
+        createNewElement(whiteboard, child, contextMenuCenter.x, contextMenuCenter.y)
     })
 })
