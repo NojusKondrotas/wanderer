@@ -31,6 +31,10 @@ body {
     height: 100%;
 }
 
+svg {
+    overflow: visible;
+}
+
 #titlebar-visual {
     display: flex;
     justify-content: stretch;
