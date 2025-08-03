@@ -59,3 +59,57 @@ document.addEventListener('mousemove', (e) => {
         ctrl.style.transform = `translate(-50%, -50%) scale(${factor})`
     })
 })
+
+whiteboard.addEventListener('contextmenu', (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    generateCircularContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
+    contextMenuCenter = {x:e.clientX, y:e.clientY}
+
+    noteAndNotepadContextMenu.style.display = 'none'
+    generalContextMenu.style.display = 'block'
+    isContextMenuOpen = true
+})
+
+document.getElementById('new-note').addEventListener('click', (e) => createNewNote(whiteboard, '', contextMenuCenter.x, contextMenuCenter.y))
+
+document.getElementById('copy').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+    
+    text = IDClipboardContent(selectedElement.outerHTML)
+
+    navigator.clipboard.writeText(text)
+
+    turnOffContextMenu()
+})
+
+document.getElementById('cut').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+    
+    text = IDClipboardContent(selectedElement.outerHTML)
+
+    navigator.clipboard.writeText(text)
+    selectedElement.remove()
+
+    turnOffContextMenu()
+})
+
+document.getElementById('paste').addEventListener('mousedown', async (e) => {
+    e.stopPropagation()
+
+    let clipboardContent = await navigator.clipboard.readText();
+
+    let {isHTML, parsedString} = parseClipboardElement(clipboardContent)
+    if(!isHTML) return createNewNote(whiteboard, parsedString, contextMenuCenter.x, contextMenuCenter.y)
+
+    Array.from(parsedString.children).forEach(child => {
+        createNewElement(whiteboard, child, contextMenuCenter.x, contextMenuCenter.y)
+    })
+})
+
+document.getElementById('connect-interelement').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    
+})
