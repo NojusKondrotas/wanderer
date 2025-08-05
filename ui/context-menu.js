@@ -184,9 +184,14 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
 
         let targetNote = null
         for (const el of elementsAtPoint) {
-            if (el.classList && el.classList.contains('note')) {
-                targetNote = el
-                break
+            if (
+                el.classList?.contains('note') &&
+                !el.closest('#general-context-menu') &&
+                !el.closest('#note-and-notepad-context-menu')
+            ) {
+                targetNote = el;
+                console.log('Snapping note reciepient:', targetNote);
+                break;
             }
         }
 
@@ -219,5 +224,8 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
 
     document.addEventListener('mousemove', mouseMoveHandler)
     document.addEventListener('mousedown', mouseDownHandler)
+    setTimeout(() => {
     document.addEventListener('mouseup', mouseUpHandler)
+    }, 500)
+
 })
