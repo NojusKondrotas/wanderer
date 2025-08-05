@@ -1,10 +1,9 @@
 const whiteboard = document.getElementById('whiteboard')
 
 let isDraggingBoard = false
-let boardOffset = {x: 0, y:0}, boardOrigin = {x: 0, y: 0}
+let boardOffset = {x: 0, y:0}, boardOrigin = {x: 0, y: 0}, dragOrigin = {x:0, y:0}
 const elementOffsets = new WeakMap()
 
-let selectedElement = null
 let isDraggingElement = false, isWritingElement = false
 let tmp_elementOffset = {x: 0, y:0}, tmp_elementOrigin = {x: 0, y:0}
 
@@ -15,14 +14,10 @@ function updateElementPosition(el) {
     let x = boardOffset.x + elOffset.x
     let y = boardOffset.y + elOffset.y
 
-    if (el instanceof SVGElement) {
-        el.setAttribute('transform', `translate(${x}, ${y})`)
-    } else if (el instanceof HTMLElement) {
-        el.style.transform = `translate(${x}px, ${y}px)`
-    }
+    el.style.transform = `translate(${x}px, ${y}px)`
 }
 
-whiteboard.addEventListener('mousedown', (e) => {
+document.addEventListener('mousedown', (e) => {
     if(e.button !== 2){
         if(isContextMenuOpen){
             turnOffContextMenu()
@@ -36,10 +31,11 @@ whiteboard.addEventListener('mousedown', (e) => {
 
         isDraggingBoard = true
         boardOrigin = {x:e.clientX, y:e.clientY}
+        dragOrigin = {x:e.clientX, y:e.clientY}
     }
 })
 
-whiteboard.addEventListener('mousemove', (e) => {
+document.addEventListener('mousemove', (e) => {
     if(isDraggingBoard){
         const dx = e.clientX - boardOrigin.x
         const dy = e.clientY - boardOrigin.y
@@ -61,11 +57,15 @@ whiteboard.addEventListener('mousemove', (e) => {
     }
 })
 
-document.addEventListener('mouseup', () => {
+document.addEventListener('mouseup', (e) => {
     if(selectedElement){
         selectedElement = null
         isDraggingElement = false
     }
+
+    if(e.clientX - dragOrigin.x <= 5 || e.clientY - dragOrigin.y <= 5)
+        isDrawingConnection = false
+    else isDrawingConnection = true
 
     isDraggingBoard = false
 })

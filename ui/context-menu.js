@@ -3,8 +3,14 @@ const noteAndNotepadContextMenu = document.getElementById('note-and-notepad-cont
 
 const optionCtrls = document.getElementsByClassName('option-control')
 
+let selectedElement = null
+
 let isContextMenuOpen = false
 let contextMenuCenter = {x:0, y:0}
+
+let elementConnections = new WeakMap()
+let isDrawingConnection = false
+let drawnLine = null
 
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     contextMenuBlueprint.style.left = `${centerX}px`
@@ -109,7 +115,90 @@ document.getElementById('paste').addEventListener('mousedown', async (e) => {
 })
 
 document.getElementById('connect-interelement').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
 
-    
-})
+    if (!selectedElement) return;
+
+    isDrawingConnection = true;
+
+    let connections = elementConnections.get(selectedElement);
+    if (!connections) {
+        elementConnections.set(selectedElement, []);
+        connections = elementConnections.get(selectedElement);
+    }
+
+    const div = document.createElement('div');
+    div.classList.add('svg-container');
+
+    drawnLine = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+    const line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+
+    const startRect = selectedElement.getBoundingClientRect();
+    const whiteboardRect = whiteboard.getBoundingClientRect();
+    const initialBoardOffset = { x: boardOffset.x, y: boardOffset.y };
+
+    const x1 = (startRect.left + startRect.width / 2);
+    const y1 = (startRect.top + startRect.height / 2);
+
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x1);
+    line.setAttribute('y2', y1);
+    line.setAttribute("stroke", "red");
+    line.setAttribute("stroke-width", "2");
+
+    drawnLine.appendChild(line);
+    div.appendChild(drawnLine);
+    connections.push(div);
+    createNewElement(whiteboard, div);
+
+    let dragStart = null;
+    let mouseDown = false;
+
+    function mouseMoveHandler(ev) {
+        if (!dragStart) dragStart = { x: ev.clientX, y: ev.clientY };
+
+        const dx = boardOffset.x - initialBoardOffset.x;
+        const dy = boardOffset.y - initialBoardOffset.y;
+
+        const localX = ev.clientX - dx;
+        const localY = ev.clientY - dy;
+
+        line.setAttribute('x2', localX);
+        line.setAttribute('y2', localY);
+    }
+
+    function mouseDownHandler(ev) {
+        mouseDown = true;
+        dragStart = { x: ev.clientX, y: ev.clientY };
+    }
+
+    function mouseUpHandler(ev) {
+        const movedX = Math.abs(ev.clientX - dragStart.x);
+        const movedY = Math.abs(ev.clientY - dragStart.y);
+        const draggedEnough = movedX > 5 || movedY > 5;
+
+        const dx = boardOffset.x - initialBoardOffset.x;
+        const dy = boardOffset.y - initialBoardOffset.y;
+
+        const localX = ev.clientX - dx;
+        const localY = ev.clientY - dy;
+
+        line.setAttribute('x2', localX);
+        line.setAttribute('y2', localY);
+
+        isDrawingConnection = false;
+
+        if(!draggedEnough)
+        {
+            document.removeEventListener('mousemove', mouseMoveHandler);
+            document.removeEventListener('mousedown', mouseDownHandler);
+            document.removeEventListener('mouseup', mouseUpHandler);
+        }
+    }
+
+    // Activate drawing
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mousedown', mouseDownHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+});
