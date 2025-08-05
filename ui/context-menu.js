@@ -9,7 +9,6 @@ let isContextMenuOpen = false
 let contextMenuCenter = {x:0, y:0}
 
 let elementConnections = new WeakMap()
-let isDrawingConnection = false
 let drawnLine = null
 
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
@@ -17,14 +16,14 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
     contextMenuBlueprint.style.top = `${centerY}px`
 
     Array.from(contextMenuBlueprint.children).forEach((option, i) => {
-        const angleDeg = angleOffset + i * angleSize;
-        const angleRad = angleDeg * Math.PI / 180;
+        const angleDeg = angleOffset + i * angleSize
+        const angleRad = angleDeg * Math.PI / 180
 
-        let x = radius * Math.cos(angleRad) + xOffset;
-        let y = radius * Math.sin(angleRad) + yOffset;
+        let x = radius * Math.cos(angleRad) + xOffset
+        let y = radius * Math.sin(angleRad) + yOffset
 
-        option.style.left = `${x}px`;
-        option.style.top = `${y}px`;
+        option.style.left = `${x}px`
+        option.style.top = `${y}px`
     });
 }
 
@@ -104,7 +103,7 @@ document.getElementById('cut').addEventListener('mousedown', (e) => {
 document.getElementById('paste').addEventListener('mousedown', async (e) => {
     e.stopPropagation()
 
-    let clipboardContent = await navigator.clipboard.readText();
+    let clipboardContent = await navigator.clipboard.readText()
 
     let {isHTML, parsedString} = parseClipboardElement(clipboardContent)
     if(!isHTML) return createNewNote(whiteboard, parsedString, contextMenuCenter.x, contextMenuCenter.y)
@@ -115,90 +114,110 @@ document.getElementById('paste').addEventListener('mousedown', async (e) => {
 })
 
 document.getElementById('connect-interelement').addEventListener('mousedown', (e) => {
-    e.stopPropagation();
+    e.stopPropagation()
 
-    if (!selectedElement) return;
+    if (!selectedElement) return
 
-    isDrawingConnection = true;
-
-    let connections = elementConnections.get(selectedElement);
+    let connections = elementConnections.get(selectedElement)
     if (!connections) {
-        elementConnections.set(selectedElement, []);
-        connections = elementConnections.get(selectedElement);
+        elementConnections.set(selectedElement, [])
+        connections = elementConnections.get(selectedElement)
     }
 
-    const div = document.createElement('div');
-    div.classList.add('svg-container');
+    const div = document.createElement('div')
+    div.classList.add('svg-container')
 
-    drawnLine = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-    const line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+    drawnLine = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
+    const line = document.createElementNS("http://www.w3.org/2000/svg", 'line')
 
-    const startRect = selectedElement.getBoundingClientRect();
-    const whiteboardRect = whiteboard.getBoundingClientRect();
-    const initialBoardOffset = { x: boardOffset.x, y: boardOffset.y };
+    const startRect = selectedElement.getBoundingClientRect()
+    const initialBoardOffset = { x: boardOffset.x, y: boardOffset.y }
 
-    const x1 = (startRect.left + startRect.width / 2);
-    const y1 = (startRect.top + startRect.height / 2);
+    const x1 = (startRect.left + startRect.width / 2)
+    const y1 = (startRect.top + startRect.height / 2)
 
-    line.setAttribute('x1', x1);
-    line.setAttribute('y1', y1);
-    line.setAttribute('x2', x1);
-    line.setAttribute('y2', y1);
-    line.setAttribute("stroke", "red");
-    line.setAttribute("stroke-width", "2");
+    line.setAttribute('x1', x1)
+    line.setAttribute('y1', y1)
+    line.setAttribute('x2', x1)
+    line.setAttribute('y2', y1)
+    line.setAttribute("stroke", "red")
+    line.setAttribute("stroke-width", "2")
 
-    drawnLine.appendChild(line);
-    div.appendChild(drawnLine);
-    connections.push(div);
-    createNewElement(whiteboard, div);
+    drawnLine.appendChild(line)
+    div.appendChild(drawnLine)
+    connections.push(div)
+    createNewElement(whiteboard, div)
 
-    let dragStart = null;
-    let mouseDown = false;
+    let dragStart = null
+    let mouseDown = false
 
     function mouseMoveHandler(ev) {
-        if (!dragStart) dragStart = { x: ev.clientX, y: ev.clientY };
+        if (!dragStart) dragStart = { x: ev.clientX, y: ev.clientY }
 
-        const dx = boardOffset.x - initialBoardOffset.x;
-        const dy = boardOffset.y - initialBoardOffset.y;
+        const dx = boardOffset.x - initialBoardOffset.x
+        const dy = boardOffset.y - initialBoardOffset.y
 
-        const localX = ev.clientX - dx;
-        const localY = ev.clientY - dy;
+        const localX = ev.clientX - dx
+        const localY = ev.clientY - dy
 
-        line.setAttribute('x2', localX);
-        line.setAttribute('y2', localY);
+        line.setAttribute('x2', localX)
+        line.setAttribute('y2', localY)
     }
 
     function mouseDownHandler(ev) {
-        mouseDown = true;
-        dragStart = { x: ev.clientX, y: ev.clientY };
+        mouseDown = true
+        dragStart = { x: ev.clientX, y: ev.clientY }
     }
 
     function mouseUpHandler(ev) {
-        const movedX = Math.abs(ev.clientX - dragStart.x);
-        const movedY = Math.abs(ev.clientY - dragStart.y);
-        const draggedEnough = movedX > 5 || movedY > 5;
+        const movedX = Math.abs(ev.clientX - dragStart.x)
+        const movedY = Math.abs(ev.clientY - dragStart.y)
+        let draggedEnough = movedX > 5 || movedY > 5
 
-        const dx = boardOffset.x - initialBoardOffset.x;
-        const dy = boardOffset.y - initialBoardOffset.y;
+        const dx = boardOffset.x - initialBoardOffset.x
+        const dy = boardOffset.y - initialBoardOffset.y
 
-        const localX = ev.clientX - dx;
-        const localY = ev.clientY - dy;
+        const svgContainer = drawnLine.parentNode
+        const svgRect = svgContainer.getBoundingClientRect()
 
-        line.setAttribute('x2', localX);
-        line.setAttribute('y2', localY);
+        const elementsAtPoint = document.elementsFromPoint(ev.clientX, ev.clientY)
 
-        isDrawingConnection = false;
+        let targetNote = null
+        for (const el of elementsAtPoint) {
+            if (el.classList && el.classList.contains('note')) {
+                targetNote = el
+                break
+            }
+        }
 
-        if(!draggedEnough)
-        {
-            document.removeEventListener('mousemove', mouseMoveHandler);
-            document.removeEventListener('mousedown', mouseDownHandler);
-            document.removeEventListener('mouseup', mouseUpHandler);
+        let localX = ev.clientX - dx
+        let localY = ev.clientY - dy
+
+        if (targetNote) {
+            const targetRect = targetNote.getBoundingClientRect()
+
+            localX = (targetRect.left + targetRect.width / 2) - svgRect.left
+            localY = (targetRect.top + targetRect.height / 2) - svgRect.top
+
+            draggedEnough = false
+        }
+        else {
+            localX = ev.clientX - svgRect.left
+            localY = ev.clientY - svgRect.top
+        }
+
+        line.setAttribute('x2', localX)
+        line.setAttribute('y2', localY)
+
+        if (!draggedEnough) {
+            document.removeEventListener('mousemove', mouseMoveHandler)
+            document.removeEventListener('mousedown', mouseDownHandler)
+            document.removeEventListener('mouseup', mouseUpHandler)
         }
     }
 
-    // Activate drawing
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mousedown', mouseDownHandler);
-    document.addEventListener('mouseup', mouseUpHandler);
-});
+
+    document.addEventListener('mousemove', mouseMoveHandler)
+    document.addEventListener('mousedown', mouseDownHandler)
+    document.addEventListener('mouseup', mouseUpHandler)
+})
