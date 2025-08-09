@@ -77,7 +77,13 @@ whiteboard.addEventListener('contextmenu', (e) => {
     isContextMenuOpen = true
 })
 
-document.getElementById('new-note').addEventListener('click', (e) => createNewNote(whiteboard, '', contextMenuCenter.x, contextMenuCenter.y))
+document.getElementById('new-note').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    createNewNote(whiteboard, '', contextMenuCenter.x, contextMenuCenter.y)
+
+    turnOffContextMenu()
+})
 
 document.getElementById('copy').addEventListener('mousedown', (e) => {
     e.stopPropagation()
