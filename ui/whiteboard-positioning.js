@@ -55,6 +55,26 @@ document.addEventListener('mousemove', (e) => {
 
         updateElementPosition(selectedElement)
     }
+
+    for (const conn of allConnections) {
+        const { startNote, endNote, line, div } = conn
+        const svgRect = div.getBoundingClientRect()
+
+        if (startNote) {
+            const rect = startNote.getBoundingClientRect()
+            const cx = (rect.left + rect.width / 2) - svgRect.left
+            const cy = (rect.top + rect.height / 2) - svgRect.top
+            line.setAttribute('x1', cx)
+            line.setAttribute('y1', cy)
+        }
+        if (endNote) {
+            const rect = endNote.getBoundingClientRect()
+            const cx = (rect.left + rect.width / 2) - svgRect.left
+            const cy = (rect.top + rect.height / 2) - svgRect.top
+            line.setAttribute('x2', cx)
+            line.setAttribute('y2', cy)
+        }
+    }
 })
 
 document.addEventListener('mouseup', (e) => {

@@ -8,7 +8,7 @@ let selectedElement = null
 let isContextMenuOpen = false
 let contextMenuCenter = {x:0, y:0}
 
-let elementConnections = new WeakMap()
+let elementConnections = new WeakMap(), allConnections = []
 let drawnLine = null
 
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
@@ -145,7 +145,16 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
 
     drawnLine.appendChild(line)
     div.appendChild(drawnLine)
-    connections.push(div)
+
+    const conn = {
+        div,
+        line,
+        startNote: selectedElement,
+        endNote: null
+    }
+    connections.push(conn)
+    allConnections.push(conn)
+
     createNewElement(whiteboard, div)
 
     let dragStart = null
@@ -204,6 +213,7 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
             localX = (targetRect.left + targetRect.width / 2) - svgRect.left
             localY = (targetRect.top + targetRect.height / 2) - svgRect.top
 
+            conn.endNote = targetNote;
             draggedEnough = false
         }
         else {
