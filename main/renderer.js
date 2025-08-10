@@ -83,6 +83,10 @@ function createNewElement(container, el, centerX = 0, centerY = 0){
     el.style.visibility = 'visible'
 }
 
+function removeElement(container, el){
+    container.removeChild(el)
+}
+
 function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     const newNote = document.createElement('div')
     newNote.classList.add('note')

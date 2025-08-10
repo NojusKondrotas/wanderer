@@ -124,6 +124,8 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
 
     if (!selectedElement) return
 
+    const startNote = selectedElement
+
     let connections = elementConnections.get(selectedElement)
     if (!connections) {
         elementConnections.set(selectedElement, [])
@@ -199,16 +201,31 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
 
         let targetNote = null
         for (const el of elementsAtPoint) {
-            if (
-                el.classList?.contains('note') &&
+            if (el.classList?.contains('note') &&
                 !el.closest('#general-context-menu') &&
                 !el.closest('#note-and-notepad-context-menu')
-            ) {
-                targetNote = el;
-                console.log('Snapping note reciepient:', targetNote);
-                break;
+            ){
+                targetNote = el
+                break
             }
         }
+
+
+        if(targetNote === startNote){
+            document.removeEventListener('mousemove', mouseMoveHandler)
+            document.removeEventListener('mousedown', mouseDownHandler)
+            document.removeEventListener('mouseup', mouseUpHandler)
+
+
+            connections.pop()
+            allConnections.pop()
+            drawnLine.remove()
+            removeElement(whiteboard, div)
+            console.log('hi')
+            return
+        }
+
+        console.log('Snapping note reciepient:', targetNote)
 
         let localX = ev.clientX - dx
         let localY = ev.clientY - dy
