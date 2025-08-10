@@ -11,7 +11,7 @@ let contextMenuCenter = {x:0, y:0}
 let elementConnections = new WeakMap(), allConnections = []
 let drawnPath = null
 
-const pathShape = 'zigzag'
+const pathShape = 'zigzag', pathWidth = '2'
 
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     contextMenuBlueprint.style.left = `${centerX}px`
@@ -138,7 +138,6 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
     div.classList.add('svg-container')
 
     drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
-    const path = document.createElementNS("http://www.w3.org/2000/svg", 'path')
 
     const startRect = selectedElement.getBoundingClientRect()
     const initialBoardOffset = { x: boardOffset.x, y: boardOffset.y }
@@ -146,16 +145,31 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
     const x1 = (startRect.left + startRect.width / 2)
     const y1 = (startRect.top + startRect.height / 2)
 
+    const path = document.createElementNS("http://www.w3.org/2000/svg", 'path')
     path.setAttribute("stroke", "#626464ff")
-    path.setAttribute("stroke-width", "2")
+    path.setAttribute("stroke-width", pathWidth)
     path.setAttribute("fill", "none")
+    path.style.pointerEvents = 'none'
 
+    const hitPath = document.createElementNS("http://www.w3.org/2000/svg", 'path')
+    hitPath.setAttribute("stroke", "transparent")
+    hitPath.setAttribute("stroke-width", pathWidth * 8)
+    hitPath.setAttribute("fill", "none")
+    hitPath.style.pointerEvents = 'stroke'
+    hitPath.addEventListener('contextmenu', (e) => {
+        e.preventDefault()
+        console.log('Right click on the line stroke!')
+    })
+
+
+    drawnPath.appendChild(hitPath)
     drawnPath.appendChild(path)
     div.appendChild(drawnPath)
 
     const conn = {
         div,
         path,
+        hitPath,
         startNote: selectedElement,
         endNote: null,
         shape: pathShape
@@ -177,7 +191,9 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
         const localX = ev.clientX - dx
         const localY = ev.clientY - dy
 
-        path.setAttribute('d', updateConnectionPath(x1, y1, localX, localY, pathShape))
+        const updatedPath = updateConnectionPath(x1, y1, localX, localY, conn.shape)
+        path.setAttribute('d', updatedPath)
+        hitPath.setAttribute('d', updatedPath)
     }
 
     function mouseDownHandler(ev) {
@@ -243,7 +259,9 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
             localY = ev.clientY - svgRect.top
         }
 
-        path.setAttribute('d', updateConnectionPath(x1, y1, localX, localY, pathShape))
+        const updatedPath = updateConnectionPath(x1, y1, localX, localY, conn.shape)
+        path.setAttribute('d', updatedPath)
+        hitPath.setAttribute('d', updatedPath)
 
         if (!draggedEnough) {
             document.removeEventListener('mousemove', mouseMoveHandler)

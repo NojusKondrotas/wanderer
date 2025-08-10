@@ -57,7 +57,7 @@ document.addEventListener('mousemove', (e) => {
     }
 
     for (const conn of allConnections) {
-        const { startNote, endNote, path, div } = conn
+        const { startNote, endNote, path, hitPath, div } = conn
         const svgRect = div.getBoundingClientRect()
 
         let x1, y1, x2, y2;
@@ -75,8 +75,9 @@ document.addEventListener('mousemove', (e) => {
         }
 
         if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined) {
-            const newPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
-            path.setAttribute('d', newPath)
+            const updatedPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
+            path.setAttribute('d', updatedPath)
+            hitPath.setAttribute('d', updatedPath)
         }
     }
 })
