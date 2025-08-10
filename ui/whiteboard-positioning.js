@@ -57,22 +57,26 @@ document.addEventListener('mousemove', (e) => {
     }
 
     for (const conn of allConnections) {
-        const { startNote, endNote, line, div } = conn
+        const { startNote, endNote, path, div } = conn
         const svgRect = div.getBoundingClientRect()
 
+        let x1, y1, x2, y2;
+
         if (startNote) {
-            const rect = startNote.getBoundingClientRect()
-            const cx = (rect.left + rect.width / 2) - svgRect.left
-            const cy = (rect.top + rect.height / 2) - svgRect.top
-            line.setAttribute('x1', cx)
-            line.setAttribute('y1', cy)
+            const startRect = startNote.getBoundingClientRect()
+            x1 = (startRect.left + startRect.width / 2) - svgRect.left
+            y1 = (startRect.top + startRect.height / 2) - svgRect.top
         }
+
         if (endNote) {
-            const rect = endNote.getBoundingClientRect()
-            const cx = (rect.left + rect.width / 2) - svgRect.left
-            const cy = (rect.top + rect.height / 2) - svgRect.top
-            line.setAttribute('x2', cx)
-            line.setAttribute('y2', cy)
+            const endRect = endNote.getBoundingClientRect();
+            x2 = (endRect.left + endRect.width / 2) - svgRect.left
+            y2 = (endRect.top + endRect.height / 2) - svgRect.top
+        }
+
+        if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined) {
+            const newPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
+            path.setAttribute('d', newPath)
         }
     }
 })

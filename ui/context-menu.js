@@ -9,7 +9,9 @@ let isContextMenuOpen = false
 let contextMenuCenter = {x:0, y:0}
 
 let elementConnections = new WeakMap(), allConnections = []
-let drawnLine = null
+let drawnPath = null
+
+const pathShape = 'zigzag'
 
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     contextMenuBlueprint.style.left = `${centerX}px`
@@ -135,8 +137,8 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
     const div = document.createElement('div')
     div.classList.add('svg-container')
 
-    drawnLine = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
-    const line = document.createElementNS("http://www.w3.org/2000/svg", 'line')
+    drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
+    const path = document.createElementNS("http://www.w3.org/2000/svg", 'path')
 
     const startRect = selectedElement.getBoundingClientRect()
     const initialBoardOffset = { x: boardOffset.x, y: boardOffset.y }
@@ -144,21 +146,19 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
     const x1 = (startRect.left + startRect.width / 2)
     const y1 = (startRect.top + startRect.height / 2)
 
-    line.setAttribute('x1', x1)
-    line.setAttribute('y1', y1)
-    line.setAttribute('x2', x1)
-    line.setAttribute('y2', y1)
-    line.setAttribute("stroke", "red")
-    line.setAttribute("stroke-width", "2")
+    path.setAttribute("stroke", "#626464ff")
+    path.setAttribute("stroke-width", "2")
+    path.setAttribute("fill", "none")
 
-    drawnLine.appendChild(line)
-    div.appendChild(drawnLine)
+    drawnPath.appendChild(path)
+    div.appendChild(drawnPath)
 
     const conn = {
         div,
-        line,
+        path,
         startNote: selectedElement,
-        endNote: null
+        endNote: null,
+        shape: pathShape
     }
     connections.push(conn)
     allConnections.push(conn)
@@ -177,8 +177,7 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
         const localX = ev.clientX - dx
         const localY = ev.clientY - dy
 
-        line.setAttribute('x2', localX)
-        line.setAttribute('y2', localY)
+        path.setAttribute('d', updateConnectionPath(x1, y1, localX, localY, pathShape))
     }
 
     function mouseDownHandler(ev) {
@@ -194,7 +193,7 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
         const dx = boardOffset.x - initialBoardOffset.x
         const dy = boardOffset.y - initialBoardOffset.y
 
-        const svgContainer = drawnLine.parentNode
+        const svgContainer = drawnPath.parentNode
         const svgRect = svgContainer.getBoundingClientRect()
 
         const elementsAtPoint = document.elementsFromPoint(ev.clientX, ev.clientY)
@@ -219,13 +218,13 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
 
             connections.pop()
             allConnections.pop()
-            drawnLine.remove()
+            drawnPath.remove()
             removeElement(whiteboard, div)
-            console.log('hi')
+            
             return
         }
 
-        console.log('Snapping note reciepient:', targetNote)
+        console.log('Snapping note recipient:', targetNote)
 
         let localX = ev.clientX - dx
         let localY = ev.clientY - dy
@@ -244,8 +243,7 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
             localY = ev.clientY - svgRect.top
         }
 
-        line.setAttribute('x2', localX)
-        line.setAttribute('y2', localY)
+        path.setAttribute('d', updateConnectionPath(x1, y1, localX, localY, pathShape))
 
         if (!draggedEnough) {
             document.removeEventListener('mousemove', mouseMoveHandler)
@@ -262,3 +260,23 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
     }, 500)
 
 })
+
+function updateConnectionPath(x1, y1, x2, y2, shape = 'line') {
+    let pathData
+    switch(shape){
+        case 'line':
+            pathData = `M ${x1} ${y1} L ${x2} ${y2}`
+            return pathData
+        case 'curve':
+            const dx = (x2 - x1) / 2
+            pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`
+            return pathData
+        case 'right-angle':
+            pathData = `M ${x1} ${y1} L ${x1} ${y2} L ${x2} ${y2}`
+            return pathData
+        case 'zigzag':
+            const midX = (x1 + x2) / 2
+            pathData = `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`
+            return pathData
+    }
+}
