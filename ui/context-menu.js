@@ -27,15 +27,24 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
 
         option.style.left = `${x}px`
         option.style.top = `${y}px`
-    });
+    })
 }
 
-function turnOffContextMenu(){
+function concealContextMenu(){
     generalContextMenu.style.display = 'none'
     noteAndNotepadContextMenu.style.display = 'none'
     connectionContextMenu.style.display = 'none'
-    selectedElement = null
+}
+
+function turnOffContextMenu(){
+    concealContextMenu()
     isContextMenuOpen = false
+    selectedElement = null
+}
+
+function openContextMenu(contextMenuBlueprint){
+    contextMenuBlueprint.style.display = 'block'
+    isContextMenuOpen = true
 }
 
 document.addEventListener('mousemove', (e) => {
@@ -76,9 +85,8 @@ whiteboard.addEventListener('contextmenu', (e) => {
     generateCircularContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
     contextMenuCenter = {x:e.clientX, y:e.clientY}
 
-    noteAndNotepadContextMenu.style.display = 'none'
-    generalContextMenu.style.display = 'block'
-    isContextMenuOpen = true
+    turnOffContextMenu()
+    openContextMenu(generalContextMenu)
 })
 
 document.getElementById('new-note').addEventListener('mousedown', (e) => {
@@ -186,7 +194,8 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
 
         selectedElement = conn
         generateCircularContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
-        connectionContextMenu.style.display = 'block'
+        concealContextMenu()
+        openContextMenu(connectionContextMenu)
     })
 
     connections.push(conn)

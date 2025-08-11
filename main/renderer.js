@@ -14,9 +14,8 @@ function configureNewChild(child){
         generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 70, -18, 0, -10)
         contextMenuCenter = {x:e.clientX, y:e.clientY}
 
-        generalContextMenu.style.display = 'none'
-        noteAndNotepadContextMenu.style.display = 'block'
-        isContextMenuOpen = true
+        concealContextMenu()
+        openContextMenu(noteAndNotepadContextMenu)
     })
 
     child.addEventListener('mousedown', (e) => {
@@ -25,10 +24,7 @@ function configureNewChild(child){
             if(isWritingElement) return
 
             if(isContextMenuOpen){
-                generalContextMenu.style.display = 'none'
-                noteAndNotepadContextMenu.style.display = 'none'
-                selectedElement = null
-                isContextMenuOpen = false
+                turnOffContextMenu()
                 return;
             }
             
