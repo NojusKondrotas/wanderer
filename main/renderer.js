@@ -9,6 +9,7 @@ function configureNewChild(child){
         e.preventDefault()
         e.stopPropagation()
         if(isWritingElement) return
+        
         selectedElement = child
 
         generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 70, -18, 0, -10)
@@ -25,22 +26,20 @@ function configureNewChild(child){
 
             if(isContextMenuOpen){
                 turnOffContextMenu()
-                return;
+                return
             }
             
-            child.contentEditable = 'false'
-            isWritingElement = false
+            toggleWritingMode(false, child)
 
             tmp_elementOrigin = {x:e.clientX, y:e.clientY}
             tmp_elementOffset = elementOffsets.get(child)
 
-            isDraggingElement = true
             selectedElement = child
         }
     })
 
     child.addEventListener('dblclick', (e) => {
-        child.contentEditable = 'true'
+        toggleWritingMode(true, child)
 
         setTimeout(() => {
             child.focus()
@@ -56,9 +55,6 @@ function configureNewChild(child){
                 sel.addRange(range)
             }
         }, 0)
-
-        isWritingElement = true
-        isDraggingElement = false
     })
 }
 
@@ -92,3 +88,16 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
 }
 
 Array.from(whiteboard.children).forEach(child => {configureNewChild(child); elementOffsets.set(child, { x: 0, y: 0 })})
+
+function toggleWritingMode(boolean = false, editableEl = null){
+    if(boolean){
+        isWritingElement = true
+        isDraggingElement = false
+        if(editableEl) editableEl.contentEditable = 'true'
+    }
+    else{
+        isWritingElement = false
+        isDraggingElement = true
+        if(editableEl) editableEl.contentEditable = 'false'
+    }
+}
