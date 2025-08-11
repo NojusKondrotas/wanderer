@@ -88,21 +88,7 @@ svg {
     flex-grow: 3.5;
 }
 
-#general-context-menu {
-    display: none;
-    position: relative;
-    width: 0;
-    height: 0;
-}
-
-#note-and-notepad-context-menu {
-    display: none;
-    position: relative;
-    width: 0;
-    height: 0;
-}
-
-#connection-context-menu {
+.context-menu {
     display: none;
     position: relative;
     width: 0;

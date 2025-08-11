@@ -1,5 +1,5 @@
 const generalContextMenu = document.getElementById('general-context-menu')
-const noteAndNotepadContextMenu = document.getElementById('note-and-notepad-context-menu')
+const noteAndNotepadContextMenu = document.getElementById('note-and-pad-context-menu')
 const connectionContextMenu = document.getElementById('connection-context-menu')
 
 const optionCtrls = document.getElementsByClassName('option-control')
@@ -97,7 +97,7 @@ document.getElementById('new-note').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('copy').addEventListener('mousedown', (e) => {
+document.getElementById('copy-note-and-pad').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
     text = IDClipboardContent(selectedElement.outerHTML)
@@ -107,7 +107,7 @@ document.getElementById('copy').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('cut').addEventListener('mousedown', (e) => {
+document.getElementById('cut-note-and-pad').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
     text = IDClipboardContent(selectedElement.outerHTML)
@@ -118,7 +118,7 @@ document.getElementById('cut').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('paste').addEventListener('mousedown', async (e) => {
+document.getElementById('paste-note').addEventListener('mousedown', async (e) => {
     e.stopPropagation()
 
     let clipboardContent = await navigator.clipboard.readText()
@@ -139,7 +139,7 @@ document.getElementById('remove-connection').addEventListener('mousedown', (e) =
     turnOffContextMenu()
 })
 
-document.getElementById('connect-interelement').addEventListener('mousedown', (e) => {
+document.getElementById('connect-element').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
     if (!selectedElement) return
@@ -240,7 +240,7 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
         for (const el of elementsAtPoint) {
             if (el.classList?.contains('note') &&
                 !el.closest('#general-context-menu') &&
-                !el.closest('#note-and-notepad-context-menu')
+                !el.closest('#note-and-pad-context-menu')
             ){
                 targetNote = el
                 break
