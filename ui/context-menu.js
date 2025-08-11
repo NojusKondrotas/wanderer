@@ -1,5 +1,6 @@
 const generalContextMenu = document.getElementById('general-context-menu')
 const noteAndNotepadContextMenu = document.getElementById('note-and-notepad-context-menu')
+const connectionContextMenu = document.getElementById('connection-context-menu')
 
 const optionCtrls = document.getElementsByClassName('option-control')
 
@@ -8,7 +9,7 @@ let selectedElement = null
 let isContextMenuOpen = false
 let contextMenuCenter = {x:0, y:0}
 
-let elementConnections = new WeakMap(), allConnections = []
+let elementConnections = new Map()
 let drawnPath = null
 
 const pathShape = 'zigzag', pathWidth = '2'
@@ -32,6 +33,7 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
 function turnOffContextMenu(){
     generalContextMenu.style.display = 'none'
     noteAndNotepadContextMenu.style.display = 'none'
+    connectionContextMenu.style.display = 'none'
     selectedElement = null
     isContextMenuOpen = false
 }
@@ -121,6 +123,14 @@ document.getElementById('paste').addEventListener('mousedown', async (e) => {
     })
 })
 
+document.getElementById('remove-connection').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    removeConnection(selectedElement)
+
+    turnOffContextMenu()
+})
+
 document.getElementById('connect-interelement').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
@@ -156,10 +166,6 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
     hitPath.setAttribute("stroke-width", pathWidth * 8)
     hitPath.setAttribute("fill", "none")
     hitPath.style.pointerEvents = 'stroke'
-    hitPath.addEventListener('contextmenu', (e) => {
-        e.preventDefault()
-        console.log('Right click on the line stroke!')
-    })
 
 
     drawnPath.appendChild(hitPath)
@@ -174,9 +180,16 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
         endNote: null,
         shape: pathShape
     }
-    connections.push(conn)
-    allConnections.push(conn)
+    hitPath.addEventListener('contextmenu', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
 
+        selectedElement = conn
+        generateCircularContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
+        connectionContextMenu.style.display = 'block'
+    })
+
+    connections.push(conn)
     createNewElement(whiteboard, div)
 
     let dragStart = null
@@ -233,7 +246,6 @@ document.getElementById('connect-interelement').addEventListener('mousedown', (e
 
 
             connections.pop()
-            allConnections.pop()
             drawnPath.remove()
             removeElement(whiteboard, div)
             
@@ -296,5 +308,55 @@ function updateConnectionPath(x1, y1, x2, y2, shape = 'line') {
             const midX = (x1 + x2) / 2
             pathData = `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`
             return pathData
+    }
+}
+
+function moveConnections(){
+    for(const [el, connections] of elementConnections)
+    {
+        for (const conn of connections){
+            const { startNote, endNote, path, hitPath, div } = conn
+            const svgRect = div.getBoundingClientRect()
+
+            let x1, y1, x2, y2;
+
+            if (startNote){
+                const startRect = startNote.getBoundingClientRect()
+                x1 = (startRect.left + startRect.width / 2) - svgRect.left
+                y1 = (startRect.top + startRect.height / 2) - svgRect.top
+            }
+
+            if (endNote){
+                const endRect = endNote.getBoundingClientRect()
+                x2 = (endRect.left + endRect.width / 2) - svgRect.left
+                y2 = (endRect.top + endRect.height / 2) - svgRect.top
+            }
+
+            if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){
+                const updatedPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
+                path.setAttribute('d', updatedPath)
+                hitPath.setAttribute('d', updatedPath)
+            }
+        }
+    }
+}
+
+function removeConnection(connRemove){
+    console.log(connRemove)
+    for (const [el, connections] of elementConnections){
+        const index = connections.indexOf(connRemove)
+        if (index !== -1){
+            connections.splice(index, 1)
+
+            connRemove.path.remove()
+            connRemove.hitPath.remove()
+            removeElement(whiteboard, connRemove.div)
+
+            if (connections.length === 0){
+                elementConnections.delete(el)
+            }
+
+            return
+        }
     }
 }

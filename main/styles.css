@@ -102,6 +102,13 @@ svg {
     height: 0;
 }
 
+#connection-context-menu {
+    display: none;
+    position: relative;
+    width: 0;
+    height: 0;
+}
+
 .option-control {
     position: absolute;
     width: fit-content;

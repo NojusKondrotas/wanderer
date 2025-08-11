@@ -56,30 +56,7 @@ document.addEventListener('mousemove', (e) => {
         updateElementPosition(selectedElement)
     }
 
-    for (const conn of allConnections) {
-        const { startNote, endNote, path, hitPath, div } = conn
-        const svgRect = div.getBoundingClientRect()
-
-        let x1, y1, x2, y2;
-
-        if (startNote) {
-            const startRect = startNote.getBoundingClientRect()
-            x1 = (startRect.left + startRect.width / 2) - svgRect.left
-            y1 = (startRect.top + startRect.height / 2) - svgRect.top
-        }
-
-        if (endNote) {
-            const endRect = endNote.getBoundingClientRect();
-            x2 = (endRect.left + endRect.width / 2) - svgRect.left
-            y2 = (endRect.top + endRect.height / 2) - svgRect.top
-        }
-
-        if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined) {
-            const updatedPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
-            path.setAttribute('d', updatedPath)
-            hitPath.setAttribute('d', updatedPath)
-        }
-    }
+    moveConnections()
 })
 
 document.addEventListener('mouseup', (e) => {
