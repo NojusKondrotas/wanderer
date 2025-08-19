@@ -1,15 +1,17 @@
+let totalElements = 2, totalPaths = 0
+
 const generalContextMenu = document.getElementById('general-context-menu')
 const noteAndNotepadContextMenu = document.getElementById('note-and-pad-context-menu')
 const connectionContextMenu = document.getElementById('connection-context-menu')
 
 const optionCtrls = document.getElementsByClassName('option-control')
 
-let selectedElement = null
+let selectedElement = null, selectedLine = null
 
 let isContextMenuOpen = false
 let contextMenuCenter = {x:0, y:0}
 
-let elementConnections = new Map()
+let elementConnections = new Array()
 let drawnPath = null
 
 const pathShape = 'zigzag', pathWidth = '2'
@@ -40,6 +42,7 @@ function turnOffContextMenu(){
     concealContextMenu()
     isContextMenuOpen = false
     selectedElement = null
+    selectedLine = null
 }
 
 function openContextMenu(contextMenuBlueprint){
@@ -134,7 +137,7 @@ document.getElementById('paste-note').addEventListener('mousedown', async (e) =>
 document.getElementById('remove-connection').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    removeConnection(selectedElement)
+    removeConnection(selectedLine)
 
     turnOffContextMenu()
 })
@@ -144,13 +147,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
 
     if (!selectedElement) return
 
-    const startNote = selectedElement
-
-    let connections = elementConnections.get(selectedElement)
-    if (!connections) {
-        elementConnections.set(selectedElement, [])
-        connections = elementConnections.get(selectedElement)
-    }
+    const startNoteID = selectedElement.id
 
     const div = document.createElement('div')
     div.classList.add('svg-container')
@@ -168,38 +165,39 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
     path.setAttribute("stroke-width", pathWidth)
     path.setAttribute("fill", "none")
     path.style.pointerEvents = 'none'
+    path.setAttribute("id", `path-${totalPaths++}`)
 
     const hitPath = document.createElementNS("http://www.w3.org/2000/svg", 'path')
     hitPath.setAttribute("stroke", "transparent")
     hitPath.setAttribute("stroke-width", pathWidth * 8)
     hitPath.setAttribute("fill", "none")
     hitPath.style.pointerEvents = 'stroke'
-
+    hitPath.setAttribute("id", `path-${totalPaths++}`)
 
     drawnPath.appendChild(hitPath)
     drawnPath.appendChild(path)
     div.appendChild(drawnPath)
+    createNewElement(whiteboard, div)
 
     const conn = {
-        div,
-        path,
-        hitPath,
-        startNote: selectedElement,
-        endNote: null,
+        divID: div.id,
+        pathID: path.id,
+        hitPathID: hitPath.id,
+        startNoteID: selectedElement.id,
+        endNoteID: null,
         shape: pathShape
     }
     hitPath.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
 
-        selectedElement = conn
+        selectedLine = conn
         generateCircularContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
         concealContextMenu()
         openContextMenu(connectionContextMenu)
     })
 
-    connections.push(conn)
-    createNewElement(whiteboard, div)
+    elementConnections.push(conn)
 
     let dragStart = null
     let mouseDown = false
@@ -248,13 +246,13 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         }
 
 
-        if(targetNote === startNote){
+        if(targetNote.id === startNoteID){
             document.removeEventListener('mousemove', mouseMoveHandler)
             document.removeEventListener('mousedown', mouseDownHandler)
             document.removeEventListener('mouseup', mouseUpHandler)
 
 
-            connections.pop()
+            elementConnections.pop()
             drawnPath.remove()
             removeElement(whiteboard, div)
             
@@ -272,7 +270,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
             localX = (targetRect.left + targetRect.width / 2) - svgRect.left
             localY = (targetRect.top + targetRect.height / 2) - svgRect.top
 
-            conn.endNote = targetNote;
+            conn.endNoteID = targetNote.id;
             draggedEnough = false
         }
         else {
@@ -321,51 +319,44 @@ function updateConnectionPath(x1, y1, x2, y2, shape = 'line') {
 }
 
 function moveConnections(){
-    for(const [el, connections] of elementConnections)
-    {
-        for (const conn of connections){
-            const { startNote, endNote, path, hitPath, div } = conn
-            const svgRect = div.getBoundingClientRect()
+    for (const conn of elementConnections){
+        const { divID, pathID, hitPathID, startNoteID, endNoteID, shape } = conn
+        const svgRect = document.getElementById(divID).getBoundingClientRect()
 
-            let x1, y1, x2, y2;
+        let x1, y1, x2, y2;
 
-            if (startNote){
-                const startRect = startNote.getBoundingClientRect()
-                x1 = (startRect.left + startRect.width / 2) - svgRect.left
-                y1 = (startRect.top + startRect.height / 2) - svgRect.top
-            }
+        if (startNoteID){
+            const startRect = document.getElementById(startNoteID).getBoundingClientRect()
+            x1 = (startRect.left + startRect.width / 2) - svgRect.left
+            y1 = (startRect.top + startRect.height / 2) - svgRect.top
+        }
 
-            if (endNote){
-                const endRect = endNote.getBoundingClientRect()
-                x2 = (endRect.left + endRect.width / 2) - svgRect.left
-                y2 = (endRect.top + endRect.height / 2) - svgRect.top
-            }
+        if (endNoteID){
+            const endRect = document.getElementById(endNoteID).getBoundingClientRect()
+            x2 = (endRect.left + endRect.width / 2) - svgRect.left
+            y2 = (endRect.top + endRect.height / 2) - svgRect.top
+        }
 
-            if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){
-                const updatedPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
-                path.setAttribute('d', updatedPath)
-                hitPath.setAttribute('d', updatedPath)
-            }
+        if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){
+            const updatedPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
+            document.getElementById(pathID).setAttribute('d', updatedPath)
+            document.getElementById(hitPathID).setAttribute('d', updatedPath)
         }
     }
 }
 
 function removeConnection(connRemove){
     console.log(connRemove)
-    for (const [el, connections] of elementConnections){
-        const index = connections.indexOf(connRemove)
-        if (index !== -1){
-            connections.splice(index, 1)
+    const index = elementConnections.indexOf(connRemove)
+    if (index !== -1){
+        connections.splice(index, 1)
 
-            connRemove.path.remove()
-            connRemove.hitPath.remove()
-            removeElement(whiteboard, connRemove.div)
+        const path = getElementById(connRemove.pathID)
+        const hitPath = getElementById(connRemove.hitPathID)
+        path.remove()
+        hitPath.remove()
+        removeElementByID(whiteboard, connRemove.divID)
 
-            if (connections.length === 0){
-                elementConnections.delete(el)
-            }
-
-            return
-        }
+        return
     }
 }

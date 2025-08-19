@@ -2,14 +2,17 @@ const whiteboard = document.getElementById('whiteboard')
 
 let isDraggingBoard = false
 let boardOffset = {x: 0, y:0}, boardOrigin = {x: 0, y: 0}, dragOrigin = {x:0, y:0}
-const elementOffsets = new WeakMap()
+let elementOffsets = new Map()
 
 let isDraggingElement = false, isWritingElement = false
 let tmp_elementOffset = {x: 0, y:0}, tmp_elementOrigin = {x: 0, y:0}
 
 function updateElementPosition(el) {
-    const elOffset = elementOffsets.get(el)
-    if (!elOffset) elementOffsets.set(el, { x: 0, y: 0 })
+    let elOffset = elementOffsets.get(el)
+    if (!elOffset){
+        elOffset = { x: 0, y: 0 }
+        elementOffsets.set(el, elOffset)
+    }
 
     let x = boardOffset.x + elOffset.x
     let y = boardOffset.y + elOffset.y

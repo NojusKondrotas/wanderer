@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const fs = require('fs')
-const { title } = require('process')
 
 let main_window, isWhiteboardTitlebarLocked = false;
 function initialiseApp(){
@@ -14,7 +13,7 @@ function initialiseApp(){
         height: 600,
         // frame: false,
         // titleBarStyle: 'hidden',
-        // fullscreen: true,
+        fullscreen: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -44,6 +43,36 @@ ipcMain.on('save-html', (e, html) => {
     }
     const filePath = path.join(saveDir, 'index.html')
     fs.writeFileSync(filePath, html, 'utf-8')
+})
+
+ipcMain.on('save-state', (e, stateObj) => {
+    const saveDir = path.join(__dirname, '..', 'saves')
+    if(!fs.existsSync(saveDir))
+        fs.mkdirSync(saveDir)
+
+    const serializedElements = Array.from(stateObj.elementOffsets, ([id, offset]) => ({ id, x: offset.x, y: offset.y }))
+
+    const dataToSave = {
+        totalElements: stateObj.totalElements,
+        totalPaths: stateObj.totalPaths,
+        boardOffset: stateObj.boardOffset,
+        boardOrigin: stateObj.boardOrigin,
+        tmp_elementOffset: stateObj.tmp_elementOffset,
+        tmp_elementOrigin: stateObj.tmp_elementOrigin,
+        elementOffsets: serializedElements,
+        elementConnections: stateObj.elementConnections,
+        isTitlebarLocked: stateObj.isTitlebarLocked
+    }
+
+    const filePath = path.join(saveDir, 'save-data.json')
+    fs.writeFileSync(filePath, JSON.stringify(dataToSave, null, 2), 'utf-8')
+})
+
+ipcMain.handle('load-state', () => {
+    const savePath = path.join(__dirname, '..', 'saves', 'save-data.json')
+    if (fs.existsSync(savePath))
+        return JSON.parse(fs.readFileSync(savePath, 'utf-8'))
+    return {}
 })
 
 ipcMain.handle('is-fullscreen', () => {

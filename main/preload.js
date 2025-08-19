@@ -5,6 +5,10 @@ contextBridge.exposeInMainWorld('wandererAPI', {
     const html = document.documentElement.outerHTML
     ipcRenderer.send('save-html', html)
   },
+  saveState: (stateObj) => {
+    ipcRenderer.send('save-state', stateObj)
+  },
+  loadState: () => ipcRenderer.invoke('load-state'),
   isFullscreen: () => ipcRenderer.invoke('is-fullscreen'),
   setFullscreen: (flag) => ipcRenderer.invoke('set-fullscreen', flag),
   isMaximized: () => ipcRenderer.invoke('is-maximized'),
