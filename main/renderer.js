@@ -101,3 +101,5 @@ function toggleWritingMode(boolean = false, editableEl = null){
         if(editableEl) editableEl.contentEditable = 'false'
     }
 }
+
+window.addEventListener('beforeunload', () => window.wandererAPI.saveHTML())

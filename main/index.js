@@ -1,15 +1,20 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-const path = require('path');
-const { title } = require('process');
+const path = require('path')
+const fs = require('fs')
+const { title } = require('process')
 
-let whiteboard, isWhiteboardTitlebarLocked = false;
+let main_window, isWhiteboardTitlebarLocked = false;
 function initialiseApp(){
-    whiteboard = new BrowserWindow({
+    const savesPath = path.join(__dirname, '..', 'saves', 'index.html')
+    const defaultPath = path.join(__dirname, 'index.html')
+    const entryFile = fs.existsSync(savesPath) ? savesPath : defaultPath
+
+    main_window = new BrowserWindow({
         width: 800,
         height: 600,
         // frame: false,
         // titleBarStyle: 'hidden',
-        // fullscreen: true
+        // fullscreen: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -17,7 +22,7 @@ function initialiseApp(){
         }
     })
 
-    whiteboard.loadFile('index.html')
+    main_window.loadFile(entryFile)
 }
 
 app.whenReady().then(() => {
@@ -32,17 +37,26 @@ app.on('window-all-closed', () => {
     if(process.platform !== 'darwin') app.quit()
 })
 
-ipcMain.handle('is-fullscreen', () => {
-  return whiteboard.isFullScreen()
+ipcMain.on('save-html', (e, html) => {
+    const saveDir = path.join(__dirname, '..', 'saves')
+    if(!fs.existsSync(saveDir)){
+        fs.mkdirSync(saveDir)
+    }
+    const filePath = path.join(saveDir, 'index.html')
+    fs.writeFileSync(filePath, html, 'utf-8')
 })
 
-ipcMain.handle('is-maximized', () => whiteboard.isMaximized())
+ipcMain.handle('is-fullscreen', () => {
+  return main_window.isFullScreen()
+})
 
-ipcMain.handle('set-fullscreen', (e, flag) => whiteboard.setFullScreen(flag))
+ipcMain.handle('is-maximized', () => main_window.isMaximized())
+
+ipcMain.handle('set-fullscreen', (e, flag) => main_window.setFullScreen(flag))
 
 ipcMain.handle('set-maximized', (e, flag) => {
-    if(flag) whiteboard.maximize()
-    else whiteboard.unmaximize()
+    if(flag) main_window.maximize()
+    else main_window.unmaximize()
 })
 
-ipcMain.handle('close-window', () => whiteboard.close())
+ipcMain.handle('close-window', () => main_window.close())
