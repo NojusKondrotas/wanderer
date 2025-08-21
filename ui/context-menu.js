@@ -157,8 +157,8 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
     const startRect = selectedElement.getBoundingClientRect()
     const initialBoardOffset = { x: boardOffset.x, y: boardOffset.y }
 
-    const x1 = (startRect.left + startRect.width / 2)
-    const y1 = (startRect.top + startRect.height / 2)
+    const x1 = contextMenuCenter.x//(startRect.left + startRect.width / 2)
+    const y1 = contextMenuCenter.y//(startRect.top + startRect.height / 2)
 
     const path = document.createElementNS("http://www.w3.org/2000/svg", 'path')
     path.setAttribute("stroke", "#626464ff")
@@ -185,6 +185,8 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         hitPathID: hitPath.id,
         startNoteID: selectedElement.id,
         endNoteID: null,
+        startOffset: {x: x1 - startRect.left, y: y1 - startRect.top},
+        endOffset: null,
         shape: pathShape
     }
     hitPath.addEventListener('contextmenu', (e) => {
@@ -263,12 +265,15 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
 
         let localX = ev.clientX - dx
         let localY = ev.clientY - dy
+        const targetRect = targetNote.getBoundingClientRect()
 
         if (targetNote) {
-            const targetRect = targetNote.getBoundingClientRect()
+            // const targetRect = targetNote.getBoundingClientRect()
 
-            localX = (targetRect.left + targetRect.width / 2) - svgRect.left
-            localY = (targetRect.top + targetRect.height / 2) - svgRect.top
+            // localX = (targetRect.left + targetRect.width / 2) - svgRect.left
+            // localY = (targetRect.top + targetRect.height / 2) - svgRect.top
+            localX = (ev.clientX - targetRect.left) + targetRect.left - svgRect.left
+            localY = (ev.clientY - targetRect.top) + targetRect.top - svgRect.top
 
             conn.endNoteID = targetNote.id;
             draggedEnough = false
@@ -286,6 +291,11 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
             document.removeEventListener('mousemove', mouseMoveHandler)
             document.removeEventListener('mousedown', mouseDownHandler)
             document.removeEventListener('mouseup', mouseUpHandler)
+
+            conn.endOffset = {
+                x: ev.clientX - targetRect.left,
+                y: ev.clientY - targetRect.top
+            }
         }
     }
 
@@ -320,25 +330,29 @@ function updateConnectionPath(x1, y1, x2, y2, shape = 'line') {
 
 function moveConnections(){
     for (const conn of elementConnections){
-        const { divID, pathID, hitPathID, startNoteID, endNoteID, shape } = conn
+        const { divID, pathID, hitPathID, startNoteID, endNoteID, startOffset, endOffset, shape } = conn
         const svgRect = document.getElementById(divID).getBoundingClientRect()
 
-        let x1, y1, x2, y2;
-
+        let x1, y1, x2, y2
+        
         if (startNoteID){
             const startRect = document.getElementById(startNoteID).getBoundingClientRect()
-            x1 = (startRect.left + startRect.width / 2) - svgRect.left
-            y1 = (startRect.top + startRect.height / 2) - svgRect.top
+            x1 = (startRect.left + startOffset.x) - svgRect.left
+            y1 = (startRect.top + startOffset.y) - svgRect.top
+            // x1 = (startRect.left + startRect.width / 2) - svgRect.left
+            // y1 = (startRect.top + startRect.height / 2) - svgRect.top
         }
 
         if (endNoteID){
             const endRect = document.getElementById(endNoteID).getBoundingClientRect()
-            x2 = (endRect.left + endRect.width / 2) - svgRect.left
-            y2 = (endRect.top + endRect.height / 2) - svgRect.top
+            x2 = (endRect.left + endOffset.x) - svgRect.left
+            y2 = (endRect.top + endOffset.y) - svgRect.top
+            // x2 = (endRect.left + endRect.width / 2) - svgRect.left
+            // y2 = (endRect.top + endRect.height / 2) - svgRect.top
         }
 
         if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){
-            const updatedPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
+            const updatedPath = updateConnectionPath(x1, y1, x2, y2, shape)
             document.getElementById(pathID).setAttribute('d', updatedPath)
             document.getElementById(hitPathID).setAttribute('d', updatedPath)
         }
