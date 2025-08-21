@@ -248,7 +248,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         }
 
 
-        if(targetNote.id === startNoteID){
+        if(targetNote && targetNote.id === startNoteID){
             document.removeEventListener('mousemove', mouseMoveHandler)
             document.removeEventListener('mousedown', mouseDownHandler)
             document.removeEventListener('mouseup', mouseUpHandler)
@@ -263,27 +263,28 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
 
         console.log('Snapping note recipient:', targetNote)
 
-        let localX = ev.clientX - dx
-        let localY = ev.clientY - dy
-        const targetRect = targetNote.getBoundingClientRect()
+        let localX, localY
 
-        if (targetNote) {
-            // const targetRect = targetNote.getBoundingClientRect()
+        let targetRect = targetNote ? targetNote.getBoundingClientRect() : null
 
-            // localX = (targetRect.left + targetRect.width / 2) - svgRect.left
-            // localY = (targetRect.top + targetRect.height / 2) - svgRect.top
-            localX = (ev.clientX - targetRect.left) + targetRect.left - svgRect.left
-            localY = (ev.clientY - targetRect.top) + targetRect.top - svgRect.top
+        if(targetNote){
+            conn.endNoteID = targetNote.id
 
-            conn.endNoteID = targetNote.id;
-            draggedEnough = false
+            conn.endOffset = {
+                x: ev.clientX - targetRect.left,
+                y: ev.clientY - targetRect.top
+            }
+        }else{
+            conn.endNoteID = null
+            conn.endOffset = {
+                x: ev.clientX - svgRect.left,
+                y: ev.clientY - svgRect.top
+            }
         }
-        else {
-            localX = ev.clientX - svgRect.left
-            localY = ev.clientY - svgRect.top
-        }
 
-        const updatedPath = updateConnectionPath(x1, y1, localX, localY, conn.shape)
+        draggedEnough = false
+
+        const updatedPath = updateConnectionPath(x1, y1,  conn.endOffset.x, conn.endOffset.y, conn.shape)
         path.setAttribute('d', updatedPath)
         hitPath.setAttribute('d', updatedPath)
 
@@ -291,11 +292,6 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
             document.removeEventListener('mousemove', mouseMoveHandler)
             document.removeEventListener('mousedown', mouseDownHandler)
             document.removeEventListener('mouseup', mouseUpHandler)
-
-            conn.endOffset = {
-                x: ev.clientX - targetRect.left,
-                y: ev.clientY - targetRect.top
-            }
         }
     }
 
@@ -349,6 +345,9 @@ function moveConnections(){
             y2 = (endRect.top + endOffset.y) - svgRect.top
             // x2 = (endRect.left + endRect.width / 2) - svgRect.left
             // y2 = (endRect.top + endRect.height / 2) - svgRect.top
+        }else if(endOffset){
+            x2 = endOffset.x
+            y2 = endOffset.y
         }
 
         if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){
