@@ -363,10 +363,10 @@ function removeConnection(connRemove){
     console.log(connRemove)
     const index = elementConnections.indexOf(connRemove)
     if (index !== -1){
-        connections.splice(index, 1)
+        elementConnections.splice(index, 1)
 
-        const path = getElementById(connRemove.pathID)
-        const hitPath = getElementById(connRemove.hitPathID)
+        const path = document.getElementById(connRemove.pathID)
+        const hitPath = document.getElementById(connRemove.hitPathID)
         path.remove()
         hitPath.remove()
         removeElementByID(whiteboard, connRemove.divID)
