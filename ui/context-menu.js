@@ -11,7 +11,7 @@ let selectedElement = null, selectedLine = null
 let isContextMenuOpen = false
 let contextMenuCenter = {x:0, y:0}
 
-let elementConnections = new Array()
+let allPaths = new Array()
 let drawnPath = null
 
 const pathShape = 'line', pathWidth = '2'
@@ -145,7 +145,7 @@ document.getElementById('paste-note').addEventListener('mousedown', async (e) =>
 document.getElementById('remove-connection').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    removeConnection(selectedLine)
+    removePath(selectedLine)
 
     turnOffContextMenu()
 })
@@ -206,12 +206,12 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         openNewContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
     })
 
-    elementConnections.push(conn)
+    allPaths.push(conn)
 
     let dragStart = null
 
     function drawInternal(x1, y1, x2, y2){
-        const updatedPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
+        const updatedPath = updatePathData(x1, y1, x2, y2, conn.shape)
         path.setAttribute('d', updatedPath)
         hitPath.setAttribute('d', updatedPath)
     }
@@ -223,7 +223,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
     }
 
     function removeLineInternal(){
-        elementConnections.pop()
+        allPaths.pop()
         drawnPath.remove()
         removeElement(whiteboard, div)
     }
@@ -308,7 +308,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
 
 })
 
-function updateConnectionPath(x1, y1, x2, y2, shape = 'line') {
+function updatePathData(x1, y1, x2, y2, shape = 'line') {
     let pathData
     switch(shape){
         case 'line':
@@ -328,51 +328,55 @@ function updateConnectionPath(x1, y1, x2, y2, shape = 'line') {
     }
 }
 
-function moveConnections(){
-    for (const conn of elementConnections){
-        const { divID, pathID, hitPathID, startNoteID, endNoteID, startOffset, endOffset, shape } = conn
-        const svgRect = document.getElementById(divID).getBoundingClientRect()
+function updatePathPosition(path){
+    const { divID, pathID, hitPathID, startNoteID, endNoteID, startOffset, endOffset, shape } = path
+    const svgRect = document.getElementById(divID).getBoundingClientRect()
 
-        let x1, y1, x2, y2
-        
-        if (startNoteID){
-            const startRect = document.getElementById(startNoteID).getBoundingClientRect()
-            x1 = (startRect.left + startOffset.x) - svgRect.left
-            y1 = (startRect.top + startOffset.y) - svgRect.top
-            // x1 = (startRect.left + startRect.width / 2) - svgRect.left
-            // y1 = (startRect.top + startRect.height / 2) - svgRect.top
-        }
+    let x1, y1, x2, y2
+    
+    if (startNoteID){
+        const startRect = document.getElementById(startNoteID).getBoundingClientRect()
+        x1 = (startRect.left + startOffset.x) - svgRect.left
+        y1 = (startRect.top + startOffset.y) - svgRect.top
+        // x1 = (startRect.left + startRect.width / 2) - svgRect.left
+        // y1 = (startRect.top + startRect.height / 2) - svgRect.top
+    }
 
-        if (endNoteID){
-            const endRect = document.getElementById(endNoteID).getBoundingClientRect()
-            x2 = (endRect.left + endOffset.x) - svgRect.left
-            y2 = (endRect.top + endOffset.y) - svgRect.top
-            // x2 = (endRect.left + endRect.width / 2) - svgRect.left
-            // y2 = (endRect.top + endRect.height / 2) - svgRect.top
-        }else if(endOffset){
-            x2 = endOffset.x
-            y2 = endOffset.y
-        }
+    if (endNoteID){
+        const endRect = document.getElementById(endNoteID).getBoundingClientRect()
+        x2 = (endRect.left + endOffset.x) - svgRect.left
+        y2 = (endRect.top + endOffset.y) - svgRect.top
+        // x2 = (endRect.left + endRect.width / 2) - svgRect.left
+        // y2 = (endRect.top + endRect.height / 2) - svgRect.top
+    }else if(endOffset){
+        x2 = endOffset.x
+        y2 = endOffset.y
+    }
 
-        if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){
-            const updatedPath = updateConnectionPath(x1, y1, x2, y2, shape)
-            document.getElementById(pathID).setAttribute('d', updatedPath)
-            document.getElementById(hitPathID).setAttribute('d', updatedPath)
-        }
+    if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){
+        const updatedPath = updatePathData(x1, y1, x2, y2, shape)
+        document.getElementById(pathID).setAttribute('d', updatedPath)
+        document.getElementById(hitPathID).setAttribute('d', updatedPath)
     }
 }
 
-function removeConnection(connRemove){
-    console.log(connRemove)
-    const index = elementConnections.indexOf(connRemove)
-    if (index !== -1){
-        elementConnections.splice(index, 1)
+function updateAllPathsPositions(){
+    for (const path of allPaths){
+        updatePathPosition(path)
+    }
+}
 
-        const path = document.getElementById(connRemove.pathID)
-        const hitPath = document.getElementById(connRemove.hitPathID)
+function removePath(pathRemove){
+    console.log(pathRemove)
+    const index = allPaths.indexOf(pathRemove)
+    if (index !== -1){
+        allPaths.splice(index, 1)
+
+        const path = document.getElementById(pathRemove.pathID)
+        const hitPath = document.getElementById(pathRemove.hitPathID)
         path.remove()
         hitPath.remove()
-        removeElementByID(whiteboard, connRemove.divID)
+        removeElementByID(whiteboard, pathRemove.divID)
 
         return
     }

@@ -59,7 +59,7 @@ function docMouseMove_WhiteboardMoveHandler(e){
         updateElementPosition(selectedElement)
     }
 
-    moveConnections()
+    updateAllPathsPositions()
 }
 
 function docMouseUp_WhiteboardMoveHandler(e){
