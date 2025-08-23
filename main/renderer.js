@@ -10,10 +10,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         totalElements = savedData.totalElements
         totalPaths = savedData.totalPaths
-        tmp_elementOffset = savedData.tmp_elementOffset
-        tmp_elementOrigin = savedData.tmp_elementOrigin
         boardOffset = savedData.boardOffset
-        boardOrigin = savedData.boardOrigin
 
         elementOffsets = new Map(savedData.elementOffsets.map(e => [document.getElementById(e.id), {x: e.x, y: e.y}]))
         elementConnections = savedData.elementConnections
@@ -21,10 +18,9 @@ window.addEventListener('DOMContentLoaded', async () => {
         isTitlebarLocked = savedData.isTitlebarLocked
         contextMenuCenter = savedData.contextMenuCenter
 
-        console.log(tmp_elementOffset)
-        console.log(tmp_elementOrigin)
+        console.log(totalElements)
+        console.log(totalPaths)
         console.log(boardOffset)
-        console.log(boardOrigin)
         console.log(elementOffsets)
         console.log(elementConnections)
         console.log(isTitlebarLocked)
@@ -170,10 +166,7 @@ window.addEventListener('beforeunload', () => {
     window.wandererAPI.saveState({
         totalElements,
         totalPaths,
-        tmp_elementOffset,
-        tmp_elementOrigin,
         boardOffset,
-        boardOrigin,
         elementOffsets: elementOffsetsArr,
         elementConnections,
         isTitlebarLocked,

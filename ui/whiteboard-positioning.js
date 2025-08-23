@@ -1,7 +1,7 @@
 const whiteboard = document.getElementById('whiteboard')
 
 let isDraggingBoard = false
-let boardOffset = {x: 0, y:0}, boardOrigin = {x: 0, y: 0}, dragOrigin = {x:0, y:0}
+let boardOffset = {x: 0, y:0}, boardPrevPos = {x: 0, y: 0}, dragOrigin = {x:0, y:0}
 let elementOffsets = new Map()
 
 let isDraggingElement = false, isWritingElement = false
@@ -9,10 +9,6 @@ let tmp_elementOffset = {x: 0, y:0}, tmp_elementOrigin = {x: 0, y:0}
 
 function updateElementPosition(el) {
     let elOffset = elementOffsets.get(el)
-    if (!elOffset){
-        elOffset = { x: 0, y: 0 }
-        elementOffsets.set(el, elOffset)
-    }
 
     let x = boardOffset.x + elOffset.x
     let y = boardOffset.y + elOffset.y
@@ -20,11 +16,17 @@ function updateElementPosition(el) {
     el.style.transform = `translate(${x}px, ${y}px)`
 }
 
+function updateChildrenPositions(container){
+    Array.from(container.children).forEach(child => {
+        updateElementPosition(child)
+    })
+}
+
 function docMouseDown_WhiteboardMoveHandler(e){
     if(e.button !== 2){
         if(isContextMenuOpen){
             turnOffContextMenu()
-            return;
+            return
         }
 
         isWritingElement = false
@@ -33,22 +35,20 @@ function docMouseDown_WhiteboardMoveHandler(e){
         })
 
         isDraggingBoard = true
-        boardOrigin = {x:e.clientX, y:e.clientY}
+        boardPrevPos = {x:e.clientX, y:e.clientY}
         dragOrigin = {x:e.clientX, y:e.clientY}
     }
 }
 
 function docMouseMove_WhiteboardMoveHandler(e){
     if(isDraggingBoard){
-        const dx = e.clientX - boardOrigin.x
-        const dy = e.clientY - boardOrigin.y
+        const dx = e.clientX - boardPrevPos.x
+        const dy = e.clientY - boardPrevPos.y
 
         boardOffset.x += dx
         boardOffset.y += dy
-        boardOrigin = { x: e.clientX, y: e.clientY }
-        Array.from(whiteboard.children).forEach(child => {
-            updateElementPosition(child)
-        })
+        boardPrevPos = { x: e.clientX, y: e.clientY }
+        updateChildrenPositions(whiteboard)
     }
     else if(isDraggingElement){
         const dx = e.clientX - tmp_elementOrigin.x
@@ -63,14 +63,8 @@ function docMouseMove_WhiteboardMoveHandler(e){
 }
 
 function docMouseUp_WhiteboardMoveHandler(e){
-    if(selectedElement){
-        selectedElement = null
-        isDraggingElement = false
-    }
-
-    if(e.clientX - dragOrigin.x <= 5 || e.clientY - dragOrigin.y <= 5)
-        isDrawingConnection = false
-    else isDrawingConnection = true
+    selectedElement = null
+    isDraggingElement = false
 
     isDraggingBoard = false
 }
