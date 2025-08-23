@@ -51,7 +51,6 @@ function configureNewChild(child){
         if(e.button !== 2){
             e.stopPropagation()
             if(isWritingElement) return
-
             if(isContextMenuOpen){
                 turnOffContextMenu()
                 return

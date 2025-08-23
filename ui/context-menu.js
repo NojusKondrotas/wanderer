@@ -14,7 +14,7 @@ let contextMenuCenter = {x:0, y:0}
 let elementConnections = new Array()
 let drawnPath = null
 
-const pathShape = 'zigzag', pathWidth = '2'
+const pathShape = 'line', pathWidth = '2'
 
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     contextMenuBlueprint.style.left = `${centerX}px`
@@ -46,6 +46,8 @@ function concealContextMenu(){
     generalContextMenu.style.display = 'none'
     noteAndNotepadContextMenu.style.display = 'none'
     connectionContextMenu.style.display = 'none'
+
+    isContextMenuOpen = false
 }
 
 function turnOffContextMenu(){
@@ -157,6 +159,7 @@ document.getElementById('remove-connection').addEventListener('mousedown', (e) =
 
 document.getElementById('connect-element').addEventListener('mousedown', (e) => {
     e.stopPropagation()
+    concealContextMenu()
     if (!selectedElement) return
 
     const startNoteID = selectedElement.id
@@ -204,6 +207,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
     hitPath.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
+        console.log('right clicked on hitPath')
 
         selectedLine = conn
         openNewContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
@@ -212,7 +216,24 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
     elementConnections.push(conn)
 
     let dragStart = null
-    let mouseDown = false
+
+    function drawInternal(x1, y1, x2, y2){
+        const updatedPath = updateConnectionPath(x1, y1, x2, y2, conn.shape)
+        path.setAttribute('d', updatedPath)
+        hitPath.setAttribute('d', updatedPath)
+    }
+
+    function terminateDrawing(){
+        document.removeEventListener('mousemove', mouseMoveHandler)
+        document.removeEventListener('mousedown', mouseDownHandler)
+        document.removeEventListener('mouseup', mouseUpHandler)
+    }
+
+    function removeLineInternal(){
+        elementConnections.pop()
+        drawnPath.remove()
+        removeElement(whiteboard, div)
+    }
 
     function mouseMoveHandler(ev) {
         if (!dragStart) dragStart = { x: ev.clientX, y: ev.clientY }
@@ -223,9 +244,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         const localX = ev.clientX - dx
         const localY = ev.clientY - dy
 
-        const updatedPath = updateConnectionPath(x1, y1, localX, localY, conn.shape)
-        path.setAttribute('d', updatedPath)
-        hitPath.setAttribute('d', updatedPath)
+        drawInternal(x1, y1, localX, localY)
     }
 
     function mouseDownHandler(ev) {
@@ -237,9 +256,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         const movedX = Math.abs(ev.clientX - dragStart.x)
         const movedY = Math.abs(ev.clientY - dragStart.y)
         let draggedEnough = movedX > 5 || movedY > 5
-
-        const dx = boardOffset.x - initialBoardOffset.x
-        const dy = boardOffset.y - initialBoardOffset.y
+        dragStart = null
 
         const svgContainer = drawnPath.parentNode
         const svgRect = svgContainer.getBoundingClientRect()
@@ -259,21 +276,12 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
 
 
         if(targetNote && targetNote.id === startNoteID){
-            document.removeEventListener('mousemove', mouseMoveHandler)
-            document.removeEventListener('mousedown', mouseDownHandler)
-            document.removeEventListener('mouseup', mouseUpHandler)
-
-
-            elementConnections.pop()
-            drawnPath.remove()
-            removeElement(whiteboard, div)
-            
+            removeLineInternal()
+            terminateDrawing()
             return
         }
 
         console.log('Snapping note recipient:', targetNote)
-
-        let localX, localY
 
         let targetRect = targetNote ? targetNote.getBoundingClientRect() : null
 
@@ -284,6 +292,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
                 x: ev.clientX - targetRect.left,
                 y: ev.clientY - targetRect.top
             }
+            draggedEnough = false
         }else{
             conn.endNoteID = null
             conn.endOffset = {
@@ -292,16 +301,8 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
             }
         }
 
-        draggedEnough = false
-
-        const updatedPath = updateConnectionPath(x1, y1,  conn.endOffset.x, conn.endOffset.y, conn.shape)
-        path.setAttribute('d', updatedPath)
-        hitPath.setAttribute('d', updatedPath)
-
         if (!draggedEnough) {
-            document.removeEventListener('mousemove', mouseMoveHandler)
-            document.removeEventListener('mousedown', mouseDownHandler)
-            document.removeEventListener('mouseup', mouseUpHandler)
+            terminateDrawing()
         }
     }
 
