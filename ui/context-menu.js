@@ -55,9 +55,16 @@ function turnOffContextMenu(){
     selectedLine = null
 }
 
-function openContextMenu(contextMenuBlueprint){
+function revealContextMenu(contextMenuBlueprint){
     contextMenuBlueprint.style.display = 'block'
     isContextMenuOpen = true
+}
+
+function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
+    concealContextMenu()
+    revealContextMenu(contextMenuBlueprint)
+    contextMenuCenter = {x:centerX, y:centerY}
+    generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset, yOffset)
 }
 
 document.addEventListener('mousemove', (e) => {
@@ -95,10 +102,7 @@ whiteboard.addEventListener('contextmenu', (e) => {
     e.preventDefault()
     e.stopPropagation()
 
-    concealContextMenu()
-    openContextMenu(generalContextMenu)
-    contextMenuCenter = {x:e.clientX, y:e.clientY}
-    generateCircularContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
+    openNewContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
 })
 
 document.getElementById('new-note').addEventListener('mousedown', (e) => {
@@ -202,10 +206,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         e.stopPropagation()
 
         selectedLine = conn
-        concealContextMenu()
-        openContextMenu(connectionContextMenu)
-        contextMenuCenter = {x:e.clientX, y:e.clientY}
-        generateCircularContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
+        openNewContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
     })
 
     elementConnections.push(conn)
