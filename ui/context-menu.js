@@ -27,6 +27,16 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
         let x = radius * Math.cos(angleRad) + xOffset
         let y = radius * Math.sin(angleRad) + yOffset
 
+        const offsetX = (Math.random() - 0.5) * 100 // -50..+50 px
+        const offsetY = (Math.random() - 0.5) * 100
+
+        option.style.transition = "none"
+        option.style.left = `${x + offsetX}px`
+        option.style.top = `${y + offsetY}px`
+
+        option.offsetHeight
+
+        option.style.transition = "transform 240ms ease, left 240ms ease, top 240ms ease"
         option.style.left = `${x}px`
         option.style.top = `${y}px`
     })
@@ -85,11 +95,10 @@ whiteboard.addEventListener('contextmenu', (e) => {
     e.preventDefault()
     e.stopPropagation()
 
-    generateCircularContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
-    contextMenuCenter = {x:e.clientX, y:e.clientY}
-
-    turnOffContextMenu()
+    concealContextMenu()
     openContextMenu(generalContextMenu)
+    contextMenuCenter = {x:e.clientX, y:e.clientY}
+    generateCircularContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
 })
 
 document.getElementById('new-note').addEventListener('mousedown', (e) => {
@@ -144,7 +153,6 @@ document.getElementById('remove-connection').addEventListener('mousedown', (e) =
 
 document.getElementById('connect-element').addEventListener('mousedown', (e) => {
     e.stopPropagation()
-
     if (!selectedElement) return
 
     const startNoteID = selectedElement.id
@@ -194,9 +202,10 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         e.stopPropagation()
 
         selectedLine = conn
-        generateCircularContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
         concealContextMenu()
         openContextMenu(connectionContextMenu)
+        contextMenuCenter = {x:e.clientX, y:e.clientY}
+        generateCircularContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
     })
 
     elementConnections.push(conn)

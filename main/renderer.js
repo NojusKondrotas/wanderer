@@ -44,11 +44,10 @@ function configureNewChild(child){
         
         selectedElement = child
 
-        generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 70, -18, 0, -10)
-        contextMenuCenter = {x:e.clientX, y:e.clientY}
-
         concealContextMenu()
         openContextMenu(noteAndNotepadContextMenu)
+        contextMenuCenter = {x:e.clientX, y:e.clientY}
+        generateCircularContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 70, -18, 0, -10)
     })
 
     child.addEventListener('mousedown', (e) => {
