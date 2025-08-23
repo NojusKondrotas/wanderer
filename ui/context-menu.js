@@ -69,7 +69,7 @@ function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, r
     generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset, yOffset)
 }
 
-document.addEventListener('mousemove', (e) => {
+function docMouseMove_ContextMenuHandler(e){
     if (!isContextMenuOpen) return
 
     Array.from(optionCtrls).forEach(ctrl => {
@@ -98,14 +98,7 @@ document.addEventListener('mousemove', (e) => {
         }
         ctrl.style.transform = `translate(-50%, -50%) scale(${factor})`
     })
-})
-
-whiteboard.addEventListener('contextmenu', (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    openNewContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
-})
+}
 
 document.getElementById('new-note').addEventListener('mousedown', (e) => {
     e.stopPropagation()

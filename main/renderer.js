@@ -148,10 +148,18 @@ document.addEventListener('mousedown', (e) => {
 
 document.addEventListener('mousemove', (e) => {
     docMouseMove_WhiteboardMoveHandler(e)
+    docMouseMove_ContextMenuHandler(e)
 })
 
 document.addEventListener('mouseup', (e) => {
     docMouseUp_WhiteboardMoveHandler(e)
+})
+
+whiteboard.addEventListener('contextmenu', (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    openNewContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
 })
 
 window.addEventListener('beforeunload', () => {
