@@ -105,7 +105,7 @@ function createNewElement(container, el, centerX = 0, centerY = 0){
 
 function removeElement(container, el){
     container.removeChild(el)
-    totalElements--
+    --totalElements
 
     if (elementOffsets.has(el)) {
         elementOffsets.delete(el)
@@ -121,7 +121,6 @@ function removeElementByID(container, elID){
 function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     const newNote = document.createElement('div')
     newNote.classList.add('note')
-    newNote.id = ``
     newNote.textContent = content
 
     createNewElement(container, newNote, xOffset, yOffset)
@@ -142,6 +141,18 @@ function toggleWritingMode(boolean = false, editableEl = null){
         if(editableEl) editableEl.contentEditable = 'false'
     }
 }
+
+document.addEventListener('mousedown', (e) => {
+    docMouseDown_WhiteboardMoveHandler(e)
+})
+
+document.addEventListener('mousemove', (e) => {
+    docMouseMove_WhiteboardMoveHandler(e)
+})
+
+document.addEventListener('mouseup', (e) => {
+    docMouseUp_WhiteboardMoveHandler(e)
+})
 
 window.addEventListener('beforeunload', () => {
     window.wandererAPI.saveHTML()

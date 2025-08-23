@@ -20,7 +20,7 @@ function updateElementPosition(el) {
     el.style.transform = `translate(${x}px, ${y}px)`
 }
 
-document.addEventListener('mousedown', (e) => {
+function docMouseDown_WhiteboardMoveHandler(e){
     if(e.button !== 2){
         if(isContextMenuOpen){
             turnOffContextMenu()
@@ -36,9 +36,9 @@ document.addEventListener('mousedown', (e) => {
         boardOrigin = {x:e.clientX, y:e.clientY}
         dragOrigin = {x:e.clientX, y:e.clientY}
     }
-})
+}
 
-document.addEventListener('mousemove', (e) => {
+function docMouseMove_WhiteboardMoveHandler(e){
     if(isDraggingBoard){
         const dx = e.clientX - boardOrigin.x
         const dy = e.clientY - boardOrigin.y
@@ -60,9 +60,9 @@ document.addEventListener('mousemove', (e) => {
     }
 
     moveConnections()
-})
+}
 
-document.addEventListener('mouseup', (e) => {
+function docMouseUp_WhiteboardMoveHandler(e){
     if(selectedElement){
         selectedElement = null
         isDraggingElement = false
@@ -73,4 +73,4 @@ document.addEventListener('mouseup', (e) => {
     else isDrawingConnection = true
 
     isDraggingBoard = false
-})
+}
