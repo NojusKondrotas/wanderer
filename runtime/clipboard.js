@@ -1,13 +1,5 @@
 let currClipboardID = 0
 
-function generateRandom(minRange = 0x1000, maxRange = 0xffffffff){
-    return Math.floor(Math.random() * (maxRange - minRange + 1)) + minRange
-}
-
-function convertToString(num, base = 10){
-    return num.toString(base)
-}
-
 function IDClipboardContent(content, minRange = 0x1000, maxRange = 0xffffffff){
     currClipboardID = convertToString(generateRandom(minRange, maxRange), 16)
     
