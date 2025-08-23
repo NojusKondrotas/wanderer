@@ -56,12 +56,9 @@ ipcMain.on('save-state', (e, stateObj) => {
         totalElements: stateObj.totalElements,
         totalPaths: stateObj.totalPaths,
         boardOffset: stateObj.boardOffset,
-        boardOrigin: stateObj.boardOrigin,
-        tmp_elementOffset: stateObj.tmp_elementOffset,
-        tmp_elementOrigin: stateObj.tmp_elementOrigin,
         elementOffsets: serializedElements,
-        elementConnections: stateObj.elementConnections,
-        isTitlebarLocked: stateObj.isTitlebarLocked
+        allPaths: stateObj.allPaths,
+        isTitlebarLocked: stateObj.isTitlebarLocked,
     }
 
     const filePath = path.join(saveDir, 'save-data.json')

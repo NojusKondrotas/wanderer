@@ -13,18 +13,16 @@ window.addEventListener('DOMContentLoaded', async () => {
         boardOffset = savedData.boardOffset
 
         elementOffsets = new Map(savedData.elementOffsets.map(e => [document.getElementById(e.id), {x: e.x, y: e.y}]))
-        elementConnections = savedData.elementConnections
+        allPaths = savedData.allPaths
 
         isTitlebarLocked = savedData.isTitlebarLocked
-        contextMenuCenter = savedData.contextMenuCenter
 
         console.log(totalElements)
         console.log(totalPaths)
         console.log(boardOffset)
         console.log(elementOffsets)
-        console.log(elementConnections)
+        console.log(allPaths)
         console.log(isTitlebarLocked)
-        console.log(contextMenuCenter)
     }
 })
 
@@ -168,8 +166,7 @@ window.addEventListener('beforeunload', () => {
         totalPaths,
         boardOffset,
         elementOffsets: elementOffsetsArr,
-        elementConnections,
-        isTitlebarLocked,
-        contextMenuCenter
+        allPaths,
+        isTitlebarLocked
     })
 })
