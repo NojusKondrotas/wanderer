@@ -14,6 +14,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         isTitlebarLocked = savedData.isTitlebarLocked
 
         Array.from(whiteboard.children).forEach(child => addNoteListeners(child))
+        allPaths.forEach(path => addPathListeners(path, document.getElementById(path.hitPathID)))
 
         console.log(totalElements)
         console.log(totalPaths)

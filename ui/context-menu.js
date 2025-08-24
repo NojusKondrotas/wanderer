@@ -197,14 +197,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         endOffset: null,
         shape: pathVisualShape
     }
-    hitPath.addEventListener('contextmenu', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        console.log('right clicked on hitPath')
-
-        selectedPath = path
-        openNewContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
-    })
+    addPathListeners(path, hitPath)
 
     allPaths.push(path)
 
@@ -380,4 +373,15 @@ function deletePath(pathRemove){
 
         return
     }
+}
+
+function addPathListeners(path, hitPath){
+    hitPath.addEventListener('contextmenu', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        console.log('right clicked on hitPath')
+
+        selectedPath = path
+        openNewContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
+    })
 }
