@@ -6,7 +6,7 @@ const connectionContextMenu = document.getElementById('connection-context-menu')
 
 const optionCtrls = document.getElementsByClassName('option-control')
 
-let selectedElement = null, selectedLine = null
+let selectedElement = null, selectedPath = null
 
 let isContextMenuOpen = false
 let contextMenuCenter = {x:0, y:0}
@@ -14,7 +14,7 @@ let contextMenuCenter = {x:0, y:0}
 let allPaths = new Array()
 let drawnPath = null
 
-const pathShape = 'line', pathWidth = '2'
+const pathVisualShape = 'line', pathVisualWidth = '2'
 
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     contextMenuBlueprint.style.left = `${centerX}px`
@@ -54,7 +54,7 @@ function turnOffContextMenu(){
     concealContextMenu()
     isContextMenuOpen = false
     selectedElement = null
-    selectedLine = null
+    selectedPath = null
 }
 
 function revealContextMenu(contextMenuBlueprint){
@@ -142,10 +142,10 @@ document.getElementById('paste-note').addEventListener('mousedown', async (e) =>
     })
 })
 
-document.getElementById('remove-connection').addEventListener('mousedown', (e) => {
+document.getElementById('delete-path').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    removePath(selectedLine)
+    deletePath(selectedPath)
 
     turnOffContextMenu()
 })
@@ -168,51 +168,51 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
     const x1 = contextMenuCenter.x//(startRect.left + startRect.width / 2)
     const y1 = contextMenuCenter.y//(startRect.top + startRect.height / 2)
 
-    const path = document.createElementNS("http://www.w3.org/2000/svg", 'path')
-    path.setAttribute("stroke", "#626464ff")
-    path.setAttribute("stroke-width", pathWidth)
-    path.setAttribute("fill", "none")
-    path.style.pointerEvents = 'none'
-    path.setAttribute("id", `path-${totalPaths++}`)
+    const pathVisual = document.createElementNS("http://www.w3.org/2000/svg", 'path')
+    pathVisual.setAttribute("stroke", "#626464ff")
+    pathVisual.setAttribute("stroke-width", pathVisualWidth)
+    pathVisual.setAttribute("fill", "none")
+    pathVisual.style.pointerEvents = 'none'
+    pathVisual.setAttribute("id", `path-${totalPaths++}`)
 
     const hitPath = document.createElementNS("http://www.w3.org/2000/svg", 'path')
     hitPath.setAttribute("stroke", "transparent")
-    hitPath.setAttribute("stroke-width", pathWidth * 8)
+    hitPath.setAttribute("stroke-width", pathVisualWidth * 8)
     hitPath.setAttribute("fill", "none")
     hitPath.style.pointerEvents = 'stroke'
     hitPath.setAttribute("id", `path-${totalPaths++}`)
 
     drawnPath.appendChild(hitPath)
-    drawnPath.appendChild(path)
+    drawnPath.appendChild(pathVisual)
     div.appendChild(drawnPath)
     createNewElement(whiteboard, div)
 
-    const conn = {
-        divID: div.id,
-        pathID: path.id,
+    const path = {
+        ID: div.id,
+        pathVisualID: pathVisual.id,
         hitPathID: hitPath.id,
         startNoteID: selectedElement.id,
         endNoteID: null,
         startOffset: {x: x1 - startRect.left, y: y1 - startRect.top},
         endOffset: null,
-        shape: pathShape
+        shape: pathVisualShape
     }
     hitPath.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
         console.log('right clicked on hitPath')
 
-        selectedLine = conn
+        selectedPath = path
         openNewContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
     })
 
-    allPaths.push(conn)
+    allPaths.push(path)
 
     let dragStart = null
 
     function drawInternal(x1, y1, x2, y2){
-        const updatedPath = updatePathData(x1, y1, x2, y2, conn.shape)
-        path.setAttribute('d', updatedPath)
+        const updatedPath = updatePathData(x1, y1, x2, y2, path.shape)
+        pathVisual.setAttribute('d', updatedPath)
         hitPath.setAttribute('d', updatedPath)
     }
 
@@ -279,16 +279,16 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         let targetRect = targetNote ? targetNote.getBoundingClientRect() : null
 
         if(targetNote){
-            conn.endNoteID = targetNote.id
+            path.endNoteID = targetNote.id
 
-            conn.endOffset = {
+            path.endOffset = {
                 x: ev.clientX - targetRect.left,
                 y: ev.clientY - targetRect.top
             }
             draggedEnough = false
         }else{
-            conn.endNoteID = null
-            conn.endOffset = {
+            path.endNoteID = null
+            path.endOffset = {
                 x: ev.clientX - svgRect.left,
                 y: ev.clientY - svgRect.top
             }
@@ -329,8 +329,8 @@ function updatePathData(x1, y1, x2, y2, shape = 'line') {
 }
 
 function updatePathPosition(path){
-    const { divID, pathID, hitPathID, startNoteID, endNoteID, startOffset, endOffset, shape } = path
-    const svgRect = document.getElementById(divID).getBoundingClientRect()
+    const { ID, pathVisualID, hitPathID, startNoteID, endNoteID, startOffset, endOffset, shape } = path
+    const svgRect = document.getElementById(ID).getBoundingClientRect()
 
     let x1, y1, x2, y2
     
@@ -355,7 +355,7 @@ function updatePathPosition(path){
 
     if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){
         const updatedPath = updatePathData(x1, y1, x2, y2, shape)
-        document.getElementById(pathID).setAttribute('d', updatedPath)
+        document.getElementById(pathVisualID).setAttribute('d', updatedPath)
         document.getElementById(hitPathID).setAttribute('d', updatedPath)
     }
 }
@@ -366,17 +366,17 @@ function updateAllPathsPositions(){
     }
 }
 
-function removePath(pathRemove){
+function deletePath(pathRemove){
     console.log(pathRemove)
     const index = allPaths.indexOf(pathRemove)
     if (index !== -1){
         allPaths.splice(index, 1)
 
-        const path = document.getElementById(pathRemove.pathID)
+        const pathVisual = document.getElementById(pathRemove.pathVisualID)
         const hitPath = document.getElementById(pathRemove.hitPathID)
-        path.remove()
+        pathVisual.remove()
         hitPath.remove()
-        removeElementByID(whiteboard, pathRemove.divID)
+        removeElementByID(whiteboard, pathRemove.ID)
 
         return
     }
