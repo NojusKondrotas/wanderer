@@ -79,52 +79,7 @@ function configureNewChild(child){
     child.contentEditable = 'false'
     child.style.userSelect = 'none'
 
-    child.addEventListener('contextmenu', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        if(isWritingElement) return
-        
-        selectedElement = child
-
-        openNewContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 70, -18, 0, -10)
-    })
-
-    child.addEventListener('mousedown', (e) => {
-        if(e.button !== 2){
-            e.stopPropagation()
-            if(isWritingElement) return
-            if(isContextMenuOpen){
-                turnOffContextMenu()
-                return
-            }
-            
-            toggleWritingMode(false, child)
-
-            tmp_elementOrigin = {x:e.clientX, y:e.clientY}
-            tmp_elementOffset = elementOffsets.get(child)
-
-            selectedElement = child
-        }
-    })
-
-    child.addEventListener('dblclick', (e) => {
-        toggleWritingMode(true, child)
-
-        setTimeout(() => {
-            child.focus()
-
-            const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
-            range = document.createRange()
-            range.setStart(pos.offsetNode, pos.offset)
-            range.collapse(true)
-
-            if (range) {
-                const sel = window.getSelection()
-                sel.removeAllRanges()
-                sel.addRange(range)
-            }
-        }, 0)
-    })
+    addNoteListeners(child)
 }
 
 function createNewElement(container, el, centerX = 0, centerY = 0){
