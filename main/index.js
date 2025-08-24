@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const fs = require('fs')
 
-let main_window, isWhiteboardTitlebarLocked = false;
+let main_window
 function initialiseApp(){
     const savesPath = path.join(__dirname, '..', 'saves', 'index.html')
     const defaultPath = path.join(__dirname, 'index.html')
@@ -11,8 +11,8 @@ function initialiseApp(){
     main_window = new BrowserWindow({
         width: 800,
         height: 600,
-        // frame: false,
-        // titleBarStyle: 'hidden',
+        frame: false,
+        titleBarStyle: 'hidden',
         fullscreen: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),

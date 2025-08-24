@@ -2,15 +2,14 @@ body {
     overflow: hidden;
 }
 
-
 #whiteboard {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
-  z-index: 9;
+    z-index: 9;
 }
 
 .titlebar {
@@ -107,14 +106,9 @@ svg {
     border-radius: 3px;
 
     transform: translate(-50%, -50%);
-    /* transition: transform 140ms ease; */
 
     z-index: 100;
 }
-
-/* .option-control:is(:hover, :focus) {
-    transform: translate(-50%, -50%) scale(1.15);
-} */
 
 .note {
     position: absolute;
