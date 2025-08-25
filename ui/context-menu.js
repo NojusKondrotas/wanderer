@@ -2,7 +2,8 @@ let totalElements = 2, totalPaths = 0
 
 const generalContextMenu = document.getElementById('general-context-menu')
 const noteAndNotepadContextMenu = document.getElementById('note-and-pad-context-menu')
-const connectionContextMenu = document.getElementById('connection-context-menu')
+const pathContextMenu = document.getElementById('path-context-menu')
+const titlebarContextMenu = document.getElementById('titlebar-context-menu')
 
 const optionCtrls = document.getElementsByClassName('option-control')
 
@@ -45,7 +46,8 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
 function concealContextMenu(){
     generalContextMenu.style.display = 'none'
     noteAndNotepadContextMenu.style.display = 'none'
-    connectionContextMenu.style.display = 'none'
+    pathContextMenu.style.display = 'none'
+    titlebarContextMenu.style.display = 'none'
 
     isContextMenuOpen = false
 }
@@ -382,6 +384,6 @@ function addPathListeners(path, hitPath){
         console.log('right clicked on hitPath')
 
         selectedPath = path
-        openNewContextMenu(e.clientX, e.clientY, connectionContextMenu, 360 / 2, 70, 90, 0, -10)
+        openNewContextMenu(e.clientX, e.clientY, pathContextMenu, 360 / 2, 70, 90, 0, -10)
     })
 }

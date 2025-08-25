@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, globalShortcut, screen } = require('electron')
 const path = require('path')
 const fs = require('fs')
 
@@ -30,6 +30,8 @@ app.whenReady().then(() => {
     app.on('activate', () => {
         if(BrowserWindow.getAllWindows().length === 0) initialiseApp()
     })
+
+    globalShortcut.register('CmdOrCtrl+B', () => main_window.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), main_window.getBounds()))
 })
 
 app.on('window-all-closed', () => {

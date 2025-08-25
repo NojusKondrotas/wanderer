@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, ipcMain } = require('electron');
 
 contextBridge.exposeInMainWorld('wandererAPI', {
   saveHTML: () => {
@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   isMaximized: () => ipcRenderer.invoke('is-maximized'),
   setMaximized: (flag) => ipcRenderer.invoke('set-maximized', flag),
   closeWindow: () => ipcRenderer.invoke('close-window'),
+  openTitlebarContextMenu: (callback) => ipcRenderer.on('open-titlebar-context-menu', (event, mousePos, boundsOffset) => callback(mousePos, boundsOffset)),
 })
 
 ipcRenderer.on('app-before-quit', () => {
