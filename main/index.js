@@ -31,7 +31,8 @@ app.whenReady().then(() => {
         if(BrowserWindow.getAllWindows().length === 0) initialiseApp()
     })
 
-    globalShortcut.register('CmdOrCtrl+B', () => main_window.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), main_window.getBounds()))
+    globalShortcut.register('CmdOrCtrl+1', () => main_window.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), main_window.getBounds()))
+    globalShortcut.register('CmdOrCtrl+num1', () => main_window.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), main_window.getBounds()))
 })
 
 app.on('window-all-closed', () => {
