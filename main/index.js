@@ -78,13 +78,10 @@ ipcMain.handle('is-fullscreen', () => {
   return main_window.isFullScreen()
 })
 
-ipcMain.handle('is-maximized', () => main_window.isMaximized())
-
 ipcMain.handle('set-fullscreen', (e, flag) => main_window.setFullScreen(flag))
 
-ipcMain.handle('set-maximized', (e, flag) => {
-    if(flag) main_window.maximize()
-    else main_window.unmaximize()
+ipcMain.handle('set-minimized', () => {
+    main_window.minimize()
 })
 
 ipcMain.handle('close-window', () => main_window.close())

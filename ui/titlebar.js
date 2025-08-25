@@ -2,11 +2,11 @@ const titlebar = document.querySelector('.titlebar')
 const titlebarVisual = document.getElementById('titlebar-visual')
 
 const [titlebarFullscreenCtrlFrame, titlebarFullscreenCtrlContextMenu] = document.getElementsByClassName('fullscreen-window')
-const [titlebarMaximizeCtrlFrame, titlebarMaximizeCtrlContextMenu] = document.getElementsByClassName('maximize-window')
+const [titlebarMinimizeCtrlFrame, titlebarMinimizeCtrlContextMenu] = document.getElementsByClassName('minimize-window')
 const [titlebarCloseCtrlFrame, titlebarCloseCtrlContextMenu] = document.getElementsByClassName('close-window')
 const [titlebarLockCtrlFrame, titlebarLockCtrlContextMenu] = document.getElementsByClassName('lock-titlebar')
 
-let isTitlebarLocked = false
+let isMaximized = false, isTitlebarLocked = false
 
 titlebarFullscreenCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
@@ -33,27 +33,21 @@ titlebarFullscreenCtrlContextMenu.addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-titlebarMaximizeCtrlFrame.addEventListener('click', (e) => {
+titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
 
-    window.wandererAPI.isMaximized().then((isMax) => {
-        if(isMax) window.wandererAPI.setMaximized(false)
-        else window.wandererAPI.setMaximized(true)
-    })
+    window.wandererAPI.setMinimized()
 
-    titlebarMaximizeCtrlFrame.blur()
+    titlebarMinimizeCtrlFrame.blur()
 
     turnOffContextMenu()
 })
-titlebarMaximizeCtrlContextMenu.addEventListener('mousedown', (e) => {
+titlebarMinimizeCtrlContextMenu.addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    window.wandererAPI.isMaximized().then((isMax) => {
-        if(isMax) window.wandererAPI.setMaximized(false)
-        else window.wandererAPI.setMaximized(true)
-    })
+    window.wandererAPI.setMinimized()
 
-    titlebarMaximizeCtrlContextMenu.blur()
+    titlebarMinimizeCtrlContextMenu.blur()
 
     turnOffContextMenu()
 })
