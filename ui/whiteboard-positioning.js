@@ -35,8 +35,6 @@ function docMouseDown_WhiteboardMoveHandler(e){
         })
 
         isDraggingBoard = true
-        handleKeybindGuideAppearance(false)
-
         boardPrevPos = {x:e.clientX, y:e.clientY}
         dragOrigin = {x:e.clientX, y:e.clientY}
     }
@@ -69,5 +67,4 @@ function docMouseUp_WhiteboardMoveHandler(e){
     isDraggingElement = false
 
     isDraggingBoard = false
-    handleKeybindGuideAppearance(true)
 }

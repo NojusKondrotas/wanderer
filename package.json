@@ -6,14 +6,12 @@
   "repository": "https://github.com/NojusKondrotas/wanderer",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "fresh": "rimraf ./saves && mkdir saves && electron ."
+    "start": "electron ."
   },
   "keywords": [],
   "author": "Nojus Kondrotas <nojus.kondrotas23@gmail.com>",
   "license": "GPL-3.0-only",
   "devDependencies": {
-    "electron": "^37.2.4",
-    "rimraf": "^6.0.1"
+    "electron": "^37.2.4"
   }
 }
