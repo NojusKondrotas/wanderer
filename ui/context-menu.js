@@ -113,9 +113,11 @@ document.getElementById('new-note').addEventListener('mousedown', (e) => {
 document.getElementById('copy-note-and-pad').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
-    text = IDClipboardContent(selectedElement.outerHTML)
+    elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
+    elementContent = selectedElement.textContent
 
-    navigator.clipboard.writeText(text)
+    writeElementWandererClipboard(elementIDHTML)
+    navigator.clipboard.writeText(elementContent)
 
     turnOffContextMenu()
 })
@@ -123,10 +125,13 @@ document.getElementById('copy-note-and-pad').addEventListener('mousedown', (e) =
 document.getElementById('cut-note-and-pad').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
-    text = IDClipboardContent(selectedElement.outerHTML)
+    elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
+    elementContent = selectedElement.textContent
 
-    navigator.clipboard.writeText(text)
-    selectedElement.remove()
+    writeElementWandererClipboard(elementIDHTML)
+    navigator.clipboard.writeText(elementContent)
+    
+    selectedElement.remove() // fix null exception when updating path
 
     turnOffContextMenu()
 })
@@ -134,8 +139,7 @@ document.getElementById('cut-note-and-pad').addEventListener('mousedown', (e) =>
 document.getElementById('paste-note').addEventListener('mousedown', async (e) => {
     e.stopPropagation()
 
-    let clipboardContent = await navigator.clipboard.readText()
-
+    let clipboardContent = await readElementWandererClipboard()
     let {isHTML, parsedString} = parseClipboardElement(clipboardContent)
     if(!isHTML) return createNewNote(whiteboard, parsedString, contextMenuCenter.x, contextMenuCenter.y)
 
