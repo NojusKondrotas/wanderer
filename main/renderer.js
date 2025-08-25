@@ -12,6 +12,9 @@ window.addEventListener('DOMContentLoaded', async () => {
         allPaths = savedData.allPaths
 
         isTitlebarLocked = savedData.isTitlebarLocked
+        isFullscreen = savedData.isFullscreen
+
+        window.wandererAPI.setFullscreen(isFullscreen)
 
         Array.from(whiteboard.children).forEach(child => addNoteListeners(child))
         allPaths.forEach(path => addPathListeners(path, document.getElementById(path.hitPathID)))
@@ -21,7 +24,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(boardOffset)
         console.log(elementOffsets)
         console.log(allPaths)
-        console.log(isTitlebarLocked)
+        console.log(isFullscreen)
     }
 })
 
@@ -167,7 +170,8 @@ window.addEventListener('beforeunload', () => {
         boardOffset,
         elementOffsets: elementOffsetsArr,
         allPaths,
-        isTitlebarLocked
+        isTitlebarLocked,
+        isFullscreen
     })
 })
 

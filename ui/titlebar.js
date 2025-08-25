@@ -6,14 +6,15 @@ const [titlebarMinimizeCtrlFrame, titlebarMinimizeCtrlContextMenu] = document.ge
 const [titlebarCloseCtrlFrame, titlebarCloseCtrlContextMenu] = document.getElementsByClassName('close-window')
 const [titlebarLockCtrlFrame, titlebarLockCtrlContextMenu] = document.getElementsByClassName('lock-titlebar')
 
-let isMaximized = false, isTitlebarLocked = false
+let isFullscreen = true, isTitlebarLocked = false
 
 titlebarFullscreenCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
 
-    window.wandererAPI.isFullscreen().then((isFull) => {
-        if(isFull) window.wandererAPI.setFullscreen(false)
-        else window.wandererAPI.setFullscreen(true)
+    window.wandererAPI.isFullscreen().then(current => {
+        isFullscreen = !current
+        window.wandererAPI.setFullscreen(isFullscreen)
+        console.log(isFullscreen)
     })
 
     titlebarFullscreenCtrlFrame.blur()
@@ -23,9 +24,10 @@ titlebarFullscreenCtrlFrame.addEventListener('click', (e) => {
 titlebarFullscreenCtrlContextMenu.addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    window.wandererAPI.isFullscreen().then((isFull) => {
-        if(isFull) window.wandererAPI.setFullscreen(false)
-        else window.wandererAPI.setFullscreen(true)
+    window.wandererAPI.isFullscreen().then(current => {
+        isFullscreen = !current
+        window.wandererAPI.setFullscreen(isFullscreen)
+        console.log(isFullscreen)
     })
 
     titlebarFullscreenCtrlContextMenu.blur()

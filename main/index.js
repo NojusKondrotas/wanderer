@@ -61,6 +61,7 @@ ipcMain.on('save-state', (e, stateObj) => {
         elementOffsets: serializedElements,
         allPaths: stateObj.allPaths,
         isTitlebarLocked: stateObj.isTitlebarLocked,
+        isFullscreen: stateObj.isFullscreen
     }
 
     const filePath = path.join(saveDir, 'save-data.json')
@@ -74,9 +75,7 @@ ipcMain.handle('load-state', () => {
     return {}
 })
 
-ipcMain.handle('is-fullscreen', () => {
-  return main_window.isFullScreen()
-})
+ipcMain.handle('is-fullscreen', () => main_window.isFullScreen())
 
 ipcMain.handle('set-fullscreen', (e, flag) => main_window.setFullScreen(flag))
 
