@@ -53,6 +53,7 @@ function docMouseMove_WhiteboardMoveHandler(e){
         updateChildrenPositions(whiteboard)
     }
     else if(isDraggingElement){
+        handleKeybindGuideAppearance(false)
         const dx = e.clientX - tmp_elementOrigin.x
         const dy = e.clientY - tmp_elementOrigin.y
 
