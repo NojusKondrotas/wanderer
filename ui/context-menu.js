@@ -131,7 +131,7 @@ document.getElementById('cut-note-and-pad').addEventListener('mousedown', (e) =>
     writeElementWandererClipboard(elementIDHTML)
     navigator.clipboard.writeText(elementContent)
     
-    selectedElement.remove() // fix null exception when updating path
+    removeElement(whiteboard, selectedElement)
 
     turnOffContextMenu()
 })
@@ -199,7 +199,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
         hitPathID: hitPath.id,
         startNoteID: selectedElement.id,
         endNoteID: null,
-        startOffset: {x: x1 - startRect.left, y: y1 - startRect.top},
+        startOffset: {x: x1 - startRect.left - boardOffset.x, y: y1 - startRect.top - boardOffset.y},
         endOffset: null,
         shape: pathVisualShape
     }
@@ -210,7 +210,7 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
     let dragStart = null
 
     function drawInternal(x1, y1, x2, y2){
-        const updatedPath = updatePathData(x1, y1, x2, y2, path.shape)
+        const updatedPath = updatePathData(x1 + boardOffset.x, y1 + boardOffset.y, x2 + boardOffset.x, y2 + boardOffset.y, path.shape)
         pathVisual.setAttribute('d', updatedPath)
         hitPath.setAttribute('d', updatedPath)
     }
@@ -281,15 +281,15 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
             path.endNoteID = targetNote.id
 
             path.endOffset = {
-                x: ev.clientX - targetRect.left,
-                y: ev.clientY - targetRect.top
+                x: ev.clientX - targetRect.left - boardOffset.x,
+                y: ev.clientY - targetRect.top - boardOffset.y
             }
             draggedEnough = false
         }else{
             path.endNoteID = null
             path.endOffset = {
-                x: ev.clientX - svgRect.left,
-                y: ev.clientY - svgRect.top
+                x: ev.clientX - boardOffset.x,
+                y: ev.clientY - boardOffset.x
             }
         }
 
@@ -306,6 +306,15 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
     }, 500)
 
 })
+
+function updatePathPointAfterDeletion(elementID){
+    for(const path of allPaths){
+        if(path.startNoteID === elementID)
+            path.startNoteID = null
+        if(path.endNoteID === elementID)
+            path.endNoteID = null
+    }
+}
 
 function updatePathData(x1, y1, x2, y2, shape = 'line') {
     let pathData
@@ -335,21 +344,20 @@ function updatePathPosition(path){
     
     if (startNoteID){
         const startRect = document.getElementById(startNoteID).getBoundingClientRect()
-        x1 = (startRect.left + startOffset.x) - svgRect.left
-        y1 = (startRect.top + startOffset.y) - svgRect.top
-        // x1 = (startRect.left + startRect.width / 2) - svgRect.left
-        // y1 = (startRect.top + startRect.height / 2) - svgRect.top
+        x1 = (startRect.left + startOffset.x) + boardOffset.x
+        y1 = (startRect.top + startOffset.y) + boardOffset.y
+    }else if(startOffset){
+        x1 = startOffset.x + boardOffset.x
+        y1 = startOffset.y + boardOffset.y
     }
 
     if (endNoteID){
         const endRect = document.getElementById(endNoteID).getBoundingClientRect()
-        x2 = (endRect.left + endOffset.x) - svgRect.left
-        y2 = (endRect.top + endOffset.y) - svgRect.top
-        // x2 = (endRect.left + endRect.width / 2) - svgRect.left
-        // y2 = (endRect.top + endRect.height / 2) - svgRect.top
+        x2 = (endRect.left + endOffset.x) + boardOffset.x
+        y2 = (endRect.top + endOffset.y) + boardOffset.y
     }else if(endOffset){
-        x2 = endOffset.x
-        y2 = endOffset.y
+        x2 = endOffset.x + boardOffset.x
+        y2 = endOffset.y + boardOffset.y
     }
 
     if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){

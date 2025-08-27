@@ -47,14 +47,17 @@ function addNoteListeners(child){
                 turnOffContextMenu()
                 return
             }
+
+            DragHandler.startDrag(e, false, true)
             
             toggleWritingMode(false, child)
 
-            tmp_elementOrigin = {x:e.clientX, y:e.clientY}
-            tmp_elementOffset = elementOffsets.get(child)
-
             selectedElement = child
         }
+    })
+
+    child.addEventListener('mouseup', () => {
+        DragHandler.endDrag()
     })
 
     child.addEventListener('dblclick', (e) => {
@@ -91,31 +94,28 @@ function createNewElement(container, el, centerX = 0, centerY = 0){
 
     const rect = el.getBoundingClientRect()
 
-    const boardSpaceX = centerX - boardOffset.x - rect.width / 2
-    const boardSpaceY = centerY - boardOffset.y - rect.height / 2
+    const boardSpaceX = centerX - rect.width / 2
+    const boardSpaceY = centerY - rect.height / 2
 
-    elementOffsets.set(el, { x: boardSpaceX, y: boardSpaceY })
     el.id = `el-${totalElements++}`
+    elementPositions.set(el.id, { x: boardSpaceX, y: boardSpaceY })
     configureNewChild(el)
 
-    updateElementPosition(el)
+    updateElementPositionByID(el.id)
 
     el.style.visibility = 'visible'
 }
 
-function removeElement(container, el){
-    container.removeChild(el)
+function removeElementByID(container, elID){
+    container.removeChild(document.getElementById(elID))
     --totalElements
 
-    if (elementOffsets.has(el)) {
-        elementOffsets.delete(el)
+    if (elementPositions.has(elID)) {
+        elementPositions.delete(elID)
     }
-}
 
-function removeElementByID(container, elID){
-    const el = document.getElementById(elID)
-    if(el)
-        removeElement(container, el)
+    updatePathPointAfterDeletion(elID)
+    console.log(allPaths)
 }
 
 function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
