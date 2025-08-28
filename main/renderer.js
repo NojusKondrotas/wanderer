@@ -6,9 +6,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (savedData && Object.keys(savedData).length > 0){
         totalElements = savedData.totalElements
         totalPaths = savedData.totalPaths
-        boardOffset = savedData.boardOffset
 
-        elementOffsets = new Map(savedData.elementOffsets.map(e => [document.getElementById(e.id), {x: e.x, y: e.y}]))
+        elementPositions = new Map(savedData.elementPositions.map(e => [e.id, {x: e.x, y: e.y}]))
         allPaths = savedData.allPaths
 
         isTitlebarLocked = savedData.isTitlebarLocked
@@ -17,13 +16,13 @@ window.addEventListener('DOMContentLoaded', async () => {
         window.wandererAPI.setFullscreen(isFullscreen)
 
         Array.from(whiteboard.children).forEach(child => addNoteListeners(child))
-        allPaths.forEach(path => addPathListeners(path, document.getElementById(path.hitPathID)))
+        allPaths.forEach(path => addPathListeners(path))
 
         console.log(totalElements)
         console.log(totalPaths)
-        console.log(boardOffset)
-        console.log(elementOffsets)
+        console.log(elementPositions)
         console.log(allPaths)
+        console.log(isTitlebarLocked)
         console.log(isFullscreen)
     }
 })
@@ -40,24 +39,11 @@ function addNoteListeners(child){
     })
 
     child.addEventListener('mousedown', (e) => {
-        if(e.button !== 2){
-            e.stopPropagation()
-            if(isWritingElement) return
-            if(isContextMenuOpen){
-                turnOffContextMenu()
-                return
-            }
-
-            DragHandler.startDrag(e, false, true)
-            
-            toggleWritingMode(false, child)
-
-            selectedElement = child
-        }
+        PositioningHandler.element_MouseDown(e, child)
     })
 
-    child.addEventListener('mouseup', () => {
-        DragHandler.endDrag()
+    child.addEventListener('mouseup', (e) => {
+        PositioningHandler.element_MouseUp(e, child)
     })
 
     child.addEventListener('dblclick', (e) => {
@@ -162,13 +148,12 @@ whiteboard.addEventListener('contextmenu', (e) => {
 window.addEventListener('beforeunload', () => {
     window.wandererAPI.saveHTML()
 
-    const elementOffsetsArr = Array.from(elementOffsets, ([el, offset]) => [el.id, offset])
+    const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
 
     window.wandererAPI.saveState({
         totalElements,
         totalPaths,
-        boardOffset,
-        elementOffsets: elementOffsetsArr,
+        elementPositions: elementPositionsArr,
         allPaths,
         isTitlebarLocked,
         isFullscreen

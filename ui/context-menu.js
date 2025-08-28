@@ -17,6 +17,8 @@ let drawnPath = null
 
 const pathVisualShape = 'line', pathVisualWidth = '2'
 
+let suppressNextMouseUp = false
+
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     contextMenuBlueprint.style.left = `${centerX}px`
     contextMenuBlueprint.style.top = `${centerY}px`
@@ -69,6 +71,50 @@ function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, r
     revealContextMenu(contextMenuBlueprint)
     contextMenuCenter = {x:centerX, y:centerY}
     generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset, yOffset)
+}
+
+function createPath(){
+    const div = document.createElement('div')
+    div.classList.add('svg-container')
+
+    drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
+
+    const x1 = contextMenuCenter.x
+    const y1 = contextMenuCenter.y
+
+    const pathVisual = document.createElementNS("http://www.w3.org/2000/svg", 'path')
+    pathVisual.setAttribute("stroke", "#626464ff")
+    pathVisual.setAttribute("stroke-width", pathVisualWidth)
+    pathVisual.setAttribute("fill", "none")
+    pathVisual.style.pointerEvents = 'none'
+    pathVisual.setAttribute("id", `path-${totalPaths++}`)
+
+    const hitPath = document.createElementNS("http://www.w3.org/2000/svg", 'path')
+    hitPath.setAttribute("stroke", "transparent")
+    hitPath.setAttribute("stroke-width", pathVisualWidth * 8)
+    hitPath.setAttribute("fill", "none")
+    hitPath.style.pointerEvents = 'stroke'
+    hitPath.setAttribute("id", `path-${totalPaths++}`)
+
+    drawnPath.appendChild(hitPath)
+    drawnPath.appendChild(pathVisual)
+    div.appendChild(drawnPath)
+    createNewElement(whiteboard, div)
+
+    const path = {
+        ID: div.id,
+        pathVisualID: pathVisual.id,
+        hitPathID: hitPath.id,
+        startNoteID: selectedElement.id,
+        endNoteID: null,
+        startPosition: {x: x1, y: y1},
+        endPosition: null,
+        shape: pathVisualShape
+    }
+    addPathListeners(path, hitPath)
+    allPaths.push(path)
+    selectedPath = path
+    return path
 }
 
 function docMouseMove_ContextMenuHandler(e){
@@ -161,149 +207,87 @@ document.getElementById('connect-element').addEventListener('mousedown', (e) => 
     concealContextMenu()
     if (!selectedElement) return
 
-    const startNoteID = selectedElement.id
+    path = createPath()
+    PositioningHandler.isDrawingPath = true
+    selectedPath = path
 
-    const div = document.createElement('div')
-    div.classList.add('svg-container')
+    suppressNextMouseUp = true
 
-    drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
+    // function terminateDrawing(){
+    //     document.removeEventListener('mousemove', mouseMoveHandler)
+    //     document.removeEventListener('mousedown', mouseDownHandler)
+    //     document.removeEventListener('mouseup', mouseUpHandler)
+    // }
 
-    const startRect = selectedElement.getBoundingClientRect()
-    const initialBoardOffset = { x: boardOffset.x, y: boardOffset.y }
+    // function mouseMoveHandler(ev) {
+    //     if (!dragStart) dragStart = { x: ev.clientX, y: ev.clientY }
+    // }
 
-    const x1 = contextMenuCenter.x//(startRect.left + startRect.width / 2)
-    const y1 = contextMenuCenter.y//(startRect.top + startRect.height / 2)
+    // function mouseDownHandler(ev) {
+    //     mouseDown = true
+    //     dragStart = { x: ev.clientX, y: ev.clientY }
+    // }
 
-    const pathVisual = document.createElementNS("http://www.w3.org/2000/svg", 'path')
-    pathVisual.setAttribute("stroke", "#626464ff")
-    pathVisual.setAttribute("stroke-width", pathVisualWidth)
-    pathVisual.setAttribute("fill", "none")
-    pathVisual.style.pointerEvents = 'none'
-    pathVisual.setAttribute("id", `path-${totalPaths++}`)
+    // function mouseUpHandler(ev) {
+    //     const movedX = Math.abs(ev.clientX - dragStart.x)
+    //     const movedY = Math.abs(ev.clientY - dragStart.y)
+    //     let draggedEnough = movedX > 5 || movedY > 5
+    //     dragStart = null
 
-    const hitPath = document.createElementNS("http://www.w3.org/2000/svg", 'path')
-    hitPath.setAttribute("stroke", "transparent")
-    hitPath.setAttribute("stroke-width", pathVisualWidth * 8)
-    hitPath.setAttribute("fill", "none")
-    hitPath.style.pointerEvents = 'stroke'
-    hitPath.setAttribute("id", `path-${totalPaths++}`)
+    //     const svgContainer = drawnPath.parentNode
+    //     const svgRect = svgContainer.getBoundingClientRect()
 
-    drawnPath.appendChild(hitPath)
-    drawnPath.appendChild(pathVisual)
-    div.appendChild(drawnPath)
-    createNewElement(whiteboard, div)
+    //     const elementsAtPoint = document.elementsFromPoint(ev.clientX, ev.clientY)
 
-    const path = {
-        ID: div.id,
-        pathVisualID: pathVisual.id,
-        hitPathID: hitPath.id,
-        startNoteID: selectedElement.id,
-        endNoteID: null,
-        startOffset: {x: x1 - startRect.left - boardOffset.x, y: y1 - startRect.top - boardOffset.y},
-        endOffset: null,
-        shape: pathVisualShape
-    }
-    addPathListeners(path, hitPath)
-
-    allPaths.push(path)
-
-    let dragStart = null
-
-    function drawInternal(x1, y1, x2, y2){
-        const updatedPath = updatePathData(x1 + boardOffset.x, y1 + boardOffset.y, x2 + boardOffset.x, y2 + boardOffset.y, path.shape)
-        pathVisual.setAttribute('d', updatedPath)
-        hitPath.setAttribute('d', updatedPath)
-    }
-
-    function terminateDrawing(){
-        document.removeEventListener('mousemove', mouseMoveHandler)
-        document.removeEventListener('mousedown', mouseDownHandler)
-        document.removeEventListener('mouseup', mouseUpHandler)
-    }
-
-    function removeLineInternal(){
-        allPaths.pop()
-        drawnPath.remove()
-        removeElement(whiteboard, div)
-    }
-
-    function mouseMoveHandler(ev) {
-        if (!dragStart) dragStart = { x: ev.clientX, y: ev.clientY }
-
-        const dx = boardOffset.x - initialBoardOffset.x
-        const dy = boardOffset.y - initialBoardOffset.y
-
-        const localX = ev.clientX - dx
-        const localY = ev.clientY - dy
-
-        drawInternal(x1, y1, localX, localY)
-    }
-
-    function mouseDownHandler(ev) {
-        mouseDown = true
-        dragStart = { x: ev.clientX, y: ev.clientY }
-    }
-
-    function mouseUpHandler(ev) {
-        const movedX = Math.abs(ev.clientX - dragStart.x)
-        const movedY = Math.abs(ev.clientY - dragStart.y)
-        let draggedEnough = movedX > 5 || movedY > 5
-        dragStart = null
-
-        const svgContainer = drawnPath.parentNode
-        const svgRect = svgContainer.getBoundingClientRect()
-
-        const elementsAtPoint = document.elementsFromPoint(ev.clientX, ev.clientY)
-
-        let targetNote = null
-        for (const el of elementsAtPoint) {
-            if (el.classList?.contains('note') &&
-                !el.closest('#general-context-menu') &&
-                !el.closest('#note-and-pad-context-menu')
-            ){
-                targetNote = el
-                break
-            }
-        }
+    //     let targetNote = null
+    //     for (const el of elementsAtPoint) {
+    //         if (el.classList?.contains('note') &&
+    //             !el.closest('#general-context-menu') &&
+    //             !el.closest('#note-and-pad-context-menu')
+    //         ){
+    //             targetNote = el
+    //             break
+    //         }
+    //     }
 
 
-        if(targetNote && targetNote.id === startNoteID){
-            removeLineInternal()
-            terminateDrawing()
-            return
-        }
+    //     if(targetNote && targetNote.id === startNoteID){
+    //         removeLineInternal()
+    //         terminateDrawing()
+    //         return
+    //     }
 
-        console.log('Snapping note recipient:', targetNote)
+    //     console.log('Snapping note recipient:', targetNote)
 
-        let targetRect = targetNote ? targetNote.getBoundingClientRect() : null
+    //     let targetRect = targetNote ? targetNote.getBoundingClientRect() : null
 
-        if(targetNote){
-            path.endNoteID = targetNote.id
+    //     if(targetNote){
+    //         path.endNoteID = targetNote.id
+    //         path.endPosition = {
+    //             x: ev.clientX,
+    //             y: ev.clientY
+    //         }
 
-            path.endOffset = {
-                x: ev.clientX - targetRect.left - boardOffset.x,
-                y: ev.clientY - targetRect.top - boardOffset.y
-            }
-            draggedEnough = false
-        }else{
-            path.endNoteID = null
-            path.endOffset = {
-                x: ev.clientX - boardOffset.x,
-                y: ev.clientY - boardOffset.x
-            }
-        }
+    //         draggedEnough = false
+    //     }else{
+    //         path.endNoteID = null
+    //         path.endPosition = {
+    //             x: ev.clientX,
+    //             y: ev.clientY
+    //         }
+    //     }
 
-        if (!draggedEnough) {
-            terminateDrawing()
-        }
-    }
+    //     if (!draggedEnough) {
+    //         terminateDrawing()
+    //     }
+    // }
 
 
-    document.addEventListener('mousemove', mouseMoveHandler)
-    document.addEventListener('mousedown', mouseDownHandler)
-    setTimeout(() => {
-    document.addEventListener('mouseup', mouseUpHandler)
-    }, 500)
+    // document.addEventListener('mousemove', mouseMoveHandler)
+    // document.addEventListener('mousedown', mouseDownHandler)
+    // setTimeout(() => {
+    // document.addEventListener('mouseup', mouseUpHandler)
+    // }, 500)
 
 })
 
@@ -389,8 +373,8 @@ function deletePath(pathRemove){
     }
 }
 
-function addPathListeners(path, hitPath){
-    hitPath.addEventListener('contextmenu', (e) => {
+function addPathListeners(path){
+    document.getElementById(path.hitPathID).addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
         console.log('right clicked on hitPath')

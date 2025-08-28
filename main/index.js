@@ -53,13 +53,12 @@ ipcMain.on('save-state', (e, stateObj) => {
     if(!fs.existsSync(saveDir))
         fs.mkdirSync(saveDir)
 
-    const serializedElements = Array.from(stateObj.elementOffsets, ([id, offset]) => ({ id, x: offset.x, y: offset.y }))
+    const serializedElements = Array.from(stateObj.elementPositions, ([id, pos]) => ({ id, x: pos.x, y: pos.y }))
 
     const dataToSave = {
         totalElements: stateObj.totalElements,
         totalPaths: stateObj.totalPaths,
-        boardOffset: stateObj.boardOffset,
-        elementOffsets: serializedElements,
+        elementPositions: serializedElements,
         allPaths: stateObj.allPaths,
         isTitlebarLocked: stateObj.isTitlebarLocked,
         isFullscreen: stateObj.isFullscreen
