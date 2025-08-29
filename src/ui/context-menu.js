@@ -1,7 +1,7 @@
 let largestElementID = 0, unusedElementIDs = new Array()
 
 const generalContextMenu = document.getElementById('general-context-menu')
-const noteAndNotepadContextMenu = document.getElementById('note-and-pad-context-menu')
+const noteAndNotepadContextMenu = document.getElementById('element-context-menu')
 const pathContextMenu = document.getElementById('path-context-menu')
 const titlebarContextMenu = document.getElementById('titlebar-context-menu')
 
