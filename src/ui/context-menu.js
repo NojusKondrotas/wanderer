@@ -97,7 +97,7 @@ function docMouseMove_ContextMenuHandler(e){
     })
 }
 
-document.getElementById('new-note').addEventListener('mousedown', (e) => {
+document.getElementById('wcm-new-note').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
     createNewNote(whiteboard, '', contextMenuCenter.x, contextMenuCenter.y)
@@ -105,7 +105,7 @@ document.getElementById('new-note').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('copy-note-and-pad').addEventListener('mousedown', (e) => {
+document.getElementById('npcm-copy').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
     elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
@@ -117,7 +117,7 @@ document.getElementById('copy-note-and-pad').addEventListener('mousedown', (e) =
     turnOffContextMenu()
 })
 
-document.getElementById('cut-note-and-pad').addEventListener('mousedown', (e) => {
+document.getElementById('npcm-cut').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
     elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
@@ -131,7 +131,7 @@ document.getElementById('cut-note-and-pad').addEventListener('mousedown', (e) =>
     turnOffContextMenu()
 })
 
-document.getElementById('paste-note').addEventListener('mousedown', async (e) => {
+document.getElementById('wcm-paste').addEventListener('mousedown', async (e) => {
     e.stopPropagation()
 
     let clipboardContent = await readElementWandererClipboard()
@@ -143,7 +143,7 @@ document.getElementById('paste-note').addEventListener('mousedown', async (e) =>
     })
 })
 
-document.getElementById('delete-path').addEventListener('mousedown', (e) => {
+document.getElementById('acm-delete').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
     deletePath(selectedPath)
@@ -151,7 +151,7 @@ document.getElementById('delete-path').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('connect-element').addEventListener('mousedown', (e) => {
+document.getElementById('npcm-connect').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     concealContextMenu()
     if (!selectedElement) return

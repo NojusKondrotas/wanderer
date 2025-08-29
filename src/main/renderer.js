@@ -1,4 +1,4 @@
-const optionsMenu = document.getElementById('global-configuration-menu')
+const optionsMenu = document.getElementById('frame-global-configuration-menu')
 
 window.addEventListener('DOMContentLoaded', async () => {
     const stateObj = await window.wandererAPI.loadState()
