@@ -126,7 +126,7 @@ document.getElementById('cut-note-and-pad').addEventListener('mousedown', (e) =>
     writeElementWandererClipboard(elementIDHTML)
     navigator.clipboard.writeText(elementContent)
     
-    removeElement(whiteboard, selectedElement)
+    removeElementByID(whiteboard, selectedElement.id)
 
     turnOffContextMenu()
 })

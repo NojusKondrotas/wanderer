@@ -62,15 +62,6 @@ function addPathListeners(path){
     })
 }
 
-function updatePathPointAfterDeletion(elementID){
-    for(const path of allPaths){
-        if(path.startNoteID === elementID)
-            path.startNoteID = null
-        if(path.endNoteID === elementID)
-            path.endNoteID = null
-    }
-}
-
 function updatePathData(x1, y1, x2, y2, shape = 'line') {
     let pathData
     switch(shape){
@@ -93,7 +84,6 @@ function updatePathData(x1, y1, x2, y2, shape = 'line') {
 
 function updatePathPosition(path){
     const { ID, pathVisualID, hitPathID, startNoteID, endNoteID, startOffset, endOffset, shape } = path
-    const svgRect = document.getElementById(ID).getBoundingClientRect()
 
     let x1, y1, x2, y2
     
@@ -129,7 +119,6 @@ function updateAllPathsPositions(){
 }
 
 function deletePath(pathRemove){
-    console.log(pathRemove)
     const index = allPaths.indexOf(pathRemove)
     if (index !== -1){
         allPaths.splice(index, 1)
@@ -139,6 +128,8 @@ function deletePath(pathRemove){
         pathVisual.remove()
         hitPath.remove()
         removeElementByID(whiteboard, pathRemove.ID)
+
+        totalPaths -= 2
 
         return
     }

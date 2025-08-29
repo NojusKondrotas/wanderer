@@ -96,12 +96,16 @@ function removeElementByID(container, elID){
     container.removeChild(document.getElementById(elID))
     --totalElements
 
+    allPaths.forEach(path => {
+        if(path.startNoteID === elID)
+            path.startNoteID = null
+        if(path.endNoteID === elID)
+            path.endNoteID = null
+    })
+
     if (elementPositions.has(elID)) {
         elementPositions.delete(elID)
     }
-
-    updatePathPointAfterDeletion(elID)
-    console.log(allPaths)
 }
 
 function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
