@@ -82,40 +82,10 @@ function updatePathData(x1, y1, x2, y2, shape = 'line') {
     }
 }
 
-function updatePathPosition(path){
-    const { ID, pathVisualID, hitPathID, startNoteID, endNoteID, startOffset, endOffset, shape } = path
-
-    let x1, y1, x2, y2
-    
-    if (startNoteID){
-        const startRect = document.getElementById(startNoteID).getBoundingClientRect()
-        x1 = (startRect.left + startOffset.x) + boardOffset.x
-        y1 = (startRect.top + startOffset.y) + boardOffset.y
-    }else if(startOffset){
-        x1 = startOffset.x + boardOffset.x
-        y1 = startOffset.y + boardOffset.y
-    }
-
-    if (endNoteID){
-        const endRect = document.getElementById(endNoteID).getBoundingClientRect()
-        x2 = (endRect.left + endOffset.x) + boardOffset.x
-        y2 = (endRect.top + endOffset.y) + boardOffset.y
-    }else if(endOffset){
-        x2 = endOffset.x + boardOffset.x
-        y2 = endOffset.y + boardOffset.y
-    }
-
-    if (x1 !== undefined && y1 !== undefined && x2 !== undefined && y2 !== undefined){
-        const updatedPath = updatePathData(x1, y1, x2, y2, shape)
-        document.getElementById(pathVisualID).setAttribute('d', updatedPath)
-        document.getElementById(hitPathID).setAttribute('d', updatedPath)
-    }
-}
-
-function updateAllPathsPositions(){
-    for (const path of allPaths){
-        updatePathPosition(path)
-    }
+function updatePathPosition(path, startPosition, endPosition){
+    const updatedPath = updatePathData(startPosition.x, startPosition.y, endPosition.x, endPosition.y, path.shape)
+    document.getElementById(path.pathVisualID).setAttribute('d', updatedPath)
+    document.getElementById(path.hitPathID).setAttribute('d', updatedPath)
 }
 
 function deletePath(pathRemove){

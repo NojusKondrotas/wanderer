@@ -38,6 +38,10 @@ class PositioningHandler{
 
     static element_MouseUp(ev, el){
         if(this.isDrawingPath){
+            if(el.id === selectedPath.startNoteID){
+                deletePath(selectedPath)
+                return this.endDrag(ev)
+            }
             const movedX = Math.abs(this.dragTotalDiff.x)
             const movedY = Math.abs(this.dragTotalDiff.y)
             let draggedEnough = movedX > 5 || movedY > 5
@@ -99,12 +103,23 @@ class PositioningHandler{
                 }
 
                 if(hasUpdated){
-                    let updatedPath
-                    if(this.isDrawingPath)
-                        updatedPath = updatePathData(path.startPosition.x, path.startPosition.y, ev.clientX, ev.clientY, path.shape)
-                    else updatedPath = updatePathData(path.startPosition.x, path.startPosition.y, path.endPosition.x, path.endPosition.y, path.shape)
-                    document.getElementById(path.pathVisualID).setAttribute('d', updatedPath)
-                    document.getElementById(path.hitPathID).setAttribute('d', updatedPath)
+                    let startPoint = {
+                        x: path.startPosition.x,
+                        y: path.startPosition.y
+                    }
+                    let endPoint
+                    if(this.isDrawingPath){
+                        endPoint = {
+                            x: ev.clientX,
+                            y: ev.clientY
+                        }
+                    }else{
+                        endPoint = {
+                            x: path.endPosition.x,
+                            y: path.endPosition.y
+                        }
+                    }
+                    updatePathPosition(path, startPoint, endPoint)
                 }
             })
         }
