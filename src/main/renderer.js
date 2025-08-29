@@ -1,25 +1,29 @@
 const optionsMenu = document.getElementById('global-configuration-menu')
 
 window.addEventListener('DOMContentLoaded', async () => {
-    const savedData = await window.wandererAPI.loadState()
+    const stateObj = await window.wandererAPI.loadState()
 
-    if (savedData && Object.keys(savedData).length > 0){
-        totalElements = savedData.totalElements
-        totalPaths = savedData.totalPaths
+    if (stateObj && Object.keys(stateObj).length > 0){
+        largestElementID = stateObj.largestElementID,
+        unusedElementIDs = stateObj.unusedElementIDs,
+        largestPathID = stateObj.largestPathID,
+        unusedPathIDs = stateObj.unusedPathIDs,
 
-        elementPositions = new Map(savedData.elementPositions.map(e => [e.id, {x: e.x, y: e.y}]))
-        allPaths = savedData.allPaths
+        elementPositions = new Map(stateObj.elementPositions.map(e => [e.id, {x: e.x, y: e.y}]))
+        allPaths = stateObj.allPaths
 
-        isTitlebarLocked = savedData.isTitlebarLocked
-        isFullscreen = savedData.isFullscreen
+        isTitlebarLocked = stateObj.isTitlebarLocked
+        isFullscreen = stateObj.isFullscreen
 
         window.wandererAPI.setFullscreen(isFullscreen)
 
         Array.from(whiteboard.children).forEach(child => addNoteListeners(child))
         allPaths.forEach(path => addPathListeners(path))
 
-        console.log(totalElements)
-        console.log(totalPaths)
+        console.log(largestElementID)
+        console.log(unusedElementIDs)
+        console.log(largestPathID)
+        console.log(unusedPathIDs)
         console.log(elementPositions)
         console.log(allPaths)
         console.log(isTitlebarLocked)
@@ -74,6 +78,15 @@ function configureNewChild(child){
     addNoteListeners(child)
 }
 
+function getElementID(){
+    if(unusedElementIDs.length !== 0)
+        return unusedElementIDs.pop()
+    else{
+        ++largestElementID
+        return `el-${largestElementID - 1}`
+    }
+}
+
 function createNewElement(container, el, centerX = 0, centerY = 0){
     container.appendChild(el)
     el.style.visibility = 'hidden'
@@ -83,7 +96,7 @@ function createNewElement(container, el, centerX = 0, centerY = 0){
     const boardSpaceX = centerX - rect.width / 2
     const boardSpaceY = centerY - rect.height / 2
 
-    el.id = `el-${totalElements++}`
+    el.id = `${getElementID()}`
     elementPositions.set(el.id, { x: boardSpaceX, y: boardSpaceY })
     configureNewChild(el)
 
@@ -94,7 +107,7 @@ function createNewElement(container, el, centerX = 0, centerY = 0){
 
 function removeElementByID(container, elID){
     container.removeChild(document.getElementById(elID))
-    --totalElements
+    unusedElementIDs.push(elID)
 
     allPaths.forEach(path => {
         if(path.startNoteID === elID)
@@ -155,8 +168,10 @@ window.addEventListener('beforeunload', () => {
     const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
 
     window.wandererAPI.saveState({
-        totalElements,
-        totalPaths,
+        largestElementID,
+        unusedElementIDs,
+        largestPathID,
+        unusedPathIDs,
         elementPositions: elementPositionsArr,
         allPaths,
         isTitlebarLocked,

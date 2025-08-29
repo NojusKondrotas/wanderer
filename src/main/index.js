@@ -56,8 +56,10 @@ ipcMain.on('save-state', (e, stateObj) => {
     const serializedElements = Array.from(stateObj.elementPositions, ([id, pos]) => ({ id, x: pos.x, y: pos.y }))
 
     const dataToSave = {
-        totalElements: stateObj.totalElements,
-        totalPaths: stateObj.totalPaths,
+        largestElementID: stateObj.largestElementID,
+        unusedElementIDs: stateObj.unusedElementIDs,
+        largestPathID: stateObj.largestPathID,
+        unusedPathIDs: stateObj.unusedPathIDs,
         elementPositions: serializedElements,
         allPaths: stateObj.allPaths,
         isTitlebarLocked: stateObj.isTitlebarLocked,

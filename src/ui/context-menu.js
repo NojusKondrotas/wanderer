@@ -1,4 +1,4 @@
-let totalElements = 0
+let largestElementID = 0, unusedElementIDs = new Array()
 
 const generalContextMenu = document.getElementById('general-context-menu')
 const noteAndNotepadContextMenu = document.getElementById('note-and-pad-context-menu')

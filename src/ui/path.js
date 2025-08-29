@@ -1,11 +1,20 @@
-let totalPaths = 0
+let largestPathID = 0
 
-let allPaths = new Array()
+let allPaths = new Array(), unusedPathIDs = new Array()
 let drawnPath = null, selectedPath = null
 
 const pathVisualShape = 'line', pathVisualWidth = '2'
 
 let suppressNextMouseUp = false
+
+function getPathID(){
+    if(unusedPathIDs.length !== 0)
+        return unusedPathIDs.pop()
+    else{
+        ++largestPathID
+        return `path-${largestPathID - 1}`
+    }
+}
 
 function createPath(){
     const div = document.createElement('div')
@@ -21,14 +30,14 @@ function createPath(){
     pathVisual.setAttribute("stroke-width", pathVisualWidth)
     pathVisual.setAttribute("fill", "none")
     pathVisual.style.pointerEvents = 'none'
-    pathVisual.setAttribute("id", `path-${totalPaths++}`)
+    pathVisual.setAttribute("id", `${getPathID()}`)
 
     const hitPath = document.createElementNS("http://www.w3.org/2000/svg", 'path')
     hitPath.setAttribute("stroke", "transparent")
     hitPath.setAttribute("stroke-width", pathVisualWidth * 8)
     hitPath.setAttribute("fill", "none")
     hitPath.style.pointerEvents = 'stroke'
-    hitPath.setAttribute("id", `path-${totalPaths++}`)
+    hitPath.setAttribute("id", `${getPathID()}`)
 
     drawnPath.appendChild(hitPath)
     drawnPath.appendChild(pathVisual)
@@ -93,13 +102,14 @@ function deletePath(pathRemove){
     if (index !== -1){
         allPaths.splice(index, 1)
 
+        unusedPathIDs.push(pathRemove.pathVisualID)
+        unusedPathIDs.push(pathRemove.hitPathID)
+
         const pathVisual = document.getElementById(pathRemove.pathVisualID)
         const hitPath = document.getElementById(pathRemove.hitPathID)
         pathVisual.remove()
         hitPath.remove()
         removeElementByID(whiteboard, pathRemove.ID)
-
-        totalPaths -= 2
 
         return
     }
