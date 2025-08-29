@@ -87,19 +87,25 @@ class PositioningHandler{
             updateElementPositionByID(selectedElement.id)
 
             allPaths.forEach(path => {
+                let hasUpdated = false
                 if(path.startNoteID === selectedElement.id){
                     path.startPosition.x -= this.dragDiff.x
                     path.startPosition.y -= this.dragDiff.y
-                }
-
-                if(path.endNoteID === selectedElement.id){
+                    hasUpdated = true
+                }else if(path.endNoteID === selectedElement.id){
                     path.endPosition.x -= this.dragDiff.x
                     path.endPosition.y -= this.dragDiff.y
+                    hasUpdated = true
                 }
 
-                const updatedPath = updatePathData(path.startPosition.x, path.startPosition.y, path.endPosition ? path.endPosition.x : ev.clientX, path.endPosition ? path.endPosition.y : ev.clientY, path.shape)
-                document.getElementById(path.pathVisualID).setAttribute('d', updatedPath)
-                document.getElementById(path.hitPathID).setAttribute('d', updatedPath)
+                if(hasUpdated){
+                    let updatedPath
+                    if(this.isDrawingPath)
+                        updatedPath = updatePathData(path.startPosition.x, path.startPosition.y, ev.clientX, ev.clientY, path.shape)
+                    else updatedPath = updatePathData(path.startPosition.x, path.startPosition.y, path.endPosition.x, path.endPosition.y, path.shape)
+                    document.getElementById(path.pathVisualID).setAttribute('d', updatedPath)
+                    document.getElementById(path.hitPathID).setAttribute('d', updatedPath)
+                }
             })
         }
         
