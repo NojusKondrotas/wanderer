@@ -1,13 +1,13 @@
 {
   "name": "wanderer",
   "version": "1.0.0",
-  "main": "main/index.js",
+  "main": "src/main/index.js",
   "description": "A lightweight experimental cross-platform note-taking app.",
   "repository": "https://github.com/NojusKondrotas/wanderer",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "fresh": "rimraf ./saves && mkdir saves && electron ."
+    "fresh": "rimraf ./src/saves && cd src && mkdir saves && cd .. && electron ."
   },
   "keywords": [],
   "author": "Nojus Kondrotas <nojus.kondrotas23@gmail.com>",
