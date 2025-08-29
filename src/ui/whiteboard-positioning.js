@@ -1,9 +1,3 @@
-const whiteboard = document.getElementById('whiteboard')
-
-let elementPositions = new Map()
-
-let isWritingElement = false
-
 class PositioningHandler{
     static isDraggingBoard = false
     static isDraggingElement = false

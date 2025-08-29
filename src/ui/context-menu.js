@@ -1,13 +1,9 @@
-let largestElementID = 0, unusedElementIDs = new Array()
-
 const generalContextMenu = document.getElementById('general-context-menu')
 const elementContextMenu = document.getElementById('element-context-menu')
 const pathContextMenu = document.getElementById('path-context-menu')
 const titlebarContextMenu = document.getElementById('titlebar-context-menu')
 
 const optionCtrls = document.getElementsByClassName('option-control')
-
-let selectedElement = null
 
 let isContextMenuOpen = false
 let contextMenuCenter = {x:0, y:0}
