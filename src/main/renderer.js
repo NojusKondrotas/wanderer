@@ -39,7 +39,7 @@ function addNoteListeners(child){
         
         selectedElement = child
 
-        openNewContextMenu(e.clientX, e.clientY, noteAndNotepadContextMenu, 360 / 5, 70, -18, 0, -10)
+        openNewContextMenu(e.clientX, e.clientY, elementContextMenu, 360 / 5, 70, -18, 0, -10)
     })
 
     child.addEventListener('mousedown', (e) => {
@@ -159,7 +159,7 @@ whiteboard.addEventListener('contextmenu', (e) => {
     e.preventDefault()
     e.stopPropagation()
 
-    openNewContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 234, -10, -10)
+    openNewContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 162, -10, -10)
 })
 
 window.addEventListener('beforeunload', () => {

@@ -1,7 +1,7 @@
 let largestElementID = 0, unusedElementIDs = new Array()
 
 const generalContextMenu = document.getElementById('general-context-menu')
-const noteAndNotepadContextMenu = document.getElementById('element-context-menu')
+const elementContextMenu = document.getElementById('element-context-menu')
 const pathContextMenu = document.getElementById('path-context-menu')
 const titlebarContextMenu = document.getElementById('titlebar-context-menu')
 
@@ -40,7 +40,7 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
 
 function concealContextMenu(){
     generalContextMenu.style.display = 'none'
-    noteAndNotepadContextMenu.style.display = 'none'
+    elementContextMenu.style.display = 'none'
     pathContextMenu.style.display = 'none'
     titlebarContextMenu.style.display = 'none'
 
