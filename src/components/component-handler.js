@@ -15,13 +15,29 @@ function getElementID(){
     }
 }
 
-function configureNewChild(child){
-    if(child.classList.contains('note')){
-        child.contentEditable = 'false'
-        child.style.userSelect = 'none'
+function configureElement(element){
+    console.log(element)
+    if(element.classList.contains('note')){
+        element.contentEditable = 'false'
+        element.style.userSelect = 'none'
 
-        addNoteListeners(child)
+        addNoteListeners(element)
     }
+}
+
+function configureAllElements(elements){
+    for(let element of elements){
+        configureElement(element)
+    }
+}
+
+function configurePath(path){
+    addPathListeners(path)
+}
+
+function configureAllPaths(paths){
+    for(let path of paths)
+        configurePath(path)
 }
 
 function createNewElement(container, el, centerX = 0, centerY = 0){
@@ -35,7 +51,7 @@ function createNewElement(container, el, centerX = 0, centerY = 0){
 
     el.id = `${getElementID()}`
     elementPositions.set(el.id, { x: boardSpaceX, y: boardSpaceY })
-    configureNewChild(el)
+    configureElement(el)
 
     updateElementPositionByID(el.id)
 

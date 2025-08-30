@@ -18,7 +18,7 @@ function getPathID(){
 
 function createPath(){
     const div = document.createElement('div')
-    div.classList.add('svg-container')
+    div.classList.add('path-container')
 
     const drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
 
@@ -54,7 +54,7 @@ function createPath(){
         endPosition: null,
         shape: pathVisualShape
     }
-    addPathListeners(path, hitPath)
+    configurePath(path)
     allPaths.push(path)
     selectedPath = path
     return path

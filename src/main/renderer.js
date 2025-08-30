@@ -17,8 +17,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         window.wandererAPI.setFullscreen(isFullscreen)
 
-        Array.from(whiteboard.children).forEach(child => addNoteListeners(child))
-        allPaths.forEach(path => addPathListeners(path))
+        configureAllElements(whiteboard.children)
+        configureAllPaths(allPaths)
 
         console.log(largestElementID)
         console.log(unusedElementIDs)

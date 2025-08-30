@@ -70,7 +70,7 @@ body {
     z-index: 10;
 }
 
-.svg-container {
+.path-container {
     position: absolute;
     top: 0;
     left: 0;
