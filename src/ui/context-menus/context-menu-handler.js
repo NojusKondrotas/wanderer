@@ -1,8 +1,3 @@
-const generalContextMenu = document.getElementById('general-context-menu')
-const elementContextMenu = document.getElementById('element-context-menu')
-const pathContextMenu = document.getElementById('path-context-menu')
-const titlebarContextMenu = document.getElementById('titlebar-context-menu')
-
 let isContextMenuOpen = false
 let activeContextMenu = null, contextMenuCenter = {x:0, y:0}
 
@@ -92,69 +87,3 @@ function genMouseMove_ContextMenuHandler(e){
         ctrl.style.transform = `translate(-50%, -50%) scale(${factor})`
     })
 }
-
-document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-
-    createNewNote(whiteboard, '', contextMenuCenter.x, contextMenuCenter.y)
-
-    turnOffContextMenu()
-})
-
-document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-    
-    elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
-    elementContent = selectedElement.textContent
-
-    writeElementWandererClipboard(elementIDHTML)
-    navigator.clipboard.writeText(elementContent)
-
-    turnOffContextMenu()
-})
-
-document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-    
-    elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
-    elementContent = selectedElement.textContent
-
-    writeElementWandererClipboard(elementIDHTML)
-    navigator.clipboard.writeText(elementContent)
-    
-    removeElementByID(whiteboard, selectedElement.id)
-
-    turnOffContextMenu()
-})
-
-document.getElementById('gcm-paste').addEventListener('mousedown', async (e) => {
-    e.stopPropagation()
-
-    let clipboardContent = await readElementWandererClipboard()
-    let {isHTML, parsedString} = parseClipboardElement(clipboardContent)
-    if(!isHTML) return createNewNote(whiteboard, parsedString, contextMenuCenter.x, contextMenuCenter.y)
-
-    Array.from(parsedString.children).forEach(child => {
-        createNewElement(whiteboard, child, contextMenuCenter.x, contextMenuCenter.y)
-    })
-})
-
-document.getElementById('acm-delete').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-
-    deletePath(selectedPath)
-
-    turnOffContextMenu()
-})
-
-document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-    concealContextMenu()
-    if (!selectedElement) return
-
-    path = createPath()
-    PositioningHandler.isDrawingPath = true
-    selectedPath = path
-
-    suppressNextMouseUp = true
-})
