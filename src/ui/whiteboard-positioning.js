@@ -4,10 +4,15 @@ class PositioningHandler{
     static isDrawingPath = false
     static dragStart = { x: 0, y: 0 }
     static dragDiff = { x: 0, y: 0 }
-    static dragTotalStart = { x: 0, y: 0 }
     static dragTotalDiff = { x: 0, y: 0 }
 
     static updatedPaths = new Array()
+
+    static checkIfDraggedEnough(){
+        const movedX = this.dragTotalDiff.x
+        const movedY = this.dragTotalDiff.y
+        return movedX > 5 || movedY > 5
+    }
 
     static getAbsoluteMousePos(ev, boundingClientRect){
         return { x: ev.clientX - boundingClientRect.left, y: ev.clientY - boundingClientRect.top}
@@ -36,17 +41,8 @@ class PositioningHandler{
                 deletePath(selectedPath)
                 return this.endDrag(ev)
             }
-            const movedX = Math.abs(this.dragTotalDiff.x)
-            const movedY = Math.abs(this.dragTotalDiff.y)
-            let draggedEnough = movedX > 5 || movedY > 5
-            if(!draggedEnough){
-                selectedPath.endNoteID = el.id
-                const boundingClientRect = document.getElementById(selectedPath.ID).getBoundingClientRect()
-                const mousePos = this.getAbsoluteMousePos(ev, boundingClientRect)
-                selectedPath.endPosition = mousePos
-                this.isDrawingPath = false
-                selectedPath = false
-                this.endDrag(ev)
+            if(!this.checkIfDraggedEnough()){
+                return terminatePathDrawing(ev, el.id)
             }
         }
         else this.endDrag(ev)
@@ -62,10 +58,8 @@ class PositioningHandler{
                 x: ev.clientX,
                 y: ev.clientY
             }
-            this.dragTotalDiff = {
-                x: this.dragTotalStart.x - ev.clientX,
-                y: this.dragTotalStart.y - ev.clientY
-            }
+            this.dragTotalDiff.x += Math.abs(this.dragDiff.x)
+            this.dragTotalDiff.y += Math.abs(this.dragDiff.y)
 
             updateChildrenPositions(whiteboard)
         }else if(this.isDraggingElement){
@@ -77,10 +71,8 @@ class PositioningHandler{
                 x: ev.clientX,
                 y: ev.clientY
             }
-            this.dragTotalDiff = {
-                x: this.dragTotalStart.x - ev.clientX,
-                y: this.dragTotalStart.y - ev.clientY
-            }
+            this.dragTotalDiff.x += Math.abs(this.dragDiff.x)
+            this.dragTotalDiff.y += Math.abs(this.dragDiff.y)
 
             updateElementPositionByID(selectedElement.id)
 
@@ -142,7 +134,6 @@ class PositioningHandler{
             this.updatedPaths = new Array()
             this.dragStart = { x: ev.clientX, y: ev.clientY }
             this.dragDiff = { x: 0, y: 0 }
-            this.dragTotalStart = { x: ev.clientX, y: ev.clientY }
             this.dragTotalDiff = { x: 0, y: 0 }
             if(isBoard){
                 this.isDraggingBoard = true
@@ -160,18 +151,9 @@ class PositioningHandler{
             return
         }
         if(this.isDrawingPath){
-            const movedX = Math.abs(this.dragTotalDiff.x)
-            const movedY = Math.abs(this.dragTotalDiff.y)
-            console.log(movedX, movedY)
-            let draggedEnough = movedX > 5 || movedY > 5
-            if(!draggedEnough){
-                selectedPath.endNoteID = null
-                const boundingClientRect = document.getElementById(selectedPath.ID).getBoundingClientRect()
-                const mousePos = this.getAbsoluteMousePos(ev, boundingClientRect)
-                selectedPath.endPosition = mousePos
-                this.isDrawingPath = false
-                selectedPath = false
-                this.endDrag(ev)
+            console.log(this.dragTotalDiff)
+            if(!this.checkIfDraggedEnough()){
+                return terminatePathDrawing(ev, null)
             }
         }
 
@@ -179,7 +161,6 @@ class PositioningHandler{
         this.isDraggingElement = false
         this.dragStart = {x:0, y:0}
         this.dragDiff = {x:0, y:0}
-        this.dragTotalStart = {x:0, y:0}
         this.dragTotalDiff = {x:0, y:0}
 
         selectedElement = null

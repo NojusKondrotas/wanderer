@@ -97,6 +97,16 @@ function updatePathPosition(path, startPosition, endPosition){
     document.getElementById(path.hitPathID).setAttribute('d', updatedPath)
 }
 
+function terminatePathDrawing(ev, elID){
+    selectedPath.endNoteID = elID
+    const boundingClientRect = document.getElementById(selectedPath.ID).getBoundingClientRect()
+    const mousePos = PositioningHandler.getAbsoluteMousePos(ev, boundingClientRect)
+    selectedPath.endPosition = mousePos
+    PositioningHandler.isDrawingPath = false
+    selectedPath = false
+    PositioningHandler.endDrag(ev)
+}
+
 function deletePath(pathRemove){
     const index = allPaths.indexOf(pathRemove)
     if (index !== -1){
