@@ -26,6 +26,7 @@ function createPath(){
     const y1 = contextMenuCenter.y
 
     const pathVisual = document.createElementNS("http://www.w3.org/2000/svg", 'path')
+    pathVisual.classList.add('path')
     pathVisual.setAttribute("stroke", "#626464ff")
     pathVisual.setAttribute("stroke-width", pathVisualWidth)
     pathVisual.setAttribute("fill", "none")
