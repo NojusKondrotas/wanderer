@@ -148,7 +148,6 @@ class PositioningHandler{
             return
         }
         if(this.isDrawingPath){
-            console.log(this.dragTotalDiff)
             if(!this.checkIfDraggedEnough()){
                 return terminatePathDrawing(ev, null)
             }

@@ -16,7 +16,6 @@ function getElementID(){
 }
 
 function configureElement(element){
-    console.log(element)
     if(element.classList.contains('note')){
         element.contentEditable = 'false'
         element.style.userSelect = 'none'

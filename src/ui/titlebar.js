@@ -15,7 +15,6 @@ titlebarFullscreenCtrlFrame.addEventListener('click', (e) => {
     window.wandererAPI.isFullscreen().then(current => {
         isFullscreen = !current
         window.wandererAPI.setFullscreen(isFullscreen)
-        console.log(isFullscreen)
     })
 
     titlebarFullscreenCtrlFrame.blur()
@@ -28,7 +27,6 @@ titlebarFullscreenCtrlContextMenu.addEventListener('mousedown', (e) => {
     window.wandererAPI.isFullscreen().then(current => {
         isFullscreen = !current
         window.wandererAPI.setFullscreen(isFullscreen)
-        console.log(isFullscreen)
     })
 
     titlebarFullscreenCtrlContextMenu.blur()
