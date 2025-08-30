@@ -3,8 +3,6 @@ const keybindGuideCloseCtrl = document.getElementById('keybind-guide-close')
 const keybindContainer = document.getElementById('keybind-container')
 const keybindContainerChildren = keybindContainer.children
 
-handleKeybindGuideAppearance(true)
-
 function keybindGuide_MouseOverHandler(){
     for(let child of keybindContainerChildren){
         child.style.color = 'rgba(126, 135, 135, 1)'

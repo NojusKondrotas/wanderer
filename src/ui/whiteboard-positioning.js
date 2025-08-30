@@ -202,14 +202,14 @@ function updateChildrenPositions(container){
         updateElementPositionByID(child.id)
 }
 
-function docMouseDown_WhiteboardMoveHandler(e){
+function genMouseDown_WhiteboardMoveHandler(e){
     PositioningHandler.startDrag(e, true, false)
 }
 
-function docMouseMove_WhiteboardMoveHandler(e){
+function genMouseMove_WhiteboardMoveHandler(e){
     PositioningHandler.update(e)
 }
 
-function docMouseUp_WhiteboardMoveHandler(e){
+function genMouseUp_WhiteboardMoveHandler(e){
     PositioningHandler.endDrag(e)
 }

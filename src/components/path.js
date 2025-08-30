@@ -1,7 +1,7 @@
 let largestPathID = 0
 
 let allPaths = new Array(), unusedPathIDs = new Array()
-let drawnPath = null, selectedPath = null
+let selectedPath = null
 
 const pathVisualShape = 'line', pathVisualWidth = '2'
 
@@ -20,7 +20,7 @@ function createPath(){
     const div = document.createElement('div')
     div.classList.add('svg-container')
 
-    drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
+    const drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
 
     const x1 = contextMenuCenter.x
     const y1 = contextMenuCenter.y

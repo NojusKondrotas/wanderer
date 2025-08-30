@@ -4,7 +4,8 @@ const titlebarVisual = document.getElementById('titlebar-visual')
 const [titlebarFullscreenCtrlFrame, titlebarFullscreenCtrlContextMenu] = document.getElementsByClassName('fullscreen-window')
 const [titlebarMinimizeCtrlFrame, titlebarMinimizeCtrlContextMenu] = document.getElementsByClassName('minimize-window')
 const [titlebarCloseCtrlFrame, titlebarCloseCtrlContextMenu] = document.getElementsByClassName('close-window')
-const [titlebarLockCtrlFrame, titlebarLockCtrlContextMenu] = document.getElementsByClassName('lock-titlebar')
+const [titlebarGlobalConfigurationFrame, titlebarGlobalConfigurationContextMenu] = document.getElementsByClassName('global-config')
+const titlebarLockCtrlFrame = document.getElementById('frame-lock-titlebar')
 
 let isFullscreen = true, isTitlebarLocked = false
 
@@ -71,23 +72,6 @@ titlebarLockCtrlFrame.addEventListener('click', (e) => {
     }
 
     titlebarLockCtrlFrame.blur()
-
-    turnOffContextMenu()
-})
-titlebarLockCtrlContextMenu.addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-    if(isTitlebarLocked){
-        titlebarVisual.style.removeProperty('transform');
-
-        isTitlebarLocked = false
-    }
-    else{
-        titlebarVisual.style.setProperty('transform', 'translateY(0px)')
-
-        isTitlebarLocked = true
-    }
-
-    titlebarLockCtrlContextMenu.blur()
 
     turnOffContextMenu()
 })

@@ -1,6 +1,6 @@
-const optionsMenu = document.getElementById('frame-global-configuration-menu')
-
 window.addEventListener('DOMContentLoaded', async () => {
+    handleKeybindGuideAppearance(true)
+    
     const stateObj = await window.wandererAPI.loadState()
 
     if (stateObj && Object.keys(stateObj).length > 0){

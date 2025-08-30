@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, ipcMain } = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('wandererAPI', {
   saveHTML: () => {
@@ -13,7 +13,8 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   setFullscreen: (flag) => ipcRenderer.invoke('set-fullscreen', flag),
   setMinimized: () => ipcRenderer.invoke('set-minimized'),
   closeWindow: () => ipcRenderer.invoke('close-window'),
-  openTitlebarContextMenu: (callback) => ipcRenderer.on('open-titlebar-context-menu', (event, mousePos, boundsOffset) => callback(mousePos, boundsOffset)),
+  openTitlebarContextMenu: (callback) => ipcRenderer.on('open-titlebar-context-menu',
+    (event, mousePos, boundsOffset) => callback(mousePos, boundsOffset)),
 })
 
 ipcRenderer.on('app-before-quit', () => {

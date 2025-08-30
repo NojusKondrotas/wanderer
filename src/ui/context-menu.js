@@ -3,14 +3,13 @@ const elementContextMenu = document.getElementById('element-context-menu')
 const pathContextMenu = document.getElementById('path-context-menu')
 const titlebarContextMenu = document.getElementById('titlebar-context-menu')
 
-const optionCtrls = document.getElementsByClassName('option-control')
-
 let isContextMenuOpen = false
-let contextMenuCenter = {x:0, y:0}
+let activeContextMenu = null, contextMenuCenter = {x:0, y:0}
 
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     contextMenuBlueprint.style.left = `${centerX}px`
     contextMenuBlueprint.style.top = `${centerY}px`
+    activeContextMenu = contextMenuBlueprint
 
     Array.from(contextMenuBlueprint.children).forEach((option, i) => {
         const angleDeg = angleOffset + i * angleSize
@@ -19,8 +18,8 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
         let x = radius * Math.cos(angleRad) + xOffset
         let y = radius * Math.sin(angleRad) + yOffset
 
-        const offsetX = (Math.random() - 0.5) * 100 // -50..+50 px
-        const offsetY = (Math.random() - 0.5) * 100
+        const offsetX = generateRandom(-50, 50)
+        const offsetY = generateRandom(-50, 50)
 
         option.style.transition = "none"
         option.style.left = `${x + offsetX}px`
@@ -41,6 +40,7 @@ function concealContextMenu(){
     titlebarContextMenu.style.display = 'none'
 
     isContextMenuOpen = false
+    activeContextMenu = null
 }
 
 function turnOffContextMenu(){
@@ -50,22 +50,22 @@ function turnOffContextMenu(){
     selectedPath = null
 }
 
-function revealContextMenu(contextMenuBlueprint){
-    contextMenuBlueprint.style.display = 'block'
-    isContextMenuOpen = true
-}
-
 function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
+    function revealContextMenu(contextMenuBlueprint){
+        contextMenuBlueprint.style.display = 'block'
+        isContextMenuOpen = true
+    }
+    
     concealContextMenu()
     revealContextMenu(contextMenuBlueprint)
-    contextMenuCenter = {x:centerX, y:centerY}
+    contextMenuCenter = { x: centerX, y: centerY }
     generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset, yOffset)
 }
 
-function docMouseMove_ContextMenuHandler(e){
+function genMouseMove_ContextMenuHandler(e){
     if (!isContextMenuOpen) return
 
-    Array.from(optionCtrls).forEach(ctrl => {
+    Array.from(activeContextMenu.children).forEach(ctrl => {
         const rect = ctrl.getBoundingClientRect()
         const centerX = rect.left + rect.width / 2
         const centerY = rect.top + rect.height / 2
@@ -80,7 +80,7 @@ function docMouseMove_ContextMenuHandler(e){
         let factor
         if(distance < 20) factor = 1.2
         else{
-            function easeOutCubic(t) {
+            function easeOutCubic(t){
                 return 1 - Math.pow(1 - t, 3)
             }
 
@@ -93,7 +93,7 @@ function docMouseMove_ContextMenuHandler(e){
     })
 }
 
-document.getElementById('wcm-new-note').addEventListener('mousedown', (e) => {
+document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
     createNewNote(whiteboard, '', contextMenuCenter.x, contextMenuCenter.y)
@@ -101,7 +101,7 @@ document.getElementById('wcm-new-note').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('npcm-copy').addEventListener('mousedown', (e) => {
+document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
     elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
@@ -113,7 +113,7 @@ document.getElementById('npcm-copy').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('npcm-cut').addEventListener('mousedown', (e) => {
+document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
     elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
@@ -127,7 +127,7 @@ document.getElementById('npcm-cut').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('wcm-paste').addEventListener('mousedown', async (e) => {
+document.getElementById('gcm-paste').addEventListener('mousedown', async (e) => {
     e.stopPropagation()
 
     let clipboardContent = await readElementWandererClipboard()
@@ -147,7 +147,7 @@ document.getElementById('acm-delete').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
-document.getElementById('npcm-connect').addEventListener('mousedown', (e) => {
+document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     concealContextMenu()
     if (!selectedElement) return

@@ -1,16 +1,16 @@
 const whiteboard = document.getElementById('whiteboard')
 
 whiteboard.addEventListener('mousedown', (e) => {
-    docMouseDown_WhiteboardMoveHandler(e)
+    genMouseDown_WhiteboardMoveHandler(e)
 })
 
 whiteboard.addEventListener('mousemove', (e) => {
-    docMouseMove_WhiteboardMoveHandler(e)
-    docMouseMove_ContextMenuHandler(e)
+    genMouseMove_WhiteboardMoveHandler(e)
+    genMouseMove_ContextMenuHandler(e)
 })
 
 whiteboard.addEventListener('mouseup', (e) => {
-    docMouseUp_WhiteboardMoveHandler(e)
+    genMouseUp_WhiteboardMoveHandler(e)
 })
 
 whiteboard.addEventListener('contextmenu', (e) => {
