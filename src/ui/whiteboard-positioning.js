@@ -6,8 +6,6 @@ class PositioningHandler{
     static dragDiff = { x: 0, y: 0 }
     static dragTotalDiff = { x: 0, y: 0 }
 
-    static updatedPaths = new Array()
-
     static checkIfDraggedEnough(){
         const movedX = this.dragTotalDiff.x
         const movedY = this.dragTotalDiff.y
@@ -94,7 +92,7 @@ class PositioningHandler{
                         y: path.startPosition.y
                     }
                     let endPoint
-                    if(this.isDrawingPath){
+                    if(this.isDrawingPath && path === selectedPath){
                         endPoint = {
                             x: ev.clientX,
                             y: ev.clientY
@@ -131,7 +129,6 @@ class PositioningHandler{
                 child.contentEditable = 'false'
             })
 
-            this.updatedPaths = new Array()
             this.dragStart = { x: ev.clientX, y: ev.clientY }
             this.dragDiff = { x: 0, y: 0 }
             this.dragTotalDiff = { x: 0, y: 0 }
