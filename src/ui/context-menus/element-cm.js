@@ -31,9 +31,5 @@ document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
     concealContextMenu()
     if (!selectedElement) return
 
-    path = createPath()
-    PositioningHandler.isDrawingPath = true
-    selectedPath = path
-
-    suppressNextMouseUp = true
+    createPath(contextMenuCenter.x, contextMenuCenter.y)
 })

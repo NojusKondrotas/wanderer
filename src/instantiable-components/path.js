@@ -16,14 +16,11 @@ function getPathID(){
     }
 }
 
-function createPath(){
+function createPath(startX = 0, startY = 0){
     const div = document.createElement('div')
     div.classList.add('path-container')
 
     const drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
-
-    const x1 = contextMenuCenter.x
-    const y1 = contextMenuCenter.y
 
     const pathVisual = document.createElementNS("http://www.w3.org/2000/svg", 'path')
     pathVisual.classList.add('path')
@@ -49,15 +46,17 @@ function createPath(){
         ID: div.id,
         pathVisualID: pathVisual.id,
         hitPathID: hitPath.id,
-        startNoteID: selectedElement.id,
+        startNoteID: selectedElement ? selectedElement.id : null,
         endNoteID: null,
-        startPosition: {x: x1, y: y1},
+        startPosition: {x: startX, y: startY},
         endPosition: null,
         shape: pathVisualShape
     }
     configurePath(path)
     allPaths.push(path)
     selectedPath = path
+    suppressNextMouseUp = true
+    PositioningHandler.isDrawingPath = true
     return path
 }
 
@@ -104,8 +103,7 @@ function terminatePathDrawing(ev, elID){
     const mousePos = PositioningHandler.getAbsoluteMousePos(ev, boundingClientRect)
     selectedPath.endPosition = mousePos
     PositioningHandler.isDrawingPath = false
-    selectedPath = false
-    PositioningHandler.endDrag(ev)
+    selectedPath = null
 }
 
 function deletePath(pathRemove){
