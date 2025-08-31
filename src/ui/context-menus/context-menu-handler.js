@@ -1,3 +1,5 @@
+const allContextMenus = document.getElementsByClassName('context-menu')
+
 let isContextMenuOpen = false
 let activeContextMenu = null, contextMenuCenter = {x:0, y:0}
 
@@ -29,10 +31,8 @@ function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, ang
 }
 
 function concealContextMenu(){
-    generalContextMenu.style.display = 'none'
-    elementContextMenu.style.display = 'none'
-    pathContextMenu.style.display = 'none'
-    titlebarContextMenu.style.display = 'none'
+    for(let cm of allContextMenus)
+        cm.style.display = 'none'
 
     isContextMenuOpen = false
     activeContextMenu = null
