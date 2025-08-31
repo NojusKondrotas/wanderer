@@ -26,6 +26,14 @@ document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
+document.getElementById('npwcm-delete').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    removeElementByID(whiteboard, selectedElement.id)
+
+    turnOffContextMenu()
+})
+
 document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     concealContextMenu()
