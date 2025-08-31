@@ -41,3 +41,11 @@ document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
 
     createPath(contextMenuCenter.x, contextMenuCenter.y)
 })
+
+document.getElementById('npwcm-disconnect').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    disconnectConnectedPaths(selectedElement.id)
+
+    turnOffContextMenu()
+})

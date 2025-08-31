@@ -44,3 +44,15 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
 
     createNewElement(container, newNote, xOffset, yOffset)
 }
+
+function disconnectConnectedPaths(elID){
+    const element = document.getElementById(elID)
+
+    allPaths.forEach(path => {
+        if(path.startNoteID === element.id){
+            path.startNoteID = null
+        }else if(path.endNoteID === element.id){
+            path.endNoteID = null
+        }
+    })
+}
