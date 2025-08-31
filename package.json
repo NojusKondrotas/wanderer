@@ -15,5 +15,8 @@
   "devDependencies": {
     "electron": "^37.2.4",
     "rimraf": "^6.0.1"
+  },
+  "dependencies": {
+    "quill": "^2.0.3"
   }
 }
