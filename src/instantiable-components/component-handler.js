@@ -50,7 +50,6 @@ function createNewElement(container, el, centerX = 0, centerY = 0){
 
     el.id = `${getElementID()}`
     elementPositions.set(el.id, { x: boardSpaceX, y: boardSpaceY })
-    configureElement(el)
 
     updateElementPositionByID(el.id)
 
