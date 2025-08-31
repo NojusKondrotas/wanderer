@@ -149,7 +149,7 @@ class PositioningHandler{
         }
         if(this.isDrawingPath){
             if(!this.checkIfDraggedEnough()){
-                return terminatePathDrawing(ev, null)
+                terminatePathDrawing(ev, null)
             }
         }
 

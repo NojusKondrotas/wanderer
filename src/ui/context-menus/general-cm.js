@@ -8,6 +8,14 @@ document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
+document.getElementById('gcm-new-connection').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    createPath(contextMenuCenter.x, contextMenuCenter.y)
+
+    concealContextMenu()
+})
+
 document.getElementById('gcm-paste').addEventListener('mousedown', async (e) => {
     e.stopPropagation()
 
