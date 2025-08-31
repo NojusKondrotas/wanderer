@@ -1,10 +1,10 @@
 const titlebar = document.querySelector('.titlebar')
 const titlebarVisual = document.getElementById('titlebar-visual')
 
-const [titlebarFullscreenCtrlFrame, titlebarFullscreenCtrlContextMenu] = document.getElementsByClassName('fullscreen-window')
-const [titlebarMinimizeCtrlFrame, titlebarMinimizeCtrlContextMenu] = document.getElementsByClassName('minimize-window')
-const [titlebarCloseCtrlFrame, titlebarCloseCtrlContextMenu] = document.getElementsByClassName('close-window')
-const [titlebarGlobalConfigurationFrame, titlebarGlobalConfigurationContextMenu] = document.getElementsByClassName('global-config')
+const titlebarFullscreenCtrlFrame = document.getElementById('frame-fullscreen-window')
+const titlebarMinimizeCtrlFrame = document.getElementById('frame-minimize-window')
+const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')
+const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')
 const titlebarLockCtrlFrame = document.getElementById('frame-lock-titlebar')
 
 let isFullscreen = true, isTitlebarLocked = false
@@ -21,18 +21,6 @@ titlebarFullscreenCtrlFrame.addEventListener('click', (e) => {
 
     turnOffContextMenu()
 })
-titlebarFullscreenCtrlContextMenu.addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-
-    window.wandererAPI.isFullscreen().then(current => {
-        isFullscreen = !current
-        window.wandererAPI.setFullscreen(isFullscreen)
-    })
-
-    titlebarFullscreenCtrlContextMenu.blur()
-
-    turnOffContextMenu()
-})
 
 titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
@@ -43,18 +31,12 @@ titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
 
     turnOffContextMenu()
 })
-titlebarMinimizeCtrlContextMenu.addEventListener('mousedown', (e) => {
+
+titlebarCloseCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
-
-    window.wandererAPI.setMinimized()
-
-    titlebarMinimizeCtrlContextMenu.blur()
-
+    window.wandererAPI.closeWindow()
     turnOffContextMenu()
 })
-
-titlebarCloseCtrlFrame.addEventListener('click', (e) => {e.stopPropagation(); window.wandererAPI.closeWindow(); turnOffContextMenu()})
-titlebarCloseCtrlContextMenu.addEventListener('mousedown', (e) => {e.stopPropagation(); window.wandererAPI.closeWindow(); turnOffContextMenu()})
 
 titlebarLockCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
