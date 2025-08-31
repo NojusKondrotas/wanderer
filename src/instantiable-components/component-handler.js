@@ -61,12 +61,7 @@ function removeElementByID(container, elID){
     container.removeChild(document.getElementById(elID))
     unusedElementIDs.push(elID)
 
-    allPaths.forEach(path => {
-        if(path.startNoteID === elID)
-            path.startNoteID = null
-        if(path.endNoteID === elID)
-            path.endNoteID = null
-    })
+    disconnectConnectedPaths(elID)
 
     if (elementPositions.has(elID)) {
         elementPositions.delete(elID)
