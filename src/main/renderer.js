@@ -10,6 +10,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         unusedPathIDs = stateObj.unusedPathIDs,
 
         elementPositions = new Map(stateObj.elementPositions.map(e => [e.id, {x: e.x, y: e.y}]))
+        allQlEditors = stateObj.allQlEditors
         allPaths = stateObj.allPaths
 
         isTitlebarLocked = stateObj.isTitlebarLocked
@@ -25,6 +26,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(largestPathID)
         console.log(unusedPathIDs)
         console.log(elementPositions)
+        console.log(allQlEditors)
         console.log(allPaths)
         console.log(isTitlebarLocked)
         console.log(isFullscreen)
@@ -42,6 +44,7 @@ window.addEventListener('beforeunload', () => {
         largestPathID,
         unusedPathIDs,
         elementPositions: elementPositionsArr,
+        allQlEditors,
         allPaths,
         isTitlebarLocked,
         isFullscreen

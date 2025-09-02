@@ -125,8 +125,8 @@ class PositioningHandler{
             }
 
             isWritingElement = false
-            Array.from(whiteboard.children).forEach((child) => {
-                child.contentEditable = 'false'
+            Array.from(allQlEditors).forEach((qlEditorID) => {
+                document.getElementById(qlEditorID).contentEditable = 'false'
             })
 
             this.dragStart = { x: ev.clientX, y: ev.clientY }

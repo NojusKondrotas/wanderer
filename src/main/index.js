@@ -61,6 +61,7 @@ ipcMain.on('save-state', (e, stateObj) => {
         largestPathID: stateObj.largestPathID,
         unusedPathIDs: stateObj.unusedPathIDs,
         elementPositions: serializedElements,
+        allQlEditors: stateObj.allQlEditors,
         allPaths: stateObj.allPaths,
         isTitlebarLocked: stateObj.isTitlebarLocked,
         isFullscreen: stateObj.isFullscreen

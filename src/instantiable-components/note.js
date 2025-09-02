@@ -1,3 +1,16 @@
+let largestQlEditorID = 0, unusedQlEditorIDs = new Array()
+
+let allQlEditors = new Array()
+
+function getQlEditorID(){
+    if(unusedQlEditorIDs.length !== 0)
+        return unusedQlEditorIDs.pop()
+    else{
+        ++largestQlEditorID
+        return `editor-${largestQlEditorID - 1}`
+    }
+}
+
 function addNoteListeners(note){
     note.addEventListener('contextmenu', (e) => {
         e.preventDefault()
@@ -46,8 +59,10 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
 
     const quill = createQuill(newNote)
     configureQuill(newNote, content)
-
-    console.log(contextMenuCenter.x, contextMenuCenter.y)
+    const editor = newNote.querySelector('.ql-editor')
+    let id = getQlEditorID()
+    editor.id = id
+    allQlEditors.push(id)
 }
 
 function disconnectConnectedPaths(elID){
