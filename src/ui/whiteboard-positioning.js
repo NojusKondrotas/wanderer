@@ -36,7 +36,7 @@ class PositioningHandler{
     static element_MouseUp(ev, el){
         if(this.isDrawingPath){
             if(el.id === selectedPath.startNoteID){
-                deletePath(selectedPath)
+                deletePathByID(selectedPath.id)
                 return this.endDrag(ev)
             }
             if(!this.checkIfDraggedEnough()){

@@ -106,19 +106,20 @@ function terminatePathDrawing(ev, elID){
     selectedPath = null
 }
 
-function deletePath(pathRemove){
-    const index = allPaths.indexOf(pathRemove)
+function deletePathByID(pathToRemoveID){
+    const pathToRemove = document.getElementById(pathToRemoveID)
+    const index = allPaths.indexOf(pathToRemove)
     if (index !== -1){
         allPaths.splice(index, 1)
 
-        unusedPathIDs.push(pathRemove.pathVisualID)
-        unusedPathIDs.push(pathRemove.hitPathID)
+        unusedPathIDs.push(pathToRemove.pathVisualID)
+        unusedPathIDs.push(pathToRemove.hitPathID)
 
-        const pathVisual = document.getElementById(pathRemove.pathVisualID)
-        const hitPath = document.getElementById(pathRemove.hitPathID)
+        const pathVisual = document.getElementById(pathToRemove.pathVisualID)
+        const hitPath = document.getElementById(pathToRemove.hitPathID)
         pathVisual.remove()
         hitPath.remove()
-        removeComponentByID(whiteboard, pathRemove.ID)
+        removeComponentByID(whiteboard, pathToRemove.ID)
 
         return
     }
