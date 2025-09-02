@@ -1,3 +1,5 @@
+$whiteboard-color: #f8f8f8;
+
 body {
     overflow: hidden;
 }
@@ -8,6 +10,8 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
+
+    background-color: $whiteboard-color;
 
     z-index: 5;
 }
@@ -162,7 +166,8 @@ svg {
     border-radius: 5px;
     padding: 2px;
 
-    background-color: antiquewhite;
+    background-color: $whiteboard-color;
+    border: 2px solid #dadada;
 
     z-index: 5;
 }

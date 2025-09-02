@@ -7,14 +7,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "fresh": "rimraf ./src/saves && cd src && mkdir saves && cd .. && electron ."
+    "fresh": "rimraf ./src/saves && cd src && mkdir saves && cd .. && electron .",
+    "start-s": "npm run c-sass && electron .",
+    "fresh-s": "npm run c-sass && rimraf ./src/saves && cd src && mkdir saves && cd .. && electron .",
+    "c-sass": "sass ./src/main/styles.scss ./src/main/styles.css"
   },
   "keywords": [],
   "author": "Nojus Kondrotas <nojus.kondrotas23@gmail.com>",
   "license": "GPL-3.0-only",
   "devDependencies": {
     "electron": "^37.2.4",
-    "rimraf": "^6.0.1"
+    "rimraf": "^6.0.1",
+    "sass": "^1.91.0"
   },
   "dependencies": {
     "quill": "^2.0.3"
