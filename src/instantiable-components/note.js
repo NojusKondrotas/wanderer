@@ -65,6 +65,19 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     allQlEditors.push(id)
 }
 
+function removeNoteByID(container, noteID){
+    const editorID = document.getElementById(noteID).querySelector('.ql-editor').id
+    
+    const index = allQlEditors.indexOf(editorID)
+    if (index !== -1){
+        allQlEditors.splice(index, 1)
+
+        unusedQlEditorIDs.push(editorID)
+    }
+
+    removeComponentByID(container, noteID)
+}
+
 function disconnectConnectedPaths(elID){
     allPaths.forEach(path => {
         if(path.startNoteID === elID){

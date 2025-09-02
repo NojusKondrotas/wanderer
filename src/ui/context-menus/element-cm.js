@@ -21,7 +21,7 @@ document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
     writeElementWandererClipboard(elementIDHTML)
     navigator.clipboard.writeText(elementContent)
     
-    removeElementByID(whiteboard, selectedElement.id)
+    removeComponentByID(whiteboard, selectedElement.id)
 
     turnOffContextMenu()
 })
@@ -29,7 +29,7 @@ document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
 document.getElementById('npwcm-delete').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    removeElementByID(whiteboard, selectedElement.id)
+    removeNoteByID(whiteboard, selectedElement.id)
 
     turnOffContextMenu()
 })

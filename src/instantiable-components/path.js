@@ -118,7 +118,7 @@ function deletePath(pathRemove){
         const hitPath = document.getElementById(pathRemove.hitPathID)
         pathVisual.remove()
         hitPath.remove()
-        removeElementByID(whiteboard, pathRemove.ID)
+        removeComponentByID(whiteboard, pathRemove.ID)
 
         return
     }

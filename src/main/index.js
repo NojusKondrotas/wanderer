@@ -60,6 +60,8 @@ ipcMain.on('save-state', (e, stateObj) => {
         unusedElementIDs: stateObj.unusedElementIDs,
         largestPathID: stateObj.largestPathID,
         unusedPathIDs: stateObj.unusedPathIDs,
+        largestQlEditorID: stateObj.largestQlEditorID,
+        unusedQlEditorIDs: stateObj.unusedQlEditorIDs,
         elementPositions: serializedElements,
         allQlEditors: stateObj.allQlEditors,
         allPaths: stateObj.allPaths,

@@ -4,10 +4,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     const stateObj = await window.wandererAPI.loadState()
 
     if (stateObj && Object.keys(stateObj).length > 0){
-        largestElementID = stateObj.largestElementID,
-        unusedElementIDs = stateObj.unusedElementIDs,
-        largestPathID = stateObj.largestPathID,
-        unusedPathIDs = stateObj.unusedPathIDs,
+        largestElementID = stateObj.largestElementID
+        unusedElementIDs = stateObj.unusedElementIDs
+        largestPathID = stateObj.largestPathID
+        unusedPathIDs = stateObj.unusedPathIDs
+        largestQlEditorID = stateObj.largestQlEditorID
+        unusedQlEditorIDs = stateObj.unusedQlEditorIDs
 
         elementPositions = new Map(stateObj.elementPositions.map(e => [e.id, {x: e.x, y: e.y}]))
         allQlEditors = stateObj.allQlEditors
@@ -43,6 +45,8 @@ window.addEventListener('beforeunload', () => {
         unusedElementIDs,
         largestPathID,
         unusedPathIDs,
+        largestQlEditorID,
+        unusedQlEditorIDs,
         elementPositions: elementPositionsArr,
         allQlEditors,
         allPaths,
