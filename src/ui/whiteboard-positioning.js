@@ -27,7 +27,7 @@ class PositioningHandler{
 
             PositioningHandler.startDrag(ev, false, true)
             
-            toggleWritingMode(false, el)
+            toggleQuillWritingMode(false, el)
 
             selectedElement = el
         }

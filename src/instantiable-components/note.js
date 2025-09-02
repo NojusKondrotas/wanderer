@@ -18,7 +18,7 @@ function addNoteListeners(note){
     })
 
     note.addEventListener('dblclick', (e) => {
-        toggleWritingMode(true, note)
+        toggleQuillWritingMode(true, note)
 
         setTimeout(() => {
             note.focus()
@@ -40,9 +40,14 @@ function addNoteListeners(note){
 function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     const newNote = document.createElement('div')
     newNote.classList.add('note')
-    newNote.textContent = content
 
     createNewElement(container, newNote, xOffset, yOffset)
+    addNoteListeners(newNote)
+
+    const quill = createQuill(newNote)
+    configureQuill(newNote, content)
+
+    console.log(contextMenuCenter.x, contextMenuCenter.y)
 }
 
 function disconnectConnectedPaths(elID){

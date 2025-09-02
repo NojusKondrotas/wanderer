@@ -66,16 +66,3 @@ function removeElementByID(container, elID){
         elementPositions.delete(elID)
     }
 }
-
-function toggleWritingMode(boolean = false, editableEl = null){
-    if(boolean){
-        isWritingElement = true
-        isDraggingElement = false
-        if(editableEl) editableEl.contentEditable = 'true'
-    }
-    else{
-        isWritingElement = false
-        isDraggingElement = true
-        if(editableEl) editableEl.contentEditable = 'false'
-    }
-}
