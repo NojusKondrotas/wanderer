@@ -65,7 +65,7 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     allQlEditors.push(id)
 }
 
-function removeNoteByID(container, noteID){
+function deleteNoteByID(container, noteID){
     const editorID = document.getElementById(noteID).querySelector('.ql-editor').id
     
     const index = allQlEditors.indexOf(editorID)
@@ -75,7 +75,7 @@ function removeNoteByID(container, noteID){
         unusedQlEditorIDs.push(editorID)
     }
 
-    removeComponentByID(container, noteID)
+    deleteComponentByID(container, noteID)
 }
 
 function disconnectConnectedPaths(elID){

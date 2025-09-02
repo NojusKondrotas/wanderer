@@ -56,7 +56,7 @@ function createNewElement(container, el, centerX = 0, centerY = 0){
     el.style.visibility = 'visible'
 }
 
-function removeComponentByID(container, elID){
+function deleteComponentByID(container, elID){
     container.removeChild(document.getElementById(elID))
     unusedElementIDs.push(elID)
 
