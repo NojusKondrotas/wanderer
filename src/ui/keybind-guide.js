@@ -19,6 +19,7 @@ function keybindGuide_MouseOutHandler(){
 
 function handleKeybindGuideAppearance(flag){
     if(flag){
+        keybindGuide.style.pointerEvents = "auto"
         keybindGuideCloseCtrl.style.color = 'rgba(126, 135, 135, 0)'
         for(let child of keybindContainerChildren){
             child.style.color = 'rgba(126, 135, 135, 0.33)'
@@ -27,6 +28,7 @@ function handleKeybindGuideAppearance(flag){
 
         keybindGuide.addEventListener('mouseout', keybindGuide_MouseOutHandler)
     }else{
+        keybindGuide.style.pointerEvents = "none"
         keybindGuideCloseCtrl.style.color = 'rgba(126, 135, 135, 0)'
         for(let child of keybindContainerChildren){
             child.style.color = 'rgba(126, 135, 135, 0)'
