@@ -1,5 +1,10 @@
 $whiteboard-color: #f8f8f8;
 
+$low-index: 5;
+$medium-index: 10;
+$higher-index: 15;
+$highest-index: 20;
+
 body {
     overflow: hidden;
 }
@@ -13,7 +18,7 @@ body {
 
     background-color: $whiteboard-color;
 
-    z-index: 5;
+    z-index: $low-index;
 }
 
 #keybind-guide {
@@ -24,7 +29,7 @@ body {
     right: 0px;
     bottom: 0px;
 
-    z-index: 5;
+    z-index: $low-index;
 }
 
 #keybind-container {
@@ -71,7 +76,7 @@ body {
     margin: 0;
     padding: 0;
     
-    z-index: 10;
+    z-index: $higher-index;
 }
 
 .path-container {
@@ -118,7 +123,7 @@ svg {
 
     transition: transform 100ms ease;
 
-    z-index: 100;
+    z-index: $highest-index;
 }
 
 .window-control > img {
@@ -157,7 +162,7 @@ svg {
 
     transform: translate(-50%, -50%);
 
-    z-index: 100;
+    z-index: $highest-index;
 }
 
 .note {
@@ -169,7 +174,7 @@ svg {
     background-color: $whiteboard-color;
     border: 2px solid #dadada;
 
-    z-index: 5;
+    z-index: $medium-index;
 }
 
 path {
