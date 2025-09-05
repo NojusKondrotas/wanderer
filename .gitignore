@@ -1,3 +1,5 @@
 node_modules/
 
 src/saves/
+src/main/styles.css
+src/main/styles.css.map
