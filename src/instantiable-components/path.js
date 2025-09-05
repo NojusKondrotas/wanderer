@@ -40,7 +40,9 @@ function createPath(startX = 0, startY = 0){
     drawnPath.appendChild(hitPath)
     drawnPath.appendChild(pathVisual)
     div.appendChild(drawnPath)
-    createNewElement(whiteboard, div)
+    whiteboard.appendChild(div)
+    div.id = `${getElementID()}`
+    div.style.visibility = 'visible'
 
     const path = {
         ID: div.id,

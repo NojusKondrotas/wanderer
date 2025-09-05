@@ -59,7 +59,7 @@ class PositioningHandler{
             this.dragTotalDiff.x += Math.abs(this.dragDiff.x)
             this.dragTotalDiff.y += Math.abs(this.dragDiff.y)
 
-            updateChildrenPositions(whiteboard)
+            updateComponentPositions(whiteboard)
         }else if(this.isDraggingElement){
             this.dragDiff = {
                 x: this.dragStart.x - ev.clientX,
@@ -174,9 +174,19 @@ function updateElementPositionByID(elID) {
     document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
 }
 
-function updateChildrenPositions(container){
-    for(let child of container.children)
-        updateElementPositionByID(child.id)
+function updateComponentPositions(container){
+    for (let [key, value] of elementPositions){
+        updateElementPositionByID(key)
+    }
+    
+    allPaths.forEach(path => {
+        path.startPosition.x -= PositioningHandler.dragDiff.x
+        path.startPosition.y -= PositioningHandler.dragDiff.y
+        path.endPosition.x -= PositioningHandler.dragDiff.x
+        path.endPosition.y -= PositioningHandler.dragDiff.y
+
+        updatePathPosition(path, path.startPosition, path.endPosition)
+    })
 }
 
 function genMouseDown_WhiteboardMoveHandler(e){
