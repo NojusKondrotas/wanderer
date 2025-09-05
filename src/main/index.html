@@ -25,14 +25,14 @@
         </div>
     </div>
 
-    <div class="context-menu" id="general-context-menu">
+    <div class="context-menu-container cm-logic" id="general-context-menu">
         <button class="option-control gcm" id="gcm-new-whiteboard">New Whiteboard</button>
         <button class="option-control gcm" id="gcm-new-note">New Note</button>
         <button class="option-control gcm" id="gcm-new-notepad">New Notepad</button>
         <button class="option-control gcm" id="gcm-new-connection">New Connection</button>
         <button class="option-control gcm" id="gcm-paste">Paste</button>
     </div>
-    <div class="context-menu" id="element-context-menu">
+    <div class="context-menu-container cm-logic" id="element-context-menu">
         <button class="option-control npcm" id="npwcm-copy">Copy</button>
         <button class="option-control npcm" id="npwcm-delete">Delete</button>
         <button class="option-control npcm" id="npwcm-cut">Cut</button>
@@ -40,12 +40,12 @@
         <button class="option-control npcm" id="npwcm-connect">Connect</button>
         <button class="option-control npcm" id="npwcm-disconnect">Disconnect</button>
     </div>
-    <div class="context-menu" id="path-context-menu">
+    <div class="context-menu-container cm-logic" id="path-context-menu">
         <button class="option-control acm" id="acm-delete">Remove</button>
         <button class="option-control acm" id="acm-style">Style</button>
         <button class="option-control acm" id="acm-disconnect">Disconnect</button>
     </div>
-    <div class="context-menu" id="titlebar-context-menu">
+    <div class="context-menu-container cm-logic" id="titlebar-context-menu">
         <button class="option-control fullscreen-window tcm" id="tcm-fullscreen-window"><img src="../../res/fullscreen-window.png"></button>
         <button class="option-control minimize-window tcm" id="tcm-minimize-window"><img src="../../res/maximize-window.png"></button>
         <button class="option-control close-window tcm" id="tcm-close-window"><img src="../../res/close-window.png"></button>
@@ -55,8 +55,8 @@
     <div id="whiteboard">
     </div>
 
-    <button id="path-end-0" class="path-end"></button>
-    <button id="path-end-1" class="path-end"></button>
+    <button class="path-end cm-logic" id="path-end-0"></button>
+    <button class="path-end cm-logic" id="path-end-1"></button>
 
     <div id="keybind-guide">
         <button id="keybind-guide-close">x</button>

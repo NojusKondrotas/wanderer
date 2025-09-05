@@ -1,4 +1,7 @@
-const allContextMenus = document.getElementsByClassName('context-menu')
+const allContextMenus = document.getElementsByClassName('cm-logic')
+
+const pathStartPoint = document.getElementById('path-end-0')
+const pathEndPoint = document.getElementById('path-end-1')
 
 let isContextMenuOpen = false
 let activeContextMenu = null, contextMenuCenter = {x:0, y:0}
@@ -45,6 +48,20 @@ function turnOffContextMenu(){
     selectedPath = null
 }
 
+function openPathDisconnectionContextMenu(){
+    concealContextMenu()
+
+    pathStartPoint.style.left = `${selectedPath.startPosition.x}px`
+    pathStartPoint.style.top = `${selectedPath.startPosition.y}px`
+    pathEndPoint.style.left = `${selectedPath.endPosition.x}px`
+    pathEndPoint.style.top = `${selectedPath.endPosition.y}px`
+
+    pathStartPoint.style.display = 'inline'
+    pathEndPoint.style.display = 'inline'
+
+    isContextMenuOpen = true
+}
+
 function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     function revealContextMenu(contextMenuBlueprint){
         contextMenuBlueprint.style.display = 'block'
@@ -58,7 +75,7 @@ function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, r
 }
 
 function genMouseMove_ContextMenuHandler(e){
-    if (!isContextMenuOpen) return
+    if (!isContextMenuOpen || !activeContextMenu) return
 
     Array.from(activeContextMenu.children).forEach(ctrl => {
         const rect = ctrl.getBoundingClientRect()
