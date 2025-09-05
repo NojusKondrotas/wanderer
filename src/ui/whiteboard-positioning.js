@@ -1,7 +1,6 @@
 class PositioningHandler{
     static isDraggingBoard = false
     static isDraggingElement = false
-    static isDrawingPath = false
     static dragStart = { x: 0, y: 0 }
     static dragDiff = { x: 0, y: 0 }
     static dragTotalDiff = { x: 0, y: 0 }
@@ -34,7 +33,7 @@ class PositioningHandler{
     }
 
     static element_MouseUp(ev, el){
-        if(this.isDrawingPath){
+        if(isDrawingPath){
             if(el.id === selectedPath.startNoteID){
                 deletePathByID(selectedPath.id)
                 return this.endDrag(ev)
@@ -92,7 +91,7 @@ class PositioningHandler{
                         y: path.startPosition.y
                     }
                     let endPoint
-                    if(this.isDrawingPath && path === selectedPath){
+                    if(isDrawingPath && path === selectedPath){
                         endPoint = {
                             x: ev.clientX,
                             y: ev.clientY
@@ -108,7 +107,7 @@ class PositioningHandler{
             })
         }
         
-        if(this.isDrawingPath){
+        if(isDrawingPath){
             const boundingClientRect = document.getElementById(selectedPath.ID).getBoundingClientRect()
             const mousePos = this.getAbsoluteMousePos(ev, boundingClientRect)
             const updatedPath = updatePathData(selectedPath.startPosition.x, selectedPath.startPosition.y, mousePos.x, mousePos.y, selectedPath.shape)
@@ -147,7 +146,7 @@ class PositioningHandler{
             suppressNextMouseUp = false
             return
         }
-        if(this.isDrawingPath){
+        if(isDrawingPath){
             if(!this.checkIfDraggedEnough()){
                 terminatePathDrawing(ev, null)
             }

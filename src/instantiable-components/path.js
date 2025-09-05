@@ -1,6 +1,7 @@
 let largestPathID = 0
 
 let allPaths = new Array(), unusedPathIDs = new Array()
+let isDrawingPath = false
 let selectedPath = null
 
 const pathVisualShape = 'line', pathVisualWidth = '2'
@@ -58,7 +59,7 @@ function createPath(startX = 0, startY = 0){
     allPaths.push(path)
     selectedPath = path
     suppressNextMouseUp = true
-    PositioningHandler.isDrawingPath = true
+    isDrawingPath = true
     return path
 }
 
@@ -99,12 +100,16 @@ function updatePathPosition(path, startPosition, endPosition){
     document.getElementById(path.hitPathID).setAttribute('d', updatedPath)
 }
 
+function initiatePathDrawing(ev, elID){
+
+}
+
 function terminatePathDrawing(ev, elID){
     selectedPath.endNoteID = elID
     const boundingClientRect = document.getElementById(selectedPath.ID).getBoundingClientRect()
     const mousePos = PositioningHandler.getAbsoluteMousePos(ev, boundingClientRect)
     selectedPath.endPosition = mousePos
-    PositioningHandler.isDrawingPath = false
+    isDrawingPath = false
     selectedPath = null
 }
 
