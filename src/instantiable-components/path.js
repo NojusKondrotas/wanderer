@@ -67,7 +67,7 @@ function addPathListeners(path){
         console.log('right clicked on hitPath')
 
         selectedPath = path
-        openNewContextMenu(e.clientX, e.clientY, pathContextMenu, 360 / 2, 70, 90, 0, -10)
+        openNewContextMenu(e.clientX, e.clientY, pathContextMenu, 360 / 3, 70, 90, 0, -10)
     })
 }
 

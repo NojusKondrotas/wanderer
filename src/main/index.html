@@ -43,6 +43,7 @@
     <div class="context-menu" id="path-context-menu">
         <button class="option-control acm" id="acm-delete">Remove</button>
         <button class="option-control acm" id="acm-style">Style</button>
+        <button class="option-control acm" id="acm-disconnect">Disconnect</button>
     </div>
     <div class="context-menu" id="titlebar-context-menu">
         <button class="option-control fullscreen-window tcm" id="tcm-fullscreen-window"><img src="../../res/fullscreen-window.png"></button>
@@ -53,6 +54,9 @@
 
     <div id="whiteboard">
     </div>
+
+    <button id="path-end-0" class="path-end"></button>
+    <button id="path-end-1" class="path-end"></button>
 
     <div id="keybind-guide">
         <button id="keybind-guide-close">x</button>
@@ -72,6 +76,7 @@
     <script src="../ui/context-menus/path-cm.js"></script>
     <script src="../ui/context-menus/titlebar-cm.js"></script>
     <script src="../instantiable-components/component-handler.js"></script>
+    <script src="../instantiable-components/path-connection-handler.js"></script>
     <script src="../instantiable-components/note.js"></script>
     <script src="../instantiable-components/notepad.js"></script>
     <script src="../instantiable-components/whiteboard.js"></script>
