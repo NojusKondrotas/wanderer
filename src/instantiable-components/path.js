@@ -60,6 +60,7 @@ function createPath(mousePos, startX = 0, startY = 0){
     selectedPath = path
     suppressNextMouseUp = true
     isDrawingPath = true
+    updatePathPosition(path, path.startPosition, path.endPosition)
     return path
 }
 
