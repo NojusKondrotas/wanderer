@@ -1,6 +1,6 @@
 let quillToolbar = null
 
-let isQuillToolbarDefined = false
+let isQuillToolbarDefined = false, isQuillToolbarEdit = false
 
 function updateQuillToolbarPosition(component){
     const componentRect = component.getBoundingClientRect()

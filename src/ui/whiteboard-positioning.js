@@ -29,6 +29,7 @@ class PositioningHandler{
     }
 
     static element_MouseUp(ev, el){
+        if(isWritingElement) return
         if(isDrawingPath){
             if(!this.checkIfDraggedEnough()){
                 if(el.id === selectedPath.startNoteID){
@@ -131,6 +132,7 @@ class PositioningHandler{
     }
 
     static startDrag(ev, isBoard, isEl){
+        if(isQuillToolbarEdit) return
         if(ev.button !== 2){
             if(isContextMenuOpen){
                 turnOffContextMenu()
@@ -159,6 +161,10 @@ class PositioningHandler{
     }
 
     static endDrag(ev){
+        if(isQuillToolbarEdit){
+            isQuillToolbarEdit = false
+            return
+        }
         if(suppressNextMouseUp){
             suppressNextMouseUp = false
             return

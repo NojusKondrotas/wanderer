@@ -1,6 +1,6 @@
 let largestQlEditorID = 0, unusedQlEditorIDs = new Array()
 
-let allQlEditors = new Array()
+let allQlEditors = new Array(), isEditing = false
 
 function getQlEditorID(){
     if(unusedQlEditorIDs.length !== 0)
@@ -23,14 +23,17 @@ function addNoteListeners(note){
     })
 
     note.addEventListener('mousedown', (e) => {
+        e.stopPropagation()
         PositioningHandler.element_MouseDown(e, note)
     })
 
     note.addEventListener('mouseup', (e) => {
+        e.stopPropagation()
         PositioningHandler.element_MouseUp(e, note)
     })
 
     note.addEventListener('dblclick', (e) => {
+        if(isWritingElement) return
         selectedElement = note
         toggleQuillWritingMode(true, note)
 
@@ -60,7 +63,6 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     addNoteListeners(newNote)
 
     document.getElementById(newNote.id).addEventListener("input", (e) => {
-        console.log("User typed:", e.target.value)
         updateQuillToolbarPosition(newNote)
     })
 
@@ -68,6 +70,7 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     configureQuill(newNote, content)
     const editor = newNote.querySelector('.ql-editor')
     quillToolbar = document.querySelector('.ql-toolbar')
+    quillToolbar.addEventListener('mousedown', (e) => isQuillToolbarEdit = true)
     let id = getQlEditorID()
     editor.id = id
     allQlEditors.push(id)
