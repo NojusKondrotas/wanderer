@@ -53,6 +53,7 @@ function addNoteListeners(note){
 function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     const newNote = document.createElement('div')
     newNote.classList.add('note')
+    newNote.spellcheck = false
 
     createNewElement(container, newNote, xOffset, yOffset)
     addNoteListeners(newNote)

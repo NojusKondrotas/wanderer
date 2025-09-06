@@ -21,8 +21,9 @@ function configureQuill(ql_container, content = ''){
 
 function createQuill(parent){
     return quill = new Quill(parent, {
+        theme: 'snow',
         modules: {
-            toolbar: false,
+            toolbar: true
         }
     })
 }
