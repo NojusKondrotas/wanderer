@@ -39,7 +39,7 @@ document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
     concealContextMenu()
     if (!selectedElement) return
 
-    createPath(contextMenuCenter.x, contextMenuCenter.y)
+    createPath({ x: e.clientX, y: e.clientY }, contextMenuCenter.x, contextMenuCenter.y)
 })
 
 document.getElementById('npwcm-disconnect').addEventListener('mousedown', (e) => {

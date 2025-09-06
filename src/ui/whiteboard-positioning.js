@@ -11,10 +11,6 @@ class PositioningHandler{
         return movedX > 5 || movedY > 5
     }
 
-    static getAbsoluteMousePos(ev, boundingClientRect){
-        return { x: ev.clientX - boundingClientRect.left, y: ev.clientY - boundingClientRect.top}
-    }
-
     static element_MouseDown(ev, el){
         if(ev.button !== 2){
             ev.stopPropagation()
@@ -108,11 +104,7 @@ class PositioningHandler{
         }
         
         if(isDrawingPath){
-            const boundingClientRect = document.getElementById(selectedPath.ID).getBoundingClientRect()
-            const mousePos = this.getAbsoluteMousePos(ev, boundingClientRect)
-            const updatedPath = updatePathData(selectedPath.startPosition.x, selectedPath.startPosition.y, mousePos.x, mousePos.y, selectedPath.shape)
-            document.getElementById(selectedPath.pathVisualID).setAttribute('d', updatedPath)
-            document.getElementById(selectedPath.hitPathID).setAttribute('d', updatedPath)
+            updatePathPosition(selectedPath, selectedPath.startPosition, { x: ev.clientX, y: ev.clientY })
         }
     }
 

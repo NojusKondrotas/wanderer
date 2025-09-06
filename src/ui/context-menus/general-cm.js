@@ -11,7 +11,7 @@ document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
 document.getElementById('gcm-new-connection').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    createPath(contextMenuCenter.x, contextMenuCenter.y)
+    createPath({ x: e.clientX, y: e.clientY }, contextMenuCenter.x, contextMenuCenter.y)
 
     concealContextMenu()
 })

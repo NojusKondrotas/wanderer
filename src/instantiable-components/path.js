@@ -17,7 +17,7 @@ function getPathID(){
     }
 }
 
-function createPath(startX = 0, startY = 0){
+function createPath(mousePos, startX = 0, startY = 0){
     const div = document.createElement('div')
     div.classList.add('path-container')
 
@@ -51,8 +51,8 @@ function createPath(startX = 0, startY = 0){
         hitPathID: hitPath.id,
         startNoteID: selectedElement ? selectedElement.id : null,
         endNoteID: null,
-        startPosition: {x: startX, y: startY},
-        endPosition: null,
+        startPosition: { x: startX, y: startY },
+        endPosition: { x: mousePos.x, y: mousePos.y },
         shape: pathVisualShape
     }
     configurePath(path)
@@ -100,15 +100,9 @@ function updatePathPosition(path, startPosition, endPosition){
     document.getElementById(path.hitPathID).setAttribute('d', updatedPath)
 }
 
-function initiatePathDrawing(ev, elID){
-
-}
-
 function terminatePathDrawing(ev, elID){
     selectedPath.endNoteID = elID
-    const boundingClientRect = document.getElementById(selectedPath.ID).getBoundingClientRect()
-    const mousePos = PositioningHandler.getAbsoluteMousePos(ev, boundingClientRect)
-    selectedPath.endPosition = mousePos
+    selectedPath.endPosition = { x: ev.clientX, y: ev.clientY }
     isDrawingPath = false
     selectedPath = null
 }
