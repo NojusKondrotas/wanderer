@@ -11,7 +11,8 @@ function updateQuillToolbarPosition(component){
     quillToolbar.style.top = `${y}px`
 }
 
-function toggleQuillWritingMode(toggle = false, editableEl){
+function toggleQuillWritingMode(toggle = false, editableElID){
+    const editableEl = document.getElementById(editableElID)
     if(toggle){
         editableEl.querySelector(':scope > .ql-editor').contentEditable = 'true'
 

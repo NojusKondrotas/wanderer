@@ -22,7 +22,7 @@ class PositioningHandler{
 
             PositioningHandler.startDrag(ev, false, true)
             
-            toggleQuillWritingMode(false, el)
+            toggleQuillWritingMode(false, el.id)
 
             selectedElement = el
         }
@@ -139,7 +139,7 @@ class PositioningHandler{
                 return
             }
             if(isWritingElement){
-                toggleQuillWritingMode(false, selectedElement)
+                toggleQuillWritingMode(false, selectedElement.id)
                 return
             }
 

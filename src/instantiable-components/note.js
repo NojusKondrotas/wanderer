@@ -35,7 +35,7 @@ function addNoteListeners(note){
     note.addEventListener('dblclick', (e) => {
         if(isWritingElement) return
         selectedElement = note
-        toggleQuillWritingMode(true, note)
+        toggleQuillWritingMode(true, note.id)
 
         setTimeout(() => {
             note.focus()
