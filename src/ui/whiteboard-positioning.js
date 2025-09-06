@@ -136,8 +136,11 @@ class PositioningHandler{
                 turnOffContextMenu()
                 return
             }
+            if(isWritingElement){
+                toggleQuillWritingMode(false, selectedElement)
+                return
+            }
 
-            isWritingElement = false
             Array.from(allQlEditors).forEach((qlEditorID) => {
                 document.getElementById(qlEditorID).contentEditable = 'false'
             })

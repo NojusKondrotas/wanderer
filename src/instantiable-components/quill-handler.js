@@ -1,13 +1,32 @@
-function toggleQuillWritingMode(toggle = false, editableEl = null){
+let quillToolbar = null
+
+let isQuillToolbarDefined = false
+
+function updateQuillToolbarPosition(component){
+    const componentRect = component.getBoundingClientRect()
+    const quillToolbarRect = quillToolbar.getBoundingClientRect()
+    const x = elementPositions.get(component.id).x + componentRect.width / 2
+    const y = elementPositions.get(component.id).y - quillToolbarRect.height
+    quillToolbar.style.left = `${x}px`
+    quillToolbar.style.top = `${y}px`
+}
+
+function toggleQuillWritingMode(toggle = false, editableEl){
     if(toggle){
+        editableEl.querySelector(':scope > .ql-editor').contentEditable = 'true'
+
+        quillToolbar.style.display = 'inline'
+        updateQuillToolbarPosition(editableEl)
+
         isWritingElement = true
-        isDraggingElement = false
-        if(editableEl) editableEl.querySelector(':scope > .ql-editor').contentEditable = 'true'
+        selectedElement = editableEl
     }
     else{
+        editableEl.querySelector(':scope > .ql-editor').contentEditable = 'false'
+        quillToolbar.style.display = 'none'
+
         isWritingElement = false
-        isDraggingElement = true
-        if(editableEl) editableEl.querySelector(':scope > .ql-editor').contentEditable = 'false'
+        selectedElement = null
     }
 }
 
@@ -20,10 +39,20 @@ function configureQuill(ql_container, content = ''){
 }
 
 function createQuill(parent){
-    return quill = new Quill(parent, {
-        theme: 'snow',
-        modules: {
-            toolbar: true
-        }
-    })
+    if(isQuillToolbarDefined)
+        return quill = new Quill(parent, {
+            theme: 'snow',
+            modules: {
+                toolbar: false
+            }
+        })
+    else{
+        isQuillToolbarDefined = true
+        return quill = new Quill(parent, {
+            theme: 'snow',
+            modules: {
+                toolbar: true
+            }
+        })
+    }
 }

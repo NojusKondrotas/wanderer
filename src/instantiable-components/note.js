@@ -31,6 +31,7 @@ function addNoteListeners(note){
     })
 
     note.addEventListener('dblclick', (e) => {
+        selectedElement = note
         toggleQuillWritingMode(true, note)
 
         setTimeout(() => {
@@ -58,9 +59,15 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     createNewElement(container, newNote, xOffset, yOffset)
     addNoteListeners(newNote)
 
+    document.getElementById(newNote.id).addEventListener("input", (e) => {
+        console.log("User typed:", e.target.value)
+        updateQuillToolbarPosition(newNote)
+    })
+
     const quill = createQuill(newNote)
     configureQuill(newNote, content)
     const editor = newNote.querySelector('.ql-editor')
+    quillToolbar = document.querySelector('.ql-toolbar')
     let id = getQlEditorID()
     editor.id = id
     allQlEditors.push(id)

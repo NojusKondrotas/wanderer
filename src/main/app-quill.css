@@ -7,7 +7,7 @@
  */
 
 /* Changes:
-		15, 17; 46, 49; 57-59; 754-760; 1204; 1288 */
+		15, 17; 46, 49; 57-59; 754-760; 1204; 1288; 1172-1174 */
 .ql-container {
 	box-sizing: border-box;
 	font-family: Helvetica, Arial, sans-serif;
@@ -1169,10 +1169,14 @@
 }
 
 .ql-toolbar.ql-snow {
-	border: 1px solid #ccc;
+	display: none;
+	position: absolute;
+	/* border: 1px solid #ccc; */
 	box-sizing: border-box;
 	font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-	padding: 8px
+	padding: 8px;
+
+	transform: translate(-50%, -50%);
 }
 
 .ql-toolbar.ql-snow .ql-formats {
