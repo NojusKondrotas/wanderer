@@ -48,11 +48,22 @@ function createQuill(parent){
             }
         })
     else{
+        const toolbarOptions = [
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            ['link', 'image', 'video'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],
+            [{ 'indent': '-1'}, { 'indent': '+1' }],
+            [{ 'size': ['small', false, 'large', 'huge'] }],
+        ]
         isQuillToolbarDefined = true
         return quill = new Quill(parent, {
             theme: 'snow',
             modules: {
-                toolbar: true
+                toolbar: toolbarOptions
             }
         })
     }
