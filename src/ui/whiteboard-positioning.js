@@ -35,7 +35,8 @@ class PositioningHandler{
                     deletePathByID(selectedPath.id)
                     return this.endDrag(ev)
                 }
-                return terminatePathDrawing(ev, el.id)
+                terminatePathDrawing(ev, el.id)
+                return this.endDrag(ev)
             }
         }
         else this.endDrag(ev)
