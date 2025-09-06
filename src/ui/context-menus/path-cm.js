@@ -1,19 +1,15 @@
 const pathContextMenu = document.getElementById('path-context-menu')
 
-pathStartPoint.addEventListener('mousedown', (e) => {
-    disconnectPathStart(selectedPath)
-    concealContextMenu()
-})
+document.getElementById('acm-connect').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
 
-pathEndPoint.addEventListener('mousedown', (e) => {
-    disconnectPathEnd(selectedPath)
-    concealContextMenu()
+    openPathConnectionContextMenu(true)
 })
 
 document.getElementById('acm-disconnect').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    openPathDisconnectionContextMenu()
+    openPathConnectionContextMenu(false)
 })
 
 document.getElementById('acm-delete').addEventListener('mousedown', (e) => {

@@ -83,20 +83,38 @@ class PositioningHandler{
                 }
 
                 if(hasUpdated){
-                    let startPoint = {
-                        x: path.startPosition.x,
-                        y: path.startPosition.y
-                    }
-                    let endPoint
-                    if(isDrawingPath && path === selectedPath){
-                        endPoint = {
-                            x: ev.clientX,
-                            y: ev.clientY
+                    let startPoint, endPoint
+                    if(isDrawingPathEnd){
+                        startPoint = {
+                            x: path.startPosition.x,
+                            y: path.startPosition.y
+                        }
+                        if(isDrawingPath && path === selectedPath){
+                            endPoint = {
+                                x: ev.clientX,
+                                y: ev.clientY
+                            }
+                        }else{
+                            endPoint = {
+                                x: path.endPosition.x,
+                                y: path.endPosition.y
+                            }
                         }
                     }else{
                         endPoint = {
                             x: path.endPosition.x,
                             y: path.endPosition.y
+                        }
+                        if(isDrawingPath && path === selectedPath){
+                            startPoint = {
+                                x: ev.clientX,
+                                y: ev.clientY
+                            }
+                        }else{
+                            startPoint = {
+                                x: path.startPosition.x,
+                                y: path.startPosition.y
+                            }
                         }
                     }
                     updatePathPosition(path, startPoint, endPoint)
@@ -105,7 +123,10 @@ class PositioningHandler{
         }
         
         if(isDrawingPath){
-            updatePathPosition(selectedPath, selectedPath.startPosition, { x: ev.clientX, y: ev.clientY })
+            if(isDrawingPathEnd)
+                updatePathPosition(selectedPath, selectedPath.startPosition, { x: ev.clientX, y: ev.clientY })
+            else
+                updatePathPosition(selectedPath, { x: ev.clientX, y: ev.clientY }, selectedPath.endPosition)
         }
     }
 

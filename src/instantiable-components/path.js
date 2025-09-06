@@ -1,7 +1,7 @@
 let largestPathID = 0
 
 let allPaths = new Array(), unusedPathIDs = new Array()
-let isDrawingPath = false
+let isDrawingPath = false, isDrawingPathEnd = true
 let selectedPath = null
 
 const pathVisualShape = 'line', pathVisualWidth = '2'
@@ -60,6 +60,7 @@ function createPath(mousePos, startX = 0, startY = 0){
     selectedPath = path
     suppressNextMouseUp = true
     isDrawingPath = true
+    isDrawingPathEnd = true
     updatePathPosition(path, path.startPosition, path.endPosition)
     return path
 }
@@ -71,7 +72,7 @@ function addPathListeners(path){
         console.log('right clicked on hitPath')
 
         selectedPath = path
-        openNewContextMenu(e.clientX, e.clientY, pathContextMenu, 360 / 3, 70, 90, 0, -10)
+        openNewContextMenu(e.clientX, e.clientY, pathContextMenu, 360 / 4, 70, 90, 0, -10)
     })
 }
 
@@ -102,8 +103,14 @@ function updatePathPosition(path, startPosition, endPosition){
 }
 
 function terminatePathDrawing(ev, elID){
-    selectedPath.endNoteID = elID
-    selectedPath.endPosition = { x: ev.clientX, y: ev.clientY }
+    if(isDrawingPathEnd)
+        selectedPath.endNoteID = elID
+    else
+        selectedPath.startNoteID = elID
+    if(isDrawingPathEnd)
+        selectedPath.endPosition = { x: ev.clientX, y: ev.clientY }
+    else
+        selectedPath.startPosition = { x: ev.clientX, y: ev.clientY }
     isDrawingPath = false
     selectedPath = null
 }
