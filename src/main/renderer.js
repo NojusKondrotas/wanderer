@@ -12,35 +12,36 @@ window.addEventListener('DOMContentLoaded', async () => {
         unusedQlEditorIDs = stateObj.unusedQlEditorIDs
 
         elementPositions = new Map(stateObj.elementPositions.map(e => [e.id, {x: e.x, y: e.y}]))
-        allQlEditors = stateObj.allQlEditors
         allPaths = stateObj.allPaths
+        allQuillToolbars = new Map(stateObj.allQuillToolbars.map(e => [e.id, e.quill]))
 
         isTitlebarLocked = stateObj.isTitlebarLocked
         isFullscreen = stateObj.isFullscreen
-        isQuillToolbarDefined = stateObj.isQuillToolbarDefined
-        quillToolbar = stateObj.quillToolbar
 
         window.wandererAPI.setFullscreen(isFullscreen)
 
         configureAllElements(whiteboard.children)
         configureAllPaths(allPaths)
+        reinstateAllQuillToolbars()
 
         console.log(largestElementID)
         console.log(unusedElementIDs)
         console.log(largestPathID)
         console.log(unusedPathIDs)
         console.log(elementPositions)
-        console.log(allQlEditors)
         console.log(allPaths)
+        console.log(allQuillToolbars)
         console.log(isTitlebarLocked)
         console.log(isFullscreen)
     }
 })
 
 window.addEventListener('beforeunload', () => {
+    saveAllQuillToolbars()
     window.wandererAPI.saveHTML()
 
     const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
+    const allQuillToolbarsArr = Array.from(allQuillToolbars, ([elID, quill]) => [elID, quill])
 
     window.wandererAPI.saveState({
         largestElementID,
@@ -50,8 +51,8 @@ window.addEventListener('beforeunload', () => {
         largestQlEditorID,
         unusedQlEditorIDs,
         elementPositions: elementPositionsArr,
-        allQlEditors,
         allPaths,
+        allQuillToolbars: allQuillToolbarsArr,
         isTitlebarLocked,
         isFullscreen,
     })

@@ -1,3 +1,5 @@
+let allQuillToolbars = new Map()
+
 let activeQlToolbar = null, isQuillToolbarEdit = false
 
 function queryQuillToolbar(qlToolbarID){
@@ -35,12 +37,26 @@ function toggleQuillWritingMode(toggle = false, editableElID){
     }
 }
 
-function configureQuill(ql_container, content = ''){
+function configureQuill(quill, ql_container, content = ''){
     const editor = ql_container.querySelector(':scope > .ql-editor')
-    editor.textContent = content
+    quill.setContents(content)
     editor.contentEditable = 'false'
 
     ql_container.querySelector(':scope > .ql-clipboard').remove()
+}
+
+function configureQuillToolbar(qlToolbar){
+    qlToolbar.addEventListener('mousedown', (e) => { e.stopPropagation(); isQuillToolbarEdit = true })
+}
+
+function saveAllQuillToolbars(){
+    document.querySelectorAll('.note').forEach(qlEditor => allQuillToolbars.set(qlEditor.id, quill.getContents()))
+    document.querySelectorAll('.ql-toolbar').forEach(toolbar => toolbar.remove())
+}
+
+function reinstateAllQuillToolbars(){
+    for(let [key, value] of elementPositions)
+        createQuill(key, allQuillToolbars.get(key))
 }
 
 function initQuill(parent){
@@ -63,17 +79,19 @@ function initQuill(parent){
     })
 }
 
-function createQuill(parent, content = ''){
-    initQuill(parent)
+function createQuill(parentID, content = ''){
+    const parent = document.getElementById(parentID)
+    const quill = initQuill(parent)
 
-    configureQuill(parent, content)
+    configureQuill(quill, parent, content)
 
     const quillToolbar = parent.previousSibling
     quillToolbar.setAttribute('data-parent-id', parent.id)
-    quillToolbar.addEventListener('mousedown', (e) => { e.stopPropagation(); isQuillToolbarEdit = true })
+    configureQuillToolbar(quillToolbar)
 
     const editor = parent.querySelector('.ql-editor')
     let idEditor = getQlEditorID()
     editor.id = idEditor
-    allQlEditors.push(idEditor)
+
+    allQuillToolbars.set(parentID, quill.getContents())
 }

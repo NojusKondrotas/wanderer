@@ -54,7 +54,8 @@ ipcMain.on('save-state', (e, stateObj) => {
         fs.mkdirSync(saveDir)
 
     const serializedElements = Array.from(stateObj.elementPositions, ([id, pos]) => ({ id, x: pos.x, y: pos.y }))
-
+    const serializedallQuillToolbars = Array.from(stateObj.allQuillToolbars, ([id, quill]) => ({ id, quill }))
+    
     const dataToSave = {
         largestElementID: stateObj.largestElementID,
         unusedElementIDs: stateObj.unusedElementIDs,
@@ -63,8 +64,8 @@ ipcMain.on('save-state', (e, stateObj) => {
         largestQlEditorID: stateObj.largestQlEditorID,
         unusedQlEditorIDs: stateObj.unusedQlEditorIDs,
         elementPositions: serializedElements,
-        allQlEditors: stateObj.allQlEditors,
         allPaths: stateObj.allPaths,
+        allQuillToolbars: serializedallQuillToolbars,
         isTitlebarLocked: stateObj.isTitlebarLocked,
         isFullscreen: stateObj.isFullscreen,
     }

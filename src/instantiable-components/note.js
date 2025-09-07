@@ -1,6 +1,6 @@
 let largestQlEditorID = 0, unusedQlEditorIDs = new Array()
 
-let allQlEditors = new Array(), isEditing = false
+let isEditing = false
 
 function getQlEditorID(){
     if(unusedQlEditorIDs.length !== 0)
@@ -66,18 +66,9 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
         updateQuillToolbarPosition(newNote)
     })
 
-    createQuill(newNote, content)
+    createQuill(newNote.id, content)
 }
 
 function deleteNoteByID(container, noteID){
-    const editorID = document.getElementById(noteID).querySelector('.ql-editor').id
-    
-    const index = allQlEditors.indexOf(editorID)
-    if (index !== -1){
-        allQlEditors.splice(index, 1)
-
-        unusedQlEditorIDs.push(editorID)
-    }
-
     deleteComponentByID(container, noteID)
 }

@@ -143,8 +143,8 @@ class PositioningHandler{
                 return
             }
 
-            Array.from(allQlEditors).forEach((qlEditorID) => {
-                document.getElementById(qlEditorID).contentEditable = 'false'
+            document.querySelectorAll('.ql-editor').forEach((qlEditor) => {
+                document.getElementById(qlEditor.id).contentEditable = 'false'
             })
 
             this.dragStart = { x: ev.clientX, y: ev.clientY }
