@@ -66,7 +66,7 @@ ipcMain.on('save-state', (e, stateObj) => {
         allQlEditors: stateObj.allQlEditors,
         allPaths: stateObj.allPaths,
         isTitlebarLocked: stateObj.isTitlebarLocked,
-        isFullscreen: stateObj.isFullscreen
+        isFullscreen: stateObj.isFullscreen,
     }
 
     const filePath = path.join(saveDir, 'save-data.json')

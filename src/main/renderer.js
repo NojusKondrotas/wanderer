@@ -17,6 +17,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         isTitlebarLocked = stateObj.isTitlebarLocked
         isFullscreen = stateObj.isFullscreen
+        isQuillToolbarDefined = stateObj.isQuillToolbarDefined
+        quillToolbar = stateObj.quillToolbar
 
         window.wandererAPI.setFullscreen(isFullscreen)
 
@@ -51,7 +53,7 @@ window.addEventListener('beforeunload', () => {
         allQlEditors,
         allPaths,
         isTitlebarLocked,
-        isFullscreen
+        isFullscreen,
     })
 })
 

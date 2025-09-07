@@ -66,14 +66,7 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
         updateQuillToolbarPosition(newNote)
     })
 
-    const quill = createQuill(newNote)
-    configureQuill(newNote, content)
-    const editor = newNote.querySelector('.ql-editor')
-    quillToolbar = document.querySelector('.ql-toolbar')
-    quillToolbar.addEventListener('mousedown', (e) => isQuillToolbarEdit = true)
-    let id = getQlEditorID()
-    editor.id = id
-    allQlEditors.push(id)
+    createQuill(newNote, content)
 }
 
 function deleteNoteByID(container, noteID){

@@ -17,9 +17,6 @@ function getElementID(){
 
 function configureElement(element){
     if(element.classList.contains('note')){
-        element.contentEditable = 'false'
-        element.style.userSelect = 'none'
-
         addNoteListeners(element)
     }
 }
