@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, globalShortcut, screen } = require('electron')
 const path = require('path')
 const fs = require('fs')
+const robot = require('@hurdlegroup/robotjs')
 
 let main_window
 function initialiseApp(){
@@ -79,6 +80,10 @@ ipcMain.handle('load-state', () => {
     if (fs.existsSync(savePath))
         return JSON.parse(fs.readFileSync(savePath, 'utf-8'))
     return {}
+})
+
+ipcMain.handle('set-mouse-position', (e, x, y) => {
+    robot.moveMouse(x, y)
 })
 
 ipcMain.handle('is-fullscreen', () => main_window.isFullScreen())

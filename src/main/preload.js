@@ -15,6 +15,9 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   closeWindow: () => ipcRenderer.invoke('close-window'),
   openTitlebarContextMenu: (callback) => ipcRenderer.on('open-titlebar-context-menu',
     (event, mousePos, boundsOffset) => callback(mousePos, boundsOffset)),
+  setMousePosition: (x, y) => {
+    ipcRenderer.invoke('set-mouse-position', x, y)
+  },
 })
 
 ipcRenderer.on('app-before-quit', () => {

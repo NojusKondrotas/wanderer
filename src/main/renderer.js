@@ -23,6 +23,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         configureAllElements(whiteboard.children)
         configureAllPaths(allPaths)
         reinstateAllQuillToolbars()
+        reinstateAllNoteBorders(elementPositions)
 
         console.log(largestElementID)
         console.log(unusedElementIDs)
