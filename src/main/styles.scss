@@ -168,6 +168,7 @@ svg {
 .note {
     position: absolute;
     min-width: 80px;
+    min-height: 25.65px;
     border-radius: 5px;
     padding: 2px;
 
@@ -175,6 +176,44 @@ svg {
     border: 2px solid #dadada;
 
     z-index: $medium-index;
+}
+
+.note-border {
+    position: absolute;
+    background: #333;
+    z-index: 2;
+}
+.note-border-top {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    cursor: ns-resize;
+}
+.note-border-right {
+    top: 0;
+    right: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 0 3px 3px 0;
+    cursor: ew-resize;
+}
+.note-border-bottom {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    cursor: ns-resize;
+}
+.note-border-left {
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 3px 0 0 3px;
+    cursor: ew-resize;
 }
 
 path {

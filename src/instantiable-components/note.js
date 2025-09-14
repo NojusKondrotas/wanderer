@@ -2,6 +2,8 @@ let largestQlEditorID = 0, unusedQlEditorIDs = new Array()
 
 let isEditing = false
 
+let activeBorder = null
+
 function getQlEditorID(){
     if(unusedQlEditorIDs.length !== 0)
         return unusedQlEditorIDs.pop()
@@ -54,6 +56,37 @@ function addNoteListeners(note){
     })
 }
 
+function reinstateAllNoteBorders(elements){
+    for(let [key, value] of elements){
+        const el = document.getElementById(key)
+        if(el.classList.contains('note'))
+            instantiateNoteResizingBorders(el)
+    }
+}
+
+function instantiateNoteResizingBorders(note){
+    const borders = ['top', 'right', 'bottom', 'left']
+    borders.forEach(border => {
+        const borderDiv = document.createElement('div')
+        borderDiv.classList.add(`note-border`, `note-border-${border}`)
+        note.appendChild(borderDiv)
+
+        // Add resizing logic
+        borderDiv.addEventListener('mousedown', function(e) {
+            e.stopPropagation()
+            this.isResizing = true
+            activeBorder = border
+            selectedElement = note
+            PositioningHandler.startDrag(e, false, false, true)
+            document.body.style.cursor = (border === 'left' || border === 'right') ? 'ew-resize' : 'ns-resize'
+        })
+
+        borderDiv.addEventListener('mouseup', function(e) {
+            PositioningHandler.endDrag(e)
+        })
+    })
+}
+
 function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     const newNote = document.createElement('div')
     newNote.classList.add('note')
@@ -67,6 +100,7 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     })
 
     createQuill(newNote.id, content)
+    instantiateNoteResizingBorders(newNote)
 }
 
 function deleteNoteByID(container, noteID){
