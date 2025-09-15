@@ -6,6 +6,7 @@ const robot = require('@hurdlegroup/robotjs')
 let main_window
 function initialiseApp(){
     const savesPath = path.join(__dirname, '..', 'saves', 'index.html')
+    const savesNotepadsPath = path.join(__dirname, '..', 'saves', 'notepads')
     const defaultPath = path.join(__dirname, 'index.html')
     const entryFile = fs.existsSync(savesPath) ? savesPath : defaultPath
 
@@ -45,11 +46,22 @@ ipcMain.on('save-html', (e, html) => {
     if(!fs.existsSync(saveDir)){
         fs.mkdirSync(saveDir)
     }
-    const filePath = path.join(saveDir, 'index.html')
-    fs.writeFileSync(filePath, html, 'utf-8')
+    const saveNotepadDir = path.join(saveDir, 'notepads')
+    if(!fs.existsSync(saveNotepadDir)){
+        fs.mkdirSync(saveNotepadDir)
+    }
+
+    let filePath
+    const focusedWindow = BrowserWindow.getFocusedWindow()
+    if (focusedWindow && focusedWindow === main_window) {
+        filePath = path.join(saveDir, 'index.html')
+        fs.writeFileSync(filePath, html, 'utf-8')
+    }
 })
 
 ipcMain.on('save-state', (e, stateObj) => {
+    const focusedWindow = BrowserWindow.getFocusedWindow()
+    if(focusedWindow && focusedWindow !== main_window) return
     const saveDir = path.join(__dirname, '..', 'saves')
     if(!fs.existsSync(saveDir))
         fs.mkdirSync(saveDir)
@@ -76,9 +88,9 @@ ipcMain.on('save-state', (e, stateObj) => {
 })
 
 ipcMain.handle('load-state', () => {
-    const savePath = path.join(__dirname, '..', 'saves', 'save-data.json')
-    if (fs.existsSync(savePath))
-        return JSON.parse(fs.readFileSync(savePath, 'utf-8'))
+    const saveJSONPath = path.join(__dirname, '..', 'saves', 'save-data.json')
+    if (fs.existsSync(saveJSONPath))
+        return JSON.parse(fs.readFileSync(saveJSONPath, 'utf-8'))
     return {}
 })
 
