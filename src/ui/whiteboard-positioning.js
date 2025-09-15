@@ -14,6 +14,30 @@ class PositioningHandler{
         return movedX > 5 || movedY > 5
     }
 
+    static resize(){
+        if(activeBorder === 'right'){
+            const currentWidth = parseInt(selectedElement.style.width) || 80
+            selectedElement.style.width = Math.max(currentWidth - Math.floor(this.dragDiff.x), 80) + 'px'
+        }else if(activeBorder === 'left'){
+            const currentWidth = parseInt(selectedElement.style.width) || 80
+            const newWidth = Math.max(currentWidth + Math.floor(this.dragDiff.x), 80)
+            if(newWidth === 80 && this.dragDiff.x <= 0) return
+
+            selectedElement.style.width = newWidth + 'px'
+            selectedElement.style.left = selectedElement.offsetLeft - Math.floor(this.dragDiff.x) + 'px'
+        }else if(activeBorder === 'bottom'){
+            const currentHeight = parseInt(selectedElement.style.height) || 25.65
+            selectedElement.style.height = Math.max(currentHeight + Math.floor(this.dragDiff.y) * -1, 25.65) + 'px'
+        }else if(activeBorder === 'top'){
+            const currentHeight = parseInt(selectedElement.style.height) || 25.65
+            const newHeight = Math.max(currentHeight + Math.floor(this.dragDiff.y), 25.65)
+            if(newHeight === 25.65 && this.dragDiff.y <= 0) return
+            
+            selectedElement.style.height = newHeight + 'px'
+            selectedElement.style.top = (selectedElement.offsetTop - Math.floor(this.dragDiff.y)) + 'px'
+        }
+    }
+
     static element_MouseDown(ev, el){
         if(ev.button !== 2){
             ev.stopPropagation()
@@ -59,25 +83,7 @@ class PositioningHandler{
         this.dragAbsoluteTotalDiff.y += Math.abs(this.dragDiff.y)
         
         if (this.isResizing){
-            if(activeBorder === 'right'){
-                const currentWidth = parseInt(selectedElement.style.width) || 80
-                selectedElement.style.width = Math.max(currentWidth + Math.floor(this.dragDiff.x) * -1, 80) + 'px'
-            }else if(activeBorder === 'left'){
-                const currentWidth = parseInt(selectedElement.style.width) || 80
-                if(this.dragDiff.x < 0 && currentWidth === 80) return
-                const newWidth = Math.max(currentWidth + Math.floor(this.dragDiff.x), 80)
-                selectedElement.style.width = newWidth + 'px'
-                selectedElement.style.left = (selectedElement.offsetLeft - Math.floor(this.dragDiff.x)) + 'px'
-            }else if(activeBorder === 'bottom'){
-                const currentHeight = parseInt(selectedElement.style.height) || 25.65
-                selectedElement.style.height = Math.max(currentHeight + Math.floor(this.dragDiff.y) * -1, 25.65) + 'px'
-            }else if(activeBorder === 'top'){
-                const currentHeight = parseInt(selectedElement.style.height) || 25.65
-                if(this.dragDiff.y < 0 && currentHeight === 25.65) return
-                const newHeight = Math.max(currentHeight + Math.floor(this.dragDiff.y), 25.65)
-                selectedElement.style.height = newHeight + 'px'
-                selectedElement.style.top = (selectedElement.offsetTop - Math.floor(this.dragDiff.y)) + 'px'
-            }
+            this.resize()
         }else if(this.isDraggingBoard){
             updateComponentPositions(whiteboard)
         }else if(this.isDraggingElement){
