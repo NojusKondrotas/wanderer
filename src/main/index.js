@@ -3,6 +3,28 @@ const path = require('path')
 const fs = require('fs')
 const robot = require('@hurdlegroup/robotjs')
 
+function terminateApp(){
+    const windows = BrowserWindow.getAllWindows().map(win => {
+        win.webContents.send('terminate-app')
+        const bounds = win.getBounds()
+        return {
+            x: bounds.x,
+            y: bounds.y,
+            width: bounds.width,
+            height: bounds.height,
+            isMain: win === main_window,
+            isFullscreen: win.isFullScreen(),
+            isMinimized: win.isMinimized(),
+        }
+    })
+
+    const saveDir = path.join(__dirname, '..', 'saves')
+    if (!fs.existsSync(saveDir)) fs.mkdirSync(saveDir)
+    const windowsFilePath = path.join(saveDir, 'windows.json')
+    fs.writeFileSync(windowsFilePath, JSON.stringify(windows, null, 2), 'utf-8')
+    app.quit()
+}
+
 let main_window
 function initialiseApp(){
     const savesPath = path.join(__dirname, '..', 'saves', 'index.html')
@@ -40,6 +62,9 @@ app.whenReady().then(() => {
     globalShortcut.register('CmdOrCtrl+num1', () => {
         const focusedWindow = BrowserWindow.getFocusedWindow()
         if(focusedWindow) focusedWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), focusedWindow.getBounds())
+    })
+    globalShortcut.register('CmdOrCtrl+2', () => {
+        terminateApp()
     })
 })
 

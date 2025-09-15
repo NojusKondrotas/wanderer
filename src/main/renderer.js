@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 })
 
-window.addEventListener('beforeunload', () => {
+function save(){
     saveAllQuillToolbars()
     window.wandererAPI.saveHTML()
 
@@ -57,6 +57,14 @@ window.addEventListener('beforeunload', () => {
         isTitlebarLocked,
         isFullscreen,
     })
+}
+
+window.addEventListener('beforeunload', () => {
+    save()
+})
+
+window.addEventListener('terminate-app', () => {
+    save()
 })
 
 window.wandererAPI.openTitlebarContextMenu((mousePos, boundsOffset) => {
