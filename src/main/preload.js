@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   setMousePosition: (x, y) => {
     ipcRenderer.invoke('set-mouse-position', x, y)
   },
+  openNotepad: (notepadID) => ipcRenderer.invoke('open-notepad', notepadID)
 })
 
 ipcRenderer.on('app-before-quit', () => {

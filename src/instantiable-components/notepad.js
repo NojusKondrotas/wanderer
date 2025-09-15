@@ -18,6 +18,12 @@ function addNotepadListeners(notepad){
         e.stopPropagation()
         PositioningHandler.element_MouseUp(e, notepad)
     })
+
+    notepad.addEventListener('dblclick', (e) => {
+        if(isWritingElement) return
+
+        window.wandererAPI.openNotepad(notepad.id)
+    })
 }
 
 function reinstateAllNotepadBorders(elements){

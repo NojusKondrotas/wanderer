@@ -94,4 +94,29 @@ ipcMain.handle('set-minimized', () => {
     main_window.minimize()
 })
 
-ipcMain.handle('close-window', () => main_window.close())
+ipcMain.handle('close-window', () => {
+    const focusedWindow = BrowserWindow.getFocusedWindow()
+    if (focusedWindow) focusedWindow.close()
+})
+
+ipcMain.handle('open-notepad', (e, notepadID) => {
+    const savesPath = path.join(__dirname, '..', 'saves', 'notepads', `${notepadID}.html`)
+    const defaultPath = path.join(__dirname, 'index.html')
+    const entryFile = fs.existsSync(savesPath) ? savesPath : defaultPath
+
+    // Create a new window without affecting the main window
+    const notepadWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        frame: false,
+        titleBarStyle: 'hidden',
+        fullscreen: false, // Not fullscreen to distinguish from main window
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false,
+        }
+    })
+
+    notepadWindow.loadFile(entryFile)
+})
