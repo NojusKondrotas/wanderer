@@ -18,6 +18,8 @@ function getElementID(){
 function configureElement(element){
     if(element.classList.contains('note')){
         addNoteListeners(element)
+    }else if(element.classList.contains('notepad')){
+        addNotepadListeners(element)
     }
 }
 

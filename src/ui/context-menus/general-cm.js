@@ -8,6 +8,14 @@ document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
     turnOffContextMenu()
 })
 
+document.getElementById('gcm-new-notepad').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    createNewNotepad(whiteboard, contextMenuCenter.x, contextMenuCenter.y)
+
+    turnOffContextMenu()
+})
+
 document.getElementById('gcm-new-connection').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 

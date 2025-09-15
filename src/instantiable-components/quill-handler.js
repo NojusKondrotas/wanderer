@@ -55,8 +55,11 @@ function saveAllQuillToolbars(){
 }
 
 function reinstateAllQuillToolbars(){
-    for(let [key, value] of elementPositions)
-        createQuill(key, allQuillToolbars.get(key))
+    for(let [key, value] of elementPositions){
+        const el = document.getElementById(key)
+        if(el.classList.contains('note'))
+            createQuill(key, allQuillToolbars.get(key))
+    }
 }
 
 function initQuill(parent){

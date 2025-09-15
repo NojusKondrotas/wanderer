@@ -49,7 +49,7 @@ class PositioningHandler{
 
             PositioningHandler.startDrag(ev, false, true, false)
             
-            toggleQuillWritingMode(false, el.id)
+            if(el.classList.contains('.note')) toggleQuillWritingMode(false, el.id)
 
             selectedElement = el
         }
