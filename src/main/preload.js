@@ -1,14 +1,19 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('wandererAPI', {
-  saveHTML: () => {
+  saveWhiteboardHTML: () => {
     const html = document.documentElement.outerHTML
-    ipcRenderer.send('save-html', html)
+    ipcRenderer.send('save-whiteboard-html', html)
   },
-  saveState: (stateObj) => {
-    ipcRenderer.send('save-state', stateObj)
+  saveWhiteboardState: (stateObj) => {
+    ipcRenderer.send('save-whiteboard-state', stateObj)
   },
-  loadState: () => ipcRenderer.invoke('load-state'),
+  loadWhiteboardState: () => ipcRenderer.invoke('load-whiteboard-state'),
+  saveNotepadHTML: () => {
+    const html = document.documentElement.outerHTML
+    ipcRenderer.send('save-notepad-html', html)
+  },
+
   isFullscreen: () => ipcRenderer.invoke('is-fullscreen'),
   setFullscreen: (flag) => ipcRenderer.invoke('set-fullscreen', flag),
   setMinimized: () => ipcRenderer.invoke('set-minimized'),

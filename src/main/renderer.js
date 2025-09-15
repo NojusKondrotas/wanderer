@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', async () => {
     handleKeybindGuideAppearance(true)
     
-    const stateObj = await window.wandererAPI.loadState()
+    const stateObj = await window.wandererAPI.loadWhiteboardState()
 
     if (stateObj && Object.keys(stateObj).length > 0){
         largestElementID = stateObj.largestElementID
@@ -39,12 +39,12 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 function save(){
     saveAllQuillToolbars()
-    window.wandererAPI.saveHTML()
+    window.wandererAPI.saveWhiteboardHTML()
 
     const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
     const allQuillToolbarsArr = Array.from(allQuillToolbars, ([elID, quill]) => [elID, quill])
 
-    window.wandererAPI.saveState({
+    window.wandererAPI.saveWhiteboardState({
         largestElementID,
         unusedElementIDs,
         largestPathID,

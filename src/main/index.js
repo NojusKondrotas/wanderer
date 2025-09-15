@@ -72,7 +72,7 @@ app.on('window-all-closed', () => {
     if(process.platform !== 'darwin') app.quit()
 })
 
-ipcMain.on('save-html', (e, html) => {
+ipcMain.on('save-whiteboard-html', (e, html) => {
     const saveDir = path.join(__dirname, '..', 'saves')
     if(!fs.existsSync(saveDir)){
         fs.mkdirSync(saveDir)
@@ -90,7 +90,7 @@ ipcMain.on('save-html', (e, html) => {
     }
 })
 
-ipcMain.on('save-state', (e, stateObj) => {
+ipcMain.on('save-whiteboard-state', (e, stateObj) => {
     const focusedWindow = BrowserWindow.getFocusedWindow()
     if(focusedWindow && focusedWindow !== main_window) return
     const saveDir = path.join(__dirname, '..', 'saves')
@@ -118,7 +118,7 @@ ipcMain.on('save-state', (e, stateObj) => {
     fs.writeFileSync(filePath, JSON.stringify(dataToSave, null, 2), 'utf-8')
 })
 
-ipcMain.handle('load-state', () => {
+ipcMain.handle('load-whiteboard-state', () => {
     const saveJSONPath = path.join(__dirname, '..', 'saves', 'save-data.json')
     if (fs.existsSync(saveJSONPath))
         return JSON.parse(fs.readFileSync(saveJSONPath, 'utf-8'))
@@ -151,8 +151,10 @@ ipcMain.handle('close-window', () => {
 
 ipcMain.handle('open-notepad', (e, notepadID) => {
     const savesPath = path.join(__dirname, '..', 'saves', 'notepads', `${notepadID}.html`)
-    const defaultPath = path.join(__dirname, 'index.html')
+    const defaultPath = path.join(__dirname, 'notepad-index.html')
     const entryFile = fs.existsSync(savesPath) ? savesPath : defaultPath
+
+    console.log(entryFile)
 
     const notepadWindow = new BrowserWindow({
         width: 800,
