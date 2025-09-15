@@ -33,8 +33,14 @@ app.whenReady().then(() => {
         if(BrowserWindow.getAllWindows().length === 0) initialiseApp()
     })
 
-    globalShortcut.register('CmdOrCtrl+1', () => main_window.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), main_window.getBounds()))
-    globalShortcut.register('CmdOrCtrl+num1', () => main_window.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), main_window.getBounds()))
+    globalShortcut.register('CmdOrCtrl+1', () => {
+        const focusedWindow = BrowserWindow.getFocusedWindow()
+        if(focusedWindow) focusedWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), focusedWindow.getBounds())
+    })
+    globalShortcut.register('CmdOrCtrl+num1', () => {
+        const focusedWindow = BrowserWindow.getFocusedWindow()
+        if(focusedWindow) focusedWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), focusedWindow.getBounds())
+    })
 })
 
 app.on('window-all-closed', () => {
@@ -98,12 +104,19 @@ ipcMain.handle('set-mouse-position', (e, x, y) => {
     robot.moveMouse(x, y)
 })
 
-ipcMain.handle('is-fullscreen', () => main_window.isFullScreen())
+ipcMain.handle('is-fullscreen', () => {
+    const focusedWindow = BrowserWindow.getFocusedWindow()
+    if(focusedWindow) focusedWindow.isFullScreen()
+})
 
-ipcMain.handle('set-fullscreen', (e, flag) => main_window.setFullScreen(flag))
+ipcMain.handle('set-fullscreen', (e, flag) => {
+    const focusedWindow = BrowserWindow.getFocusedWindow()
+    if(focusedWindow) focusedWindow.setFullScreen(flag)
+})
 
 ipcMain.handle('set-minimized', () => {
-    main_window.minimize()
+    const focusedWindow = BrowserWindow.getFocusedWindow()
+    if(focusedWindow) focusedWindow.minimize()
 })
 
 ipcMain.handle('close-window', () => {
@@ -116,13 +129,12 @@ ipcMain.handle('open-notepad', (e, notepadID) => {
     const defaultPath = path.join(__dirname, 'index.html')
     const entryFile = fs.existsSync(savesPath) ? savesPath : defaultPath
 
-    // Create a new window without affecting the main window
     const notepadWindow = new BrowserWindow({
         width: 800,
         height: 600,
         frame: false,
         titleBarStyle: 'hidden',
-        fullscreen: false, // Not fullscreen to distinguish from main window
+        fullscreen: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
