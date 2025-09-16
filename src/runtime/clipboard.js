@@ -1,5 +1,13 @@
 let currClipboardID = 0
-let clipboardIDs = new Array(), copiedElements = new Array()
+let clipboardIDs = new Array(), copiedElements = new Map()
+
+function copy(element){
+    elementIDHTML = IDClipboardContent(element.outerHTML)
+    elementContent = element.textContent
+
+    writeElementWandererClipboard(elementIDHTML)
+    navigator.clipboard.writeText(elementContent)
+}
 
 function IDClipboardContent(content, minRange = 0x1000, maxRange = 0xffffffff){
     currClipboardID = convertToString(generateRandom(minRange, maxRange), 16)

@@ -3,11 +3,7 @@ const elementContextMenu = document.getElementById('element-context-menu')
 document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
-    elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
-    elementContent = selectedElement.textContent
-
-    writeElementWandererClipboard(elementIDHTML)
-    navigator.clipboard.writeText(elementContent)
+    copy(selectedElement)
 
     turnOffContextMenu()
 })
@@ -15,11 +11,7 @@ document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
 document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
     e.stopPropagation()
     
-    elementIDHTML = IDClipboardContent(selectedElement.outerHTML)
-    elementContent = selectedElement.textContent
-
-    writeElementWandererClipboard(elementIDHTML)
-    navigator.clipboard.writeText(elementContent)
+    copy(selectedElement)
     
     deleteComponentByID(whiteboard, selectedElement.id)
 
