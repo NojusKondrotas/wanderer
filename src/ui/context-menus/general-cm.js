@@ -31,7 +31,6 @@ document.getElementById('gcm-paste').addEventListener('mousedown', async (e) => 
     let {isHTML, element} = parseClipboardElement(clipboardContent)
     if(!isHTML) return createNewNote(whiteboard, clipboardContent, contextMenuCenter.x, contextMenuCenter.y)
 
-    console.log(element)
     if(element.type === 'n'){
         return createNewNote(whiteboard, element.content, contextMenuCenter.x, contextMenuCenter.y)
     }
