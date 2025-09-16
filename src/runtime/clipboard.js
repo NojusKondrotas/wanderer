@@ -1,67 +1,27 @@
-let currClipboardID = 0
-let clipboardIDs = new Array(), copiedElements = new Map()
+let copiedElements = new Map()
 
 function copy(element){
-    elementIDHTML = IDClipboardContent(element.outerHTML)
+    let elementID = generateUniqueHash(copiedElements)
     elementContent = element.textContent
 
-    writeElementWandererClipboard(elementIDHTML)
-    navigator.clipboard.writeText(elementContent)
+    if(element.classList.contains('note'))
+        copiedElements.set(elementID, { type : 'n', content : elementContent })
+    else if(element.classList.contains('notepad'))
+        copiedElements.set(elementID, { type : 'p', content : null /* implement */ })
+    else if(element.classList.contains('whiteboard'))
+        copiedElements.set(elementID, { type : 'w', content : null /* implement */ })
+
+    navigator.clipboard.writeText(elementID)
 }
 
-function IDClipboardContent(content, minRange = 0x1000, maxRange = 0xffffffff){
-    currClipboardID = convertToString(generateRandom(minRange, maxRange), 16)
-    clipboardIDs.push(currClipboardID)
-    
-    let text = `[${currClipboardID}]` + content
-    
-    return text
+async function readWandererClipboard(){
+    return await navigator.clipboard.readText()
 }
 
-function writeElementWandererClipboard(elementIDHTML){
-    copiedElements.push(elementIDHTML)
-}
-
-async function readElementWandererClipboard(){
-    if(copiedElements.length === 0)
-        return await navigator.clipboard.readText()
-    
-    return await copiedElements.pop()
-}
-
-function checkTextForLastClipboardID(text){
-    if(text[0] === '['){
-        if(text.substring(1, text.indexOf(']')) === currClipboardID)
-            return true
-        else return false
-    }
-    else return false
-}
-
-function checkTextForAnyClipboardID(text){
-    if(text[0] === '['){
-        if(clipboardIDs.includes(text.substring(1, text.indexOf(']'))))
-            return true
-        else return false
-    }
-    else return false
-}
-
-function parseClipboardElement(elementIDHTML){
-    let HTMLContent, isHTML = false
-    
-    if(checkTextForLastClipboardID(elementIDHTML))
-        HTMLContent = elementIDHTML.substring(elementIDHTML.indexOf(']') + 1)
-    else return {isHTML: isHTML, parsedString: elementIDHTML}
-
-    isHTML = true
-    
-    const template = document.createElement('template');
-    template.innerHTML = HTMLContent.trim();
-
-    const newElement = template.content;
-
-    return {isHTML: isHTML, parsedString: newElement}
+function parseClipboardElement(clipboardContent){
+    if(copiedElements.has(clipboardContent))
+        return {isHTML: true, element: copiedElements.get(clipboardContent)}
+    return {isHTML: false, element: null}
 }
 
 // let contents = await navigator.clipboard.read()
