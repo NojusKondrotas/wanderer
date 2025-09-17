@@ -5,11 +5,13 @@ const robot = require('@hurdlegroup/robotjs')
 
 const allWindowTypes = new Map()
 
-function createWhiteboardWindow(entryFilePath, preloadFilePath){
+function createWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600){
     const window = new BrowserWindow({
+        width: width,
+        height: height,
         frame: false,
         titleBarStyle: 'hidden',
-        fullscreen: true,
+        fullscreen: fullscreen,
         webPreferences: {
             preload: path.join(preloadFilePath),
             contextIsolation: true,
@@ -18,25 +20,17 @@ function createWhiteboardWindow(entryFilePath, preloadFilePath){
     })
     window.loadFile(entryFilePath)
 
+    return window
+}
+
+function createWhiteboardWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600){
+    const window = createWindow(entryFilePath, preloadFilePath, fullscreen, width, height)
     allWindowTypes.set(window.id, 'w')
     return window
 }
 
-function createNotepadWindow(entryFilePath, preloadFilePath){
-    const window = new BrowserWindow({
-        width: 800,
-        height: 600,
-        frame: false,
-        titleBarStyle: 'hidden',
-        fullscreen: false,
-        webPreferences: {
-            preload: path.join(preloadFilePath),
-            contextIsolation: true,
-            nodeIntegration: false,
-        }
-    })
-    window.loadFile(entryFilePath)
-
+function createNotepadWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600){
+    const window = createWindow(entryFilePath, preloadFilePath, fullscreen, width, height)
     allWindowTypes.set(window.id, 'p')
     return window
 }
@@ -67,21 +61,25 @@ function initialiseApp(){
     const savesPath = path.join(__dirname, '..', 'saves')
     if(!fs.existsSync(savesPath)) fs.mkdirSync(savesPath)
 
-    const savesNotepadsPath = path.join(savesPath, 'notepads')
+    const savesNotepadsPath = path.join(savesPath, 'notepads.json')
     if(!fs.existsSync(savesNotepadsPath))
-        fs.mkdirSync(savesNotepadsPath)
+        fs.writeFileSync(savesNotepadsPath, JSON.stringify({}, null, 2), 'utf-8')
 
     const savesWhiteboardsPath = path.join(savesPath, 'whiteboards')
     if(!fs.existsSync(savesWhiteboardsPath))
         fs.mkdirSync(savesWhiteboardsPath)
 
-    const defaultPath = path.join(__dirname, 'index.html')
-    if(!fs.existsSync(defaultPath))
+    const defaultPathIndex = path.join(__dirname, 'index.html')
+    if(!fs.existsSync(defaultPathIndex))
+        process.exit
+
+    const defaultPathPreload = path.join(__dirname, 'preload.js')
+    if(!fs.existsSync(defaultPathPreload))
         process.exit
 
     const windowsJSON = path.join(savesPath, 'windows.json')
     if(!fs.existsSync(windowsJSON))
-        fs.writeFileSync(windowsJSON, JSON.stringify({}, null, 2), 'utf-8')
+        fs.writeFileSync(windowsJSON, JSON.stringify([], null, 2), 'utf-8')
 
     const windowsObj = JSON.parse(fs.readFileSync(windowsJSON, 'utf-8'))
     if(Array.isArray(windowsObj) && windowsObj.length > 0){
@@ -96,15 +94,10 @@ function initialiseApp(){
             }
         }
     }else{
-        createWhiteboardWindow() // handle
+        createWhiteboardWindow(path.join(__dirname, 'first-time.html'), defaultPathPreload, true)
     }
 
-    isNotepadsDirEmpty = fs.readdirSync(savesNotepadsPath).length === 0
     isWhiteboardsDirEmpty = fs.readdirSync(savesWhiteboardsPath).length === 0
-
-    const entryFile = defaultPath
-
-    const main_window = createWhiteboardWindow(entryFile, path.join(__dirname, 'preload.js'))
 }
 
 app.whenReady().then(() => {
