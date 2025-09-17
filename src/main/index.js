@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const robot = require('@hurdlegroup/robotjs')
 
-const allWindows = new Map()
+const allWindowTypes = new Map()
 
 function createWhiteboardWindow(entryFilePath, preloadFilePath){
     const window = new BrowserWindow({
@@ -18,7 +18,7 @@ function createWhiteboardWindow(entryFilePath, preloadFilePath){
     })
     window.loadFile(entryFilePath)
 
-    allWindows.set(window.id, 'w')
+    allWindowTypes.set(window.id, 'w')
     return window
 }
 
@@ -37,23 +37,22 @@ function createNotepadWindow(entryFilePath, preloadFilePath){
     })
     window.loadFile(entryFilePath)
 
-    allWindows.set(window.id, 'p')
+    allWindowTypes.set(window.id, 'p')
     return window
 }
 
 function terminateApp(){
     const windows = BrowserWindow.getAllWindows().map(win => {
-        win.webContents.send('terminate-app')
         const bounds = win.getBounds()
         return {
             x: bounds.x,
             y: bounds.y,
             width: bounds.width,
             height: bounds.height,
-            // isMain: win === main_window,
             isFullscreen: win.isFullScreen(),
             isMinimized: win.isMinimized(),
             id: win.id,
+            type: allWindowTypes.get(win.id)
         }
     })
 
@@ -84,13 +83,24 @@ function initialiseApp(){
     if(!fs.existsSync(windowsJSON))
         fs.writeFileSync(windowsJSON, JSON.stringify({}, null, 2), 'utf-8')
 
-
+    const windowsObj = JSON.parse(fs.readFileSync(windowsJSON, 'utf-8'))
+    if(Array.isArray(windowsObj) && windowsObj.length > 0){
+        for(let i = windowsObj.length - 1; i >= 0; i--){
+            const win = windowsObj[i]
+            allWindowTypes.set(win.id, win.type)
+            switch(win.type){
+                case 'n':
+                    createNotepadWindow() // handle
+                case 'w':
+                    createWhiteboardWindow() // handle
+            }
+        }
+    }else{
+        createWhiteboardWindow() // handle
+    }
 
     isNotepadsDirEmpty = fs.readdirSync(savesNotepadsPath).length === 0
     isWhiteboardsDirEmpty = fs.readdirSync(savesWhiteboardsPath).length === 0
-    if(!isNotepadsDirEmpty){
-
-    }
 
     const entryFile = defaultPath
 
