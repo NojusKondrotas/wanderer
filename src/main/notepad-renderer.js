@@ -1,0 +1,1 @@
+initQuill('#notepad')
