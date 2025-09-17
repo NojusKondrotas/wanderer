@@ -96,8 +96,6 @@ function initialiseApp(){
     }else{
         createWindow(path.join(__dirname, 'first-time', 'first-time.html'), defaultPathPreload, true)
     }
-
-    isWhiteboardsDirEmpty = fs.readdirSync(savesWhiteboardsPath).length === 0
 }
 
 app.whenReady().then(() => {
@@ -125,13 +123,15 @@ app.on('window-all-closed', () => {
 })
 
 ipcMain.handle('first-time-notepad-chosen', (e) => {
-    const senderWindow = BrowserWindow.fromWebContents(e.sender);
-    console.log(`window id: ${senderWindow.id}`);
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    console.log(`window id: ${senderWindow.id}`)
+    senderWindow.loadFile(path.join(__dirname, 'notepad-index.html'))
 })
 
 ipcMain.handle('first-time-whiteboard-chosen', (e) => {
-    const senderWindow = BrowserWindow.fromWebContents(e.sender);
-    console.log(`window id: ${senderWindow.id}`);
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    console.log(`window id: ${senderWindow.id}`)
+    senderWindow.loadFile(path.join(__dirname, 'index.html'))
 })
 
 ipcMain.on('save-whiteboard-html', (e, html) => {
