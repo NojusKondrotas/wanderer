@@ -1,6 +1,10 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('wandererAPI', {
+  firstTimeNotepadChosen: () => ipcRenderer.invoke('first-time-notepad-chosen'),
+  firstTimeWhiteboardChosen: () => ipcRenderer.invoke('first-time-whiteboard-chosen'),
+
+
   saveWhiteboardHTML: () => {
     const html = document.documentElement.outerHTML
     ipcRenderer.send('save-whiteboard-html', html)

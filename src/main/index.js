@@ -94,7 +94,7 @@ function initialiseApp(){
             }
         }
     }else{
-        createWhiteboardWindow(path.join(__dirname, 'first-time.html'), defaultPathPreload, true)
+        createWindow(path.join(__dirname, 'first-time', 'first-time.html'), defaultPathPreload, true)
     }
 
     isWhiteboardsDirEmpty = fs.readdirSync(savesWhiteboardsPath).length === 0
@@ -122,6 +122,16 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
     if(process.platform !== 'darwin') app.quit()
+})
+
+ipcMain.handle('first-time-notepad-chosen', (e) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender);
+    console.log(`window id: ${senderWindow.id}`);
+})
+
+ipcMain.handle('first-time-whiteboard-chosen', (e) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender);
+    console.log(`window id: ${senderWindow.id}`);
 })
 
 ipcMain.on('save-whiteboard-html', (e, html) => {
