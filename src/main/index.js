@@ -3,6 +3,44 @@ const path = require('path')
 const fs = require('fs')
 const robot = require('@hurdlegroup/robotjs')
 
+const allWindows = new Map()
+
+function createWhiteboardWindow(entryFilePath, preloadFilePath){
+    const window = new BrowserWindow({
+        frame: false,
+        titleBarStyle: 'hidden',
+        fullscreen: true,
+        webPreferences: {
+            preload: path.join(preloadFilePath),
+            contextIsolation: true,
+            nodeIntegration: false,
+        }
+    })
+    window.loadFile(entryFilePath)
+
+    allWindows.set(window.id, 'w')
+    return window
+}
+
+function createNotepadWindow(entryFilePath, preloadFilePath){
+    const window = new BrowserWindow({
+        width: 800,
+        height: 600,
+        frame: false,
+        titleBarStyle: 'hidden',
+        fullscreen: false,
+        webPreferences: {
+            preload: path.join(preloadFilePath),
+            contextIsolation: true,
+            nodeIntegration: false,
+        }
+    })
+    window.loadFile(entryFilePath)
+
+    allWindows.set(window.id, 'p')
+    return window
+}
+
 function terminateApp(){
     const windows = BrowserWindow.getAllWindows().map(win => {
         win.webContents.send('terminate-app')
@@ -12,9 +50,10 @@ function terminateApp(){
             y: bounds.y,
             width: bounds.width,
             height: bounds.height,
-            isMain: win === main_window,
+            // isMain: win === main_window,
             isFullscreen: win.isFullScreen(),
             isMinimized: win.isMinimized(),
+            id: win.id,
         }
     })
 
@@ -25,27 +64,37 @@ function terminateApp(){
     app.quit()
 }
 
-let main_window
 function initialiseApp(){
-    const savesPath = path.join(__dirname, '..', 'saves', 'index.html')
-    const savesNotepadsPath = path.join(__dirname, '..', 'saves', 'notepads')
+    const savesPath = path.join(__dirname, '..', 'saves')
+    if(!fs.existsSync(savesPath)) fs.mkdirSync(savesPath)
+
+    const savesNotepadsPath = path.join(savesPath, 'notepads')
+    if(!fs.existsSync(savesNotepadsPath))
+        fs.mkdirSync(savesNotepadsPath)
+
+    const savesWhiteboardsPath = path.join(savesPath, 'whiteboards')
+    if(!fs.existsSync(savesWhiteboardsPath))
+        fs.mkdirSync(savesWhiteboardsPath)
+
     const defaultPath = path.join(__dirname, 'index.html')
-    const entryFile = fs.existsSync(savesPath) ? savesPath : defaultPath
+    if(!fs.existsSync(defaultPath))
+        process.exit
 
-    main_window = new BrowserWindow({
-        width: 800,
-        height: 600,
-        frame: false,
-        titleBarStyle: 'hidden',
-        fullscreen: true,
-        webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
-            contextIsolation: true,
-            nodeIntegration: false,
-        }
-    })
+    const windowsJSON = path.join(savesPath, 'windows.json')
+    if(!fs.existsSync(windowsJSON))
+        fs.writeFileSync(windowsJSON, JSON.stringify({}, null, 2), 'utf-8')
 
-    main_window.loadFile(entryFile)
+
+
+    isNotepadsDirEmpty = fs.readdirSync(savesNotepadsPath).length === 0
+    isWhiteboardsDirEmpty = fs.readdirSync(savesWhiteboardsPath).length === 0
+    if(!isNotepadsDirEmpty){
+
+    }
+
+    const entryFile = defaultPath
+
+    const main_window = createWhiteboardWindow(entryFile, path.join(__dirname, 'preload.js'))
 }
 
 app.whenReady().then(() => {
@@ -83,16 +132,16 @@ ipcMain.on('save-whiteboard-html', (e, html) => {
     }
 
     let filePath
-    const focusedWindow = BrowserWindow.getFocusedWindow()
-    if (focusedWindow && focusedWindow === main_window) {
+    // const focusedWindow = BrowserWindow.getFocusedWindow()
+    // if (focusedWindow && focusedWindow === main_window) {
         filePath = path.join(saveDir, 'index.html')
         fs.writeFileSync(filePath, html, 'utf-8')
-    }
+    // }
 })
 
 ipcMain.on('save-whiteboard-state', (e, stateObj) => {
     const focusedWindow = BrowserWindow.getFocusedWindow()
-    if(focusedWindow && focusedWindow !== main_window) return
+    // if(focusedWindow && focusedWindow !== main_window) return
     const saveDir = path.join(__dirname, '..', 'saves')
     if(!fs.existsSync(saveDir))
         fs.mkdirSync(saveDir)
@@ -154,20 +203,5 @@ ipcMain.handle('open-notepad', (e, notepadID) => {
     const defaultPath = path.join(__dirname, 'notepad-index.html')
     const entryFile = fs.existsSync(savesPath) ? savesPath : defaultPath
 
-    console.log(entryFile)
-
-    const notepadWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        frame: false,
-        titleBarStyle: 'hidden',
-        fullscreen: false,
-        webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
-            contextIsolation: true,
-            nodeIntegration: false,
-        }
-    })
-
-    notepadWindow.loadFile(entryFile)
+    const notepadWindow = createNotepadWindow(entryFile, path.join(__dirname, 'preload.js'))
 })
