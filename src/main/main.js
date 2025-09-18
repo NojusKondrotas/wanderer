@@ -35,6 +35,35 @@ function createNotepadWindow(entryFilePath, preloadFilePath, fullscreen = false,
     return window
 }
 
+function writeWindows(){
+    const whiteboardSavesDirPath = path.join(__dirname, '..', 'saves', 'whiteboards')
+    const windows = BrowserWindow.getAllWindows().map(win => {
+        const bounds = win.getBounds()
+        const winType = allWindowTypes.get(win.id)
+        switch(winType){
+            case 'p':
+                //handle
+                break
+            case 'w':
+                
+                break
+        }
+
+        return {
+            x: bounds.x,
+            y: bounds.y,
+            width: bounds.width,
+            height: bounds.height,
+            isFullscreen: win.isFullScreen(),
+            isMinimized: win.isMinimized(),
+            id: win.id,
+            type: allWindowTypes.get(win.id)
+        }
+    })
+    const windowsFilePath = path.join(__dirname, '..', 'saves', 'windows.json')
+    fs.writeFileSync(windowsFilePath, JSON.stringify(windows, null, 2), 'utf-8')
+}
+
 function terminateApp(){
     const windows = BrowserWindow.getAllWindows().map(win => {
         const bounds = win.getBounds()
@@ -52,8 +81,7 @@ function terminateApp(){
 
     const saveDir = path.join(__dirname, '..', 'saves')
     if (!fs.existsSync(saveDir)) fs.mkdirSync(saveDir)
-    const windowsFilePath = path.join(saveDir, 'windows.json')
-    fs.writeFileSync(windowsFilePath, JSON.stringify(windows, null, 2), 'utf-8')
+    writeWindows()
     app.quit()
 }
 
@@ -126,12 +154,14 @@ ipcMain.handle('first-time-notepad-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     console.log(`window id: ${senderWindow.id}`)
     senderWindow.loadFile(path.join(__dirname, 'notepad-index.html'))
+    allWindowTypes.set(senderWindow.id, 'p')
 })
 
 ipcMain.handle('first-time-whiteboard-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     console.log(`window id: ${senderWindow.id}`)
     senderWindow.loadFile(path.join(__dirname, 'whiteboard-index.html'))
+    allWindowTypes.set(senderWindow.id, 'w')
 })
 
 ipcMain.on('save-whiteboard-html', (e, html) => {
@@ -206,9 +236,13 @@ ipcMain.handle('set-minimized', () => {
     if(focusedWindow) focusedWindow.minimize()
 })
 
-ipcMain.handle('close-window', () => {
-    const focusedWindow = BrowserWindow.getFocusedWindow()
-    if (focusedWindow) focusedWindow.close()
+ipcMain.handle('close-window', (e) => {
+    const windows = BrowserWindow.getAllWindows()
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    if(windows.length === 1){
+        writeWindows()
+    }
+    senderWindow.close()
 })
 
 ipcMain.handle('open-notepad', (e, notepadID) => {
