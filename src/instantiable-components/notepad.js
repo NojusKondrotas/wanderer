@@ -57,12 +57,14 @@ function instantiateNotepadResizingBorders(note){
     })
 }
 
-function createNewNotepad(container, xOffset = 0, yOffset = 0){
+async function createNewNotepad(container, xOffset = 0, yOffset = 0){
     const newNotepad = document.createElement('div')
     newNotepad.classList.add('notepad')
     newNotepad.innerHTML = 'notepad'
 
-    createNewElement(container, newNotepad, xOffset, yOffset)
+
+    const id = await window.wandererAPI.addNotepad()
+    createNewElement(container, newNotepad, id, xOffset, yOffset)
     addNotepadListeners(newNotepad)
     
     //instantiateNoteResizingBorders(newNotepad)

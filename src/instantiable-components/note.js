@@ -92,7 +92,7 @@ function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
     newNote.classList.add('note')
     newNote.spellcheck = false
 
-    createNewElement(container, newNote, xOffset, yOffset)
+    createNewElement(container, newNote, getElementID(), xOffset, yOffset)
     addNoteListeners(newNote)
 
     document.getElementById(newNote.id).addEventListener("input", (e) => {

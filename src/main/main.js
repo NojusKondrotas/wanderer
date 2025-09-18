@@ -2,8 +2,31 @@ const { app, BrowserWindow, ipcMain, globalShortcut, screen } = require('electro
 const path = require('path')
 const fs = require('fs')
 const robot = require('@hurdlegroup/robotjs')
+const { send } = require('process')
 
-const allWindowTypes = new Map()
+const allWindowTypes = new Map(), windowToComponentMapping = new Map()
+const allNotepads = new Set(), allWhiteboards = new Set()
+
+let largestNotepadID = 0, unusedNotepadIDs = new Array()
+let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
+
+function getNotepadID(){
+    if(unusedNotepadIDs.length !== 0)
+        return unusedNotepadIDs.pop()
+    else{
+        ++largestNotepadID
+        return `el-${largestNotepadID - 1}`
+    }
+}
+
+function getWhiteboardID(){
+    if(unusedWhiteboardIDs.length !== 0)
+        return unusedWhiteboardIDs.pop()
+    else{
+        ++largestWhiteboardID
+        return `el-${largestWhiteboardID - 1}`
+    }
+}
 
 function createWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600){
     const window = new BrowserWindow({
@@ -29,9 +52,20 @@ function createWhiteboardWindow(entryFilePath, preloadFilePath, fullscreen = fal
     return window
 }
 
-function createNotepadWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600){
+function createNotepadWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600, notepadID, quillDelta){
     const window = createWindow(entryFilePath, preloadFilePath, fullscreen, width, height)
     allWindowTypes.set(window.id, 'p')
+    let id
+    if(!allNotepads.has(notepadID)){
+        id = getNotepadID()
+        allNotepads.add(id)
+    }else{
+        id = notepadID
+    }
+    windowToComponentMapping.set(window.id, id)
+    window.webContents.on('did-finish-load', () => {
+        window.webContents.send('retrieve-quill-delta', quillDelta)
+    })
     return window
 }
 
@@ -89,9 +123,9 @@ function initialiseApp(){
     const savesPath = path.join(__dirname, '..', 'saves')
     if(!fs.existsSync(savesPath)) fs.mkdirSync(savesPath)
 
-    const savesNotepadsPath = path.join(savesPath, 'notepads.json')
+    const savesNotepadsPath = path.join(savesPath, 'notepads')
     if(!fs.existsSync(savesNotepadsPath))
-        fs.writeFileSync(savesNotepadsPath, JSON.stringify({}, null, 2), 'utf-8')
+        fs.mkdirSync(savesNotepadsPath)
 
     const savesWhiteboardsPath = path.join(savesPath, 'whiteboards')
     if(!fs.existsSync(savesWhiteboardsPath))
@@ -150,11 +184,29 @@ app.on('window-all-closed', () => {
     if(process.platform !== 'darwin') app.quit()
 })
 
+ipcMain.handle('add-notepad', async (e) => {
+    const id = getNotepadID()
+    allNotepads.add(id)
+    return id
+})
+
+ipcMain.handle('open-notepad', (e, notepadID) => {
+    const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${notepadID}.json`)
+    if(!fs.existsSync(savesJSON))
+        fs.writeFileSync(savesJSON, JSON.stringify({}, null, 2), 'utf-8')
+    const defaultHTML = path.join(__dirname, 'notepad-index.html')
+
+    const notepadWindow = createNotepadWindow(defaultHTML, path.join(__dirname, 'preload.js'),
+    undefined, undefined, undefined, notepadID, savesJSON)
+})
+
 ipcMain.handle('first-time-notepad-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    console.log(`window id: ${senderWindow.id}`)
     senderWindow.loadFile(path.join(__dirname, 'notepad-index.html'))
     allWindowTypes.set(senderWindow.id, 'p')
+    const id = getNotepadID()
+    allNotepads.add(id)
+    windowToComponentMapping.set(window.id, id)
 })
 
 ipcMain.handle('first-time-whiteboard-chosen', (e) => {
@@ -242,13 +294,12 @@ ipcMain.handle('close-window', (e) => {
     if(windows.length === 1){
         writeWindows()
     }
-    senderWindow.close()
-})
-
-ipcMain.handle('open-notepad', (e, notepadID) => {
-    const savesPath = path.join(__dirname, '..', 'saves', 'notepads', `${notepadID}.html`)
-    const defaultPath = path.join(__dirname, 'notepad-index.html')
-    const entryFile = fs.existsSync(savesPath) ? savesPath : defaultPath
-
-    const notepadWindow = createNotepadWindow(entryFile, path.join(__dirname, 'preload.js'))
+    if(allWindowTypes.get(senderWindow.id) === 'p'){
+        const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${windowToComponentMapping.get(senderWindow.id)}.json`)
+        ipcMain.once('response-quill-delta', (e, contents) => {
+            fs.writeFileSync(savesJSON, JSON.stringify(contents, null, 2), 'utf-8')
+            senderWindow.close()
+        })
+        senderWindow.webContents.send('request-quill-delta')
+    }
 })

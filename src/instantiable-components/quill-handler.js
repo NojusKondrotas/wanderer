@@ -62,7 +62,7 @@ function reinstateAllQuillToolbars(){
     }
 }
 
-function initQuill(parent){
+function initQuill(parent, contents = ''){
     const toolbarOptions = [
         [{ 'color': [] }, { 'background': [] }],
         [{ 'align': [] }],
@@ -74,12 +74,15 @@ function initQuill(parent){
         [{ 'indent': '-1'}, { 'indent': '+1' }],
         [{ 'size': ['small', false, 'large', 'huge'] }],
     ]
-    return quill = new Quill(parent, {
+    const quill = new Quill(parent, {
         theme: 'snow',
         modules: {
             toolbar: toolbarOptions
         }
     })
+    quill.setContents(contents)
+
+    return quill
 }
 
 function createQuill(parentID, content = ''){

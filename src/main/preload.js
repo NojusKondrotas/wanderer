@@ -4,7 +4,6 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   firstTimeNotepadChosen: () => ipcRenderer.invoke('first-time-notepad-chosen'),
   firstTimeWhiteboardChosen: () => ipcRenderer.invoke('first-time-whiteboard-chosen'),
 
-
   saveWhiteboardHTML: () => {
     const html = document.documentElement.outerHTML
     ipcRenderer.send('save-whiteboard-html', html)
@@ -27,7 +26,12 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   setMousePosition: (x, y) => {
     ipcRenderer.invoke('set-mouse-position', x, y)
   },
-  openNotepad: (notepadID) => ipcRenderer.invoke('open-notepad', notepadID)
+
+  addNotepad: () => ipcRenderer.invoke('add-notepad'),
+  openNotepad: (notepadID) => ipcRenderer.invoke('open-notepad', notepadID),
+  quillDeltaRetrieve: (callback) => ipcRenderer.on('retrieve-quill-delta', (_, contents) => callback(contents)),
+  quillDeltaRequest: (callback) => ipcRenderer.on('request-quill-delta', () => callback()),
+  quillDeltaResponse: (contents) => ipcRenderer.send('response-quill-delta', contents)
 })
 
 ipcRenderer.on('app-before-quit', () => {

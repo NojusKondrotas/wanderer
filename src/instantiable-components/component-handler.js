@@ -38,7 +38,7 @@ function configureAllPaths(paths){
         configurePath(path)
 }
 
-function createNewElement(container, el, centerX = 0, centerY = 0){
+function createNewElement(container, el, id, centerX = 0, centerY = 0){
     container.appendChild(el)
     el.style.visibility = 'hidden'
 
@@ -47,7 +47,7 @@ function createNewElement(container, el, centerX = 0, centerY = 0){
     const boardSpaceX = centerX - rect.width / 2
     const boardSpaceY = centerY - rect.height / 2
 
-    el.id = `${getElementID()}`
+    el.id = id
     elementPositions.set(el.id, { x: boardSpaceX, y: boardSpaceY })
 
     updateElementPositionByID(el.id)
