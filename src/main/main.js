@@ -69,8 +69,8 @@ function initialiseApp(){
     if(!fs.existsSync(savesWhiteboardsPath))
         fs.mkdirSync(savesWhiteboardsPath)
 
-    const defaultPathIndex = path.join(__dirname, 'index.html')
-    if(!fs.existsSync(defaultPathIndex))
+    const defaultWhiteboardPathIndex = path.join(__dirname, 'whiteboard-index.html')
+    if(!fs.existsSync(defaultWhiteboardPathIndex))
         process.exit
 
     const defaultPathPreload = path.join(__dirname, 'preload.js')
@@ -131,7 +131,7 @@ ipcMain.handle('first-time-notepad-chosen', (e) => {
 ipcMain.handle('first-time-whiteboard-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     console.log(`window id: ${senderWindow.id}`)
-    senderWindow.loadFile(path.join(__dirname, 'index.html'))
+    senderWindow.loadFile(path.join(__dirname, 'whiteboard-index.html'))
 })
 
 ipcMain.on('save-whiteboard-html', (e, html) => {
@@ -147,7 +147,7 @@ ipcMain.on('save-whiteboard-html', (e, html) => {
     let filePath
     // const focusedWindow = BrowserWindow.getFocusedWindow()
     // if (focusedWindow && focusedWindow === main_window) {
-        filePath = path.join(saveDir, 'index.html')
+        filePath = path.join(saveDir, 'whiteboard-index.html')
         fs.writeFileSync(filePath, html, 'utf-8')
     // }
 })
