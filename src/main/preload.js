@@ -29,9 +29,8 @@ contextBridge.exposeInMainWorld('wandererAPI', {
 
   addNotepad: () => ipcRenderer.invoke('add-notepad'),
   openNotepad: (notepadID) => ipcRenderer.invoke('open-notepad', notepadID),
-  quillDeltaRetrieve: (callback) => ipcRenderer.on('retrieve-quill-delta', (_, contents) => callback(contents)),
-  quillDeltaRequest: (callback) => ipcRenderer.on('request-quill-delta', () => callback()),
-  quillDeltaResponse: (contents) => ipcRenderer.send('response-quill-delta', contents)
+  sendQuillDelta: (contents) => ipcRenderer.invoke('send-quill-delta', contents),
+  getQuillDelta: () => ipcRenderer.invoke('get-quill-delta'),
 })
 
 ipcRenderer.on('app-before-quit', () => {

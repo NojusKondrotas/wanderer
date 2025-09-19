@@ -46,13 +46,24 @@ function createWindow(entryFilePath, preloadFilePath, fullscreen = false, width 
     return window
 }
 
-function createWhiteboardWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600){
+function createWhiteboardWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600, whiteboardID){
     const window = createWindow(entryFilePath, preloadFilePath, fullscreen, width, height)
     allWindowTypes.set(window.id, 'w')
+    let id
+    if(!allWhiteboards.has(whiteboardID)){
+        id = getWhiteboardID()
+        allWhiteboards.add(id)
+    }else{
+        id = whiteboardID
+    }
+    windowToComponentMapping.set(window.id, id)
+    // window.webContents.on('did-finish-load', () => {
+    //     window.webContents.send('retrieve-quill-delta', quillDelta)
+    // })
     return window
 }
 
-function createNotepadWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600, notepadID, quillDelta){
+function createNotepadWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600, notepadID){
     const window = createWindow(entryFilePath, preloadFilePath, fullscreen, width, height)
     allWindowTypes.set(window.id, 'p')
     let id
@@ -63,9 +74,6 @@ function createNotepadWindow(entryFilePath, preloadFilePath, fullscreen = false,
         id = notepadID
     }
     windowToComponentMapping.set(window.id, id)
-    window.webContents.on('did-finish-load', () => {
-        window.webContents.send('retrieve-quill-delta', quillDelta)
-    })
     return window
 }
 
@@ -91,7 +99,8 @@ function writeWindows(){
             isFullscreen: win.isFullScreen(),
             isMinimized: win.isMinimized(),
             id: win.id,
-            type: allWindowTypes.get(win.id)
+            type: allWindowTypes.get(win.id),
+            componentID: windowToComponentMapping.get(win.id)
         }
     })
     const windowsFilePath = path.join(__dirname, '..', 'saves', 'windows.json')
@@ -197,7 +206,22 @@ ipcMain.handle('open-notepad', (e, notepadID) => {
     const defaultHTML = path.join(__dirname, 'notepad-index.html')
 
     const notepadWindow = createNotepadWindow(defaultHTML, path.join(__dirname, 'preload.js'),
-    undefined, undefined, undefined, notepadID, savesJSON)
+    undefined, undefined, undefined, notepadID)
+})
+
+ipcMain.handle('get-quill-delta', (e) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${windowToComponentMapping.get(senderWindow.id)}.json`)
+    if(!fs.existsSync(savesJSON))
+        fs.writeFileSync(savesJSON, JSON.stringify({}, null, 2), 'utf-8')
+
+    return savesJSON
+})
+
+ipcMain.handle('send-quill-delta', (e, contents) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${windowToComponentMapping.get(senderWindow.id)}.json`)
+    fs.writeFileSync(savesJSON, JSON.stringify(contents, null, 2), 'utf-8')
 })
 
 ipcMain.handle('first-time-notepad-chosen', (e) => {
@@ -214,6 +238,9 @@ ipcMain.handle('first-time-whiteboard-chosen', (e) => {
     console.log(`window id: ${senderWindow.id}`)
     senderWindow.loadFile(path.join(__dirname, 'whiteboard-index.html'))
     allWindowTypes.set(senderWindow.id, 'w')
+    const id = getWhiteboardID()
+    allWhiteboards.add(id)
+    windowToComponentMapping.set(window.id, id)
 })
 
 ipcMain.on('save-whiteboard-html', (e, html) => {
@@ -294,12 +321,5 @@ ipcMain.handle('close-window', (e) => {
     if(windows.length === 1){
         writeWindows()
     }
-    if(allWindowTypes.get(senderWindow.id) === 'p'){
-        const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${windowToComponentMapping.get(senderWindow.id)}.json`)
-        ipcMain.once('response-quill-delta', (e, contents) => {
-            fs.writeFileSync(savesJSON, JSON.stringify(contents, null, 2), 'utf-8')
-            senderWindow.close()
-        })
-        senderWindow.webContents.send('request-quill-delta')
-    }
+    senderWindow.close()
 })
