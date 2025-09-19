@@ -28,6 +28,18 @@ function getWhiteboardID(){
     }
 }
 
+function initialiseNotepadWindow(windowID, notepadID){
+    allWindowTypes.set(windowID, 'p')
+    let id
+    if(!allNotepads.has(notepadID)){
+        id = getNotepadID()
+        allNotepads.add(id)
+    }else{
+        id = notepadID
+    }
+    windowToComponentMapping.set(windowID, id)
+}
+
 function createWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600){
     const window = new BrowserWindow({
         width: width,
@@ -65,15 +77,7 @@ function createWhiteboardWindow(entryFilePath, preloadFilePath, fullscreen = fal
 
 function createNotepadWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600, notepadID){
     const window = createWindow(entryFilePath, preloadFilePath, fullscreen, width, height)
-    allWindowTypes.set(window.id, 'p')
-    let id
-    if(!allNotepads.has(notepadID)){
-        id = getNotepadID()
-        allNotepads.add(id)
-    }else{
-        id = notepadID
-    }
-    windowToComponentMapping.set(window.id, id)
+    initialiseNotepadWindow(window.id, notepadID)
     return window
 }
 
@@ -227,10 +231,7 @@ ipcMain.handle('send-quill-delta', (e, contents) => {
 ipcMain.handle('first-time-notepad-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     senderWindow.loadFile(path.join(__dirname, 'notepad-index.html'))
-    allWindowTypes.set(senderWindow.id, 'p')
-    const id = getNotepadID()
-    allNotepads.add(id)
-    windowToComponentMapping.set(window.id, id)
+    initialiseNotepadWindow(senderWindow.id, getNotepadID())
 })
 
 ipcMain.handle('first-time-whiteboard-chosen', (e) => {
