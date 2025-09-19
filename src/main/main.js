@@ -213,19 +213,19 @@ ipcMain.handle('open-notepad', (e, notepadID) => {
     undefined, undefined, undefined, notepadID)
 })
 
-ipcMain.handle('get-quill-delta', (e) => {
+ipcMain.handle('save-quill-delta', (e, contents) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${windowToComponentMapping.get(senderWindow.id)}.json`)
+    fs.writeFileSync(savesJSON, JSON.stringify(contents, null, 2), 'utf-8')
+})
+
+ipcMain.handle('load-quill-delta', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${windowToComponentMapping.get(senderWindow.id)}.json`)
     if(!fs.existsSync(savesJSON))
         fs.writeFileSync(savesJSON, JSON.stringify({}, null, 2), 'utf-8')
 
     return savesJSON
-})
-
-ipcMain.handle('send-quill-delta', (e, contents) => {
-    const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${windowToComponentMapping.get(senderWindow.id)}.json`)
-    fs.writeFileSync(savesJSON, JSON.stringify(contents, null, 2), 'utf-8')
 })
 
 ipcMain.handle('first-time-notepad-chosen', (e) => {

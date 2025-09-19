@@ -1,6 +1,6 @@
-const quill = initQuill('#notepad', window.wandererAPI.getQuillDelta())
+const quill = initQuill('#notepad', window.wandererAPI.loadQuillDelta())
 
 document.getElementById('but').addEventListener('click', () => {
-  window.wandererAPI.sendQuillDelta(quill.getContents())
+  window.wandererAPI.saveQuillDelta(quill.getContents())
   window.wandererAPI.closeWindow()
 })
