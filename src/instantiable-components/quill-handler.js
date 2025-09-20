@@ -1,4 +1,4 @@
-let allQuillToolbars = new Map()
+let allQuills = new Map(), allQuillToolbars = new Map()
 
 let activeQlToolbar = null, isQuillToolbarEdit = false
 
@@ -50,7 +50,7 @@ function configureQuillToolbar(qlToolbar){
 }
 
 function saveAllQuillToolbars(){
-    document.querySelectorAll('.note').forEach(qlEditor => allQuillToolbars.set(qlEditor.id, quill.getText()))
+    document.querySelectorAll('.note').forEach(qlEditor => allQuillToolbars.set(qlEditor.id, allQuills.get(qlEditor.id).getText()))
     document.querySelectorAll('.ql-toolbar').forEach(toolbar => toolbar.remove())
 }
 
@@ -99,5 +99,5 @@ function createQuill(parentID, content = ''){
     let idEditor = getQlEditorID()
     editor.id = idEditor
 
-    allQuillToolbars.set(parentID, quill.getText())
+    allQuills.set(parentID, quill)
 }

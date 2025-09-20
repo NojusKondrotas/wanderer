@@ -15,7 +15,7 @@ function getNotepadID(){
         return unusedNotepadIDs.pop()
     else{
         ++largestNotepadID
-        return `el-${largestNotepadID - 1}`
+        return `notepad-${largestNotepadID - 1}`
     }
 }
 
@@ -24,7 +24,7 @@ function getWhiteboardID(){
         return unusedWhiteboardIDs.pop()
     else{
         ++largestWhiteboardID
-        return `el-${largestWhiteboardID - 1}`
+        return `whiteboard-${largestWhiteboardID - 1}`
     }
 }
 
@@ -40,13 +40,25 @@ function initialiseNotepadWindow(windowID, notepadID){
     windowToComponentMapping.set(windowID, id)
 }
 
+function initialiseWhiteboardWindow(windowID, whiteboardID){
+    allWindowTypes.set(windowID, 'w')
+    let id
+    if(!allWhiteboards.has(whiteboardID)){
+        id = getWhiteboardID()
+        allWhiteboards.add(id)
+    }else{
+        id = whiteboardID
+    }
+    windowToComponentMapping.set(windowID, id)
+}
+
 function createWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600){
     const window = new BrowserWindow({
         width: width,
         height: height,
         frame: false,
         titleBarStyle: 'hidden',
-        fullscreen: fullscreen,
+        fullscreen,
         webPreferences: {
             preload: path.join(preloadFilePath),
             contextIsolation: true,
@@ -60,18 +72,7 @@ function createWindow(entryFilePath, preloadFilePath, fullscreen = false, width 
 
 function createWhiteboardWindow(entryFilePath, preloadFilePath, fullscreen = false, width = 800, height = 600, whiteboardID){
     const window = createWindow(entryFilePath, preloadFilePath, fullscreen, width, height)
-    allWindowTypes.set(window.id, 'w')
-    let id
-    if(!allWhiteboards.has(whiteboardID)){
-        id = getWhiteboardID()
-        allWhiteboards.add(id)
-    }else{
-        id = whiteboardID
-    }
-    windowToComponentMapping.set(window.id, id)
-    // window.webContents.on('did-finish-load', () => {
-    //     window.webContents.send('retrieve-quill-delta', quillDelta)
-    // })
+    initialiseWhiteboardWindow(window.id, whiteboardID)
     return window
 }
 
@@ -94,6 +95,8 @@ function writeWindows(){
                 
                 break
         }
+
+        console.log('is window fullscreen?' + win.isFullScreen())
 
         return {
             x: bounds.x,
@@ -159,13 +162,14 @@ function initialiseApp(){
     const windowsObj = JSON.parse(fs.readFileSync(windowsJSON, 'utf-8'))
     if(Array.isArray(windowsObj) && windowsObj.length > 0){
         for(let i = windowsObj.length - 1; i >= 0; i--){
-            const win = windowsObj[i]
-            allWindowTypes.set(win.id, win.type)
-            switch(win.type){
+            const winData = windowsObj[i]
+            allWindowTypes.set(winData.id, winData.type)
+            switch(winData.type){
                 case 'n':
                     createNotepadWindow() // handle
                 case 'w':
-                    createWhiteboardWindow() // handle
+                    const filePath = path.join(savesWhiteboardsPath, `${winData.componentID}`, `${winData.componentID}-index.html`)
+                    createWhiteboardWindow(filePath, defaultPathPreload, winData.isFullscreen, winData.width, winData.height, winData.componentID) // handle
             }
         }
     }else{
@@ -241,33 +245,30 @@ ipcMain.handle('first-time-whiteboard-chosen', (e) => {
     allWindowTypes.set(senderWindow.id, 'w')
     const id = getWhiteboardID()
     allWhiteboards.add(id)
-    windowToComponentMapping.set(window.id, id)
+    windowToComponentMapping.set(senderWindow.id, id)
 })
 
 ipcMain.on('save-whiteboard-html', (e, html) => {
-    const saveDir = path.join(__dirname, '..', 'saves')
-    if(!fs.existsSync(saveDir)){
-        fs.mkdirSync(saveDir)
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    const componentID = windowToComponentMapping.get(senderWindow.id)
+    const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
+    if(!fs.existsSync(saveWhiteboardDir)){
+        fs.mkdirSync(saveWhiteboardDir)
     }
-    const saveNotepadDir = path.join(saveDir, 'notepads')
-    if(!fs.existsSync(saveNotepadDir)){
-        fs.mkdirSync(saveNotepadDir)
+    const saveWhiteboardHTML = path.join(saveWhiteboardDir, `${componentID}-index.html`)
+    if (!html.includes('../../../')) {
+        html = html.replace(/((?:src|href)=["'])\.\.\//g, '$1../../../')
     }
-
-    let filePath
-    // const focusedWindow = BrowserWindow.getFocusedWindow()
-    // if (focusedWindow && focusedWindow === main_window) {
-        filePath = path.join(saveDir, 'whiteboard-index.html')
-        fs.writeFileSync(filePath, html, 'utf-8')
-    // }
+    fs.writeFileSync(saveWhiteboardHTML, html, 'utf-8')
 })
 
 ipcMain.on('save-whiteboard-state', (e, stateObj) => {
-    const focusedWindow = BrowserWindow.getFocusedWindow()
-    // if(focusedWindow && focusedWindow !== main_window) return
-    const saveDir = path.join(__dirname, '..', 'saves')
-    if(!fs.existsSync(saveDir))
-        fs.mkdirSync(saveDir)
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    const componentID = windowToComponentMapping.get(senderWindow.id)
+    const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
+    if(!fs.existsSync(saveWhiteboardDir)){
+        fs.mkdirSync(saveWhiteboardDir)
+    }
 
     const serializedElements = Array.from(stateObj.elementPositions, ([id, pos]) => ({ id, x: pos.x, y: pos.y }))
     const serializedallQuillToolbars = Array.from(stateObj.allQuillToolbars, ([id, quill]) => ({ id, quill }))
@@ -286,14 +287,16 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
         isFullscreen: stateObj.isFullscreen,
     }
 
-    const filePath = path.join(saveDir, 'save-data.json')
-    fs.writeFileSync(filePath, JSON.stringify(dataToSave, null, 2), 'utf-8')
+    const saveWhiteboardState = path.join(saveWhiteboardDir, `${componentID}-state.json`)
+    fs.writeFileSync(saveWhiteboardState, JSON.stringify(dataToSave, null, 2), 'utf-8')
 })
 
-ipcMain.handle('load-whiteboard-state', () => {
-    const saveJSONPath = path.join(__dirname, '..', 'saves', 'save-data.json')
-    if (fs.existsSync(saveJSONPath))
-        return JSON.parse(fs.readFileSync(saveJSONPath, 'utf-8'))
+ipcMain.handle('load-whiteboard-state', (e) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    const componentID = windowToComponentMapping.get(senderWindow.id)
+    const saveWhiteboardState = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`,  `${componentID}-state.json`)
+    if (fs.existsSync(saveWhiteboardState))
+        return JSON.parse(fs.readFileSync(saveWhiteboardState, 'utf-8'))
     return {}
 })
 
