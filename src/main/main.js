@@ -83,35 +83,25 @@ function createNotepadWindow(entryFilePath, preloadFilePath, fullscreen = false,
 }
 
 function writeWindows(){
-    const whiteboardSavesDirPath = path.join(__dirname, '..', 'saves', 'whiteboards')
-    const windows = BrowserWindow.getAllWindows().map(win => {
+    const windows = BrowserWindow.getAllWindows()
+    const map = new Array()
+    for(let i = windows.length - 1; i >= 0; --i){
+        const win = windows[i]
         const bounds = win.getBounds()
-        const winType = allWindowTypes.get(win.id)
-        switch(winType){
-            case 'p':
-                //handle
-                break
-            case 'w':
-                
-                break
-        }
-
-        console.log('is window fullscreen?' + win.isFullScreen())
-
-        return {
+        const winSaved = {
             x: bounds.x,
             y: bounds.y,
             width: bounds.width,
             height: bounds.height,
             isFullscreen: win.isFullScreen(),
             isMinimized: win.isMinimized(),
-            id: win.id,
             type: allWindowTypes.get(win.id),
             componentID: windowToComponentMapping.get(win.id)
         }
-    })
+        map.push(winSaved)
+    }
     const windowsFilePath = path.join(__dirname, '..', 'saves', 'windows.json')
-    fs.writeFileSync(windowsFilePath, JSON.stringify(windows, null, 2), 'utf-8')
+    fs.writeFileSync(windowsFilePath, JSON.stringify(map, null, 2), 'utf-8')
 }
 
 function terminateApp(){
@@ -124,8 +114,8 @@ function terminateApp(){
             height: bounds.height,
             isFullscreen: win.isFullScreen(),
             isMinimized: win.isMinimized(),
-            id: win.id,
-            type: allWindowTypes.get(win.id)
+            type: allWindowTypes.get(win.id),
+            componentID: windowToComponentMapping.get(win.id)
         }
     })
 
@@ -151,6 +141,10 @@ function initialiseApp(){
     if(!fs.existsSync(defaultWhiteboardPathIndex))
         process.exit
 
+    const defaultNotepadPathIndex = path.join(__dirname, 'notepad-index.html')
+    if(!fs.existsSync(defaultNotepadPathIndex))
+        process.exit
+
     const defaultPathPreload = path.join(__dirname, 'preload.js')
     if(!fs.existsSync(defaultPathPreload))
         process.exit
@@ -161,15 +155,16 @@ function initialiseApp(){
 
     const windowsObj = JSON.parse(fs.readFileSync(windowsJSON, 'utf-8'))
     if(Array.isArray(windowsObj) && windowsObj.length > 0){
-        for(let i = windowsObj.length - 1; i >= 0; i--){
+        for(let i = 0; i < windowsObj.length; ++i){
             const winData = windowsObj[i]
-            allWindowTypes.set(winData.id, winData.type)
             switch(winData.type){
-                case 'n':
-                    createNotepadWindow() // handle
+                case 'p':
+                    win = createNotepadWindow(defaultNotepadPathIndex, defaultPathPreload, winData.isFullscreen, winData.width, winData.height, winData.componentID)
+                    break
                 case 'w':
                     const filePath = path.join(savesWhiteboardsPath, `${winData.componentID}`, `${winData.componentID}-index.html`)
-                    createWhiteboardWindow(filePath, defaultPathPreload, winData.isFullscreen, winData.width, winData.height, winData.componentID) // handle
+                    win = createWhiteboardWindow(filePath, defaultPathPreload, winData.isFullscreen, winData.width, winData.height, winData.componentID)
+                    break
             }
         }
     }else{
@@ -214,7 +209,7 @@ ipcMain.handle('open-notepad', (e, notepadID) => {
     const defaultHTML = path.join(__dirname, 'notepad-index.html')
 
     const notepadWindow = createNotepadWindow(defaultHTML, path.join(__dirname, 'preload.js'),
-    undefined, undefined, undefined, notepadID)
+    false, undefined, undefined, notepadID)
 })
 
 ipcMain.handle('save-quill-delta', (e, contents) => {
@@ -304,14 +299,14 @@ ipcMain.handle('set-mouse-position', (e, x, y) => {
     robot.moveMouse(x, y)
 })
 
-ipcMain.handle('is-fullscreen', () => {
-    const focusedWindow = BrowserWindow.getFocusedWindow()
-    if(focusedWindow) focusedWindow.isFullScreen()
+ipcMain.handle('is-fullscreen', (e) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    return senderWindow.isFullScreen()
 })
 
 ipcMain.handle('set-fullscreen', (e, flag) => {
-    const focusedWindow = BrowserWindow.getFocusedWindow()
-    if(focusedWindow) focusedWindow.setFullScreen(flag)
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    focusedWindow.setFullScreen(flag)
 })
 
 ipcMain.handle('set-minimized', () => {
