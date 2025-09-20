@@ -105,22 +105,6 @@ function writeWindows(){
 }
 
 function terminateApp(){
-    const windows = BrowserWindow.getAllWindows().map(win => {
-        const bounds = win.getBounds()
-        return {
-            x: bounds.x,
-            y: bounds.y,
-            width: bounds.width,
-            height: bounds.height,
-            isFullscreen: win.isFullScreen(),
-            isMinimized: win.isMinimized(),
-            type: allWindowTypes.get(win.id),
-            componentID: windowToComponentMapping.get(win.id)
-        }
-    })
-
-    const saveDir = path.join(__dirname, '..', 'saves')
-    if (!fs.existsSync(saveDir)) fs.mkdirSync(saveDir)
     writeWindows()
     app.quit()
 }
@@ -179,13 +163,13 @@ app.whenReady().then(() => {
         if(BrowserWindow.getAllWindows().length === 0) initialiseApp()
     })
 
-    globalShortcut.register('CmdOrCtrl+1', () => {
-        const focusedWindow = BrowserWindow.getFocusedWindow()
-        if(focusedWindow) focusedWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), focusedWindow.getBounds())
+    globalShortcut.register('CmdOrCtrl+1', (e) => {
+        const senderWindow = BrowserWindow.fromWebContents(e.sender)
+        senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
     })
-    globalShortcut.register('CmdOrCtrl+num1', () => {
-        const focusedWindow = BrowserWindow.getFocusedWindow()
-        if(focusedWindow) focusedWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), focusedWindow.getBounds())
+    globalShortcut.register('CmdOrCtrl+num1', (e) => {
+        const senderWindow = BrowserWindow.fromWebContents(e.sender)
+        senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
     })
     globalShortcut.register('CmdOrCtrl+2', () => {
         terminateApp()
@@ -306,12 +290,12 @@ ipcMain.handle('is-fullscreen', (e) => {
 
 ipcMain.handle('set-fullscreen', (e, flag) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    focusedWindow.setFullScreen(flag)
+    senderWindow.setFullScreen(flag)
 })
 
 ipcMain.handle('set-minimized', () => {
-    const focusedWindow = BrowserWindow.getFocusedWindow()
-    if(focusedWindow) focusedWindow.minimize()
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    senderWindow.minimize()
 })
 
 ipcMain.handle('close-window', (e) => {
