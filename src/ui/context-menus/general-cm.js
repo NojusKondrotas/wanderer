@@ -3,7 +3,7 @@ const generalContextMenu = document.getElementById('general-context-menu')
 document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    createNewNote(whiteboard, '', contextMenuCenter.x, contextMenuCenter.y)
+    createNewNote(parentWhiteboard, '', contextMenuCenter.x, contextMenuCenter.y)
 
     turnOffContextMenu()
 })
@@ -11,7 +11,15 @@ document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
 document.getElementById('gcm-new-notepad').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    createNewNotepad(whiteboard, contextMenuCenter.x, contextMenuCenter.y)
+    createNewNotepad(parentWhiteboard, contextMenuCenter.x, contextMenuCenter.y)
+
+    turnOffContextMenu()
+})
+
+document.getElementById('gcm-new-whiteboard').addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    createNewWhiteboard(parentWhiteboard, contextMenuCenter.x, contextMenuCenter.y)
 
     turnOffContextMenu()
 })
@@ -29,9 +37,9 @@ document.getElementById('gcm-paste').addEventListener('mousedown', async (e) => 
 
     let clipboardContent = await readWandererClipboard()
     let {isHTML, element} = parseClipboardElement(clipboardContent)
-    if(!isHTML) return createNewNote(whiteboard, clipboardContent, contextMenuCenter.x, contextMenuCenter.y)
+    if(!isHTML) return createNewNote(parentWhiteboard, clipboardContent, contextMenuCenter.x, contextMenuCenter.y)
 
     if(element.type === 'n'){
-        return createNewNote(whiteboard, element.content, contextMenuCenter.x, contextMenuCenter.y)
+        return createNewNote(parentWhiteboard, element.content, contextMenuCenter.x, contextMenuCenter.y)
     }
 })

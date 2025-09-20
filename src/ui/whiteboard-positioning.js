@@ -85,7 +85,7 @@ class PositioningHandler{
         if (this.isResizing){
             this.resize()
         }else if(this.isDraggingBoard){
-            updateComponentPositions(whiteboard)
+            updateComponentPositions(parentWhiteboard)
         }else if(this.isDraggingElement){
             updateElementPositionByID(selectedElement.id)
 

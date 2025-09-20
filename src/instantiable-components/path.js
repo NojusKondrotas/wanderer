@@ -41,7 +41,7 @@ function createPath(mousePos, startX = 0, startY = 0){
     drawnPath.appendChild(hitPath)
     drawnPath.appendChild(pathVisual)
     div.appendChild(drawnPath)
-    whiteboard.appendChild(div)
+    parentWhiteboard.appendChild(div)
     div.id = `${getElementID()}`
     div.style.visibility = 'visible'
 
@@ -128,7 +128,7 @@ function deletePathByID(pathToRemoveID){
         const hitPath = document.getElementById(pathToRemove.hitPathID)
         pathVisual.remove()
         hitPath.remove()
-        deleteComponentByID(whiteboard, pathToRemove.ID)
+        deleteComponentByID(parentWhiteboard, pathToRemove.ID)
 
         return
     }

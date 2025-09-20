@@ -9,7 +9,7 @@ body {
     overflow: hidden;
 }
 
-#whiteboard {
+#parent-whiteboard {
     position: absolute;
     top: 0;
     left: 0;
@@ -178,7 +178,7 @@ svg {
     z-index: $medium-index;
 }
 
-.notepad {
+.notepad, .whiteboard {
     position: absolute;
     min-width: 60px;
     min-height: 60px;

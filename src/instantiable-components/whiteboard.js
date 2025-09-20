@@ -1,21 +1,44 @@
-const whiteboard = document.getElementById('whiteboard')
+function addWhiteboardListeners(whiteboard){
+    whiteboard.addEventListener('contextmenu', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        if(isWritingElement) return
+        
+        selectedElement = whiteboard
 
-whiteboard.addEventListener('mousedown', (e) => {
-    genMouseDown_WhiteboardMoveHandler(e)
-})
+        openNewContextMenu(e.clientX, e.clientY, elementContextMenu, 360 / 6, 90, 0, 0, -10)
+    })
 
-whiteboard.addEventListener('mousemove', (e) => {
-    genMouseMove_WhiteboardMoveHandler(e)
-    genMouseMove_ContextMenuHandler(e)
-})
+    whiteboard.addEventListener('mousedown', (e) => {
+        e.stopPropagation()
+        PositioningHandler.element_MouseDown(e, whiteboard)
+    })
 
-whiteboard.addEventListener('mouseup', (e) => {
-    genMouseUp_WhiteboardMoveHandler(e)
-})
+    whiteboard.addEventListener('mouseup', (e) => {
+        e.stopPropagation()
+        PositioningHandler.element_MouseUp(e, whiteboard)
+    })
 
-whiteboard.addEventListener('contextmenu', (e) => {
-    e.preventDefault()
-    e.stopPropagation()
+    whiteboard.addEventListener('dblclick', (e) => {
+        if(isWritingElement) return
 
-    openNewContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 162, -10, -10)
-})
+        window.wandererAPI.openWhiteboard(whiteboard.id)
+    })
+}
+
+async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
+    const newWhiteboard = document.createElement('div')
+    newWhiteboard.classList.add('whiteboard')
+    newWhiteboard.innerHTML = 'whiteboard'
+
+
+    const id = await window.wandererAPI.addWhiteboard()
+    createNewElement(container, newWhiteboard, id, xOffset, yOffset)
+    addWhiteboardListeners(newWhiteboard)
+    
+    //instantiateNoteResizingBorders(newWhiteboard)
+}
+
+function deleteWhiteboardByID(container, whiteboardID){
+    deleteComponentByID(container, whiteboardID)
+}

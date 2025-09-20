@@ -104,7 +104,6 @@ function writeWindows(){
     const windowsFilePath = path.join(savesPath, 'windows.json')
     fs.writeFileSync(windowsFilePath, JSON.stringify(map, null, 2), 'utf-8')
     const windowsIDsJSON = path.join(savesPath, 'windows-IDs.json')
-    console.log(allNotepads)
     fs.writeFileSync(windowsIDsJSON, JSON.stringify({
         largestNotepadID, largestWhiteboardID, unusedNotepadIDs, unusedWhiteboardIDs,
         allNotepads: Array.from(allNotepads), allWhiteboards: Array.from(allWhiteboards)
@@ -203,7 +202,6 @@ app.on('window-all-closed', () => {
 ipcMain.handle('add-notepad', async (e) => {
     const id = getNotepadID()
     allNotepads.add(id)
-    console.log(allNotepads)
     return id
 })
 
@@ -215,6 +213,27 @@ ipcMain.handle('open-notepad', (e, notepadID) => {
 
     const notepadWindow = createNotepadWindow(defaultHTML, path.join(__dirname, 'preload.js'),
     false, undefined, undefined, notepadID)
+})
+
+ipcMain.handle('add-whiteboard', async (e) => {
+    const id = getWhiteboardID()
+    allWhiteboards.add(id)
+    return id
+})
+
+ipcMain.handle('open-whiteboard', (e, whiteboardID) => {
+    const saves = path.join(__dirname, '..', 'saves', 'whiteboards', `${whiteboardID}`)
+    if(!fs.existsSync(saves))
+        fs.mkdirSync(saves)
+    const savedHTML = path.join(saves, `${whiteboardID}-index.html`)
+    const defaultHTML = path.join(__dirname, 'whiteboard-index.html')
+    let pathHTML
+    if(!fs.existsSync(savedHTML)){
+        pathHTML = defaultHTML
+    }else pathHTML = savedHTML
+
+    const whiteboardWindow = createWhiteboardWindow(pathHTML, path.join(__dirname, 'preload.js'),
+    true, undefined, undefined, whiteboardID)
 })
 
 ipcMain.handle('save-quill-delta', (e, contents) => {
@@ -240,7 +259,6 @@ ipcMain.handle('first-time-notepad-chosen', (e) => {
 
 ipcMain.handle('first-time-whiteboard-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    console.log(`window id: ${senderWindow.id}`)
     senderWindow.loadFile(path.join(__dirname, 'whiteboard-index.html'))
     allWindowTypes.set(senderWindow.id, 'w')
     const id = getWhiteboardID()

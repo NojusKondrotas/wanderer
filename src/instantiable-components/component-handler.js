@@ -20,6 +20,8 @@ function configureElement(element){
         addNoteListeners(element)
     }else if(element.classList.contains('notepad')){
         addNotepadListeners(element)
+    }else if(element.classList.contains('whiteboard')){
+        addWhiteboardListeners(element)
     }
 }
 

@@ -29,6 +29,9 @@ contextBridge.exposeInMainWorld('wandererAPI', {
 
   addNotepad: () => ipcRenderer.invoke('add-notepad'),
   openNotepad: (notepadID) => ipcRenderer.invoke('open-notepad', notepadID),
+  addWhiteboard: () => ipcRenderer.invoke('add-whiteboard'),
+  openWhiteboard: (whiteboardID) => ipcRenderer.invoke('open-whiteboard', whiteboardID),
+
   saveQuillDelta: (contents) => ipcRenderer.invoke('save-quill-delta', contents),
   loadQuillDelta: () => ipcRenderer.invoke('load-quill-delta'),
 })

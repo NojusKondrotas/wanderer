@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         window.wandererAPI.setFullscreen(isFullscreen)
 
-        configureAllElements(whiteboard.children)
+        configureAllElements(parentWhiteboard.children)
         configureAllPaths(allPaths)
         reinstateAllQuillToolbars()
         reinstateAllNoteBorders(elementPositions)
