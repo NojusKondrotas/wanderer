@@ -5,7 +5,7 @@ const robot = require('@hurdlegroup/robotjs')
 const { send } = require('process')
 
 const allWindowTypes = new Map(), windowToComponentMapping = new Map()
-const allNotepads = new Set(), allWhiteboards = new Set()
+let allNotepads = new Set(), allWhiteboards = new Set()
 
 let largestNotepadID = 0, unusedNotepadIDs = new Array()
 let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
@@ -100,8 +100,15 @@ function writeWindows(){
         }
         map.push(winSaved)
     }
-    const windowsFilePath = path.join(__dirname, '..', 'saves', 'windows.json')
+    const savesPath = path.join(__dirname, '..', 'saves')
+    const windowsFilePath = path.join(savesPath, 'windows.json')
     fs.writeFileSync(windowsFilePath, JSON.stringify(map, null, 2), 'utf-8')
+    const windowsIDsJSON = path.join(savesPath, 'windows-IDs.json')
+    console.log(allNotepads)
+    fs.writeFileSync(windowsIDsJSON, JSON.stringify({
+        largestNotepadID, largestWhiteboardID, unusedNotepadIDs, unusedWhiteboardIDs,
+        allNotepads: Array.from(allNotepads), allWhiteboards: Array.from(allWhiteboards)
+    }, null, 2), 'utf-8')
 }
 
 function terminateApp(){
@@ -136,6 +143,19 @@ function initialiseApp(){
     const windowsJSON = path.join(savesPath, 'windows.json')
     if(!fs.existsSync(windowsJSON))
         fs.writeFileSync(windowsJSON, JSON.stringify([], null, 2), 'utf-8')
+    const windowsIDsJSON = path.join(savesPath, 'windows-IDs.json')
+    if(!fs.existsSync(windowsIDsJSON))
+        fs.writeFileSync(windowsIDsJSON, JSON.stringify({}, null, 2), 'utf-8')
+
+    const stateWindowsIDs = JSON.parse(fs.readFileSync(windowsIDsJSON, 'utf-8'))
+    if(stateWindowsIDs && Object.keys(stateWindowsIDs).length > 0){
+        largestNotepadID = stateWindowsIDs.largestNotepadID
+        largestWhiteboardID = stateWindowsIDs.largestWhiteboardID
+        unusedNotepadIDs = stateWindowsIDs.unusedNotepadIDs
+        unusedWhiteboardIDs = stateWindowsIDs.unusedWhiteboardIDs
+        allNotepads = new Set(stateWindowsIDs.allNotepads)
+        allWhiteboards = new Set(stateWindowsIDs.allWhiteboards)
+    }
 
     const windowsObj = JSON.parse(fs.readFileSync(windowsJSON, 'utf-8'))
     if(Array.isArray(windowsObj) && windowsObj.length > 0){
@@ -183,6 +203,7 @@ app.on('window-all-closed', () => {
 ipcMain.handle('add-notepad', async (e) => {
     const id = getNotepadID()
     allNotepads.add(id)
+    console.log(allNotepads)
     return id
 })
 
