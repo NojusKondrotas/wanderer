@@ -2,11 +2,13 @@ class PositioningHandler{
     static isDraggingBoard = false
     static isDraggingElement = false
     static isResizing = false
+    static isDraggingWindow = false
     static dragStart = { x: 0, y: 0 }
     static dragDiff = { x: 0, y: 0 }
     static dragTotalStart = { x: 0, y: 0 }
     static dragTotalDiff = { x: 0, y: 0 }
     static dragAbsoluteTotalDiff = { x: 0, y: 0 }
+    static windowDimensions = { width: 0, height: 0 }
 
     static checkIfDraggedEnough(){
         const movedX = this.dragAbsoluteTotalDiff.x
@@ -72,12 +74,12 @@ class PositioningHandler{
 
     static update(ev){
         this.dragDiff = {
-            x: this.dragStart.x - ev.clientX,
-            y: this.dragStart.y - ev.clientY
+            x: this.dragStart.x - ev.screenX,
+            y: this.dragStart.y - ev.screenY
         }
         this.dragStart = {
-            x: ev.clientX,
-            y: ev.clientY
+            x: ev.screenX,
+            y: ev.screenY
         }
         this.dragAbsoluteTotalDiff.x += Math.abs(this.dragDiff.x)
         this.dragAbsoluteTotalDiff.y += Math.abs(this.dragDiff.y)
@@ -86,6 +88,9 @@ class PositioningHandler{
             this.resize()
         }else if(this.isDraggingBoard){
             updateComponentPositions(parentWhiteboard)
+        }else if(this.isDraggingWindow){
+            moveBy(this.dragDiff.x * -1, this.dragDiff.y * -1)
+            resizeTo(this.windowDimensions.width, this.windowDimensions.height)
         }else if(this.isDraggingElement){
             updateElementPositionByID(selectedElement.id)
 
@@ -149,7 +154,7 @@ class PositioningHandler{
         }
     }
 
-    static startDrag(ev, isBoard, isEl, isResizing){
+    static startDrag(ev, isBoard, isEl, isResizing, isWindow){
         if(isQuillToolbarEdit) return
         if(ev.button !== 2){
             if(isContextMenuOpen){
@@ -165,17 +170,20 @@ class PositioningHandler{
                 document.getElementById(qlEditor.id).contentEditable = 'false'
             })
 
-            this.dragStart = { x: ev.clientX, y: ev.clientY }
-            this.dragTotalStart = { x: ev.clientX, y: ev.clientY }
+            this.dragStart = { x: ev.screenX, y: ev.screenY }
+            this.dragTotalStart = { x: ev.screenX, y: ev.screenY }
             this.dragDiff = { x: 0, y: 0 }
             this.dragTotalDiff = { x: 0, y: 0 }
             this.dragAbsoluteTotalDiff = { x: 0, y: 0 }
+            this.windowDimensions = { width: outerWidth, height: outerHeight }
             if(isBoard){
                 this.isDraggingBoard = true
             }else if(isEl){
                 this.isDraggingElement = true
             }else if(isResizing){
                 this.isResizing = true
+            }else if(isWindow){
+                this.isDraggingWindow = true
             }
 
             handleKeybindGuideAppearance(false)
@@ -203,10 +211,11 @@ class PositioningHandler{
 
         this.isDraggingBoard = false
         this.isDraggingElement = false
-        this.dragStart = {x:0, y:0}
-        this.dragDiff = {x:0, y:0}
+        this.isDraggingWindow = false
+        this.dragStart = { x: 0, y: 0 }
+        this.dragDiff = { x: 0, y: 0 }
         this.dragTotalDiff = { x: 0, y: 0 }
-        this.dragAbsoluteTotalDiff = {x:0, y:0}
+        this.dragAbsoluteTotalDiff = { x: 0, y: 0 }
 
         selectedElement = null
         handleKeybindGuideAppearance(true)
@@ -239,7 +248,9 @@ function updateComponentPositions(container){
 }
 
 function genMouseDown_WhiteboardMoveHandler(e){
-    PositioningHandler.startDrag(e, true, false, false)
+    console.log(isCombo(keybind))
+    if(isCombo(keybind)) PositioningHandler.startDrag(e, false, false, false, true)
+    else PositioningHandler.startDrag(e, true, false, false, false)
 }
 
 function genMouseMove_WhiteboardMoveHandler(e){

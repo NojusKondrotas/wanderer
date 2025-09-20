@@ -183,12 +183,12 @@ app.whenReady().then(() => {
     })
 
     globalShortcut.register('CmdOrCtrl+1', (e) => {
-        const senderWindow = BrowserWindow.fromWebContents(e.sender)
-        senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
+        const senderWindow = BrowserWindow.getFocusedWindow()
+        if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
     })
     globalShortcut.register('CmdOrCtrl+num1', (e) => {
-        const senderWindow = BrowserWindow.fromWebContents(e.sender)
-        senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
+        const senderWindow = BrowserWindow.getFocusedWindow()
+        if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
     })
     globalShortcut.register('CmdOrCtrl+2', () => {
         terminateApp()
@@ -300,9 +300,7 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
         unusedQlEditorIDs: stateObj.unusedQlEditorIDs,
         elementPositions: serializedElements,
         allPaths: stateObj.allPaths,
-        allQuillToolbars: serializedallQuillToolbars,
-        isTitlebarLocked: stateObj.isTitlebarLocked,
-        isFullscreen: stateObj.isFullscreen,
+        allQuillToolbars: serializedallQuillToolbars
     }
 
     const saveWhiteboardState = path.join(saveWhiteboardDir, `${componentID}-state.json`)

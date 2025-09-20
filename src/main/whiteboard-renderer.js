@@ -15,11 +15,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         allPaths = stateObj.allPaths
         allQuillToolbars = new Map(stateObj.allQuillToolbars.map(e => [e.id, e.quill]))
 
-        isTitlebarLocked = stateObj.isTitlebarLocked
-        isFullscreen = stateObj.isFullscreen
-
-        window.wandererAPI.setFullscreen(isFullscreen)
-
         configureAllElements(parentWhiteboard.children)
         configureAllPaths(allPaths)
         reinstateAllQuillToolbars()
@@ -32,8 +27,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(elementPositions)
         console.log(allPaths)
         console.log(allQuillToolbars)
-        console.log(isTitlebarLocked)
-        console.log(isFullscreen)
     }
 })
 
@@ -54,8 +47,6 @@ function save(){
         elementPositions: elementPositionsArr,
         allPaths,
         allQuillToolbars: allQuillToolbarsArr,
-        isTitlebarLocked,
-        isFullscreen,
     })
 }
 
