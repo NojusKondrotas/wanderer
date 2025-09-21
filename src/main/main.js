@@ -5,6 +5,7 @@ const robot = require('@hurdlegroup/robotjs')
 const { send } = require('process')
 
 const allWindowTypes = new Map(), windowToComponentMapping = new Map()
+const openWindows = new Set()
 let allNotepads = new Set(), allWhiteboards = new Set()
 
 let largestNotepadID = 0, unusedNotepadIDs = new Array()
@@ -190,7 +191,15 @@ app.whenReady().then(() => {
         const senderWindow = BrowserWindow.getFocusedWindow()
         if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
     })
-    globalShortcut.register('CmdOrCtrl+2', () => {
+    globalShortcut.register('CmdOrCtrl+2', (e) => {
+        const senderWindow = BrowserWindow.getFocusedWindow()
+        if(senderWindow) senderWindow.webContents.send('open-tab-menu', openWindows)
+    })
+    globalShortcut.register('CmdOrCtrl+num2', (e) => {
+        const senderWindow = BrowserWindow.getFocusedWindow()
+        if(senderWindow) senderWindow.webContents.send('open-tab-menu', openWindows)
+    })
+    globalShortcut.register('CmdOrCtrl+X', () => {
         terminateApp()
     })
 })

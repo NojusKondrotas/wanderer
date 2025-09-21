@@ -22,7 +22,11 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   setMinimized: () => ipcRenderer.invoke('set-minimized'),
   closeWindow: () => ipcRenderer.invoke('close-window'),
   openTitlebarContextMenu: (callback) => ipcRenderer.on('open-titlebar-context-menu',
-    (event, mousePos, boundsOffset) => callback(mousePos, boundsOffset)),
+    (_, mousePos, boundsOffset) => callback(mousePos, boundsOffset)
+  ),
+  openTabMenu: (callback) => ipcRenderer.on('open-tab-menu',
+    (_, windows) => callback(windows)
+  ),
   setMousePosition: (x, y) => {
     ipcRenderer.invoke('set-mouse-position', x, y)
   },
