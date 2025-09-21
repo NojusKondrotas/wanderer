@@ -263,16 +263,13 @@ ipcMain.handle('load-quill-delta', (e) => {
 ipcMain.handle('first-time-notepad-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     senderWindow.loadFile(path.join(__dirname, 'notepad-index.html'))
-    initialiseNotepadWindow(senderWindow.id, getNotepadID())
+    initialiseNotepadWindow(senderWindow.id, -1)
 })
 
 ipcMain.handle('first-time-whiteboard-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     senderWindow.loadFile(path.join(__dirname, 'whiteboard-index.html'))
-    allWindowTypes.set(senderWindow.id, 'w')
-    const id = getWhiteboardID()
-    allWhiteboards.add(id)
-    windowToComponentMapping.set(senderWindow.id, id)
+    initialiseWhiteboardWindow(senderWindow.id, -1)
 })
 
 ipcMain.on('save-whiteboard-html', (e, html) => {
