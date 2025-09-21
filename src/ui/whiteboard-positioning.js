@@ -155,42 +155,44 @@ class PositioningHandler{
     }
 
     static startDrag(ev, isBoard, isEl, isResizing, isWindow){
+        if(ev.button === 2) return
         if(isQuillToolbarEdit) return
-        if(ev.button !== 2){
-            if(isContextMenuOpen){
-                turnOffContextMenu()
-                return
-            }
-            if(isWritingElement){
-                toggleQuillWritingMode(false, selectedElement.id)
-                return
-            }
 
-            document.querySelectorAll('.ql-editor').forEach((qlEditor) => {
-                document.getElementById(qlEditor.id).contentEditable = 'false'
-            })
-
-            this.dragStart = { x: ev.screenX, y: ev.screenY }
-            this.dragTotalStart = { x: ev.screenX, y: ev.screenY }
-            this.dragDiff = { x: 0, y: 0 }
-            this.dragTotalDiff = { x: 0, y: 0 }
-            this.dragAbsoluteTotalDiff = { x: 0, y: 0 }
-            this.windowDimensions = { width: outerWidth, height: outerHeight }
-            if(isBoard){
-                this.isDraggingBoard = true
-            }else if(isEl){
-                this.isDraggingElement = true
-            }else if(isResizing){
-                this.isResizing = true
-            }else if(isWindow){
-                this.isDraggingWindow = true
-            }
-
-            handleKeybindGuideAppearance(false)
+        if(isContextMenuOpen){
+            turnOffContextMenu()
+            return
         }
+        if(isWritingElement){
+            toggleQuillWritingMode(false, selectedElement.id)
+            return
+        }
+
+        document.querySelectorAll('.ql-editor').forEach((qlEditor) => {
+            document.getElementById(qlEditor.id).contentEditable = 'false'
+        })
+
+        this.dragStart = { x: ev.screenX, y: ev.screenY }
+        this.dragTotalStart = { x: ev.screenX, y: ev.screenY }
+        this.dragDiff = { x: 0, y: 0 }
+        this.dragTotalDiff = { x: 0, y: 0 }
+        this.dragAbsoluteTotalDiff = { x: 0, y: 0 }
+        this.windowDimensions = { width: outerWidth, height: outerHeight }
+        if(isBoard){
+            this.isDraggingBoard = true
+        }else if(isEl){
+            this.isDraggingElement = true
+        }else if(isResizing){
+            this.isResizing = true
+        }else if(isWindow){
+            this.isDraggingWindow = true
+        }
+
+        handleKeybindGuideAppearance(false)
     }
 
     static endDrag(ev){
+        if(ev.button === 2) return
+        
         if(this.isResizing){
             this.isResizing = false
             document.body.style.cursor = 'default'
