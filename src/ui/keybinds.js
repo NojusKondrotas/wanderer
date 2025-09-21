@@ -1,6 +1,8 @@
 const pressedKeys = new Set()
 
-const keybind = ['ShiftLeft', 'KeyW']
+const keybinds = [['ShiftLeft', 'KeyW'], ['ShiftLeft', 'KeyS']]
+const windowDragKeybind = 0
+const windowResizeKeybind = 1
 
 window.addEventListener('keydown', (e) => {
     pressedKeys.add(e.code)
@@ -11,5 +13,5 @@ window.addEventListener('keyup', (e) => {
 })
 
 function isCombo(combo) {
-  return combo.every(code => pressedKeys.has(code));
+  return combo.every(code => pressedKeys.has(code))
 }

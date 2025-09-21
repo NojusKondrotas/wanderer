@@ -248,8 +248,7 @@ function updateComponentPositions(container){
 }
 
 function genMouseDown_WhiteboardMoveHandler(e){
-    console.log(isCombo(keybind))
-    if(isCombo(keybind)) PositioningHandler.startDrag(e, false, false, false, true)
+    if(isCombo(keybinds[windowDragKeybind])) PositioningHandler.startDrag(e, false, false, false, true)
     else PositioningHandler.startDrag(e, true, false, false, false)
 }
 
