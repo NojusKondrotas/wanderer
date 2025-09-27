@@ -50,11 +50,7 @@ function save(){
     })
 }
 
-window.addEventListener('beforeunload', () => {
-    save()
-})
-
-window.addEventListener('terminate-app', () => {
+window.wandererAPI.onTerminateWindow(() => {
     save()
 })
 
