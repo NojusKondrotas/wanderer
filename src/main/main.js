@@ -11,7 +11,8 @@ let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
 class WindowHandler{
     static trueWinIDToSymbolicWinIDMapping = new Map()
     static componentToWindowMapping = new Map()
-    static openWindows = new Map()
+    static allWindows = new Map()
+    static openWindows = new Set()
 
     static largestWindowID = 0
     static unusedWindowIDs = new Array()
@@ -27,14 +28,14 @@ class WindowHandler{
         return `window-${this.largestWindowID - 1}`
     }
 
-    static openComponent(componentType, componentID, parentWindowID, fullscreen = false, width = 800, height = 600){
+    static openComponent(componentType, componentID, parentWindowID, fullscreen = false, width = 800, height = 600, x, y){
         if(this.componentToWindowMapping.has(componentID)){
-            const winData = this.openWindows.get(this.componentToWindowMapping.get(componentID))
+            const winData = this.allWindows.get(this.componentToWindowMapping.get(componentID))
             const win = BrowserWindow.fromId(winData.trueWindowID)
             win.show()
             win.focus()
         }else{
-            this.createWindow(componentType, componentID, parentWindowID, fullscreen, width, height)
+            this.createWindow(componentType, componentID, parentWindowID, fullscreen, width, height, x, y)
         }
     }
 
@@ -45,12 +46,12 @@ class WindowHandler{
 
     static overwriteComponentWindow(entryFilePath, trueWindowID, componentType, componentID){
         const symbolicWinID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
-        const winData = this.openWindows.get(symbolicWinID)
+        const winData = this.allWindows.get(symbolicWinID)
         this.reinitialiseWindow(trueWindowID, componentType, componentID, winData.parentWindowID)
         this.overwriteWindow(entryFilePath, trueWindowID)
     }
 
-    static createWindow(componentType, componentID, parentWindowID, fullscreen = false, width = 800, height = 600){
+    static createWindow(componentType, componentID, parentWindowID, fullscreen = false, width = 800, height = 600, x, y){
         let preloadFilePath = path.join(__dirname, 'preload.js')
         let entryFilePath
         switch(componentType){
@@ -73,6 +74,8 @@ class WindowHandler{
         }
         
         const win = new BrowserWindow({
+            x,
+            y,
             width,
             height,
             frame: false,
@@ -88,36 +91,50 @@ class WindowHandler{
 
         this.initialiseWindow(win.id, componentType, componentID, parentWindowID)
 
+        this.openWindows.add(this.trueWinIDToSymbolicWinIDMapping.get(win.id))
+
         return win
     }
 
     static closeWindow(trueWindowID){
         BrowserWindow.fromId(trueWindowID).webContents.send('terminate-window')
         const symbolicWinID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
-        const winData = this.openWindows.get(symbolicWinID)
+        const winData = this.allWindows.get(symbolicWinID)
         const componentID = winData.componentID
         this.trueWinIDToSymbolicWinIDMapping.delete(trueWindowID)
-        this.openWindows.delete(symbolicWinID)
+        this.allWindows.delete(symbolicWinID)
         this.componentToWindowMapping.delete(componentID)
+        this.openWindows.delete(symbolicWinID)
         BrowserWindow.fromId(trueWindowID).close()
     }
 
     static reinitialiseWindow(trueWindowID, componentType, componentID, parentWindowID){
         const symbolicWinID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
-        const winData = this.openWindows.get(symbolicWinID)
+        const winData = this.allWindows.get(symbolicWinID)
         this.componentToWindowMapping.delete(winData.componentID)
-        this.openWindows.delete(symbolicWinID)
+        this.allWindows.delete(symbolicWinID)
 
         this.initialiseWindow(trueWindowID, componentType, componentID, parentWindowID)
     }
 
     static initialiseWindow(trueWindowID, componentType, componentID, parentWindowID){
         const symbolicWindowID = this.getWindowID()
+        const win = BrowserWindow.fromId(trueWindowID)
+        const bounds = win.getBounds()
 
         this.componentToWindowMapping.set(componentID, symbolicWindowID)
 
-        this.openWindows.set(symbolicWindowID, {
-            trueWindowID, componentType, componentID, parentWindowID
+        this.allWindows.set(symbolicWindowID, {
+            trueWindowID,
+            x: bounds.x,
+            y: bounds.y,
+            width: bounds.width,
+            height: bounds.height,
+            isFullscreen: win.isFullScreen(),
+            isMinimized: win.isMinimized(),
+            type: componentType,
+            componentID,
+            parentWindowID
         })
 
         this.trueWinIDToSymbolicWinIDMapping.set(trueWindowID, symbolicWindowID)
@@ -126,11 +143,11 @@ class WindowHandler{
     static writeComponents(){
         for(let whiteboardID of allWhiteboards){
             const symbolicWinID = this.componentToWindowMapping.get(whiteboardID)
-            BrowserWindow.fromId(this.openWindows.get(symbolicWinID).trueWindowID).webContents.send('terminate-window')
+            BrowserWindow.fromId(this.allWindows.get(symbolicWinID).trueWindowID).webContents.send('terminate-window')
         }
         for(let notepadID of allNotepads){
             const symbolicWinID = this.componentToWindowMapping.get(notepadID)
-            BrowserWindow.fromId(this.openWindows.get(symbolicWinID).trueWindowID).webContents.send('terminate-window')
+            BrowserWindow.fromId(this.allWindows.get(symbolicWinID).trueWindowID).webContents.send('terminate-window')
         }
     }
 
@@ -139,21 +156,9 @@ class WindowHandler{
         const map = new Array()
         for(let i = windows.length - 1; i >= 0; --i){
             const win = windows[i]
-            const bounds = win.getBounds()
             const symbolicID = this.trueWinIDToSymbolicWinIDMapping.get(win.id)
-            const winData = this.openWindows.get(symbolicID)
-            const winSaved = {
-                x: bounds.x,
-                y: bounds.y,
-                width: bounds.width,
-                height: bounds.height,
-                isFullscreen: win.isFullScreen(),
-                isMinimized: win.isMinimized(),
-                type: winData.componentType,
-                componentID: winData.componentID,
-                parentWindowID: winData.parentWindowID
-            }
-            map.push(winSaved)
+            const winData = this.allWindows.get(symbolicID)
+            map.push(winData)
         }
         const savesPath = path.join(__dirname, '..', 'saves')
         const windowsFilePath = path.join(savesPath, 'windows.json')
@@ -237,15 +242,17 @@ function initialiseApp(){
             const winData = windowsObj[i]
             switch(winData.type){
                 case 'p':
-                    win = WindowHandler.createWindow('p', winData.componentID, null) // handle
+                    win = WindowHandler.createWindow('p', winData.componentID, winData.parentWindowID,
+                        winData.isFullScreen, winData.width, winData.height, winData.x, winData.y)
                     break
                 case 'w':
                     const filePath = path.join(savesWhiteboardsPath, `${winData.componentID}`, `${winData.componentID}-index.html`)
-                    win = WindowHandler.createWindow('w', winData.componentID, null) // handle
+                    win = WindowHandler.createWindow('w', winData.componentID, winData.parentWindowID,
+                        winData.isFullScreen, winData.width, winData.height, winData.x, winData.y)
             }
         }
     }else{
-        WindowHandler.createWindow('0', null, null) // handle
+        WindowHandler.createWindow('0', null, null, true)
     }
 }
 
@@ -292,7 +299,13 @@ ipcMain.handle('add-notepad', async (e) => {
 })
 
 ipcMain.handle('open-notepad', (e, notepadID) => {
-    WindowHandler.openComponent('p', notepadID, null) // handle
+    const win = BrowserWindow.fromWebContents(e.sender)
+    const winData = WindowHandler.allWindows.get(notepadID)
+    if(winData){
+        WindowHandler.openComponent('p', notepadID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
+            winData.isFullscreen, winData.width, winData.height, winData.x, winData.y
+        )
+    }else WindowHandler.openComponent('p', notepadID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
 })
 
 function addWhiteboard(){
@@ -306,13 +319,19 @@ ipcMain.handle('add-whiteboard', async (e) => {
 })
 
 ipcMain.handle('open-whiteboard', (e, whiteboardID) => {
-    WindowHandler.openComponent('w', whiteboardID, null) // handle
+    const win = BrowserWindow.fromWebContents(e.sender)
+    const winData = WindowHandler.allWindows.get(whiteboardID)
+    if(winData){
+        WindowHandler.openComponent('w', whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
+            winData.isFullscreen, winData.width, winData.height, winData.x, winData.y
+        )
+    }else WindowHandler.openComponent('w', whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
 })
 
 ipcMain.handle('save-quill-delta', (e, contents) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
-    const componentID = WindowHandler.openWindows.get(symbolicID).componentID
+    const componentID = WindowHandler.allWindows.get(symbolicID).componentID
     const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${componentID}.json`)
     fs.writeFileSync(savesJSON, JSON.stringify(contents, null, 2), 'utf-8')
 })
@@ -320,7 +339,7 @@ ipcMain.handle('save-quill-delta', (e, contents) => {
 ipcMain.handle('load-quill-delta', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
-    const componentID = WindowHandler.openWindows.get(symbolicID).componentID
+    const componentID = WindowHandler.allWindows.get(symbolicID).componentID
     const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${componentID}.json`)
     if(!fs.existsSync(savesJSON))
         fs.writeFileSync(savesJSON, JSON.stringify({}, null, 2), 'utf-8')
@@ -341,7 +360,7 @@ ipcMain.handle('first-time-whiteboard-chosen', (e) => {
 ipcMain.on('save-whiteboard-html', (e, html) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
-    const componentID = WindowHandler.openWindows.get(symbolicWinID).componentID
+    const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
     if(!fs.existsSync(saveWhiteboardDir)){
         fs.mkdirSync(saveWhiteboardDir)
@@ -356,7 +375,7 @@ ipcMain.on('save-whiteboard-html', (e, html) => {
 ipcMain.on('save-whiteboard-state', (e, stateObj) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
-    const componentID = WindowHandler.openWindows.get(symbolicWinID).componentID
+    const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
     if(!fs.existsSync(saveWhiteboardDir)){
         fs.mkdirSync(saveWhiteboardDir)
@@ -384,7 +403,7 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
 ipcMain.handle('load-whiteboard-state', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
-    const componentID = WindowHandler.openWindows.get(symbolicID).componentID
+    const componentID = WindowHandler.allWindows.get(symbolicID).componentID
     const saveWhiteboardState = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`,  `${componentID}-state.json`)
     if (fs.existsSync(saveWhiteboardState))
         return JSON.parse(fs.readFileSync(saveWhiteboardState, 'utf-8'))
@@ -412,8 +431,8 @@ ipcMain.handle('set-minimized', () => {
 
 ipcMain.handle('close-window', (e) => {
     const windows = BrowserWindow.getAllWindows()
-    if(windows.length === 1)
-        WindowHandler.writeWindows()
+    // if(windows.length === 1)
+    //     WindowHandler.writeWindows()
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     WindowHandler.closeWindow(senderWindow.id)
 })
