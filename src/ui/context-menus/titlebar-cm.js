@@ -1,16 +1,16 @@
 const titlebarContextMenu = document.getElementById('titlebar-context-menu')
 
-const titlebarFullscreenCtrlContextMenu = document.getElementById('tcm-fullscreen-window')
+const titlebarFullScreenCtrlContextMenu = document.getElementById('tcm-fullscreen-window')
 const titlebarMinimizeCtrlContextMenu = document.getElementById('tcm-minimize-window')
 const titlebarCloseCtrlContextMenu = document.getElementById('tcm-close-window')
 const titlebarGlobalConfigurationContextMenu = document.getElementById('tcm-global-config-menu')
 
-titlebarFullscreenCtrlContextMenu.addEventListener('click', (e) => {
+titlebarFullScreenCtrlContextMenu.addEventListener('click', (e) => {
     e.stopPropagation()
 
-    window.wandererAPI.isFullscreen().then(current => {
-        isFullscreen = !current
-        window.wandererAPI.setFullscreen(isFullscreen)
+    window.wandererAPI.isFullScreen().then(current => {
+        isFullScreen = !current
+        window.wandererAPI.setFullScreen(isFullScreen)
     })
 
     turnOffContextMenu()

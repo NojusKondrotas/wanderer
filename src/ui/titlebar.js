@@ -1,23 +1,23 @@
 const titlebar = document.querySelector('.titlebar')
 const titlebarVisual = document.getElementById('titlebar-visual')
 
-const titlebarFullscreenCtrlFrame = document.getElementById('frame-fullscreen-window')
+const titlebarFullScreenCtrlFrame = document.getElementById('frame-fullscreen-window')
 const titlebarMinimizeCtrlFrame = document.getElementById('frame-minimize-window')
 const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')
 const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')
 const titlebarLockCtrlFrame = document.getElementById('frame-lock-titlebar')
 
-let isFullscreen = true, isTitlebarLocked = false
+let isFullScreen = true, isTitlebarLocked = false
 
-titlebarFullscreenCtrlFrame.addEventListener('click', (e) => {
+titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
 
-    window.wandererAPI.isFullscreen().then(current => {
-        isFullscreen = !current
-        window.wandererAPI.setFullscreen(isFullscreen)
+    window.wandererAPI.isFullScreen().then(current => {
+        isFullScreen = !current
+        window.wandererAPI.setFullScreen(isFullScreen)
     })
 
-    titlebarFullscreenCtrlFrame.blur()
+    titlebarFullScreenCtrlFrame.blur()
 
     turnOffContextMenu()
 })

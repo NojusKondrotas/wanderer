@@ -130,7 +130,7 @@ class WindowHandler{
             y: bounds.y,
             width: bounds.width,
             height: bounds.height,
-            isFullscreen: win.isFullScreen(),
+            isFullScreen: win.isFullScreen(),
             isMinimized: win.isMinimized(),
             type: componentType,
             componentID,
@@ -303,7 +303,7 @@ ipcMain.handle('open-notepad', (e, notepadID) => {
     const winData = WindowHandler.allWindows.get(notepadID)
     if(winData){
         WindowHandler.openComponent('p', notepadID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
-            winData.isFullscreen, winData.width, winData.height, winData.x, winData.y
+            winData.isFullScreen, winData.width, winData.height, winData.x, winData.y
         )
     }else WindowHandler.openComponent('p', notepadID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
 })
@@ -323,7 +323,7 @@ ipcMain.handle('open-whiteboard', (e, whiteboardID) => {
     const winData = WindowHandler.allWindows.get(whiteboardID)
     if(winData){
         WindowHandler.openComponent('w', whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
-            winData.isFullscreen, winData.width, winData.height, winData.x, winData.y
+            winData.isFullScreen, winData.width, winData.height, winData.x, winData.y
         )
     }else WindowHandler.openComponent('w', whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
 })

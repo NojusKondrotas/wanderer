@@ -18,8 +18,8 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   },
   onTerminateWindow: (callback) => ipcRenderer.on('terminate-window', (_) => callback()),
 
-  isFullscreen: () => ipcRenderer.invoke('is-fullscreen'),
-  setFullscreen: (flag) => ipcRenderer.invoke('set-fullscreen', flag),
+  isFullScreen: () => ipcRenderer.invoke('is-fullscreen'),
+  setFullScreen: (flag) => ipcRenderer.invoke('set-fullscreen', flag),
   setMinimized: () => ipcRenderer.invoke('set-minimized'),
   closeWindow: () => ipcRenderer.invoke('close-window'),
   openTitlebarContextMenu: (callback) => ipcRenderer.on('open-titlebar-context-menu',
