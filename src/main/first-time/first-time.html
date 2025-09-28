@@ -4,9 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>wanderer-choice</title>
+    <link rel="stylesheet" href="../titlebar.css">
     <link rel="stylesheet" href="first-time.css">
 </head>
 <body>
+    <div class="titlebar">
+        <div id="titlebar-visual">
+            <div class="titlebar-stretcher"></div>
+            <button class="window-control fullscreen-window" id="frame-fullscreen-window"><img src="../../../res/fullscreen-window.png"></button>
+            <div class="titlebar-stretcher"></div>
+            <button class="window-control maximize-window" id="frame-maximize-window"><img src="../../../res/maximize-window.png"></button>
+            <div class="titlebar-stretcher"></div>
+            <button class="window-control minimize-window" id="frame-minimize-window"><img src="../../../res/minimize-window.png"></button>
+            <div class="titlebar-stretcher"></div>
+            <button class="window-control close-window" id="frame-close-window"><img src="../../../res/close-window.png"></button>
+            <div class="titlebar-stretcher"></div>
+            <button class="window-control global-config" id="frame-global-config-menu"><img src="../../../res/global-configuration.png"></button>
+            <div class="titlebar-stretcher"></div>
+            <button class="window-control lock-titlebar" id="frame-lock-titlebar"><img src="../../../res/titlebar-unlocked.png"></button>
+            <div class="titlebar-stretcher"></div>
+        </div>
+    </div>
+
     <div id="prompt"></div>
     <div id="choice-box">
         <button id="notepad-choice">Notepad</button>
@@ -14,5 +33,6 @@
     </div>
 
     <script src="first-time.js"></script>
+    <script src="../../ui/titlebar.js"></script>
 </body>
 </html>
