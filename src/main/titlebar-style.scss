@@ -1,3 +1,10 @@
+$whiteboard-color: #f8f8f8;
+
+$low-index: 5;
+$medium-index: 10;
+$higher-index: 15;
+$highest-index: 20;
+
 .titlebar {
     position: fixed;
     width: 100vw;
@@ -7,7 +14,7 @@
     margin: 0;
     padding: 0;
     
-    z-index: 15;
+    z-index: $higher-index;
 }
 
 #titlebar-visual {
@@ -42,7 +49,7 @@
 
     transition: transform 100ms ease;
 
-    z-index: 20;
+    z-index: $highest-index;
 }
 
 .window-control > img {
@@ -54,4 +61,9 @@
 
 .window-control:is(:hover, :focus) {
     transform: scale(1.5);
+}
+
+.titlebar-stretcher {
+    flex: 1;
+    flex-grow: 3.5;
 }

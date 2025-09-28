@@ -66,19 +66,6 @@ body {
 
     user-select: none;
 }
-
-.titlebar {
-    position: fixed;
-    width: 100vw;
-    height: 40px;
-    top: 0;
-    left: 0;
-    margin: 0;
-    padding: 0;
-    
-    z-index: $higher-index;
-}
-
 .path-container {
     position: absolute;
     top: 0;
@@ -89,57 +76,6 @@ body {
 
 svg {
     overflow: visible;
-}
-
-#titlebar-visual {
-    display: flex;
-    justify-content: stretch;
-    align-items: stretch;
-    position: relative;
-    height: 80px;
-    transform: translateY(-80px);
-    background-color: rgba(143, 170, 176, 0.5);
-
-    transition: transform 85ms ease-out;
-}
-
-.titlebar:hover #titlebar-visual {
-    transform: translateY(0px);
-}
-
-.window-control {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-
-    flex: 1;
-
-    user-select: none;
-
-    background-color: rgba(0, 0, 0, 0);
-    border: 0;
-
-    transition: transform 100ms ease;
-
-    z-index: $highest-index;
-}
-
-.window-control > img {
-    width: 22.4px;
-    height: 22.4px;
-    margin: 0;
-    padding: 0;
-}
-
-.window-control:is(:hover, :focus) {
-    transform: scale(1.5);
-}
-
-.titlebar-stretcher {
-    flex: 1;
-    flex-grow: 3.5;
 }
 
 .context-menu-container {

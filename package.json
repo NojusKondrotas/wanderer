@@ -10,7 +10,7 @@
     "fresh": "rimraf ./src/saves && cd src && mkdir saves && cd .. && electron .",
     "start-s": "npm run c-sass && electron .",
     "fresh-s": "npm run c-sass && rimraf ./src/saves && cd src && mkdir saves && cd .. && electron .",
-    "c-sass": "sass ./src/main/styles.scss ./src/main/styles.css"
+    "c-sass": "sass ./src/main/styles.scss ./src/main/styles.css && sass ./src/main/titlebar-style.scss ./src/main/titlebar-style.css"
   },
   "keywords": [],
   "author": "Nojus Kondrotas <nojus.kondrotas23@gmail.com>",

@@ -3,3 +3,5 @@ node_modules/
 src/saves/
 src/main/styles.css
 src/main/styles.css.map
+src/main/titlebar-style.css
+src/main/titlebar-style.css.map
