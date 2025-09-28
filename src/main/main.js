@@ -425,9 +425,15 @@ ipcMain.handle('is-fullscreen', (e) => {
     return senderWindow.isFullScreen()
 })
 
-ipcMain.handle('set-fullscreen', (e, flag) => {
+ipcMain.handle('set-fullscreen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    senderWindow.setFullScreen(flag)
+    senderWindow.setFullScreen(!senderWindow.isFullScreen())
+})
+
+ipcMain.handle('set-maximized', (e) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender)
+    if(senderWindow.isMaximized()) senderWindow.unmaximize()
+    else senderWindow.maximize()
 })
 
 ipcMain.handle('set-minimized', (e) => {

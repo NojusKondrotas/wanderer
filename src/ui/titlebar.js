@@ -2,22 +2,40 @@ const titlebar = document.querySelector('.titlebar')
 const titlebarVisual = document.getElementById('titlebar-visual')
 
 const titlebarFullScreenCtrlFrame = document.getElementById('frame-fullscreen-window')
+const titlebarMaximizeCtrlFrame = document.getElementById('frame-maximize-window')
 const titlebarMinimizeCtrlFrame = document.getElementById('frame-minimize-window')
 const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')
 const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')
 const titlebarLockCtrlFrame = document.getElementById('frame-lock-titlebar')
 
-let isFullScreen = true, isTitlebarLocked = false
+let isTitlebarLocked = false
 
 titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
 
-    window.wandererAPI.isFullScreen().then(current => {
-        isFullScreen = !current
-        window.wandererAPI.setFullScreen(isFullScreen)
-    })
+    window.wandererAPI.setFullScreen()
 
     titlebarFullScreenCtrlFrame.blur()
+
+    turnOffContextMenu()
+})
+
+titlebarMaximizeCtrlFrame.addEventListener('click', (e) => {
+    e.stopPropagation()
+
+    window.wandererAPI.setMaximized()
+
+    titlebarMaximizeCtrlFrame.blur()
+
+    turnOffContextMenu()
+})
+
+titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
+    e.stopPropagation()
+
+    window.wandererAPI.setMinimized()
+
+    titlebarMinimizeCtrlFrame.blur()
 
     turnOffContextMenu()
 })
