@@ -20,6 +20,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         reinstateAllQuillToolbars()
         reinstateAllNoteBorders(elementPositions)
 
+        document.body.style.cursor = 'default'
+
         console.log(largestElementID)
         console.log(unusedElementIDs)
         console.log(largestPathID)

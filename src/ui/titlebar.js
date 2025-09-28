@@ -12,7 +12,7 @@ let isTitlebarLocked = false
 
 function toggleTitlebar(flag){
     if(flag){
-        titlebar.style.display = 'inline-block'
+        titlebar.style.display = 'inline'
     }else{
         titlebar.style.display = 'none'
     }
