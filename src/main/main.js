@@ -424,7 +424,7 @@ ipcMain.handle('set-fullscreen', (e, flag) => {
     senderWindow.setFullScreen(flag)
 })
 
-ipcMain.handle('set-minimized', () => {
+ipcMain.handle('set-minimized', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     senderWindow.minimize()
 })
