@@ -9,6 +9,7 @@ class PositioningHandler{
     static dragTotalDiff = { x: 0, y: 0 }
     static dragAbsoluteTotalDiff = { x: 0, y: 0 }
     static windowDimensions = { width: 0, height: 0 }
+    static windowCornerOffset = { x: 0, y: 0 }
 
     static checkIfDraggedEnough(){
         const movedX = this.dragAbsoluteTotalDiff.x
@@ -89,8 +90,15 @@ class PositioningHandler{
         }else if(this.isDraggingBoard){
             updateComponentPositions(parentWhiteboard)
         }else if(this.isDraggingWindow){
-            moveBy(this.dragDiff.x * -1, this.dragDiff.y * -1)
-            resizeTo(this.windowDimensions.width, this.windowDimensions.height)
+            const newX = this.dragStart.x - this.windowCornerOffset.x
+            const newY = this.dragStart.y - this.windowCornerOffset.y
+
+            window.wandererAPI.moveWindow(
+                newX,
+                newY,
+                this.windowDimensions.width,
+                this.windowDimensions.height
+            )
         }else if(this.isDraggingElement){
             updateElementPositionByID(selectedElement.id)
 
@@ -176,7 +184,12 @@ class PositioningHandler{
         this.dragDiff = { x: 0, y: 0 }
         this.dragTotalDiff = { x: 0, y: 0 }
         this.dragAbsoluteTotalDiff = { x: 0, y: 0 }
-        this.windowDimensions = { width: outerWidth, height: outerHeight }
+        this.windowDimensions = { width: window.outerWidth, height: window.outerHeight }
+        this.windowCornerOffset = {
+            x: ev.screenX - window.screenX,
+            y: ev.screenY - window.screenY
+        }
+
         if(isBoard){
             this.isDraggingBoard = true
         }else if(isEl){

@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   setMousePosition: (x, y) => {
     ipcRenderer.invoke('set-mouse-position', x, y)
   },
+  moveWindow: (x, y, width, height) => ipcRenderer.invoke('move-window', { x, y, width, height }),
 
   addNotepad: () => ipcRenderer.invoke('add-notepad'),
   openNotepad: (notepadID) => ipcRenderer.invoke('open-notepad', notepadID),

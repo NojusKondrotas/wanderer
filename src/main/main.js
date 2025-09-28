@@ -414,6 +414,11 @@ ipcMain.handle('set-mouse-position', (e, x, y) => {
     robot.moveMouse(x, y)
 })
 
+ipcMain.handle('move-window', (event, bounds) => {
+    const win = BrowserWindow.fromWebContents(event.sender)
+    win.setBounds(bounds)
+})
+
 ipcMain.handle('is-fullscreen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     return senderWindow.isFullScreen()
