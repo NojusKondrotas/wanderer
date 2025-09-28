@@ -54,6 +54,10 @@ window.wandererAPI.onTerminateWindow(() => {
     save()
 })
 
+window.wandererAPI.onSaveComponent(() => {
+    save()
+})
+
 window.wandererAPI.openTitlebarContextMenu((mousePos, boundsOffset) => {
     openNewContextMenu(mousePos.x - boundsOffset.x, mousePos.y - boundsOffset.y, titlebarContextMenu, 360 / 5, 85, 234, -10, -10)
 })

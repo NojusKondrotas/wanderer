@@ -143,23 +143,24 @@ class WindowHandler{
     static writeComponents(){
         for(let whiteboardID of allWhiteboards){
             const symbolicWinID = this.componentToWindowMapping.get(whiteboardID)
-            BrowserWindow.fromId(this.allWindows.get(symbolicWinID).trueWindowID).webContents.send('terminate-window')
+            const winData = this.allWindows.get(symbolicWinID)
+            if(!winData) continue
+            BrowserWindow.fromId(winData.trueWindowID).webContents.send('save-component')
         }
         for(let notepadID of allNotepads){
             const symbolicWinID = this.componentToWindowMapping.get(notepadID)
-            BrowserWindow.fromId(this.allWindows.get(symbolicWinID).trueWindowID).webContents.send('terminate-window')
+            const winData = this.allWindows.get(symbolicWinID)
+            if(!winData) continue
+            BrowserWindow.fromId(winData.trueWindowID).webContents.send('save-component')
         }
     }
 
     static writeWindows(){
         const windows = BrowserWindow.getAllWindows()
         const map = new Array()
-        for(let i = windows.length - 1; i >= 0; --i){
-            const win = windows[i]
-            const symbolicID = this.trueWinIDToSymbolicWinIDMapping.get(win.id)
-            const winData = this.allWindows.get(symbolicID)
-            map.push(winData)
-        }
+        Array.from(this.allWindows).forEach(element => {
+            map.push(element)
+        })
         const savesPath = path.join(__dirname, '..', 'saves')
         const windowsFilePath = path.join(savesPath, 'windows.json')
         fs.writeFileSync(windowsFilePath, JSON.stringify(map, null, 2), 'utf-8')
@@ -436,8 +437,10 @@ ipcMain.handle('set-minimized', (e) => {
 
 ipcMain.handle('close-window', (e) => {
     const windows = BrowserWindow.getAllWindows()
-    // if(windows.length === 1)
-    //     WindowHandler.writeWindows()
-    const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    WindowHandler.closeWindow(senderWindow.id)
+    if(windows.length === 1){
+        terminateApp()
+    }else{
+        const senderWindow = BrowserWindow.fromWebContents(e.sender)
+        WindowHandler.closeWindow(senderWindow.id)
+    }
 })
