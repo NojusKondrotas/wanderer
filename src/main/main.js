@@ -345,7 +345,9 @@ ipcMain.handle('load-quill-delta', (e) => {
     if(!fs.existsSync(savesJSON))
         fs.writeFileSync(savesJSON, JSON.stringify({}, null, 2), 'utf-8')
 
-    return savesJSON
+    const fileContents = fs.readFileSync(savesJSON, 'utf-8')
+    const delta = JSON.parse(fileContents)
+    return delta
 })
 
 ipcMain.handle('first-time-notepad-chosen', (e) => {

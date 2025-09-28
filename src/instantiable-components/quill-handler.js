@@ -39,7 +39,7 @@ function toggleQuillWritingMode(toggle = false, editableElID){
 
 function configureQuill(quill, ql_container, content = ''){
     const editor = ql_container.querySelector(':scope > .ql-editor')
-    quill.setText(content)
+    quill.setContents(content)
     editor.contentEditable = 'false'
 
     ql_container.querySelector(':scope > .ql-clipboard').remove()
@@ -50,7 +50,7 @@ function configureQuillToolbar(qlToolbar){
 }
 
 function saveAllQuillToolbars(){
-    document.querySelectorAll('.note').forEach(qlEditor => allQuillToolbars.set(qlEditor.id, allQuills.get(qlEditor.id).getText()))
+    document.querySelectorAll('.note').forEach(qlEditor => allQuillToolbars.set(qlEditor.id, allQuills.get(qlEditor.id).getContents()))
     document.querySelectorAll('.ql-toolbar').forEach(toolbar => toolbar.remove())
 }
 

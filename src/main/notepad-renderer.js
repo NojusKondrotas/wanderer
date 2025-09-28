@@ -1,4 +1,10 @@
-const quill = initQuill('#notepad', window.wandererAPI.loadQuillDelta())
+let quill
+async function initNotepad() {
+    const delta = await window.wandererAPI.loadQuillDelta()
+    quill = initQuill('#notepad', delta)
+}
+
+initNotepad()
 
 document.getElementById('but').addEventListener('click', () => {
     window.wandererAPI.saveQuillDelta(quill.getContents())
