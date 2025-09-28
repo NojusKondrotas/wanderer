@@ -156,10 +156,10 @@ class WindowHandler{
     }
 
     static writeWindows(){
-        const windows = BrowserWindow.getAllWindows()
         const map = new Array()
-        Array.from(this.allWindows).forEach(element => {
-            map.push(element)
+        this.allWindows.forEach((value, key) => {
+            if(value.type !== '0')
+                map.push(value)
         })
         const savesPath = path.join(__dirname, '..', 'saves')
         const windowsFilePath = path.join(savesPath, 'windows.json')
