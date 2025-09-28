@@ -3,6 +3,7 @@ class PositioningHandler{
     static isDraggingElement = false
     static isResizing = false
     static isDraggingWindow = false
+    static isResizingWindow = false
     static dragStart = { x: 0, y: 0 }
     static dragDiff = { x: 0, y: 0 }
     static dragTotalStart = { x: 0, y: 0 }
@@ -99,6 +100,20 @@ class PositioningHandler{
                 this.windowDimensions.width,
                 this.windowDimensions.height
             )
+        }else if (this.isResizingWindow) {
+            const dx = -this.dragDiff.x
+            const dy = -this.dragDiff.y
+
+            let { width, height } = this.windowDimensions
+            let newX = window.screenX
+            let newY = window.screenY
+
+            width += dx
+            height += dy
+
+            window.wandererAPI.moveWindow(newX, newY, width, height)
+
+            this.windowDimensions = { width, height }
         }else if(this.isDraggingElement){
             updateElementPositionByID(selectedElement.id)
 
@@ -162,7 +177,7 @@ class PositioningHandler{
         }
     }
 
-    static startDrag(ev, isBoard, isEl, isResizing, isWindow){
+    static startDrag(ev, isBoard, isEl, isResizing, isWindow, isWinResizing){
         if(ev.button === 2) return
         if(isQuillToolbarEdit) return
 
@@ -198,6 +213,10 @@ class PositioningHandler{
             this.isResizing = true
         }else if(isWindow){
             this.isDraggingWindow = true
+            toggleTitlebar(false)
+        }else if(isWinResizing){
+            this.isResizingWindow = true
+            toggleTitlebar(false)
         }
 
         handleKeybindGuideAppearance(false)
@@ -224,9 +243,11 @@ class PositioningHandler{
             }
         }
 
+        toggleTitlebar(true)
         this.isDraggingBoard = false
         this.isDraggingElement = false
         this.isDraggingWindow = false
+        this.isResizingWindow = false
         this.dragStart = { x: 0, y: 0 }
         this.dragDiff = { x: 0, y: 0 }
         this.dragTotalDiff = { x: 0, y: 0 }
@@ -263,7 +284,8 @@ function updateComponentPositions(container){
 }
 
 function genMouseDown_WhiteboardMoveHandler(e){
-    if(isCombo(keybinds[windowDragKeybind])) PositioningHandler.startDrag(e, false, false, false, true)
+    if(isCombo(keybinds[windowDragKeybind])) PositioningHandler.startDrag(e, false, false, false, true, false)
+    else if(isCombo(keybinds[windowResizeKeybind])) PositioningHandler.startDrag(e, false, false, false, false, true)
     else PositioningHandler.startDrag(e, true, false, false, false)
 }
 

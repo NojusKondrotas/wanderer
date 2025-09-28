@@ -5,7 +5,7 @@ $medium-index: 10;
 $higher-index: 15;
 $highest-index: 20;
 
-.titlebar {
+#titlebar {
     position: fixed;
     width: 100vw;
     height: 40px;
@@ -29,7 +29,7 @@ $highest-index: 20;
     transition: transform 85ms ease-out;
 }
 
-.titlebar:hover #titlebar-visual {
+#titlebar:hover #titlebar-visual {
     transform: translateY(0px);
 }
 

@@ -1,4 +1,4 @@
-const titlebar = document.querySelector('.titlebar')
+const titlebar = document.getElementById('titlebar')
 const titlebarVisual = document.getElementById('titlebar-visual')
 
 const titlebarFullScreenCtrlFrame = document.getElementById('frame-fullscreen-window')
@@ -9,6 +9,14 @@ const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-c
 const titlebarLockCtrlFrame = document.getElementById('frame-lock-titlebar')
 
 let isTitlebarLocked = false
+
+function toggleTitlebar(flag){
+    if(flag){
+        titlebar.style.display = 'inline-block'
+    }else{
+        titlebar.style.display = 'none'
+    }
+}
 
 titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
