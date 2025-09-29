@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', async () => {
     handleKeybindGuideAppearance(true)
-    
+
     componentID = await window.wandererAPI.getComponentID()
     componentIDEl = document.getElementById('component-id')
     componentIDEl.textContent = componentID
@@ -62,6 +62,10 @@ window.wandererAPI.onTerminateWindow(() => {
 
 window.wandererAPI.onSaveComponent(() => {
     save()
+})
+
+window.addEventListener("beforeunload", () => {
+    window.wandererAPI.closeWindow()
 })
 
 window.wandererAPI.openTitlebarContextMenu((mousePos, boundsOffset) => {
