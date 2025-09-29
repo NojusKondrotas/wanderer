@@ -9,6 +9,16 @@ body {
     overflow: hidden;
 }
 
+#component-id {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+
+    z-index: $medium-index;
+
+    transition: transform 85ms ease-out;
+}
+
 #parent-whiteboard {
     position: absolute;
     top: 0;
@@ -42,11 +52,13 @@ body {
     padding: 5px;
 }
 
-.keybind-text {
+.im-whiteboard-text {
     color: rgba(126, 135, 135, 0.33);
     font-size: 1.05em;
     margin: 7px;
+}
 
+.keybind-text {
     transition: color 140ms linear;
 
     user-select: none;

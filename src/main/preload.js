@@ -4,6 +4,8 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   firstTimeNotepadChosen: () => ipcRenderer.invoke('first-time-notepad-chosen'),
   firstTimeWhiteboardChosen: () => ipcRenderer.invoke('first-time-whiteboard-chosen'),
 
+  getComponentID: () => ipcRenderer.invoke('get-component-id'),
+
   saveWhiteboardHTML: () => {
     const html = document.documentElement.outerHTML
     ipcRenderer.send('save-whiteboard-html', html)

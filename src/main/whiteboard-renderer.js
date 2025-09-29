@@ -1,6 +1,10 @@
 window.addEventListener('DOMContentLoaded', async () => {
     handleKeybindGuideAppearance(true)
     
+    componentID = await window.wandererAPI.getComponentID()
+    componentIDEl = document.getElementById('component-id')
+    componentIDEl.textContent = componentID
+    
     const stateObj = await window.wandererAPI.loadWhiteboardState()
 
     if (stateObj && Object.keys(stateObj).length > 0){
