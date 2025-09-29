@@ -18,14 +18,6 @@ function toggleTitlebar(flag){
     }
 }
 
-titlebar.addEventListener('mouseover', () => {
-    componentIDEl.style.color = 'rgba(126, 135, 135, 0)'
-})
-
-titlebar.addEventListener('mouseout', () => {
-    componentIDEl.style.color = 'rgba(126, 135, 135, 0.33)'
-})
-
 titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
 

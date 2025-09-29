@@ -1,5 +1,4 @@
 const parentWhiteboard = document.getElementById('parent-whiteboard')
-let componentID, componentIDEl
 
 parentWhiteboard.addEventListener('mousedown', (e) => {
     genMouseDown_WhiteboardMoveHandler(e)
