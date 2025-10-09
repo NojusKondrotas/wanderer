@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain, globalShortcut, screen } = require('electro
 const path = require('path')
 const fs = require('fs')
 const robot = require('@hurdlegroup/robotjs')
-const { send } = require('process')
+const { send, windowsStore } = require('process')
 
 let allNotepads = new Set(), allWhiteboards = new Set()
 let largestNotepadID = 0, unusedNotepadIDs = new Array()
@@ -128,12 +128,23 @@ class WindowHandler{
 
         this.componentToWindowMapping.set(componentID, symbolicWindowID)
 
+        let x = bounds.x, y = bounds.y
+        let wWidth = bounds.width, wHeight = bounds.height
+        if(win.isFullScreen()){
+            const primaryDisplay = screen.getPrimaryDisplay()
+            let { width, height } = primaryDisplay.workAreaSize
+            wWidth = 800
+            wHeight = 600
+            x = Math.round((width - wWidth) / 2)
+            y = Math.round((height - wHeight) / 2)
+        }
+
         this.allWindows.set(symbolicWindowID, {
             trueWindowID,
-            x: bounds.x,
-            y: bounds.y,
-            width: bounds.width,
-            height: bounds.height,
+            x,
+            y,
+            width: wWidth,
+            height: wHeight,
             isFullScreen: win.isFullScreen(),
             isMinimized: win.isMinimized(),
             type: componentType,
@@ -444,6 +455,7 @@ ipcMain.handle('is-fullscreen', (e) => {
 ipcMain.handle('set-fullscreen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     senderWindow.setFullScreen(!senderWindow.isFullScreen())
+    
 })
 
 ipcMain.handle('set-maximized', (e) => {
