@@ -17,6 +17,8 @@ class WindowHandler{
     static largestWindowID = 0
     static unusedWindowIDs = new Array()
 
+    static isClosingWindow = false
+
     static getWindowID(componentID){
         if(this.componentToWindowMapping.has(componentID))
             return this.componentToWindowMapping.get(componentID)
@@ -95,7 +97,9 @@ class WindowHandler{
     }
 
     static closeWindow(trueWindowID){
-        BrowserWindow.fromId(trueWindowID).webContents.send('terminate-window')
+        console.log('trueWinIDToSymbolicWinIDMapping', this.trueWinIDToSymbolicWinIDMapping, '\n', 'allWindows', this.allWindows, '\n',
+            'openWindows', this.openWindows, '\n', 'componentToWindowMapping', this.componentToWindowMapping, '\n')
+        if(!this.isClosingWindow) BrowserWindow.fromId(trueWindowID).webContents.send('terminate-window')
         const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
         const winData = this.allWindows.get(symbolicWindowID)
         const componentID = winData.componentID
@@ -104,6 +108,7 @@ class WindowHandler{
         this.allWindows.delete(symbolicWindowID)
         this.componentToWindowMapping.delete(componentID)
         BrowserWindow.fromId(trueWindowID).close()
+        this.isClosingWindow = false
     }
 
     static reinitialiseWindow(trueWindowID, componentType, componentID, parentWindowID){
@@ -458,6 +463,7 @@ ipcMain.handle('close-window', (e) => {
         terminateApp()
     }else{
         const senderWindow = BrowserWindow.fromWebContents(e.sender)
+        WindowHandler.isClosingWindow = true
         WindowHandler.closeWindow(senderWindow.id)
     }
 })

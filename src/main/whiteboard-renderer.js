@@ -1,3 +1,5 @@
+let isWindowClosing = false
+
 window.addEventListener('DOMContentLoaded', async () => {
     handleKeybindGuideAppearance(true)
 
@@ -56,6 +58,12 @@ function save(){
     })
 }
 
+function closeWindow(){
+    isWindowClosing = true
+    save()
+    window.wandererAPI.closeWindow()
+}
+
 window.wandererAPI.onTerminateWindow(() => {
     save()
 })
@@ -65,7 +73,7 @@ window.wandererAPI.onSaveComponent(() => {
 })
 
 window.addEventListener("beforeunload", () => {
-    window.wandererAPI.closeWindow()
+    if(!isWindowClosing) closeWindow()
 })
 
 window.wandererAPI.openTitlebarContextMenu((mousePos, boundsOffset) => {

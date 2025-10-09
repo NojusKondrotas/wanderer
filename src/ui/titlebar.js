@@ -60,7 +60,7 @@ titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
 
 titlebarCloseCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
-    window.wandererAPI.closeWindow()
+    closeWindow()
 })
 
 titlebarLockCtrlFrame.addEventListener('click', (e) => {
