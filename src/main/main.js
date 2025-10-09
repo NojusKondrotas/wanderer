@@ -12,7 +12,7 @@ class WindowHandler{
     static trueWinIDToSymbolicWinIDMapping = new Map()
     static componentToWindowMapping = new Map()
     static allWindows = new Map()
-    static openWindows = new Set()
+    static openWindows = new Map()
 
     static largestWindowID = 0
     static unusedWindowIDs = new Array()
@@ -91,28 +91,27 @@ class WindowHandler{
 
         this.initialiseWindow(win.id, componentType, componentID, parentWindowID)
 
-        this.openWindows.add(this.trueWinIDToSymbolicWinIDMapping.get(win.id))
-
         return win
     }
 
     static closeWindow(trueWindowID){
         BrowserWindow.fromId(trueWindowID).webContents.send('terminate-window')
-        const symbolicWinID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
-        const winData = this.allWindows.get(symbolicWinID)
+        const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
+        const winData = this.allWindows.get(symbolicWindowID)
         const componentID = winData.componentID
+        this.openWindows.delete(symbolicWindowID)
         this.trueWinIDToSymbolicWinIDMapping.delete(trueWindowID)
-        this.allWindows.delete(symbolicWinID)
+        this.allWindows.delete(symbolicWindowID)
         this.componentToWindowMapping.delete(componentID)
-        this.openWindows.delete(symbolicWinID)
         BrowserWindow.fromId(trueWindowID).close()
     }
 
     static reinitialiseWindow(trueWindowID, componentType, componentID, parentWindowID){
-        const symbolicWinID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
-        const winData = this.allWindows.get(symbolicWinID)
+        const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
+        const winData = this.allWindows.get(symbolicWindowID)
         this.componentToWindowMapping.delete(winData.componentID)
-        this.allWindows.delete(symbolicWinID)
+        this.allWindows.delete(symbolicWindowID)
+        this.openWindows.delete(symbolicWindowID)
 
         this.initialiseWindow(trueWindowID, componentType, componentID, parentWindowID)
     }
@@ -136,6 +135,8 @@ class WindowHandler{
             componentID,
             parentWindowID
         })
+
+        this.openWindows.set(symbolicWindowID, {symbolicWindowID, type: componentType, componentID})
 
         this.trueWinIDToSymbolicWinIDMapping.set(trueWindowID, symbolicWindowID)
     }
@@ -272,13 +273,15 @@ app.whenReady().then(() => {
         const senderWindow = BrowserWindow.getFocusedWindow()
         if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
     })
-    globalShortcut.register('CmdOrCtrl+2', (e) => {
+    globalShortcut.register('CmdOrCtrl+2', () => {
         const senderWindow = BrowserWindow.getFocusedWindow()
-        if(senderWindow) senderWindow.webContents.send('open-tab-menu') // handle
+        const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj))
+        if(senderWindow) senderWindow.webContents.send('open-tab-menu', screen.getCursorScreenPoint(), senderWindow.getBounds(), serializedElements)
     })
-    globalShortcut.register('CmdOrCtrl+num2', (e) => {
+    globalShortcut.register('CmdOrCtrl+num2', () => {
         const senderWindow = BrowserWindow.getFocusedWindow()
-        if(senderWindow) senderWindow.webContents.send('open-tab-menu') // handle
+        const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj))
+        if(senderWindow) senderWindow.webContents.send('open-tab-menu', screen.getCursorScreenPoint(), senderWindow.getBounds(), serializedElements)
     })
     globalShortcut.register('CmdOrCtrl+X', () => {
         terminateApp()

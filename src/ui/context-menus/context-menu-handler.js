@@ -51,6 +51,7 @@ function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, r
         isContextMenuOpen = true
     }
     
+    closeTabsMenu()
     concealContextMenu()
     revealContextMenu(contextMenuBlueprint)
     contextMenuCenter = { x: centerX, y: centerY }

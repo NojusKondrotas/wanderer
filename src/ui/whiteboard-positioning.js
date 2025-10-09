@@ -185,6 +185,10 @@ class PositioningHandler{
             turnOffContextMenu()
             return
         }
+        if(isTabsMenuOpen){
+            closeTabsMenu()
+            return
+        }
         if(isWritingElement){
             toggleQuillWritingMode(false, selectedElement.id)
             return
@@ -236,6 +240,11 @@ class PositioningHandler{
         if(suppressNextMouseUp){
             suppressNextMouseUp = false
             return
+        }
+        if(isTabsMenuOpen){
+            if(!this.checkIfDraggedEnough()){
+                closeTabsMenu()
+            }
         }
         if(isDrawingPath){
             if(!this.checkIfDraggedEnough()){
