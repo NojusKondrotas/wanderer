@@ -113,10 +113,10 @@ svg {
     z-index: $highest-index;
 }
 
-.note {
+.notepad, .whiteboard, .note {
     position: absolute;
-    min-width: 80px;
-    min-height: 25.65px;
+    min-width: 60px;
+    min-height: 60px;
     border-radius: 5px;
     padding: 2px;
 
@@ -127,17 +127,11 @@ svg {
 }
 
 .notepad, .whiteboard {
-    position: absolute;
-    min-width: 60px;
-    min-height: 60px;
-    border-radius: 5px;
-    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    background-color: $whiteboard-color;
-    border: 2px solid #dadada;
     user-select: none;
-
-    z-index: $medium-index;
 }
 
 .note-border {
