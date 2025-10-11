@@ -27,12 +27,12 @@ function addWhiteboardListeners(whiteboard){
 }
 
 async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
+    const id = await window.wandererAPI.addWhiteboard()
+
     const newWhiteboard = document.createElement('div')
     newWhiteboard.classList.add('whiteboard')
-    newWhiteboard.innerHTML = 'whiteboard'
+    newWhiteboard.textContent = id
 
-
-    const id = await window.wandererAPI.addWhiteboard()
     createNewElement(container, newWhiteboard, id, xOffset, yOffset)
     addWhiteboardListeners(newWhiteboard)
     
