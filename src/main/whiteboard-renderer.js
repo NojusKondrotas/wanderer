@@ -38,17 +38,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 })
 
-window.addEventListener('mousedown', (e) => {
-    genMouseDown_WhiteboardMoveHandler(e)
-})
-
 window.addEventListener('mousemove', (e) => {
     genMouseMove_WhiteboardMoveHandler(e)
     genMouseMove_ContextMenuHandler(e)
-})
-
-window.addEventListener('mouseup', (e) => {
-    genMouseUp_WhiteboardMoveHandler(e)
 })
 
 function save(){

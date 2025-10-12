@@ -170,6 +170,7 @@ class PositioningHandler{
         }
         
         if(StatesHandler.isDrawingPath){
+            toggleTitlebar(false)
             if(StatesHandler.isDrawingPathEnd)
                 updatePathPosition(selectedPath, selectedPath.startPosition, { x: ev.clientX, y: ev.clientY })
             else
@@ -213,16 +214,16 @@ class PositioningHandler{
             this.isResizing = true
         }else if(isWindow){
             this.isDraggingWindow = true
-            toggleTitlebar(false)
         }else if(isWinResizing){
             this.isResizingWindow = true
-            toggleTitlebar(false)
         }
 
+        toggleTitlebar(false)
         handleKeybindGuideAppearance(false)
     }
 
     static endDrag(ev){
+        console.log('ended drag!')
         if(ev.button === 2) return
         
         if(this.isResizing){

@@ -52,16 +52,6 @@ titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
     turnOffContextMenu()
 })
 
-titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
-    e.stopPropagation()
-
-    window.wandererAPI.setMinimized()
-
-    titlebarMinimizeCtrlFrame.blur()
-
-    turnOffContextMenu()
-})
-
 titlebarCloseCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
     closeWindow()

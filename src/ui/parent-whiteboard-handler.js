@@ -8,3 +8,11 @@ parentWhiteboard.addEventListener('contextmenu', (e) => {
 
     openNewContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 162, -10, -10)
 })
+
+parentWhiteboard.addEventListener('mousedown', (e) => {
+    genMouseDown_WhiteboardMoveHandler(e)
+})
+
+parentWhiteboard.addEventListener('mouseup', (e) => {
+    genMouseUp_WhiteboardMoveHandler(e)
+})
