@@ -2,7 +2,7 @@ function addWhiteboardListeners(whiteboard){
     whiteboard.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if(isWritingElement) return
+        if(StatesHandler.isWritingElement) return
         
         selectedElement = whiteboard
 
@@ -20,7 +20,7 @@ function addWhiteboardListeners(whiteboard){
     })
 
     whiteboard.addEventListener('dblclick', (e) => {
-        if(isWritingElement) return
+        if(StatesHandler.isWritingElement) return
 
         window.wandererAPI.openWhiteboard(whiteboard.id)
     })

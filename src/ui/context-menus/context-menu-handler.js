@@ -1,6 +1,5 @@
 const allContextMenus = document.getElementsByClassName('cm-logic')
 
-let isContextMenuOpen = false
 let activeContextMenu = null, contextMenuCenter = {x:0, y:0}
 
 function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
@@ -34,13 +33,13 @@ function concealContextMenu(){
     for(let cm of allContextMenus)
         cm.style.display = 'none'
 
-    isContextMenuOpen = false
+    StatesHandler.isContextMenuOpen = false
     activeContextMenu = null
 }
 
 function turnOffContextMenu(){
     concealContextMenu()
-    isContextMenuOpen = false
+    StatesHandler.isContextMenuOpen = false
     selectedElement = null
     selectedPath = null
 }
@@ -48,7 +47,7 @@ function turnOffContextMenu(){
 function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
     function revealContextMenu(contextMenuBlueprint){
         contextMenuBlueprint.style.display = 'block'
-        isContextMenuOpen = true
+        StatesHandler.isContextMenuOpen = true
     }
     
     closeTabsMenu()
@@ -59,7 +58,7 @@ function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, r
 }
 
 function genMouseMove_ContextMenuHandler(e){
-    if (!isContextMenuOpen || !activeContextMenu) return
+    if (!StatesHandler.isContextMenuOpen || !activeContextMenu) return
 
     Array.from(activeContextMenu.children).forEach(ctrl => {
         const rect = ctrl.getBoundingClientRect()

@@ -45,8 +45,8 @@ class PositioningHandler{
     static element_MouseDown(ev, el){
         if(ev.button !== 2){
             ev.stopPropagation()
-            if(isWritingElement) return
-            if(isContextMenuOpen){
+            if(StatesHandler.isWritingElement) return
+            if(StatesHandler.isContextMenuOpen){
                 turnOffContextMenu()
                 return
             }
@@ -60,8 +60,8 @@ class PositioningHandler{
     }
 
     static element_MouseUp(ev, el){
-        if(isWritingElement) return
-        if(isDrawingPath){
+        if(StatesHandler.isWritingElement) return
+        if(StatesHandler.isDrawingPath){
             if(!this.checkIfDraggedEnough()){
                 if(el.id === selectedPath.startNoteID){
                     deletePathByID(selectedPath.id)
@@ -131,12 +131,12 @@ class PositioningHandler{
 
                 if(hasUpdated){
                     let startPoint, endPoint
-                    if(isDrawingPathEnd){
+                    if(StatesHandler.isDrawingPathEnd){
                         startPoint = {
                             x: path.startPosition.x,
                             y: path.startPosition.y
                         }
-                        if(isDrawingPath && path === selectedPath){
+                        if(StatesHandler.isDrawingPath && path === selectedPath){
                             endPoint = {
                                 x: ev.clientX,
                                 y: ev.clientY
@@ -152,7 +152,7 @@ class PositioningHandler{
                             x: path.endPosition.x,
                             y: path.endPosition.y
                         }
-                        if(isDrawingPath && path === selectedPath){
+                        if(StatesHandler.isDrawingPath && path === selectedPath){
                             startPoint = {
                                 x: ev.clientX,
                                 y: ev.clientY
@@ -169,8 +169,8 @@ class PositioningHandler{
             })
         }
         
-        if(isDrawingPath){
-            if(isDrawingPathEnd)
+        if(StatesHandler.isDrawingPath){
+            if(StatesHandler.isDrawingPathEnd)
                 updatePathPosition(selectedPath, selectedPath.startPosition, { x: ev.clientX, y: ev.clientY })
             else
                 updatePathPosition(selectedPath, { x: ev.clientX, y: ev.clientY }, selectedPath.endPosition)
@@ -179,13 +179,13 @@ class PositioningHandler{
 
     static startDrag(ev, isBoard, isEl, isResizing, isWindow, isWinResizing){
         if(ev.button === 2) return
-        if(isQuillToolbarEdit) return
+        if(StatesHandler.isQuillToolbarEdit) return
 
-        if(isContextMenuOpen){
+        if(StatesHandler.isContextMenuOpen){
             turnOffContextMenu()
             return
         }
-        if(isWritingElement){
+        if(StatesHandler.isWritingElement){
             toggleQuillWritingMode(false, selectedElement.id)
             return
         }
@@ -229,20 +229,20 @@ class PositioningHandler{
             this.isResizing = false
             document.body.style.cursor = 'default'
         }
-        if(isQuillToolbarEdit){
-            isQuillToolbarEdit = false
+        if(StatesHandler.isQuillToolbarEdit){
+            StatesHandler.isQuillToolbarEdit = false
             return
         }
         if(suppressNextMouseUp){
             suppressNextMouseUp = false
             return
         }
-        if(isTabsMenuOpen){
+        if(StatesHandler.isTabsMenuOpen){
             if(!this.checkIfDraggedEnough()){
                 closeTabsMenu()
             }
         }
-        if(isDrawingPath){
+        if(StatesHandler.isDrawingPath){
             if(!this.checkIfDraggedEnough()){
                 terminatePathDrawing(ev, null)
             }

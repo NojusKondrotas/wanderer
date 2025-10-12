@@ -4,8 +4,6 @@ let selectedElement = null
 
 let elementPositions = new Map()
 
-let isWritingElement = false
-
 function getElementID(){
     if(unusedElementIDs.length !== 0)
         return unusedElementIDs.pop()

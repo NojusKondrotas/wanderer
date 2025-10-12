@@ -1,7 +1,5 @@
 let largestQlEditorID = 0, unusedQlEditorIDs = new Array()
 
-let isEditing = false
-
 let activeBorder = null
 
 function getQlEditorID(){
@@ -17,7 +15,7 @@ function addNoteListeners(note){
     note.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if(isWritingElement) return
+        if(StatesHandler.isWritingElement) return
         
         selectedElement = note
 
@@ -35,7 +33,7 @@ function addNoteListeners(note){
     })
 
     note.addEventListener('dblclick', (e) => {
-        if(isWritingElement) return
+        if(StatesHandler.isWritingElement) return
         selectedElement = note
         toggleQuillWritingMode(true, note.id)
 

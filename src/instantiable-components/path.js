@@ -1,7 +1,6 @@
 let largestPathID = 0
 
 let allPaths = new Array(), unusedPathIDs = new Array()
-let isDrawingPath = false, isDrawingPathEnd = true
 let selectedPath = null
 
 const pathVisualShape = 'line', pathVisualWidth = '2'
@@ -59,8 +58,8 @@ function createPath(mousePos, startX = 0, startY = 0){
     allPaths.push(path)
     selectedPath = path
     suppressNextMouseUp = true
-    isDrawingPath = true
-    isDrawingPathEnd = true
+    StatesHandler.isDrawingPath = true
+    StatesHandler.isDrawingPathEnd = true
     updatePathPosition(path, path.startPosition, path.endPosition)
     return path
 }
@@ -103,15 +102,15 @@ function updatePathPosition(path, startPosition, endPosition){
 }
 
 function terminatePathDrawing(ev, elID){
-    if(isDrawingPathEnd)
+    if(StatesHandler.isDrawingPathEnd)
         selectedPath.endNoteID = elID
     else
         selectedPath.startNoteID = elID
-    if(isDrawingPathEnd)
+    if(StatesHandler.isDrawingPathEnd)
         selectedPath.endPosition = { x: ev.clientX, y: ev.clientY }
     else
         selectedPath.startPosition = { x: ev.clientX, y: ev.clientY }
-    isDrawingPath = false
+    StatesHandler.isDrawingPath = false
     selectedPath = null
 }
 

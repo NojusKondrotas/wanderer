@@ -8,8 +8,6 @@ const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')
 const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')
 const titlebarLockCtrlFrame = document.getElementById('frame-lock-titlebar')
 
-let isTitlebarLocked = false
-
 function toggleTitlebar(flag){
     if(flag){
         titlebar.style.display = 'inline'
@@ -65,15 +63,15 @@ titlebarCloseCtrlFrame.addEventListener('click', (e) => {
 
 titlebarLockCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
-    if(isTitlebarLocked){
+    if(StatesHandler.isTitlebarLocked){
         titlebarVisual.style.removeProperty('transform');
 
-        isTitlebarLocked = false
+        StatesHandler.isTitlebarLocked = false
     }
     else{
         titlebarVisual.style.setProperty('transform', 'translateY(0px)')
 
-        isTitlebarLocked = true
+        StatesHandler.isTitlebarLocked = true
     }
 
     titlebarLockCtrlFrame.blur()

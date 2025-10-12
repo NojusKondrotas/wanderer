@@ -2,7 +2,7 @@ function addNotepadListeners(notepad){
     notepad.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if(isWritingElement) return
+        if(StatesHandler.isWritingElement) return
         
         selectedElement = notepad
 
@@ -20,7 +20,7 @@ function addNotepadListeners(notepad){
     })
 
     notepad.addEventListener('dblclick', (e) => {
-        if(isWritingElement) return
+        if(StatesHandler.isWritingElement) return
 
         window.wandererAPI.openNotepad(notepad.id)
     })

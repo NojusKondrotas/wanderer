@@ -1,5 +1,3 @@
-let isTabsMenuOpen = false
-
 function getTabsMenuCircleCaps(amount){
     let circleCap = 6
     const res = new Array()
@@ -48,25 +46,23 @@ function generateAllTabsMenuCircles(centerX, centerY, amount, angleSize, radius,
     })
 }
 
-function toggleElementFilter(cssFunction){
-    for (let [key, value] of elementPositions){
-        const el = document.getElementById(key)
-        if(el.classList.contains('open-window')) continue
-
-        el.style.filter = cssFunction
-    }
+function toggleChildrenFilter(container, cssFunction){
+    Array.from(container.children).forEach(el => {
+        if(!el.classList.contains('open-window'))
+            el.style.filter = cssFunction
+    })
 }
 
 function openTabsMenu(mousePos, boundsOffset, windows){
     closeTabsMenu()
     turnOffContextMenu()
-    toggleElementFilter('blur(3px)')
+    toggleChildrenFilter(parentWhiteboard, 'blur(3px)')
     generateAllTabsMenuCircles(mousePos.x - boundsOffset.x, mousePos.y - boundsOffset.y, windows.length, -1, 90, 0, 0, -10, windows)
     windows.forEach(w => {
         // console.log(w, windows.length)
     })
 
-    isTabsMenuOpen = true
+    StatesHandler.isTabsMenuOpen = true
 }
 
 function closeTabsMenu(){
@@ -76,7 +72,7 @@ function closeTabsMenu(){
         w.remove()
         elementPositions.delete(w.id)
     })
-    toggleElementFilter('none')
+    toggleChildrenFilter(parentWhiteboard, 'none')
 
-    isTabsMenuOpen = false
+    StatesHandler.isTabsMenuOpen = false
 }

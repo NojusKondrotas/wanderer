@@ -1,20 +1,18 @@
 const pathStartPoint = document.getElementById('path-end-0')
 const pathEndPoint = document.getElementById('path-end-1')
 
-let isConnecting = false
-
 function connectPathStart(path){
-    isDrawingPath = true
+    StatesHandler.isDrawingPath = true
     selectedPath = path
-    isDrawingPathEnd = false
+    StatesHandler.isDrawingPathEnd = false
 
     suppressNextMouseUp = true
 }
 
 function connectPathEnd(path){
-    isDrawingPath = true
+    StatesHandler.isDrawingPath = true
     selectedPath = path
-    isDrawingPathEnd = true
+    StatesHandler.isDrawingPathEnd = true
 
     suppressNextMouseUp = true
 }
@@ -28,13 +26,13 @@ function disconnectPathEnd(path){
 }
 
 pathStartPoint.addEventListener('mousedown', (e) => {
-    if(isConnecting) connectPathStart(selectedPath)
+    if(StatesHandler.isConnecting) connectPathStart(selectedPath)
     else disconnectPathStart(selectedPath)
     concealContextMenu()
 })
 
 pathEndPoint.addEventListener('mousedown', (e) => {
-    if(isConnecting) connectPathEnd(selectedPath)
+    if(StatesHandler.isConnecting) connectPathEnd(selectedPath)
     else disconnectPathEnd(selectedPath)
     concealContextMenu()
 })
@@ -60,7 +58,7 @@ function openPathConnectionContextMenu(flag){
     pathStartPoint.style.display = 'inline'
     pathEndPoint.style.display = 'inline'
 
-    isContextMenuOpen = true
+    StatesHandler.isContextMenuOpen = true
 
-    isConnecting = flag
+    StatesHandler.isConnecting = flag
 }

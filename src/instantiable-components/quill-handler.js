@@ -1,6 +1,6 @@
 let allQuills = new Map(), allQuillToolbars = new Map()
 
-let activeQlToolbar = null, isQuillToolbarEdit = false
+let activeQlToolbar = null
 
 function queryQuillToolbar(qlToolbarID){
     return document.querySelector(`[data-parent-id="${qlToolbarID}"]`)
@@ -24,7 +24,7 @@ function toggleQuillWritingMode(toggle = false, editableElID){
         activeQlToolbar.style.display = 'inline'
         updateQuillToolbarPosition(editableEl)
 
-        isWritingElement = true
+        StatesHandler.isWritingElement = true
         selectedElement = editableEl
     }
     else{
@@ -32,7 +32,7 @@ function toggleQuillWritingMode(toggle = false, editableElID){
         if(activeQlToolbar) activeQlToolbar.style.display = 'none'
 
         activeQlToolbar = null
-        isWritingElement = false
+        StatesHandler.isWritingElement = false
         selectedElement = null
     }
 }
@@ -46,7 +46,7 @@ function configureQuill(quill, ql_container, content = ''){
 }
 
 function configureQuillToolbar(qlToolbar){
-    qlToolbar.addEventListener('mousedown', (e) => { e.stopPropagation(); isQuillToolbarEdit = true })
+    qlToolbar.addEventListener('mousedown', (e) => { e.stopPropagation(); StatesHandler.isQuillToolbarEdit = true })
 }
 
 function saveAllQuillToolbars(){

@@ -16,7 +16,7 @@ parentWhiteboard.addEventListener('mouseup', (e) => {
 parentWhiteboard.addEventListener('contextmenu', (e) => {
     e.preventDefault()
     e.stopPropagation()
-    if(isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
+    if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
     turnOffContextMenu()
 
     openNewContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 162, -10, -10)
