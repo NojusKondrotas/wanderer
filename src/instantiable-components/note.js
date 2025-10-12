@@ -24,6 +24,7 @@ function addNoteListeners(note){
 
     note.addEventListener('mousedown', (e) => {
         e.stopPropagation()
+        if(StatesHandler.isWritingElement) return
         PositioningHandler.element_MouseDown(e, note)
     })
 
@@ -34,9 +35,9 @@ function addNoteListeners(note){
 
     note.addEventListener('dblclick', (e) => {
         selectedElement = note
-        toggleQuillWritingMode(true, note.id)
+        if(!StatesHandler.isWritingElement){
+            toggleQuillWritingMode(true, note.id)
 
-        setTimeout(() => {
             note.focus()
 
             const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
@@ -49,7 +50,7 @@ function addNoteListeners(note){
                 sel.removeAllRanges()
                 sel.addRange(range)
             }
-        }, 0)
+        }
     })
 }
 
