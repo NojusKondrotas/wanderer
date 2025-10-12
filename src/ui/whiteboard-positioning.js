@@ -185,10 +185,6 @@ class PositioningHandler{
             turnOffContextMenu()
             return
         }
-        if(isTabsMenuOpen){
-            closeTabsMenu()
-            return
-        }
         if(isWritingElement){
             toggleQuillWritingMode(false, selectedElement.id)
             return
