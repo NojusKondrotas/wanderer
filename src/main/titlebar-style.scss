@@ -30,10 +30,6 @@ $highest-index: 20;
     z-index: $highest-index;
 }
 
-#titlebar:hover #titlebar-visual {
-    transform: translateY(0px);
-}
-
 .window-control {
     display: flex;
     justify-content: center;

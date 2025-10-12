@@ -223,7 +223,6 @@ class PositioningHandler{
     }
 
     static endDrag(ev){
-        console.log('ended drag!')
         if(ev.button === 2) return
         
         if(this.isResizing){
@@ -250,6 +249,11 @@ class PositioningHandler{
         }
 
         toggleTitlebar(true)
+        const el = document.elementFromPoint(ev.clientX, ev.clientY)
+        if (el === titlebar) {
+            toggleTitlebarVisual(false)
+        }
+        
         this.isDraggingBoard = false
         this.isDraggingElement = false
         this.isDraggingWindow = false

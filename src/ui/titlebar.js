@@ -16,6 +16,25 @@ function toggleTitlebar(flag){
     }
 }
 
+function toggleTitlebarVisual(flag){
+    if(flag){
+        titlebar.addEventListener('mouseover', mouseOver_Titlebar)
+    }else{
+        titlebar.removeEventListener('mouseover', mouseOver_Titlebar)
+    }
+}
+
+function mouseOver_Titlebar(){
+    titlebarVisual.style.transform = 'translateY(0px)'
+}
+
+titlebar.addEventListener('mouseover', mouseOver_Titlebar)
+
+titlebar.addEventListener('mouseleave', () => {
+    toggleTitlebarVisual(true)
+    titlebarVisual.style.transform = 'translateY(-80px)'
+})
+
 titlebarVisual.addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
