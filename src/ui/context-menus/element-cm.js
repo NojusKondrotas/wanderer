@@ -1,4 +1,12 @@
 const elementContextMenu = document.getElementById('element-context-menu')
+const npwcm = {
+    blueprint : elementContextMenu,
+    angleSize : 360 / elementContextMenu.children.length,
+    radius : 90,
+    angleOffset : 0,
+    xOffset : 0,
+    yOffset : -10
+}
 
 document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
     e.stopPropagation()

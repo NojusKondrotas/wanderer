@@ -6,7 +6,7 @@ parentWhiteboard.addEventListener('contextmenu', (e) => {
     if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
     turnOffContextMenu()
 
-    openNewContextMenu(e.clientX, e.clientY, generalContextMenu, 360 / 5, 85, 162, -10, -10)
+    openNewContextMenu(e.clientX, e.clientY, gcm)
 })
 
 parentWhiteboard.addEventListener('mousedown', (e) => {

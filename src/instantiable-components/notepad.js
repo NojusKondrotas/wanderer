@@ -6,7 +6,7 @@ function addNotepadListeners(notepad){
         
         selectedElement = notepad
 
-        openNewContextMenu(e.clientX, e.clientY, elementContextMenu, 360 / 6, 90, 0, 0, -10)
+        openNewContextMenu(e.clientX, e.clientY, npwcm)
     })
 
     notepad.addEventListener('mousedown', (e) => {

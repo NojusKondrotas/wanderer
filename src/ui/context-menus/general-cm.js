@@ -1,4 +1,12 @@
 const generalContextMenu = document.getElementById('general-context-menu')
+const gcm = {
+    blueprint : generalContextMenu,
+    angleSize : 360 / generalContextMenu.children.length,
+    radius : 85,
+    angleOffset : 162,
+    xOffset : -10,
+    yOffset : -10
+}
 
 document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
     e.stopPropagation()

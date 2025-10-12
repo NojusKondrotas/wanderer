@@ -1,4 +1,12 @@
 const titlebarContextMenu = document.getElementById('titlebar-context-menu')
+const tcm = {
+    blueprint : titlebarContextMenu,
+    angleSize : 360 / titlebarContextMenu.children.length,
+    radius : 85,
+    angleOffset : 234,
+    xOffset : -10,
+    yOffset : -10
+}
 
 const titlebarFullScreenCtrlContextMenu = document.getElementById('tcm-fullscreen-window')
 const titlebarMaximizeCtrlContextMenu = document.getElementById('tcm-maximize-window')

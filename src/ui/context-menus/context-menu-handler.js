@@ -2,12 +2,12 @@ const allContextMenus = document.getElementsByClassName('cm-logic')
 
 let activeContextMenu = null, contextMenuCenter = {x:0, y:0}
 
-function generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
-    contextMenuBlueprint.style.left = `${centerX}px`
-    contextMenuBlueprint.style.top = `${centerY}px`
-    activeContextMenu = contextMenuBlueprint
+function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
+    blueprint.style.left = `${centerX}px`
+    blueprint.style.top = `${centerY}px`
+    activeContextMenu = blueprint
 
-    Array.from(contextMenuBlueprint.children).forEach((option, i) => {
+    Array.from(blueprint.children).forEach((option, i) => {
         const angleDeg = angleOffset + i * angleSize
         const angleRad = angleDeg * Math.PI / 180
 
@@ -44,17 +44,17 @@ function turnOffContextMenu(){
     selectedPath = null
 }
 
-function openNewContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0){
-    function revealContextMenu(contextMenuBlueprint){
-        contextMenuBlueprint.style.display = 'block'
+function openNewContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
+    function revealContextMenu(blueprint){
+        blueprint.style.display = 'block'
         StatesHandler.isContextMenuOpen = true
     }
     
     closeTabsMenu()
     concealContextMenu()
-    revealContextMenu(contextMenuBlueprint)
+    revealContextMenu(blueprint)
     contextMenuCenter = { x: centerX, y: centerY }
-    generateCircularContextMenu(centerX, centerY, contextMenuBlueprint, angleSize, radius, angleOffset, xOffset, yOffset)
+    generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset })
 }
 
 function genMouseMove_ContextMenuHandler(e){

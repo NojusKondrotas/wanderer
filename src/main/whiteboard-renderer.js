@@ -82,7 +82,7 @@ window.addEventListener("beforeunload", () => {
 })
 
 window.wandererAPI.openTitlebarContextMenu((mousePos, boundsOffset) => {
-    openNewContextMenu(mousePos.x - boundsOffset.x, mousePos.y - boundsOffset.y, titlebarContextMenu, 360 / 5, 85, 234, -10, -10)
+    openNewContextMenu(mousePos.x - boundsOffset.x, mousePos.y - boundsOffset.y, tcm)
 })
 
 window.wandererAPI.openTabMenu((mousePos, boundsOffset, windows) => {

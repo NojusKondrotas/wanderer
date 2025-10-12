@@ -72,7 +72,7 @@ function addPathListeners(path){
         if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
 
         selectedPath = path
-        openNewContextMenu(e.clientX, e.clientY, pathContextMenu, 360 / 4, 70, 90, 0, -10)
+        openNewContextMenu(e.clientX, e.clientY, acm)
     })
 }
 
