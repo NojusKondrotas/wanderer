@@ -113,6 +113,10 @@ svg {
     z-index: $highest-index;
 }
 
+.notepad, .whiteboard, .note, .path-container {
+    transition: filter 230ms ease-out;
+}
+
 .notepad, .whiteboard, .note {
     position: absolute;
     min-width: 60px;
