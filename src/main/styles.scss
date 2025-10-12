@@ -117,7 +117,7 @@ svg {
     transition: filter 230ms ease-out;
 }
 
-.notepad, .whiteboard, .note {
+.notepad, .whiteboard, .note, .open-window {
     position: absolute;
     min-width: 60px;
     min-height: 60px;
@@ -126,11 +126,17 @@ svg {
 
     background-color: $whiteboard-color;
     border: 2px solid #dadada;
+}
 
+.notepad, .whiteboard, .note {
     z-index: $medium-index;
 }
 
-.notepad, .whiteboard {
+.open-window {
+    z-index: $higher-index;
+}
+
+.notepad, .whiteboard, .open-window {
     display: flex;
     justify-content: center;
     align-items: center;
