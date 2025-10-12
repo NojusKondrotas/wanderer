@@ -379,7 +379,7 @@ ipcMain.handle('first-time-whiteboard-chosen', (e) => {
     WindowHandler.overwriteComponentWindow(path.join(__dirname, 'whiteboard-index.html'), senderWindow.id, 'w', addWhiteboard())
 })
 
-ipcMain.handle('get-component-id', (e) => {
+ipcMain.handle('get-window-component-id', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     return WindowHandler.allWindows.get(symbolicWinID).componentID
