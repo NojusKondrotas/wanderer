@@ -3,9 +3,9 @@ let isWindowClosing = false
 window.addEventListener('DOMContentLoaded', async () => {
     handleKeybindGuideAppearance(true)
 
-    componentID = await window.wandererAPI.getComponentID()
-    componentIDEl = document.getElementById('component-id')
-    componentIDEl.textContent = componentID
+    windowComponentID = await window.wandererAPI.getComponentID()
+    windowComponentIDEl = document.getElementById('component-id')
+    windowComponentIDEl.textContent = windowComponentID
     
     const stateObj = await window.wandererAPI.loadWhiteboardState()
 
