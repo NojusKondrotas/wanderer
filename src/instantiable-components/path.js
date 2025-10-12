@@ -69,6 +69,7 @@ function addPathListeners(path){
         e.preventDefault()
         e.stopPropagation()
         console.log('right clicked on hitPath')
+        if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
 
         selectedPath = path
         openNewContextMenu(e.clientX, e.clientY, pathContextMenu, 360 / 4, 70, 90, 0, -10)

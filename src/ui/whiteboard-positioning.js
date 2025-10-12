@@ -45,7 +45,7 @@ class PositioningHandler{
     static element_MouseDown(ev, el){
         if(ev.button !== 2){
             ev.stopPropagation()
-            if(StatesHandler.isWritingElement) return
+            if(StatesHandler.isWritingElement) return toggleQuillWritingMode(false, selectedElement.id)
             if(StatesHandler.isContextMenuOpen){
                 turnOffContextMenu()
                 return

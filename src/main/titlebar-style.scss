@@ -27,6 +27,7 @@ $highest-index: 20;
     background-color: rgba(143, 170, 176, 0.5);
 
     transition: transform 85ms ease-out;
+    z-index: $highest-index;
 }
 
 #titlebar:hover #titlebar-visual {

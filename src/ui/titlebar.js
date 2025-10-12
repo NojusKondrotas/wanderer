@@ -16,6 +16,12 @@ function toggleTitlebar(flag){
     }
 }
 
+titlebarVisual.addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
+    if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
+})
+
 titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
 

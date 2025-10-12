@@ -2,7 +2,7 @@ function addWhiteboardListeners(whiteboard){
     whiteboard.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if(StatesHandler.isWritingElement) return
+        if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
         
         selectedElement = whiteboard
 

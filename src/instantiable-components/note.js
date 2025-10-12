@@ -15,7 +15,7 @@ function addNoteListeners(note){
     note.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if(StatesHandler.isWritingElement) return
+        if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
         
         selectedElement = note
 
@@ -33,7 +33,6 @@ function addNoteListeners(note){
     })
 
     note.addEventListener('dblclick', (e) => {
-        if(StatesHandler.isWritingElement) return
         selectedElement = note
         toggleQuillWritingMode(true, note.id)
 
