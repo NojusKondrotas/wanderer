@@ -2,6 +2,7 @@ let isWindowClosing = false
 
 window.addEventListener('DOMContentLoaded', async () => {
     handleKeybindGuideAppearance(true)
+    initTitlebar()
 
     windowComponentID = await window.wandererAPI.getWindowComponentID()
     windowComponentIDEl = document.getElementById('window-component-id')

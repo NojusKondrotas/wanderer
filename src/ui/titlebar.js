@@ -24,16 +24,20 @@ function toggleTitlebarVisual(flag){
     }
 }
 
+function initTitlebar(){
+    titlebarVisual.style.transform = 'translateY(-80px)'
+    
+    titlebar.addEventListener('mouseover', mouseOver_Titlebar)
+
+    titlebar.addEventListener('mouseleave', () => {
+        toggleTitlebarVisual(true)
+        titlebarVisual.style.transform = 'translateY(-80px)'
+    })
+}
+
 function mouseOver_Titlebar(){
     titlebarVisual.style.transform = 'translateY(0px)'
 }
-
-titlebar.addEventListener('mouseover', mouseOver_Titlebar)
-
-titlebar.addEventListener('mouseleave', () => {
-    toggleTitlebarVisual(true)
-    titlebarVisual.style.transform = 'translateY(-80px)'
-})
 
 titlebarVisual.addEventListener('mousedown', (e) => {
     e.stopPropagation()
