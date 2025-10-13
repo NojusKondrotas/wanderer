@@ -251,7 +251,7 @@ class PositioningHandler{
         toggleTitlebar(true)
         const el = document.elementFromPoint(ev.clientX, ev.clientY)
         if (el === titlebar) {
-            toggleTitlebarVisual(false)
+            toggleTitlebarVisualHover(false)
         }
         
         this.isDraggingBoard = false

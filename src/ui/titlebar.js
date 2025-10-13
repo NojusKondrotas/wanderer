@@ -16,7 +16,7 @@ function toggleTitlebar(flag){
     }
 }
 
-function toggleTitlebarVisual(flag){
+function toggleTitlebarVisualHover(flag){
     if(flag){
         titlebar.addEventListener('mouseover', mouseOver_Titlebar)
     }else{
@@ -30,7 +30,7 @@ function initTitlebar(){
     titlebar.addEventListener('mouseover', mouseOver_Titlebar)
 
     titlebar.addEventListener('mouseleave', () => {
-        toggleTitlebarVisual(true)
+        toggleTitlebarVisualHover(true)
         titlebarVisual.style.transform = 'translateY(-80px)'
     })
 }
