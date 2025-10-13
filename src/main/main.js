@@ -408,10 +408,6 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
     if(!fs.existsSync(saveWhiteboardDir)){
         fs.mkdirSync(saveWhiteboardDir)
     }
-
-    const serializedElements = Array.from(stateObj.elementPositions, ([id, pos]) => ({ id, x: pos.x, y: pos.y }))
-    const serializedAllQuillToolbars = Array.from(stateObj.allQuillToolbars, ([id, quill]) => ({ id, quill }))
-    const serializedAllPaths = Array.from(stateObj.allPaths, ([id, path]) => ({ id, path }))
     
     const dataToSave = {
         largestElementID: stateObj.largestElementID,
@@ -420,9 +416,9 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
         unusedPathIDs: stateObj.unusedPathIDs,
         largestQlEditorID: stateObj.largestQlEditorID,
         unusedQlEditorIDs: stateObj.unusedQlEditorIDs,
-        elementPositions: serializedElements,
-        allPaths: serializedAllPaths,
-        allQuillToolbars: serializedAllQuillToolbars
+        elementPositions: stateObj.elementPositions,
+        allPaths: stateObj.allPaths,
+        allQuillToolbars: stateObj.allQuillToolbars
     }
 
     const saveWhiteboardState = path.join(saveWhiteboardDir, `${componentID}-state.json`)
