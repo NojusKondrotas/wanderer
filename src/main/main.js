@@ -71,7 +71,7 @@ class WindowHandler{
                 entryFilePath = path.join(__dirname, 'notepad-index.html')
                 break
             case '0':
-                entryFilePath = path.join(__dirname, 'first-time', 'first-time.html')
+                entryFilePath = path.join(__dirname, 'prompts', 'first-time', 'prompt-first-time.html')
                 break
         }
         
