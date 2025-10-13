@@ -12,4 +12,10 @@ class StatesHandler{
     static isTabsMenuOpen = false
 
     static isTitlebarLocked = false
+
+    ////////////////////////////////
+
+    static isPromptFirstTime = false
+    static isComponentNotepad = false
+    static isComponentWhiteboard = false
 }

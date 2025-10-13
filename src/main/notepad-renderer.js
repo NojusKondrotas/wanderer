@@ -5,6 +5,7 @@ async function initNotepad() {
 }
 
 initNotepad()
+StatesHandler.isComponentNotepad = true
 
 document.getElementById('but').addEventListener('click', () => {
     window.wandererAPI.saveQuillDelta(quill.getContents())

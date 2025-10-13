@@ -3,6 +3,7 @@ let isWindowClosing = false
 window.addEventListener('DOMContentLoaded', async () => {
     handleKeybindGuideAppearance(true)
     initTitlebar()
+    StatesHandler.isComponentWhiteboard = true
 
     windowComponentID = await window.wandererAPI.getWindowComponentID()
     windowComponentIDEl = document.getElementById('window-component-id')
