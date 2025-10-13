@@ -38,13 +38,13 @@ pathEndPoint.addEventListener('mousedown', (e) => {
 })
 
 function disconnectConnectedPaths(elID){
-    allPaths.forEach(path => {
-        if(path.startNoteID === elID){
-            path.startNoteID = null
-        }else if(path.endNoteID === elID){
-            path.endNoteID = null
+    for(let [key, value] of allPaths){
+        if(value.startNoteID === elID){
+            value.startNoteID = null
+        }else if(value.endNoteID === elID){
+            value.endNoteID = null
         }
-    })
+    }
 }
 
 function openPathConnectionContextMenu(flag){

@@ -117,15 +117,15 @@ class PositioningHandler{
         }else if(this.isDraggingElement){
             updateElementPositionByID(selectedElement.id)
 
-            allPaths.forEach(path => {
+            for(let [key, value] of allPaths){
                 let hasUpdated = false
-                if(path.startNoteID === selectedElement.id){
-                    path.startPosition.x -= this.dragDiff.x
-                    path.startPosition.y -= this.dragDiff.y
+                if(value.startNoteID === selectedElement.id){
+                    value.startPosition.x -= this.dragDiff.x
+                    value.startPosition.y -= this.dragDiff.y
                     hasUpdated = true
-                }else if(path.endNoteID === selectedElement.id){
-                    path.endPosition.x -= this.dragDiff.x
-                    path.endPosition.y -= this.dragDiff.y
+                }else if(value.endNoteID === selectedElement.id){
+                    value.endPosition.x -= this.dragDiff.x
+                    value.endPosition.y -= this.dragDiff.y
                     hasUpdated = true
                 }
 
@@ -133,40 +133,40 @@ class PositioningHandler{
                     let startPoint, endPoint
                     if(StatesHandler.isDrawingPathEnd){
                         startPoint = {
-                            x: path.startPosition.x,
-                            y: path.startPosition.y
+                            x: value.startPosition.x,
+                            y: value.startPosition.y
                         }
-                        if(StatesHandler.isDrawingPath && path === selectedPath){
+                        if(StatesHandler.isDrawingPath && value === selectedPath){
                             endPoint = {
                                 x: ev.clientX,
                                 y: ev.clientY
                             }
                         }else{
                             endPoint = {
-                                x: path.endPosition.x,
-                                y: path.endPosition.y
+                                x: value.endPosition.x,
+                                y: value.endPosition.y
                             }
                         }
                     }else{
                         endPoint = {
-                            x: path.endPosition.x,
-                            y: path.endPosition.y
+                            x: value.endPosition.x,
+                            y: value.endPosition.y
                         }
-                        if(StatesHandler.isDrawingPath && path === selectedPath){
+                        if(StatesHandler.isDrawingPath && value === selectedPath){
                             startPoint = {
                                 x: ev.clientX,
                                 y: ev.clientY
                             }
                         }else{
                             startPoint = {
-                                x: path.startPosition.x,
-                                y: path.startPosition.y
+                                x: value.startPosition.x,
+                                y: value.startPosition.y
                             }
                         }
                     }
-                    updatePathPosition(path, startPoint, endPoint)
+                    updatePathPosition(value, startPoint, endPoint)
                 }
-            })
+            }
         }
         
         if(StatesHandler.isDrawingPath){

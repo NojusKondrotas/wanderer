@@ -1,6 +1,6 @@
 let largestPathID = 0
 
-let allPaths = new Array(), unusedPathIDs = new Array()
+let allPaths = new Map(), unusedPathIDs = new Array()
 let selectedPath = null
 
 const pathVisualShape = 'line', pathVisualWidth = '2'
@@ -55,7 +55,7 @@ function createPath(mousePos, startX = 0, startY = 0){
         shape: pathVisualShape
     }
     configurePath(path)
-    allPaths.push(path)
+    allPaths.set(div.id, path)
     selectedPath = path
     suppressNextMouseUp = true
     StatesHandler.isDrawingPath = true
@@ -116,10 +116,9 @@ function terminatePathDrawing(ev, elID){
 }
 
 function deletePathByID(pathToRemoveID){
-    const pathToRemove = document.getElementById(pathToRemoveID)
-    const index = allPaths.indexOf(pathToRemove)
-    if (index !== -1){
-        allPaths.splice(index, 1)
+    if(allPaths.contains(pathToRemoveID)){
+        const pathToRemove = allPaths.get(pathToRemoveID)
+        allPaths.delete(pathToRemoveID)
 
         unusedPathIDs.push(pathToRemove.pathVisualID)
         unusedPathIDs.push(pathToRemove.hitPathID)

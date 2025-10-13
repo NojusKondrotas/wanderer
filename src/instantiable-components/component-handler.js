@@ -34,8 +34,8 @@ function configurePath(path){
 }
 
 function configureAllPaths(paths){
-    for(let path of paths)
-        configurePath(path)
+    for(let [key, value] of paths)
+        configurePath(value)
 }
 
 function createNewElement(container, el, id, centerX = 0, centerY = 0){

@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         unusedQlEditorIDs = stateObj.unusedQlEditorIDs
 
         elementPositions = new Map(stateObj.elementPositions.map(e => [e.id, {x: e.x, y: e.y}]))
-        allPaths = stateObj.allPaths
+        allPaths = new Map(stateObj.allPaths.map(e => [e.id, e.path]))
         allQuillToolbars = new Map(stateObj.allQuillToolbars.map(e => [e.id, e.quill]))
 
         configureAllElements(parentWhiteboard.children)
