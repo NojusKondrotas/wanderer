@@ -53,7 +53,7 @@ class WindowHandler{
         this.overwriteWindow(entryFilePath, trueWindowID)
     }
 
-    static createWindow(componentType, componentID, parentWindowID, fullscreen = false, width = 800, height = 600, x, y){
+    static createWindow(componentType, componentID, parentWindowID, fullscreen = false, width = 800, height = 600, x, y, url){
         let preloadFilePath = path.join(__dirname, 'preload.js')
         let entryFilePath
         switch(componentType){
@@ -73,6 +73,25 @@ class WindowHandler{
             case '0':
                 entryFilePath = path.join(__dirname, 'prompts', 'first-time', 'prompt-first-time.html')
                 break
+            case 'l':
+                const linkWin = new BrowserWindow({
+                    x,
+                    y,
+                    width,
+                    height,
+                    frame: false,
+                    titleBarStyle: 'hidden',
+                    fullscreen,
+                    webPreferences: {
+                        contextIsolation: true,
+                        nodeIntegration: false,
+                    }
+                })
+                linkWin.loadURL(url)
+
+                this.initialiseWindow(linkWin.id, componentType, componentID, parentWindowID)
+
+                return linkWin
         }
         
         const win = new BrowserWindow({
@@ -476,4 +495,12 @@ ipcMain.handle('close-window', (e) => {
         WindowHandler.isClosingWindow = true
         WindowHandler.closeWindow(senderWindow.id)
     }
+})
+
+ipcMain.handle('open-link', (e, link) => {
+    const win = BrowserWindow.fromWebContents(e.sender)
+        //WindowHandler.openComponent('l', link,+--------------------------------------------------poooooooooooooooooooooooooooooooooo WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
+
+    WindowHandler.createWindow('l', null, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id), false,
+        undefined, undefined, undefined, undefined, link)
 })
