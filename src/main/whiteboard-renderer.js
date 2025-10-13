@@ -1,8 +1,6 @@
 let isWindowClosing = false
 
 window.addEventListener('DOMContentLoaded', async () => {
-    handleKeybindGuideAppearance(true)
-    initTitlebar()
     StatesHandler.isComponentWhiteboard = true
 
     windowComponentID = await window.wandererAPI.getWindowComponentID()
@@ -23,6 +21,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         allPaths = new Map(stateObj.allPaths)
         allQuillToolbars = new Map(stateObj.allQuillToolbars)
 
+        StatesHandler.isTitlebarLocked = stateObj.isTitlebarLocked
+
         configureAllElements(parentWhiteboard.children)
         configureAllPaths(allPaths)
         reinstateAllQuillToolbars()
@@ -37,7 +37,11 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(elementPositions)
         console.log(allPaths)
         console.log(allQuillToolbars)
+        console.log(StatesHandler.isTitlebarLocked)
     }
+
+    handleKeybindGuideAppearance(true)
+    initTitlebar()
 })
 
 window.addEventListener('mousemove', (e) => {
@@ -63,6 +67,7 @@ function save(){
         elementPositions: elementPositionsArr,
         allPaths: allPathsArr,
         allQuillToolbars: allQuillToolbarsArr,
+        isTitlebarLocked: StatesHandler.isTitlebarLocked
     })
 }
 

@@ -418,7 +418,8 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
         unusedQlEditorIDs: stateObj.unusedQlEditorIDs,
         elementPositions: stateObj.elementPositions,
         allPaths: stateObj.allPaths,
-        allQuillToolbars: stateObj.allQuillToolbars
+        allQuillToolbars: stateObj.allQuillToolbars,
+        isTitlebarLocked: stateObj.isTitlebarLocked
     }
 
     const saveWhiteboardState = path.join(saveWhiteboardDir, `${componentID}-state.json`)

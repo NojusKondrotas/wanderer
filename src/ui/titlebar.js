@@ -25,9 +25,13 @@ function toggleTitlebarVisualHover(flag){
 }
 
 function initTitlebar(){
-    titlebarVisual.style.transform = 'translateY(-80px)'
-    
-    titlebar.addEventListener('mouseover', mouseOver_Titlebar)
+    if(StatesHandler.isTitlebarLocked){
+        titlebarVisual.style.transform = 'translateY(0px)'
+        toggleTitlebarVisualHover(false)
+    }else{
+        titlebarVisual.style.transform = 'translateY(-80px)'
+        toggleTitlebarVisualHover(true)
+    }
 
     titlebar.addEventListener('mouseleave', () => {
         if(!StatesHandler.isTitlebarLocked){
