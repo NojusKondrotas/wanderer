@@ -116,7 +116,7 @@ function terminatePathDrawing(ev, elID){
 }
 
 function deletePathByID(pathToRemoveID){
-    if(allPaths.contains(pathToRemoveID)){
+    if(allPaths.has(pathToRemoveID)){
         const pathToRemove = allPaths.get(pathToRemoveID)
         allPaths.delete(pathToRemoveID)
 
@@ -127,8 +127,6 @@ function deletePathByID(pathToRemoveID){
         const hitPath = document.getElementById(pathToRemove.hitPathID)
         pathVisual.remove()
         hitPath.remove()
-        deleteComponentByID(parentWhiteboard, pathToRemove.ID)
-
-        return
+        deleteComponentByID(parentWhiteboard, pathToRemoveID)
     }
 }

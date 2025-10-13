@@ -23,7 +23,7 @@ document.getElementById('acm-disconnect').addEventListener('mousedown', (e) => {
 document.getElementById('acm-delete').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    deletePathByID(selectedPath.id)
+    deletePathByID(selectedPath.ID)
 
     turnOffContextMenu()
 })
