@@ -16,26 +16,17 @@ const titlebarGlobalConfigurationContextMenu = document.getElementById('tcm-glob
 
 titlebarFullScreenCtrlContextMenu.addEventListener('click', (e) => {
     e.stopPropagation()
-
-    window.wandererAPI.setFullScreen()
-
-    turnOffContextMenu()
+    titlebarToggleFullScreen()
 })
 
 titlebarMaximizeCtrlContextMenu.addEventListener('click', (e) => {
     e.stopPropagation()
-
-    window.wandererAPI.setMaximized()
-
-    turnOffContextMenu()
+    titlebarToggleMaximized()
 })
 
 titlebarMinimizeCtrlContextMenu.addEventListener('click', (e) => {
     e.stopPropagation()
-    
-    window.wandererAPI.setMinimized()
-
-    turnOffContextMenu()
+    titlebarToggleMinimized()
 })
 
 titlebarCloseCtrlContextMenu.addEventListener('click', (e) => {

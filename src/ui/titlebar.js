@@ -30,13 +30,47 @@ function initTitlebar(){
     titlebar.addEventListener('mouseover', mouseOver_Titlebar)
 
     titlebar.addEventListener('mouseleave', () => {
-        toggleTitlebarVisualHover(true)
-        titlebarVisual.style.transform = 'translateY(-80px)'
+        if(!StatesHandler.isTitlebarLocked){
+            toggleTitlebarVisualHover(true)
+            titlebarVisual.style.transform = 'translateY(-80px)'
+        }
     })
 }
 
 function mouseOver_Titlebar(){
     titlebarVisual.style.transform = 'translateY(0px)'
+}
+
+function titlebarToggleFullScreen(){
+    window.wandererAPI.setFullScreen()
+    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+}
+
+function titlebarToggleMaximized(){
+    window.wandererAPI.setMaximized()
+    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+}
+
+function titlebarToggleMinimized(){
+    window.wandererAPI.setMinimized()
+    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+}
+
+function titlebarToggleTitlebarLock(){
+    if(StatesHandler.isTitlebarLocked){
+        titlebarVisual.style.transform = 'translateY(-80px)'
+        toggleTitlebarVisualHover(true)
+
+        StatesHandler.isTitlebarLocked = false
+    }
+    else{
+        titlebarVisual.style.transform = 'translateY(0px)'
+        toggleTitlebarVisualHover(false)
+
+        StatesHandler.isTitlebarLocked = true
+    }
+
+    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
 }
 
 titlebarVisual.addEventListener('mousedown', (e) => {
@@ -47,32 +81,20 @@ titlebarVisual.addEventListener('mousedown', (e) => {
 
 titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
-
-    window.wandererAPI.setFullScreen()
-
     titlebarFullScreenCtrlFrame.blur()
-
-    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+    titlebarToggleFullScreen()
 })
 
 titlebarMaximizeCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
-
-    window.wandererAPI.setMaximized()
-
     titlebarMaximizeCtrlFrame.blur()
-
-    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+    titlebarToggleMaximized()
 })
 
 titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
-
-    window.wandererAPI.setMinimized()
-
     titlebarMinimizeCtrlFrame.blur()
-
-    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+    titlebarToggleMinimized()
 })
 
 titlebarCloseCtrlFrame.addEventListener('click', (e) => {
@@ -82,18 +104,6 @@ titlebarCloseCtrlFrame.addEventListener('click', (e) => {
 
 titlebarLockCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
-    if(StatesHandler.isTitlebarLocked){
-        titlebarVisual.style.removeProperty('transform');
-
-        StatesHandler.isTitlebarLocked = false
-    }
-    else{
-        titlebarVisual.style.setProperty('transform', 'translateY(0px)')
-
-        StatesHandler.isTitlebarLocked = true
-    }
-
     titlebarLockCtrlFrame.blur()
-
-    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+    titlebarToggleTitlebarLock()
 })
