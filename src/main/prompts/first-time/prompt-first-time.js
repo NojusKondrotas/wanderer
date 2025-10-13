@@ -12,3 +12,7 @@ document.getElementById('notepad-choice').addEventListener('click', () => {
 document.getElementById('whiteboard-choice').addEventListener('click', () => {
     window.wandererAPI.firstTimeWhiteboardChosen()
 })
+
+document.getElementById('help-link').addEventListener('click', () => {
+    window.wandererAPI.openLink('https://github.com/NojusKondrotas/wanderer')
+})

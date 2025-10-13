@@ -11,6 +11,7 @@ let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
 class WindowHandler{
     static trueWinIDToSymbolicWinIDMapping = new Map()
     static componentToWindowMapping = new Map()
+    static trueWinIDToLink = new Map()
     static allWindows = new Map()
     static openWindows = new Map()
 
@@ -74,6 +75,7 @@ class WindowHandler{
                 entryFilePath = path.join(__dirname, 'prompts', 'first-time', 'prompt-first-time.html')
                 break
             case 'l':
+                entryFilePath = path.join(__dirname, 'prompts', 'link', 'link.html')
                 const linkWin = new BrowserWindow({
                     x,
                     y,
@@ -83,11 +85,14 @@ class WindowHandler{
                     titleBarStyle: 'hidden',
                     fullscreen,
                     webPreferences: {
+                        preload: path.join(preloadFilePath),
                         contextIsolation: true,
                         nodeIntegration: false,
+                        webviewTag: true,
                     }
                 })
-                linkWin.loadURL(url)
+                linkWin.loadFile(entryFilePath)
+                this.trueWinIDToLink.set(linkWin.id, url)
 
                 this.initialiseWindow(linkWin.id, componentType, componentID, parentWindowID)
 
@@ -503,4 +508,9 @@ ipcMain.handle('open-link', (e, link) => {
 
     WindowHandler.createWindow('l', null, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id), false,
         undefined, undefined, undefined, undefined, link)
+})
+
+ipcMain.handle('get-link', (e) => {
+    const win = BrowserWindow.fromWebContents(e.sender)
+    return WindowHandler.trueWinIDToLink.get(win.id)
 })
