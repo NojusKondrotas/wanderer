@@ -50,6 +50,7 @@ function save(){
     window.wandererAPI.saveWhiteboardHTML()
 
     const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
+    const allPathsArr = Array.from(allPaths, ([id, path]) => [id, path])
     const allQuillToolbarsArr = Array.from(allQuillToolbars, ([elID, quill]) => [elID, quill])
 
     window.wandererAPI.saveWhiteboardState({
@@ -60,7 +61,7 @@ function save(){
         largestQlEditorID,
         unusedQlEditorIDs,
         elementPositions: elementPositionsArr,
-        allPaths,
+        allPaths: allPathsArr,
         allQuillToolbars: allQuillToolbarsArr,
     })
 }
