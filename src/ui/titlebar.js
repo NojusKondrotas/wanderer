@@ -52,7 +52,7 @@ titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
 
     titlebarFullScreenCtrlFrame.blur()
 
-    turnOffContextMenu()
+    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
 })
 
 titlebarMaximizeCtrlFrame.addEventListener('click', (e) => {
@@ -62,7 +62,7 @@ titlebarMaximizeCtrlFrame.addEventListener('click', (e) => {
 
     titlebarMaximizeCtrlFrame.blur()
 
-    turnOffContextMenu()
+    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
 })
 
 titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
@@ -72,7 +72,7 @@ titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
 
     titlebarMinimizeCtrlFrame.blur()
 
-    turnOffContextMenu()
+    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
 })
 
 titlebarCloseCtrlFrame.addEventListener('click', (e) => {
@@ -95,5 +95,5 @@ titlebarLockCtrlFrame.addEventListener('click', (e) => {
 
     titlebarLockCtrlFrame.blur()
 
-    turnOffContextMenu()
+    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
 })
