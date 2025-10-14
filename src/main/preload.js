@@ -3,6 +3,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('wandererAPI', {
   openLink: (link) => ipcRenderer.invoke('open-link', link),
   getLink: () => ipcRenderer.invoke('get-link'),
+  getWindowPreview: (symbolicWindowID) => ipcRenderer.invoke('get-window-preview', symbolicWindowID),
   firstTimeNotepadChosen: () => ipcRenderer.invoke('first-time-notepad-chosen'),
   firstTimeWhiteboardChosen: () => ipcRenderer.invoke('first-time-whiteboard-chosen'),
 

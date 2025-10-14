@@ -1,3 +1,5 @@
+let openTabs = new Map()
+
 function getTabsMenuCircleCaps(amount){
     let circleCap = 6
     const res = new Array()
@@ -16,12 +18,23 @@ function getTabsMenuCircleCaps(amount){
     return res
 }
 
-function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, winIdx){
+async function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, winIdx){
     for(let i = 0; i < amount; ++i){
         const option = document.createElement('button')
         option.classList.add('option-control')
         option.classList.add('open-window')
-        option.textContent = windows[winIdx].componentID
+
+        const preview = document.createElement("img")
+        preview.alt = windows[winIdx].componentID
+        preview.style.width = '120px'
+        preview.style.height = '80px'
+        preview.style.objectFit = 'cover'
+        preview.style.margin = '0'
+
+        const dataUrl = await window.wandererAPI.getWindowPreview(windows[winIdx].symbolicWindowID)
+        preview.src = dataUrl
+
+        option.appendChild(preview)
 
         const angleDeg = angleOffset + i * angleSize
         const angleRad = angleDeg * Math.PI / 180
@@ -30,6 +43,16 @@ function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize, radiu
         let y = centerY + radius * Math.sin(angleRad) + yOffset
 
         createNewElement(parentWhiteboard, option, `${windows[winIdx].componentID}-tab`, x, y)
+
+        option.addEventListener('mouseover', () => {
+            const pos = elementPositions.get(option.id)
+            option.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(4)`
+        })
+        option.addEventListener('mouseleave', () => {
+            const pos = elementPositions.get(option.id)
+            option.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(2)`
+        })
+        
         ++winIdx
     }
 }

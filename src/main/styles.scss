@@ -124,21 +124,26 @@ svg {
 
 .notepad, .whiteboard, .note, .open-window {
     position: absolute;
-    min-width: 60px;
-    min-height: 60px;
-    border-radius: 5px;
-    padding: 2px;
 
     background-color: $whiteboard-color;
     border: 2px solid #dadada;
 }
 
 .notepad, .whiteboard, .note {
+    min-width: 60px;
+    min-height: 60px;
+    border-radius: 5px;
+    padding: 2px;
+
     z-index: $medium-index;
 }
 
 .open-window {
+    transform: scale(2);
+
     user-select: none;
+
+    transition: transform 100ms ease-out;
 
     z-index: $higher-index;
 }

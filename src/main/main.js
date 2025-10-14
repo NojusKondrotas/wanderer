@@ -514,3 +514,13 @@ ipcMain.handle('get-link', (e) => {
     const win = BrowserWindow.fromWebContents(e.sender)
     return WindowHandler.trueWinIDToLink.get(win.id)
 })
+
+ipcMain.handle('get-window-preview', async (e, symbolicWindowID) => {
+    console.log(symbolicWindowID)
+    const winData = WindowHandler.allWindows.get(symbolicWindowID)
+    const trueWindowID = winData.trueWindowID
+    console.log(trueWindowID)
+    const image = await BrowserWindow.fromId(trueWindowID).capturePage()
+    console.log(image)
+    return image.toDataURL()
+})

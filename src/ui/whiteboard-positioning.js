@@ -275,7 +275,7 @@ function updateElementPositionByID(elID) {
     const offsetY = elPos.y - PositioningHandler.dragDiff.y
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
-    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
+    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1)`
 }
 
 function updateComponentPositions(container){
