@@ -21,15 +21,11 @@ function getTabsMenuCircleCaps(amount){
 async function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, winIdx){
     for(let i = 0; i < amount; ++i){
         const option = document.createElement('button')
-        option.classList.add('option-control')
+        option.classList.add('option-control-style')
         option.classList.add('open-window')
 
         const preview = document.createElement("img")
         preview.alt = windows[winIdx].componentID
-        preview.style.width = '120px'
-        preview.style.height = '80px'
-        preview.style.objectFit = 'cover'
-        preview.style.margin = '0'
 
         const dataUrl = await window.wandererAPI.getWindowPreview(windows[winIdx].symbolicWindowID)
         preview.src = dataUrl
@@ -46,11 +42,11 @@ async function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize,
 
         option.addEventListener('mouseover', () => {
             const pos = elementPositions.get(option.id)
-            option.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(4)`
+            option.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(2)`
         })
         option.addEventListener('mouseleave', () => {
             const pos = elementPositions.get(option.id)
-            option.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(2)`
+            option.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(1)`
         })
         
         ++winIdx
@@ -63,7 +59,7 @@ function generateAllTabsMenuCircles(centerX, centerY, amount, angleSize, radius,
     let radiusExt = 0, angleOffsetExt = 0, i = 0
     circleCaps.forEach(cap => {
         generateSingleTabsMenuCircle(centerX, centerY, cap, 360 / cap, radius + radiusExt, angleOffset + angleOffsetExt, xOffset, yOffset, windows, i)
-        radiusExt += 100
+        radiusExt += 250
         angleOffsetExt += 45
         i += cap
     })
@@ -80,7 +76,7 @@ function openTabsMenu(mousePos, boundsOffset, windows){
     closeTabsMenu()
     turnOffContextMenu()
     toggleChildrenFilter(parentWhiteboard, 'blur(3px)')
-    generateAllTabsMenuCircles(mousePos.x - boundsOffset.x, mousePos.y - boundsOffset.y, windows.length, -1, 90, 0, 0, -10, windows)
+    generateAllTabsMenuCircles(mousePos.x - boundsOffset.x, mousePos.y - boundsOffset.y, windows.length, 162, 250, 0, 0, -10, windows)
     windows.forEach(w => {
         // console.log(w, windows.length)
     })
