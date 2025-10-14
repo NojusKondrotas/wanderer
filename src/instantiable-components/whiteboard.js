@@ -11,12 +11,12 @@ function addWhiteboardListeners(whiteboard){
 
     whiteboard.addEventListener('mousedown', (e) => {
         e.stopPropagation()
-        PositioningHandler.element_MouseDown(e, whiteboard)
+        WhiteboardPositioningHandler.element_MouseDown(e, whiteboard)
     })
 
     whiteboard.addEventListener('mouseup', (e) => {
         e.stopPropagation()
-        PositioningHandler.element_MouseUp(e, whiteboard)
+        WhiteboardPositioningHandler.element_MouseUp(e, whiteboard)
     })
 
     whiteboard.addEventListener('dblclick', (e) => {

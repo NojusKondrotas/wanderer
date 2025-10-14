@@ -1,16 +1,7 @@
-class PositioningHandler{
+class WhiteboardPositioningHandler{
     static isDraggingBoard = false
     static isDraggingElement = false
     static isResizing = false
-    static isDraggingWindow = false
-    static isResizingWindow = false
-    static dragStart = { x: 0, y: 0 }
-    static dragDiff = { x: 0, y: 0 }
-    static dragTotalStart = { x: 0, y: 0 }
-    static dragTotalDiff = { x: 0, y: 0 }
-    static dragAbsoluteTotalDiff = { x: 0, y: 0 }
-    static windowDimensions = { width: 0, height: 0 }
-    static windowCornerOffset = { x: 0, y: 0 }
 
     static checkIfDraggedEnough(){
         const movedX = this.dragAbsoluteTotalDiff.x
@@ -51,7 +42,7 @@ class PositioningHandler{
                 return
             }
 
-            PositioningHandler.startDrag(ev, false, true, false)
+            WhiteboardPositioningHandler.startDrag(ev, false, true, false)
             
             if(el.classList.contains('.note')) toggleQuillWritingMode(false, el.id)
 
@@ -271,8 +262,8 @@ class PositioningHandler{
 function updateElementPositionByID(elID) {
     const elPos = elementPositions.get(elID)
 
-    const offsetX = elPos.x - PositioningHandler.dragDiff.x
-    const offsetY = elPos.y - PositioningHandler.dragDiff.y
+    const offsetX = elPos.x - WhiteboardPositioningHandler.dragDiff.x
+    const offsetY = elPos.y - WhiteboardPositioningHandler.dragDiff.y
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
     document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1)`
@@ -284,25 +275,25 @@ function updateComponentPositions(container){
     }
     
     allPaths.forEach(path => {
-        path.startPosition.x -= PositioningHandler.dragDiff.x
-        path.startPosition.y -= PositioningHandler.dragDiff.y
-        path.endPosition.x -= PositioningHandler.dragDiff.x
-        path.endPosition.y -= PositioningHandler.dragDiff.y
+        path.startPosition.x -= WhiteboardPositioningHandler.dragDiff.x
+        path.startPosition.y -= WhiteboardPositioningHandler.dragDiff.y
+        path.endPosition.x -= WhiteboardPositioningHandler.dragDiff.x
+        path.endPosition.y -= WhiteboardPositioningHandler.dragDiff.y
 
         updatePathPosition(path, path.startPosition, path.endPosition)
     })
 }
 
 function genMouseDown_WhiteboardMoveHandler(e){
-    if(isCombo(keybinds[windowDragKeybind])) PositioningHandler.startDrag(e, false, false, false, true, false)
-    else if(isCombo(keybinds[windowResizeKeybind])) PositioningHandler.startDrag(e, false, false, false, false, true)
-    else PositioningHandler.startDrag(e, true, false, false, false)
+    if(isCombo(keybinds[windowDragKeybind])) WhiteboardPositioningHandler.startDrag(e, false, false, false, true, false)
+    else if(isCombo(keybinds[windowResizeKeybind])) WhiteboardPositioningHandler.startDrag(e, false, false, false, false, true)
+    else WhiteboardPositioningHandler.startDrag(e, true, false, false, false)
 }
 
 function genMouseMove_WhiteboardMoveHandler(e){
-    PositioningHandler.update(e)
+    WhiteboardPositioningHandler.update(e)
 }
 
 function genMouseUp_WhiteboardMoveHandler(e){
-    PositioningHandler.endDrag(e)
+    WhiteboardPositioningHandler.endDrag(e)
 }

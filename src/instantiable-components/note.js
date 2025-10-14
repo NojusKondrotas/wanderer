@@ -25,12 +25,12 @@ function addNoteListeners(note){
     note.addEventListener('mousedown', (e) => {
         e.stopPropagation()
         if(StatesHandler.isWritingElement) return
-        PositioningHandler.element_MouseDown(e, note)
+        WhiteboardPositioningHandler.element_MouseDown(e, note)
     })
 
     note.addEventListener('mouseup', (e) => {
         e.stopPropagation()
-        PositioningHandler.element_MouseUp(e, note)
+        WhiteboardPositioningHandler.element_MouseUp(e, note)
     })
 
     note.addEventListener('dblclick', (e) => {
@@ -75,12 +75,12 @@ function instantiateNoteResizingBorders(note){
             this.isResizing = true
             activeBorder = border
             selectedElement = note
-            PositioningHandler.startDrag(e, false, false, true)
+            WhiteboardPositioningHandler.startDrag(e, false, false, true)
             document.body.style.cursor = (border === 'left' || border === 'right') ? 'ew-resize' : 'ns-resize'
         })
 
         borderDiv.addEventListener('mouseup', function(e) {
-            PositioningHandler.endDrag(e)
+            WhiteboardPositioningHandler.endDrag(e)
         })
     })
 }

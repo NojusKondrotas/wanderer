@@ -11,12 +11,12 @@ function addNotepadListeners(notepad){
 
     notepad.addEventListener('mousedown', (e) => {
         e.stopPropagation()
-        PositioningHandler.element_MouseDown(e, notepad)
+        WhiteboardPositioningHandler.element_MouseDown(e, notepad)
     })
 
     notepad.addEventListener('mouseup', (e) => {
         e.stopPropagation()
-        PositioningHandler.element_MouseUp(e, notepad)
+        WhiteboardPositioningHandler.element_MouseUp(e, notepad)
     })
 
     notepad.addEventListener('dblclick', (e) => {
@@ -47,12 +47,12 @@ function instantiateNotepadResizingBorders(note){
             this.isResizing = true
             activeBorder = border
             selectedElement = note
-            PositioningHandler.startDrag(e, false, false, true)
+            WhiteboardPositioningHandler.startDrag(e, false, false, true)
             document.body.style.cursor = (border === 'left' || border === 'right') ? 'ew-resize' : 'ns-resize'
         })
 
         borderDiv.addEventListener('mouseup', function(e) {
-            PositioningHandler.endDrag(e)
+            WhiteboardPositioningHandler.endDrag(e)
         })
     })
 }
