@@ -5,6 +5,7 @@
   "description": "A lightweight experimental cross-platform note-taking app.",
   "repository": "https://github.com/NojusKondrotas/wanderer",
   "scripts": {
+    "b-ejs": "node ./src/dev/build-ejs.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
     "fresh": "rimraf ./src/saves && cd src && mkdir saves && cd .. && electron .",
@@ -16,6 +17,7 @@
   "author": "Nojus Kondrotas <nojus.kondrotas23@gmail.com>",
   "license": "GPL-3.0-only",
   "devDependencies": {
+    "ejs": "^3.1.10",
     "electron": "^37.2.4",
     "rimraf": "^6.0.1",
     "sass": "^1.91.0"

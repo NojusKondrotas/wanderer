@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wanderer-prompt-first-time</title>
+    <link rel="stylesheet" href="../../titlebar-style.css">
+    <link rel="stylesheet" href="prompt-first-time.css">
+</head>
+<body>
+    <%- include('titlebar-prompts-dir') %>
+
+    <div id="prompt"></div>
+    <div id="content">
+        <div>No saved files found. With which component would you like to start?</div>
+        <div id="choice-box">
+            <button id="notepad-choice">Notepad</button>
+            <button id="whiteboard-choice">Whiteboard</button>
+        </div>
+    </div>
+    <div class="text" id="footer">If this is a mistake, refer to <a id="help-link" href="#">this</a>.</div>
+
+    <script src="../../../runtime/states-handler.js"></script>
+    <script src="../../../ui/titlebar.js"></script>
+    <script src="prompt-first-time.js"></script>
+</body>
+</html>

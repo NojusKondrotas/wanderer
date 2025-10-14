@@ -13,23 +13,7 @@
 
     <p id="window-component-id" class="im-whiteboard-text"></p>
 
-    <div id="titlebar">
-    <div id="titlebar-visual">
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control fullscreen-window" id="frame-fullscreen-window"><img src="../../res/fullscreen-window.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control maximize-window" id="frame-maximize-window"><img src="../../res/maximize-window.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control minimize-window" id="frame-minimize-window"><img src="../../res/minimize-window.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control close-window" id="frame-close-window"><img src="../../res/close-window.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control global-config" id="frame-global-config-menu"><img src="../../res/global-configuration.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control lock-titlebar" id="frame-lock-titlebar"><img src="../../res/titlebar-unlocked.png"></button>
-        <div class="titlebar-stretcher"></div>
-    </div>
-</div>
+    <%- include('titlebar') %>
 
     <div class="context-menu-container cm-logic" id="general-context-menu">
         <button class="option-control-style option-control-layout gcm" id="gcm-new-whiteboard">New Whiteboard</button>
