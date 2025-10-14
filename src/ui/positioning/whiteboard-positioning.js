@@ -1,35 +1,29 @@
 class WhiteboardPositioningHandler{
     static isDraggingBoard = false
     static isDraggingElement = false
-    static isResizing = false
-
-    static checkIfDraggedEnough(){
-        const movedX = this.dragAbsoluteTotalDiff.x
-        const movedY = this.dragAbsoluteTotalDiff.y
-        return movedX > 5 || movedY > 5
-    }
+    static isResizingElement = false
 
     static resize(){
         if(activeBorder === 'right'){
             const currentWidth = parseInt(selectedElement.style.width) || 80
-            selectedElement.style.width = Math.max(currentWidth - Math.floor(this.dragDiff.x), 80) + 'px'
+            selectedElement.style.width = Math.max(currentWidth - Math.floor(dragDiff.x), 80) + 'px'
         }else if(activeBorder === 'left'){
             const currentWidth = parseInt(selectedElement.style.width) || 80
-            const newWidth = Math.max(currentWidth + Math.floor(this.dragDiff.x), 80)
-            if(newWidth === 80 && this.dragDiff.x <= 0) return
+            const newWidth = Math.max(currentWidth + Math.floor(dragDiff.x), 80)
+            if(newWidth === 80 && dragDiff.x <= 0) return
 
             selectedElement.style.width = newWidth + 'px'
-            selectedElement.style.left = selectedElement.offsetLeft - Math.floor(this.dragDiff.x) + 'px'
+            selectedElement.style.left = selectedElement.offsetLeft - Math.floor(dragDiff.x) + 'px'
         }else if(activeBorder === 'bottom'){
             const currentHeight = parseInt(selectedElement.style.height) || 25.65
-            selectedElement.style.height = Math.max(currentHeight + Math.floor(this.dragDiff.y) * -1, 25.65) + 'px'
+            selectedElement.style.height = Math.max(currentHeight + Math.floor(dragDiff.y) * -1, 25.65) + 'px'
         }else if(activeBorder === 'top'){
             const currentHeight = parseInt(selectedElement.style.height) || 25.65
-            const newHeight = Math.max(currentHeight + Math.floor(this.dragDiff.y), 25.65)
-            if(newHeight === 25.65 && this.dragDiff.y <= 0) return
+            const newHeight = Math.max(currentHeight + Math.floor(dragDiff.y), 25.65)
+            if(newHeight === 25.65 && dragDiff.y <= 0) return
             
             selectedElement.style.height = newHeight + 'px'
-            selectedElement.style.top = (selectedElement.offsetTop - Math.floor(this.dragDiff.y)) + 'px'
+            selectedElement.style.top = (selectedElement.offsetTop - Math.floor(dragDiff.y)) + 'px'
         }
     }
 
@@ -53,7 +47,7 @@ class WhiteboardPositioningHandler{
     static element_MouseUp(ev, el){
         if(StatesHandler.isWritingElement) return
         if(StatesHandler.isDrawingPath){
-            if(!this.checkIfDraggedEnough()){
+            if(!checkIfDraggedEnough()){
                 if(el.id === selectedPath.startNoteID){
                     deletePathByID(selectedPath.id)
                     return this.endDrag(ev)
@@ -66,57 +60,28 @@ class WhiteboardPositioningHandler{
     }
 
     static update(ev){
-        this.dragDiff = {
-            x: this.dragStart.x - ev.screenX,
-            y: this.dragStart.y - ev.screenY
-        }
-        this.dragStart = {
-            x: ev.screenX,
-            y: ev.screenY
-        }
-        this.dragAbsoluteTotalDiff.x += Math.abs(this.dragDiff.x)
-        this.dragAbsoluteTotalDiff.y += Math.abs(this.dragDiff.y)
+        updateMouseDrag(ev)
         
-        if (this.isResizing){
+        if (this.isResizingElement){
             this.resize()
         }else if(this.isDraggingBoard){
             updateComponentPositions(parentWhiteboard)
-        }else if(this.isDraggingWindow){
-            const newX = this.dragStart.x - this.windowCornerOffset.x
-            const newY = this.dragStart.y - this.windowCornerOffset.y
-
-            window.wandererAPI.moveWindow(
-                newX,
-                newY,
-                this.windowDimensions.width,
-                this.windowDimensions.height
-            )
-        }else if (this.isResizingWindow) {
-            const dx = -this.dragDiff.x
-            const dy = -this.dragDiff.y
-
-            let { width, height } = this.windowDimensions
-            let newX = window.screenX
-            let newY = window.screenY
-
-            width += dx
-            height += dy
-
-            window.wandererAPI.moveWindow(newX, newY, width, height)
-
-            this.windowDimensions = { width, height }
+        }else if(isDraggingWindow){
+            moveWindow()
+        }else if (isResizingWindow) {
+            resizeWindow()
         }else if(this.isDraggingElement){
             updateElementPositionByID(selectedElement.id)
 
             for(let [key, value] of allPaths){
                 let hasUpdated = false
                 if(value.startNoteID === selectedElement.id){
-                    value.startPosition.x -= this.dragDiff.x
-                    value.startPosition.y -= this.dragDiff.y
+                    value.startPosition.x -= dragDiff.x
+                    value.startPosition.y -= dragDiff.y
                     hasUpdated = true
                 }else if(value.endNoteID === selectedElement.id){
-                    value.endPosition.x -= this.dragDiff.x
-                    value.endPosition.y -= this.dragDiff.y
+                    value.endPosition.x -= dragDiff.x
+                    value.endPosition.y -= dragDiff.y
                     hasUpdated = true
                 }
 
@@ -169,7 +134,7 @@ class WhiteboardPositioningHandler{
         }
     }
 
-    static startDrag(ev, isBoard, isEl, isResizing, isWindow, isWinResizing){
+    static startDrag(ev, isBoard, isEl, isResizingElement, isWindow, isWinResizing){
         if(ev.button === 2) return
         if(StatesHandler.isQuillToolbarEdit) return
 
@@ -186,27 +151,19 @@ class WhiteboardPositioningHandler{
             document.getElementById(qlEditor.id).contentEditable = 'false'
         })
 
-        this.dragStart = { x: ev.screenX, y: ev.screenY }
-        this.dragTotalStart = { x: ev.screenX, y: ev.screenY }
-        this.dragDiff = { x: 0, y: 0 }
-        this.dragTotalDiff = { x: 0, y: 0 }
-        this.dragAbsoluteTotalDiff = { x: 0, y: 0 }
-        this.windowDimensions = { width: window.outerWidth, height: window.outerHeight }
-        this.windowCornerOffset = {
-            x: ev.screenX - window.screenX,
-            y: ev.screenY - window.screenY
-        }
+        resetMouseDrag(ev)
+        resetWindowDrag(ev)
 
         if(isBoard){
             this.isDraggingBoard = true
         }else if(isEl){
             this.isDraggingElement = true
-        }else if(isResizing){
-            this.isResizing = true
+        }else if(isResizingElement){
+            this.isResizingElement = true
         }else if(isWindow){
-            this.isDraggingWindow = true
+            isDraggingWindow = true
         }else if(isWinResizing){
-            this.isResizingWindow = true
+            isResizingWindow = true
         }
 
         toggleTitlebar(false)
@@ -216,8 +173,8 @@ class WhiteboardPositioningHandler{
     static endDrag(ev){
         if(ev.button === 2) return
         
-        if(this.isResizing){
-            this.isResizing = false
+        if(this.isResizingElement){
+            this.isResizingElement = false
             document.body.style.cursor = 'default'
         }
         if(StatesHandler.isQuillToolbarEdit){
@@ -229,12 +186,12 @@ class WhiteboardPositioningHandler{
             return
         }
         if(StatesHandler.isTabsMenuOpen){
-            if(!this.checkIfDraggedEnough()){
+            if(!checkIfDraggedEnough()){
                 closeTabsMenu()
             }
         }
         if(StatesHandler.isDrawingPath){
-            if(!this.checkIfDraggedEnough()){
+            if(!checkIfDraggedEnough()){
                 terminatePathDrawing(ev, null)
             }
         }
@@ -247,12 +204,8 @@ class WhiteboardPositioningHandler{
         
         this.isDraggingBoard = false
         this.isDraggingElement = false
-        this.isDraggingWindow = false
-        this.isResizingWindow = false
-        this.dragStart = { x: 0, y: 0 }
-        this.dragDiff = { x: 0, y: 0 }
-        this.dragTotalDiff = { x: 0, y: 0 }
-        this.dragAbsoluteTotalDiff = { x: 0, y: 0 }
+        resetMouseDrag(ev)
+        resetWindowDrag(ev)
 
         selectedElement = null
         handleKeybindGuideAppearance(true)
@@ -262,8 +215,8 @@ class WhiteboardPositioningHandler{
 function updateElementPositionByID(elID) {
     const elPos = elementPositions.get(elID)
 
-    const offsetX = elPos.x - WhiteboardPositioningHandler.dragDiff.x
-    const offsetY = elPos.y - WhiteboardPositioningHandler.dragDiff.y
+    const offsetX = elPos.x - dragDiff.x
+    const offsetY = elPos.y - dragDiff.y
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
     document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1)`
@@ -275,10 +228,10 @@ function updateComponentPositions(container){
     }
     
     allPaths.forEach(path => {
-        path.startPosition.x -= WhiteboardPositioningHandler.dragDiff.x
-        path.startPosition.y -= WhiteboardPositioningHandler.dragDiff.y
-        path.endPosition.x -= WhiteboardPositioningHandler.dragDiff.x
-        path.endPosition.y -= WhiteboardPositioningHandler.dragDiff.y
+        path.startPosition.x -= dragDiff.x
+        path.startPosition.y -= dragDiff.y
+        path.endPosition.x -= dragDiff.x
+        path.endPosition.y -= dragDiff.y
 
         updatePathPosition(path, path.startPosition, path.endPosition)
     })
