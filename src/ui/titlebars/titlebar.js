@@ -6,7 +6,6 @@ const titlebarMaximizeCtrlFrame = document.getElementById('frame-maximize-window
 const titlebarMinimizeCtrlFrame = document.getElementById('frame-minimize-window')
 const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')
 const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')
-const titlebarLockCtrlFrame = document.getElementById('frame-lock-titlebar')
 
 function toggleTitlebar(flag){
     if(flag){
@@ -104,10 +103,4 @@ titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
 titlebarCloseCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
     closeWindow()
-})
-
-titlebarLockCtrlFrame.addEventListener('click', (e) => {
-    e.stopPropagation()
-    titlebarLockCtrlFrame.blur()
-    titlebarToggleTitlebarLock()
 })
