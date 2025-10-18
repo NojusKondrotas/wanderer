@@ -53,3 +53,7 @@ body {
     position: absolute;
     bottom: 35px;
 }
+
+a {
+    color: rgba(60, 135, 135, 0.66);
+}
