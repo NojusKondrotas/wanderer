@@ -10,7 +10,9 @@
     "start": "electron .",
     "fresh": "rimraf ./src/saves && cd src && mkdir saves && cd .. && electron .",
     "start-s": "npm run c-sass && electron .",
-    "fresh-s": "npm run c-sass && rimraf ./src/saves && cd src && mkdir saves && cd .. && electron .",
+    "fresh-s": "npm run c-sass && npm run fresh",
+    "fresh-b": "npm run b-ejs && npm run fresh",
+    "fresh-b-s": "npm run b-ejs && npm run fresh-s",
     "c-sass": "sass ./src/main/styles.scss ./src/main/styles.css && sass ./src/main/titlebar-style.scss ./src/main/titlebar-style.css"
   },
   "keywords": [],
