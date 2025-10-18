@@ -1,6 +1,6 @@
 initTitlebar();
 
-StatesHandler.isPromptLink = true
+StatesHandler.isPromptLink = true;
 
 (async () => {
   async function getWebviewLink() {
@@ -11,20 +11,20 @@ StatesHandler.isPromptLink = true
   document.getElementById('webview').setAttribute('src', link)
 })()
 
-const cover = document.getElementById('cover')
-
-cover.addEventListener('mousemove', (e) => {
+LinkPositioningHandler.cover.addEventListener('mousemove', (e) => {
   console.log('hi')
     mouseMove_LinkMoveHandler(e)
 })
 
-cover.addEventListener('mousedown', (e) => {
+LinkPositioningHandler.cover.addEventListener('mousedown', (e) => {
     mouseDown_LinkMoveHandler(e)
 })
 
-cover.addEventListener('mouseup', (e) => {
+LinkPositioningHandler.cover.addEventListener('mouseup', (e) => {
     mouseUp_LinkMoveHandler(e)
 })
+
+LinkPositioningHandler.cover.style.display = 'none'
 
 function closeWindow(){
     window.wandererAPI.closeWindow()

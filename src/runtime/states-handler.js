@@ -16,6 +16,7 @@ class StatesHandler{
     ////////////////////////////////
 
     static isPromptFirstTime = false
+    static isPromptLink = false
     static isComponentNotepad = false
     static isComponentWhiteboard = false
 }
