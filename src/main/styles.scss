@@ -1,4 +1,6 @@
 $whiteboard-color: #f8f8f8;
+$semi-imp-text-color: rgb(108, 116, 116);
+$unimp-text-color: rgba(126, 135, 135, 0.33);
 
 $low-index: 5;
 $medium-index: 10;
@@ -55,7 +57,7 @@ body {
 }
 
 .im-whiteboard-text {
-    color: rgba(126, 135, 135, 0.33);
+    color: $unimp-text-color;
     font-size: 1.05em;
     margin: 7px;
 }
@@ -142,10 +144,13 @@ svg {
 }
 
 .open-window {
+    display: flex;
     width: 200px;
     margin: 0;
     padding: 0;
     border-radius: 8px;
+
+    flex-direction: column;
 
     overflow: hidden;
 
@@ -167,6 +172,11 @@ svg {
     height: 100%;
     border-radius: inherit;
     object-fit: cover;
+}
+
+.open-window div {
+    color: $semi-imp-text-color;
+    margin: 5px 0px;
 }
 
 .notepad, .whiteboard, .open-window {

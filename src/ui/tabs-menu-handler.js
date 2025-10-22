@@ -24,13 +24,16 @@ async function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize,
         option.classList.add('option-control-style')
         option.classList.add('open-window')
 
-        const preview = document.createElement("img")
+        const preview = document.createElement('img')
+        const idDiv = document.createElement('div')
         preview.alt = windows[winIdx].componentID
+        idDiv.textContent = windows[winIdx].componentID
 
         const dataUrl = await window.wandererAPI.getWindowPreview(windows[winIdx].symbolicWindowID)
         preview.src = dataUrl
 
         option.appendChild(preview)
+        option.appendChild(idDiv)
 
         const angleDeg = angleOffset + i * angleSize
         const angleRad = angleDeg * Math.PI / 180
