@@ -1,5 +1,3 @@
-initTitlebar();
-
 StatesHandler.isPromptLink = true;
 
 (async () => {

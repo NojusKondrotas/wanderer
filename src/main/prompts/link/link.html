@@ -4,26 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>wanderer-prompt-link</title>
-    <link rel="stylesheet" href="../../titlebar-style.css">
+    <link rel="stylesheet" href="../../../dev/titlebars/prompts/link/titlebar-style.css">
     <link rel="stylesheet" href="link.css">
 </head>
 <body>
-    <div id="titlebar">
     <div id="titlebar-visual">
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control fullscreen-window" id="frame-fullscreen-window"><img src="../../../../res/fullscreen-window.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control maximize-window" id="frame-maximize-window"><img src="../../../../res/maximize-window.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control minimize-window" id="frame-minimize-window"><img src="../../../../res/minimize-window.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control close-window" id="frame-close-window"><img src="../../../../res/close-window.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <button class="window-control global-config" id="frame-global-config-menu"><img src="../../../../res/global-configuration.png"></button>
-        <div class="titlebar-stretcher"></div>
-        <div class="window-control mover-titlebar" id="frame-mover-titlebar"><img src="../../../../res/titlebar-unlocked.png"></div>
-        <div class="titlebar-stretcher"></div>
-    </div>
+    <div class="titlebar-stretcher"></div>
+    <button class="window-control fullscreen-window" id="frame-fullscreen-window"><img src="../../../../res/fullscreen-window.png"></button>
+    <div class="titlebar-stretcher"></div>
+    <button class="window-control maximize-window" id="frame-maximize-window"><img src="../../../../res/maximize-window.png"></button>
+    <div class="titlebar-stretcher"></div>
+    <button class="window-control minimize-window" id="frame-minimize-window"><img src="../../../../res/minimize-window.png"></button>
+    <div class="titlebar-stretcher"></div>
+    <button class="window-control close-window" id="frame-close-window"><img src="../../../../res/close-window.png"></button>
+    <div class="titlebar-stretcher"></div>
+    <button class="window-control global-config" id="frame-global-config-menu"><img src="../../../../res/global-configuration.png"></button>
+    <div class="titlebar-stretcher"></div>
+    <div class="window-control mover-titlebar" id="frame-mover-titlebar"><img src="../../../../res/titlebar-unlocked.png"></div>
+    <div class="titlebar-stretcher"></div>
 </div>
 
     <div id="cover"></div>
@@ -31,8 +29,7 @@
     <webview id="webview"></webview>
 
     <script src="../../../runtime/states-handler.js"></script>
-    <script src="../../../ui/titlebars/titlebar.js"></script>
-    <script src="../../../ui/titlebars/prompts/link/mover.js"></script>
+    <script src="../../../ui/titlebars/prompts/link/titlebar.js"></script>
     <script src="../../../ui/keybinds.js"></script>
     <script src="../../../ui/positioning/mouse-drag-calc.js"></script>
     <script src="../../../ui/positioning/window-positioning.js"></script>

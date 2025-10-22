@@ -13,7 +13,7 @@
     "fresh-s": "npm run c-sass && npm run fresh",
     "fresh-b": "npm run b-ejs && npm run fresh",
     "fresh-b-s": "npm run b-ejs && npm run fresh-s",
-    "c-sass": "sass ./src/main/styles.scss ./src/main/styles.css && sass ./src/main/titlebar-style.scss ./src/main/titlebar-style.css"
+    "c-sass": "sass ./src/main/styles.scss ./src/main/styles.css && sass ./src/main/titlebar-style.scss ./src/main/titlebar-style.css && sass ./src/dev/titlebars/prompts/link/titlebar-style.scss ./src/dev/titlebars/prompts/link/titlebar-style.css"
   },
   "keywords": [],
   "author": "Nojus Kondrotas <nojus.kondrotas23@gmail.com>",
