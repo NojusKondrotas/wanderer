@@ -1,4 +1,5 @@
 StatesHandler.isPromptLink = true;
+isWindowClosing = false;
 
 (async () => {
   async function getWebviewLink() {
@@ -25,5 +26,10 @@ LinkPositioningHandler.cover.addEventListener('mouseup', (e) => {
 LinkPositioningHandler.cover.style.display = 'none'
 
 function closeWindow(){
+    isWindowClosing = true
     window.wandererAPI.closeWindow()
 }
+
+window.addEventListener("beforeunload", () => {
+    if(!isWindowClosing) closeWindow()
+})

@@ -7,6 +7,7 @@ const { send, windowsStore } = require('process')
 let allNotepads = new Set(), allWhiteboards = new Set()
 let largestNotepadID = 0, unusedNotepadIDs = new Array()
 let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
+let largestLinkID = 0, unusedLinkIDs = new Array()
 
 class WindowHandler{
     static trueWinIDToSymbolicWinIDMapping = new Map()
@@ -94,7 +95,7 @@ class WindowHandler{
                 linkWin.loadFile(entryFilePath)
                 this.trueWinIDToLink.set(linkWin.id, url)
 
-                this.initialiseWindow(linkWin.id, componentType, componentID, parentWindowID)
+                this.initialiseWindow(linkWin.id, componentType, getLinkID(), parentWindowID)
 
                 return linkWin
         }
@@ -228,6 +229,15 @@ function getWhiteboardID(){
     else{
         ++largestWhiteboardID
         return `whiteboard-${largestWhiteboardID - 1}`
+    }
+}
+
+function getLinkID(){
+    if(unusedLinkIDs.length > 0)
+        return unusedLinkIDs.pop()
+    else{
+        ++largestLinkID
+        return `link-${largestLinkID - 1}`
     }
 }
 
