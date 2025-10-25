@@ -110,13 +110,13 @@ window.addEventListener("beforeunload", () => {
     if(!isWindowClosing) closeWindow()
 })
 
-window.wandererAPI.openTitlebarContextMenu((mousePos, boundsOffset) => {
-    openNewContextMenu(mousePos.x - boundsOffset.x, mousePos.y - boundsOffset.y, tcm)
+window.wandererAPI.openTitlebarContextMenu((mousePos) => {
+    openNewContextMenu(mousePos.x, mousePos.y, tcm)
 })
 
-window.wandererAPI.openTabMenu((mousePos, boundsOffset, windows) => {
-    openTabsMenu(mousePos, boundsOffset, windows)
+window.wandererAPI.openTabMenu((mousePos, windows) => {
+    openTabsMenu(mousePos, windows)
 })
 
-window.wandererAPI.zoomInWindow(() => zoomInWhiteboard())
-window.wandererAPI.zoomOutWindow(() => zoomOutWhiteboard())
+window.wandererAPI.zoomInWindow((mousePos) => zoomInWhiteboard(mousePos))
+window.wandererAPI.zoomOutWindow((mousePos) => zoomOutWhiteboard(mousePos))

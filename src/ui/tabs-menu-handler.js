@@ -75,11 +75,11 @@ function toggleChildrenFilter(container, cssFunction){
     })
 }
 
-function openTabsMenu(mousePos, boundsOffset, windows){
+function openTabsMenu(mousePos, windows){
     closeTabsMenu()
     turnOffContextMenu()
     toggleChildrenFilter(parentWhiteboard, 'blur(3px)')
-    generateAllTabsMenuCircles(mousePos.x - boundsOffset.x, mousePos.y - boundsOffset.y, windows.length, 162, 250, 0, 0, -10, windows)
+    generateAllTabsMenuCircles(mousePos.x, mousePos.y, windows.length, 162, 250, 0, 0, -10, windows)
     windows.forEach(w => {
         // console.log(w, windows.length)
     })

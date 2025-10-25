@@ -214,6 +214,16 @@ class WindowHandler{
     }
 }
 
+function getMousePos(senderWindow){
+    const mousePos = screen.getCursorScreenPoint()
+    const bounds = senderWindow.getBounds()
+
+    return {
+        x: mousePos.x - bounds.x,
+        y: mousePos.y - bounds.y
+    }
+}
+
 function getNotepadID(){
     if(unusedNotepadIDs.length > 0)
         return unusedNotepadIDs.pop()
@@ -317,33 +327,33 @@ app.whenReady().then(() => {
 
     globalShortcut.register('CmdOrCtrl+1', (e) => {
         const senderWindow = BrowserWindow.getFocusedWindow()
-        if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
+        if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', getMousePos(senderWindow))
     })
     globalShortcut.register('CmdOrCtrl+num1', (e) => {
         const senderWindow = BrowserWindow.getFocusedWindow()
-        if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', screen.getCursorScreenPoint(), senderWindow.getBounds())
+        if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', getMousePos(senderWindow))
     })
     globalShortcut.register('CmdOrCtrl+2', () => {
         const senderWindow = BrowserWindow.getFocusedWindow()
         const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj))
-        if(senderWindow) senderWindow.webContents.send('open-tab-menu', screen.getCursorScreenPoint(), senderWindow.getBounds(), serializedElements)
+        if(senderWindow) senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements)
     })
     globalShortcut.register('CmdOrCtrl+num2', () => {
         const senderWindow = BrowserWindow.getFocusedWindow()
         const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj))
-        if(senderWindow) senderWindow.webContents.send('open-tab-menu', screen.getCursorScreenPoint(), senderWindow.getBounds(), serializedElements)
+        if(senderWindow) senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements)
     })
     globalShortcut.register('CmdOrCtrl+X', () => {
         terminateApp()
     })
     globalShortcut.register('CmdOrCtrl+numadd', () => {
         const senderWindow = BrowserWindow.getFocusedWindow()
-        if(senderWindow) senderWindow.webContents.send('zoom-in-window')
+        if(senderWindow) senderWindow.webContents.send('zoom-in-window', getMousePos(senderWindow))
     })
     globalShortcut.register('CmdOrCtrl+numsub', () => {
         
         const senderWindow = BrowserWindow.getFocusedWindow()
-        if(senderWindow) senderWindow.webContents.send('zoom-out-window')
+        if(senderWindow) senderWindow.webContents.send('zoom-out-window', getMousePos(senderWindow))
     })
 })
 

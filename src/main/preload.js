@@ -29,17 +29,19 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   setMinimized: () => ipcRenderer.invoke('set-minimized'),
   closeWindow: () => ipcRenderer.invoke('close-window'),
   openTitlebarContextMenu: (callback) => ipcRenderer.on('open-titlebar-context-menu',
-    (_, mousePos, boundsOffset) => callback(mousePos, boundsOffset)
+    (_, mousePos) => callback(mousePos)
   ),
   openTabMenu: (callback) => ipcRenderer.on('open-tab-menu',
-    (_, mousePos, boundsOffset, windows) => callback(mousePos, boundsOffset, windows)
+    (_, mousePos, windows) => callback(mousePos, windows)
   ),
   setMousePosition: (x, y) => {
     ipcRenderer.invoke('set-mouse-position', x, y)
   },
   moveWindow: (x, y, width, height) => ipcRenderer.invoke('move-window', { x, y, width, height }),
-  zoomInWindow: (callback) => ipcRenderer.on('zoom-in-window', callback),
-  zoomOutWindow: (callback) => ipcRenderer.on('zoom-out-window', callback),
+  zoomInWindow: (callback) => ipcRenderer.on('zoom-in-window',
+    (_, mousePos) => callback(mousePos)),
+  zoomOutWindow: (callback) => ipcRenderer.on('zoom-out-window',
+    (_, mousePos) => callback(mousePos)),
 
   addNotepad: () => ipcRenderer.invoke('add-notepad'),
   openNotepad: (notepadID) => ipcRenderer.invoke('open-notepad', notepadID),
