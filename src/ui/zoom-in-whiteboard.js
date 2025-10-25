@@ -16,3 +16,17 @@ function zoomWhiteboard(mousePos, zoomIn = false){
     parentWhiteboard.style.transformOrigin = '0 0'
     parentWhiteboard.style.transform = `translate(${boardOffset.x}px, ${boardOffset.y}px) scale(${zoomFactor})`
 }
+
+function getRealWhiteboardCoords(x, y) {
+    return {
+        x: (x - boardOffset.x) / zoomFactor,
+        y: (y - boardOffset.y) / zoomFactor
+    }
+}
+
+function convertFromWhiteboardSpace(x, y){
+    return {
+        x: x * zoomFactor + boardOffset.x,
+        y: y * zoomFactor + boardOffset.y,
+    }
+}

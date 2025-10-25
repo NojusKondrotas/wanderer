@@ -26,12 +26,16 @@ function disconnectPathEnd(path){
 }
 
 pathStartPoint.addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+
     if(StatesHandler.isConnecting) connectPathStart(selectedPath)
     else disconnectPathStart(selectedPath)
     concealContextMenu()
 })
 
 pathEndPoint.addEventListener('mousedown', (e) => {
+    e.stopPropagation()
+    
     if(StatesHandler.isConnecting) connectPathEnd(selectedPath)
     else disconnectPathEnd(selectedPath)
     concealContextMenu()
@@ -50,10 +54,12 @@ function disconnectConnectedPaths(elID){
 function openPathConnectionContextMenu(flag){
     concealContextMenu()
 
-    pathStartPoint.style.left = `${selectedPath.startPosition.x}px`
-    pathStartPoint.style.top = `${selectedPath.startPosition.y}px`
-    pathEndPoint.style.left = `${selectedPath.endPosition.x}px`
-    pathEndPoint.style.top = `${selectedPath.endPosition.y}px`
+    const startPos = convertFromWhiteboardSpace(selectedPath.startPosition.x, selectedPath.startPosition.y)
+    const endPos = convertFromWhiteboardSpace(selectedPath.endPosition.x, selectedPath.endPosition.y)
+    pathStartPoint.style.left = `${startPos.x}px`
+    pathStartPoint.style.top = `${startPos.y}px`
+    pathEndPoint.style.left = `${endPos.x}px`
+    pathEndPoint.style.top = `${endPos.y}px`
 
     pathStartPoint.style.display = 'inline'
     pathEndPoint.style.display = 'inline'

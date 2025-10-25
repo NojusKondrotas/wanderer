@@ -86,6 +86,7 @@ class WhiteboardPositioningHandler{
                 }
 
                 if(hasUpdated){
+                    const mousePos = getRealWhiteboardCoords(ev.clientX, ev.clientY)
                     let startPoint, endPoint
                     if(StatesHandler.isDrawingPathEnd){
                         startPoint = {
@@ -93,10 +94,7 @@ class WhiteboardPositioningHandler{
                             y: value.startPosition.y
                         }
                         if(StatesHandler.isDrawingPath && value === selectedPath){
-                            endPoint = {
-                                x: ev.clientX,
-                                y: ev.clientY
-                            }
+                            endPoint = mousePos
                         }else{
                             endPoint = {
                                 x: value.endPosition.x,
@@ -109,10 +107,7 @@ class WhiteboardPositioningHandler{
                             y: value.endPosition.y
                         }
                         if(StatesHandler.isDrawingPath && value === selectedPath){
-                            startPoint = {
-                                x: ev.clientX,
-                                y: ev.clientY
-                            }
+                            startPoint = mousePos
                         }else{
                             startPoint = {
                                 x: value.startPosition.x,
@@ -126,11 +121,12 @@ class WhiteboardPositioningHandler{
         }
         
         if(StatesHandler.isDrawingPath){
+            const mousePos = getRealWhiteboardCoords(ev.clientX, ev.clientY)
             toggleTitlebar(false)
             if(StatesHandler.isDrawingPathEnd)
-                updatePathPosition(selectedPath, selectedPath.startPosition, { x: ev.clientX, y: ev.clientY })
+                updatePathPosition(selectedPath, selectedPath.startPosition, mousePos)
             else
-                updatePathPosition(selectedPath, { x: ev.clientX, y: ev.clientY }, selectedPath.endPosition)
+                updatePathPosition(selectedPath, mousePos, selectedPath.endPosition)
         }
     }
 

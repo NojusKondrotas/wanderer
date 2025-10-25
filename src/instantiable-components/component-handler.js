@@ -44,11 +44,10 @@ function createNewElement(container, el, id, centerX = 0, centerY = 0){
 
     const rect = el.getBoundingClientRect()
 
-    const boardSpaceX = (centerX - rect.width / 2) / zoomFactor
-    const boardSpaceY = (centerY - rect.height / 2) / zoomFactor
+    const boardSpace = getRealWhiteboardCoords(centerX - rect.width / 2, centerY - rect.height / 2)
 
     el.id = id
-    elementPositions.set(el.id, { x: boardSpaceX, y: boardSpaceY })
+    elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y })
 
     updateElementPositionByID(el.id)
 
