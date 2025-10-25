@@ -86,7 +86,7 @@ class WhiteboardPositioningHandler{
                 }
 
                 if(hasUpdated){
-                    const mousePos = getRealWhiteboardCoords(ev.clientX, ev.clientY)
+                    const mousePos = convertToRealWhiteboardCoords(ev.clientX, ev.clientY)
                     let startPoint, endPoint
                     if(StatesHandler.isDrawingPathEnd){
                         startPoint = {
@@ -121,7 +121,7 @@ class WhiteboardPositioningHandler{
         }
         
         if(StatesHandler.isDrawingPath){
-            const mousePos = getRealWhiteboardCoords(ev.clientX, ev.clientY)
+            const mousePos = convertToRealWhiteboardCoords(ev.clientX, ev.clientY)
             toggleTitlebar(false)
             if(StatesHandler.isDrawingPathEnd)
                 updatePathPosition(selectedPath, selectedPath.startPosition, mousePos)
