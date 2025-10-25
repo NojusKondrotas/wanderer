@@ -20,8 +20,8 @@ function createPath(mousePos, startX = 0, startY = 0){
     const div = document.createElement('div')
     div.classList.add('path-container')
 
-    const boardSpaceMousePos = convertToRealWhiteboardCoords(mousePos.x, mousePos.y)
-    const boardSpaceStart = convertToRealWhiteboardCoords(startX, startY)
+    const boardSpaceMousePos = convertToWhiteboardSpace(mousePos.x, mousePos.y)
+    const boardSpaceStart = convertToWhiteboardSpace(startX, startY)
 
     const drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
 
@@ -111,9 +111,9 @@ function terminatePathDrawing(ev, elID){
     else
         selectedPath.startNoteID = elID
     if(StatesHandler.isDrawingPathEnd)
-        selectedPath.endPosition = convertToRealWhiteboardCoords(ev.clientX, ev.clientY)
+        selectedPath.endPosition = convertToWhiteboardSpace(ev.clientX, ev.clientY)
     else
-        selectedPath.startPosition = convertToRealWhiteboardCoords(ev.clientX, ev.clientY)
+        selectedPath.startPosition = convertToWhiteboardSpace(ev.clientX, ev.clientY)
     StatesHandler.isDrawingPath = false
     selectedPath = null
 }

@@ -44,7 +44,7 @@ function createNewElement(container, el, id, centerX = 0, centerY = 0){
 
     const rect = el.getBoundingClientRect()
 
-    const boardSpace = convertToRealWhiteboardCoords(centerX - rect.width / 2, centerY - rect.height / 2)
+    const boardSpace = convertToWhiteboardSpace(centerX - rect.width / 2, centerY - rect.height / 2)
 
     el.id = id
     elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y })
