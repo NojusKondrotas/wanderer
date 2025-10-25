@@ -14,8 +14,8 @@ function resetMouseDrag(ev){
 
 function updateMouseDrag(ev){
     dragDiff = {
-        x: dragStart.x - ev.screenX,
-        y: dragStart.y - ev.screenY
+        x: (dragStart.x - ev.screenX) / zoomFactor,
+        y: (dragStart.y - ev.screenY) / zoomFactor
     }
     dragStart = {
         x: ev.screenX,

@@ -24,13 +24,16 @@ body {
 }
 
 #parent-whiteboard {
-    position: absolute;
+    width: 0px;
+    height: 0px;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
 
-    background-color: $whiteboard-color;
+    transform-origin: top left;
+
+    transition: transform 150ms ease-out;
 
     z-index: $low-index;
 }

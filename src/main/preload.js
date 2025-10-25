@@ -38,6 +38,8 @@ contextBridge.exposeInMainWorld('wandererAPI', {
     ipcRenderer.invoke('set-mouse-position', x, y)
   },
   moveWindow: (x, y, width, height) => ipcRenderer.invoke('move-window', { x, y, width, height }),
+  zoomInWindow: (callback) => ipcRenderer.on('zoom-in-window', callback),
+  zoomOutWindow: (callback) => ipcRenderer.on('zoom-out-window', callback),
 
   addNotepad: () => ipcRenderer.invoke('add-notepad'),
   openNotepad: (notepadID) => ipcRenderer.invoke('open-notepad', notepadID),

@@ -49,6 +49,27 @@ window.addEventListener('mousemove', (e) => {
     genMouseMove_ContextMenuHandler(e)
 })
 
+window.addEventListener('contextmenu', (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
+    turnOffContextMenu()
+
+    console.log('contextmenu window' + e.clientX + ' | ' + e.clientY)
+
+    openNewContextMenu(e.clientX, e.clientY, gcm)
+})
+
+window.addEventListener('mousedown', (e) => {
+    console.log('mousedown window')
+    genMouseDown_WhiteboardMoveHandler(e)
+})
+
+window.addEventListener('mouseup', (e) => {
+    console.log('mouseup window')
+    genMouseUp_WhiteboardMoveHandler(e)
+})
+
 function save(){
     saveAllQuillToolbars()
     window.wandererAPI.saveWhiteboardHTML()
@@ -96,3 +117,6 @@ window.wandererAPI.openTitlebarContextMenu((mousePos, boundsOffset) => {
 window.wandererAPI.openTabMenu((mousePos, boundsOffset, windows) => {
     openTabsMenu(mousePos, boundsOffset, windows)
 })
+
+window.wandererAPI.zoomInWindow(() => zoomInWhiteboard())
+window.wandererAPI.zoomOutWindow(() => zoomOutWhiteboard())

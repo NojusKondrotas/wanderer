@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, globalShortcut, screen } = require('electron')
+const { app, BrowserWindow, ipcMain, globalShortcut, screen, webFrame } = require('electron')
 const path = require('path')
 const fs = require('fs')
 const robot = require('@hurdlegroup/robotjs')
@@ -335,6 +335,15 @@ app.whenReady().then(() => {
     })
     globalShortcut.register('CmdOrCtrl+X', () => {
         terminateApp()
+    })
+    globalShortcut.register('CmdOrCtrl+numadd', () => {
+        const senderWindow = BrowserWindow.getFocusedWindow()
+        if(senderWindow) senderWindow.webContents.send('zoom-in-window')
+    })
+    globalShortcut.register('CmdOrCtrl+numsub', () => {
+        
+        const senderWindow = BrowserWindow.getFocusedWindow()
+        if(senderWindow) senderWindow.webContents.send('zoom-out-window')
     })
 })
 

@@ -44,8 +44,8 @@ function createNewElement(container, el, id, centerX = 0, centerY = 0){
 
     const rect = el.getBoundingClientRect()
 
-    const boardSpaceX = centerX - rect.width / 2
-    const boardSpaceY = centerY - rect.height / 2
+    const boardSpaceX = (centerX - rect.width / 2) / zoomFactor
+    const boardSpaceY = (centerY - rect.height / 2) / zoomFactor
 
     el.id = id
     elementPositions.set(el.id, { x: boardSpaceX, y: boardSpaceY })
