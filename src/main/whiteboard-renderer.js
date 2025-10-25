@@ -118,5 +118,5 @@ window.wandererAPI.openTabMenu((mousePos, windows) => {
     openTabsMenu(mousePos, windows)
 })
 
-window.wandererAPI.zoomInWindow((mousePos) => zoomInWhiteboard(mousePos))
-window.wandererAPI.zoomOutWindow((mousePos) => zoomOutWhiteboard(mousePos))
+window.wandererAPI.zoomInWindow((mousePos) => zoomWhiteboard(mousePos, true))
+window.wandererAPI.zoomOutWindow((mousePos) => zoomWhiteboard(mousePos, false))
