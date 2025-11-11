@@ -17,21 +17,27 @@ function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, r
         const offsetX = generateRandom(-50, 50)
         const offsetY = generateRandom(-50, 50)
 
-        option.style.transition = "none"
+        option.style.display = 'flex'
+
         option.style.left = `${x + offsetX}px`
         option.style.top = `${y + offsetY}px`
 
         option.offsetHeight
 
-        option.style.transition = "transform 240ms ease, left 240ms ease, top 240ms ease"
         option.style.left = `${x}px`
         option.style.top = `${y}px`
     })
 }
 
+function setContextMenuChildrenDisplay(cm, display){
+    Array.from(cm.children).forEach(option => option.style.display = display)
+}
+
 function concealContextMenu(){
-    for(let cm of allContextMenus)
+    for(let cm of allContextMenus){
+        setContextMenuChildrenDisplay(cm, 'none')
         cm.style.display = 'none'
+    }
 
     StatesHandler.isContextMenuOpen = false
     activeContextMenu = null
@@ -45,14 +51,10 @@ function turnOffContextMenu(){
 }
 
 function openNewContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
-    function revealContextMenu(blueprint){
-        blueprint.style.display = 'block'
-        StatesHandler.isContextMenuOpen = true
-    }
-    
     closeTabsMenu()
     concealContextMenu()
-    revealContextMenu(blueprint)
+    blueprint.style.display = 'block'
+    StatesHandler.isContextMenuOpen = true
     contextMenuCenter = { x: centerX, y: centerY }
     generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset })
 }

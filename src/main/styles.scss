@@ -106,15 +106,19 @@ svg {
 }
 
 .option-control-style {
-    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     
-    background-color: rgba(220, 220, 220, 0.5);
-    border: 1px solid rgb(150, 150, 150);
-    border-radius: 3px;
+    background-color: transparent;
+    border: 3px double;
+    border-color: rgb(97, 97, 97);
 
     user-select: none;
 
     transform: translate(-50%, -50%);
+    
+    transition: transform 240ms ease, left 240ms ease, top 240ms ease, color 230ms ease-out, border-color 230ms ease-out;
 
     z-index: $highest-index;
 }
