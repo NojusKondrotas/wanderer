@@ -5,7 +5,10 @@ let dragTotalDiff = { x: 0, y: 0 }
 let dragAbsoluteTotalDiff = { x: 0, y: 0 }
 
 function resetMouseDrag(ev){
-    const boardSpace = convertToRealWhiteboardCoords(ev.clientX, ev.clientY)
+    let boardSpace = { x: ev.screenX, y: ev.screenY }
+    if (StatesHandler.isComponentWhiteboard) {
+        boardSpace = convertToWhiteboardSpace(ev.clientX, ev.clientY)
+    }
 
     dragStart = boardSpace
     dragTotalStart = boardSpace
@@ -15,7 +18,10 @@ function resetMouseDrag(ev){
 }
 
 function updateMouseDrag(ev){
-    const boardSpace = convertToRealWhiteboardCoords(ev.clientX, ev.clientY)
+    let boardSpace = { x: ev.screenX, y: ev.screenY }
+    if (StatesHandler.isComponentWhiteboard) {
+        boardSpace = convertToWhiteboardSpace(ev.clientX, ev.clientY)
+    }
 
     dragDiff = {
         x: dragStart.x - boardSpace.x,
