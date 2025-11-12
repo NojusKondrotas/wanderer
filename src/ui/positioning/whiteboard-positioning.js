@@ -131,7 +131,7 @@ class WhiteboardPositioningHandler{
     }
 
     static startDrag(ev, isBoard, isEl, isResizingElement, isWindow, isWinResizing){
-        if(ev.button === 2) return turnOffContextMenu()
+        if(ev.button === 2) return
         if(StatesHandler.isQuillToolbarEdit) return
 
         if(StatesHandler.isContextMenuOpen){

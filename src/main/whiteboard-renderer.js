@@ -53,20 +53,15 @@ window.addEventListener('contextmenu', (e) => {
     e.preventDefault()
     e.stopPropagation()
     if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
-    turnOffContextMenu()
-
-    console.log('contextmenu window' + e.clientX + ' | ' + e.clientY)
 
     openNewContextMenu(e.clientX, e.clientY, gcm)
 })
 
 window.addEventListener('mousedown', (e) => {
-    console.log('mousedown window')
     genMouseDown_WhiteboardMoveHandler(e)
 })
 
 window.addEventListener('mouseup', (e) => {
-    console.log('mouseup window')
     genMouseUp_WhiteboardMoveHandler(e)
 })
 

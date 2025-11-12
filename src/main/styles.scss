@@ -118,7 +118,7 @@ svg {
 
     transform: translate(-50%, -50%);
     
-    transition: transform 240ms ease, left 240ms ease, top 240ms ease, color 230ms ease-out, border-color 230ms ease-out;
+    transition: transform 240ms ease, left 240ms ease, top 240ms ease, color 250ms ease-out, border-color 250ms ease-out;
 
     z-index: $highest-index;
 }

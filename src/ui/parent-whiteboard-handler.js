@@ -1,13 +1,12 @@
 const parentWhiteboard = document.getElementById('parent-whiteboard')
 
-parentWhiteboard.addEventListener('contextmenu', (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
-    turnOffContextMenu()
+// parentWhiteboard.addEventListener('contextmenu', (e) => {
+//     e.preventDefault()
+//     e.stopPropagation()
+//     if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
 
-    openNewContextMenu(e.clientX, e.clientY, gcm)
-})
+//     openNewContextMenu(e.clientX, e.clientY, gcm)
+// })
 
 parentWhiteboard.addEventListener('mousedown', (e) => {
     genMouseDown_WhiteboardMoveHandler(e)

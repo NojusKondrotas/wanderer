@@ -1,11 +1,13 @@
 const allContextMenus = document.getElementsByClassName('cm-logic')
+const borderColorCM = { opaque: "rgb(97, 97, 97)", transparent: "rgba(97, 97, 97, 0)" }
+const colorCM = { opaque: "rgb(0, 0, 0)", transparent: "rgba(0, 0, 0, 0)" }
+const timeoutCM = 250
 
 let activeContextMenu = null, contextMenuCenter = {x:0, y:0}
 
 function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
     blueprint.style.left = `${centerX}px`
     blueprint.style.top = `${centerY}px`
-    activeContextMenu = blueprint
 
     Array.from(blueprint.children).forEach((option, i) => {
         const angleDeg = angleOffset + i * angleSize
@@ -17,33 +19,47 @@ function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, r
         const offsetX = generateRandom(-50, 50)
         const offsetY = generateRandom(-50, 50)
 
-        option.style.display = 'flex'
-
         option.style.left = `${x + offsetX}px`
         option.style.top = `${y + offsetY}px`
+        option.style.borderColor = borderColorCM.transparent
+        option.style.color = colorCM.transparent
+    })
 
-        option.offsetHeight
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+        Array.from(blueprint.children).forEach((option, i) => {
+            const angleDeg = angleOffset + i * angleSize
+            const angleRad = angleDeg * Math.PI / 180
+            const x = radius * Math.cos(angleRad) + xOffset
+            const y = radius * Math.sin(angleRad) + yOffset
 
-        option.style.left = `${x}px`
-        option.style.top = `${y}px`
+            option.style.left = `${x}px`
+            option.style.top = `${y}px`
+            option.style.borderColor = borderColorCM.opaque
+            option.style.color = colorCM.opaque
+        })
+        })
     })
 }
 
-function setContextMenuChildrenDisplay(cm, display){
-    Array.from(cm.children).forEach(option => option.style.display = display)
+function concealContextMenuChildren(cm){
+    Array.from(cm.children).forEach(option => {
+        option.style.borderColor = borderColorCM.transparent
+        option.style.color = colorCM.transparent
+    })
 }
 
 function concealContextMenu(){
     for(let cm of allContextMenus){
-        setContextMenuChildrenDisplay(cm, 'none')
-        cm.style.display = 'none'
+        if(cm !== activeContextMenu){
+            concealContextMenuChildren(cm)
+            setTimeout(() => cm.style.display = 'none', timeoutCM)
+        }
     }
-
-    StatesHandler.isContextMenuOpen = false
-    activeContextMenu = null
 }
 
 function turnOffContextMenu(){
+    activeContextMenu = null
     concealContextMenu()
     StatesHandler.isContextMenuOpen = false
     selectedElement = null
@@ -51,6 +67,7 @@ function turnOffContextMenu(){
 }
 
 function openNewContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
+    activeContextMenu = blueprint
     closeTabsMenu()
     concealContextMenu()
     blueprint.style.display = 'block'
