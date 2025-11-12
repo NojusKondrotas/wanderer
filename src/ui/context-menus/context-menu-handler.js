@@ -42,6 +42,11 @@ function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, r
     })
 }
 
+function moveContextMenu(centerX, centerY, blueprint){
+    blueprint.style.left = `${centerX}px`
+    blueprint.style.top = `${centerY}px`
+}
+
 function concealContextMenuChildren(cm){
     Array.from(cm.children).forEach(option => {
         option.style.borderColor = borderColorCM.transparent
@@ -67,6 +72,10 @@ function turnOffContextMenu(){
 }
 
 function openNewContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
+    if(activeContextMenu !== null){
+        contextMenuCenter = { x: centerX, y: centerY }
+        return moveContextMenu(centerX, centerY, blueprint)
+    }
     activeContextMenu = blueprint
     closeTabsMenu()
     concealContextMenu()

@@ -103,6 +103,8 @@ svg {
     position: relative;
     width: 0;
     height: 0;
+
+    transition: left 240ms ease, top 240ms ease;
 }
 
 .option-control-style {
