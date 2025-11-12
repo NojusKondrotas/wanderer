@@ -63,12 +63,20 @@ function concealContextMenu(){
     }
 }
 
-function turnOffContextMenu(){
+function forgetContextMenuSelection(){
+    selectedElement = null
+    selectedPath = null
+}
+
+function forgetContextMenus(){
     activeContextMenu = null
     concealContextMenu()
     StatesHandler.isContextMenuOpen = false
-    selectedElement = null
-    selectedPath = null
+}
+
+function turnOffContextMenu(){
+    forgetContextMenus()
+    forgetContextMenuSelection()
 }
 
 function openNewContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){

@@ -30,7 +30,7 @@ pathStartPoint.addEventListener('mousedown', (e) => {
 
     if(StatesHandler.isConnecting) connectPathStart(selectedPath)
     else disconnectPathStart(selectedPath)
-    concealContextMenu()
+    closePathConnectionContextMenu()
 })
 
 pathEndPoint.addEventListener('mousedown', (e) => {
@@ -38,7 +38,7 @@ pathEndPoint.addEventListener('mousedown', (e) => {
     
     if(StatesHandler.isConnecting) connectPathEnd(selectedPath)
     else disconnectPathEnd(selectedPath)
-    concealContextMenu()
+    closePathConnectionContextMenu()
 })
 
 function disconnectConnectedPaths(elID){
@@ -51,8 +51,8 @@ function disconnectConnectedPaths(elID){
     }
 }
 
-function openPathConnectionContextMenu(flag){
-    concealContextMenu()
+function openPathConnectionContextMenu(){
+    forgetContextMenus()
 
     const startPos = convertFromWhiteboardSpace(selectedPath.startPosition.x, selectedPath.startPosition.y)
     const endPos = convertFromWhiteboardSpace(selectedPath.endPosition.x, selectedPath.endPosition.y)
@@ -65,6 +65,13 @@ function openPathConnectionContextMenu(flag){
     pathEndPoint.style.display = 'inline'
 
     StatesHandler.isContextMenuOpen = true
+    StatesHandler.isConnecting = true
+}
 
-    StatesHandler.isConnecting = flag
+function closePathConnectionContextMenu(){
+    pathStartPoint.style.display = 'none'
+    pathEndPoint.style.display = 'none'
+
+    StatesHandler.isContextMenuOpen = false
+    StatesHandler.isConnecting = false
 }

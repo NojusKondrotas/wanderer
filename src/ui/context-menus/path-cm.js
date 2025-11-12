@@ -11,13 +11,13 @@ const acm = {
 document.getElementById('acm-connect').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    openPathConnectionContextMenu(true)
+    openPathConnectionContextMenu()
 })
 
 document.getElementById('acm-disconnect').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    openPathConnectionContextMenu(false)
+    closePathConnectionContextMenu()
 })
 
 document.getElementById('acm-delete').addEventListener('mousedown', (e) => {

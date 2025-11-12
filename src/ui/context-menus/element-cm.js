@@ -36,7 +36,7 @@ document.getElementById('npwcm-delete').addEventListener('mousedown', (e) => {
 
 document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
     e.stopPropagation()
-    concealContextMenu()
+    forgetContextMenus()
     if (!selectedElement) return
 
     createPath({ x: e.clientX, y: e.clientY }, contextMenuCenter.x, contextMenuCenter.y)

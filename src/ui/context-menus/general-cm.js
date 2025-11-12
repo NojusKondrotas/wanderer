@@ -37,7 +37,7 @@ document.getElementById('gcm-new-connection').addEventListener('mousedown', (e) 
 
     createPath({ x: e.clientX, y: e.clientY }, contextMenuCenter.x, contextMenuCenter.y)
 
-    concealContextMenu()
+    forgetContextMenus()
 })
 
 document.getElementById('gcm-paste').addEventListener('mousedown', async (e) => {
