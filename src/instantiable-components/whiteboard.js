@@ -35,6 +35,7 @@ async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
 
     createNewElement(container, newWhiteboard, id, xOffset, yOffset)
     addWhiteboardListeners(newWhiteboard)
+    configurePWHeight(newWhiteboard)
     
     //instantiateNoteResizingBorders(newWhiteboard)
 }

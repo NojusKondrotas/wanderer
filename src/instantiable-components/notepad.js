@@ -66,6 +66,7 @@ async function createNewNotepad(container, xOffset = 0, yOffset = 0){
 
     createNewElement(container, newNotepad, id, xOffset, yOffset)
     addNotepadListeners(newNotepad)
+    configurePWHeight(newNotepad)
     
     //instantiateNoteResizingBorders(newNotepad)
 }
