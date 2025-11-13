@@ -152,7 +152,7 @@ class WindowHandler{
         })
 
         this.initialiseWindow(win.id, componentType, componentID, parentWindowID)
-        win.on('focus', () => {
+        win.on('restore', () => {
             const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(win.id)
             this.allWindows.get(symbolicWindowID).isMinimized = false
         })
@@ -161,8 +161,8 @@ class WindowHandler{
     }
 
     static closeWindow(trueWindowID){
-        console.log('trueWinIDToSymbolicWinIDMapping', this.trueWinIDToSymbolicWinIDMapping, '\n', 'allWindows', this.allWindows, '\n',
-            'openWindows', this.openWindows, '\n', 'componentToWindowMapping', this.componentToWindowMapping, '\n')
+        // console.log('trueWinIDToSymbolicWinIDMapping', this.trueWinIDToSymbolicWinIDMapping, '\n', 'allWindows', this.allWindows, '\n',
+        //     'openWindows', this.openWindows, '\n', 'componentToWindowMapping', this.componentToWindowMapping, '\n')
         if(!this.isClosingWindow) BrowserWindow.fromId(trueWindowID).webContents.send('terminate-window')
         const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
         const winData = this.allWindows.get(symbolicWindowID)
