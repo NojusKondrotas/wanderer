@@ -145,7 +145,7 @@ svg {
 
 .notepad, .whiteboard, .note {
     min-width: 20px;
-    min-height: 20px;
+    min-height: fit-content;
     border-radius: 5px;
     padding: 2px;
 
