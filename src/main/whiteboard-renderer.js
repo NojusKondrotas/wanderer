@@ -89,12 +89,11 @@ function save(){
 
 function closeWindow(){
     isWindowClosing = true
-    save()
     window.wandererAPI.closeWindow()
 }
 
 window.wandererAPI.onTerminateWindow(() => {
-    save()
+    isWindowClosing = true
 })
 
 window.wandererAPI.onSaveComponent(() => {
@@ -102,7 +101,9 @@ window.wandererAPI.onSaveComponent(() => {
 })
 
 window.addEventListener("beforeunload", () => {
-    if(!isWindowClosing) closeWindow()
+    if(!isWindowClosing){
+        save()
+    }
 })
 
 window.wandererAPI.openTitlebarContextMenu((mousePos) => {

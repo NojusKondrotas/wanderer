@@ -163,16 +163,19 @@ class WindowHandler{
     static closeWindow(trueWindowID){
         // console.log('trueWinIDToSymbolicWinIDMapping', this.trueWinIDToSymbolicWinIDMapping, '\n', 'allWindows', this.allWindows, '\n',
         //     'openWindows', this.openWindows, '\n', 'componentToWindowMapping', this.componentToWindowMapping, '\n')
-        if(!this.isClosingWindow) BrowserWindow.fromId(trueWindowID).webContents.send('terminate-window')
+        if(!this.isClosingWindow)
+            BrowserWindow.fromId(trueWindowID).webContents.send('terminate-window')
+        BrowserWindow.fromId(trueWindowID).webContents.send('save-component')
         const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
-        const winData = this.allWindows.get(symbolicWindowID)
-        const componentID = winData.componentID
         this.openWindows.delete(symbolicWindowID)
-        this.trueWinIDToSymbolicWinIDMapping.delete(trueWindowID)
-        this.allWindows.delete(symbolicWindowID)
-        this.componentToWindowMapping.delete(componentID)
         BrowserWindow.fromId(trueWindowID).close()
         this.isClosingWindow = false
+    }
+
+    static closeAllWindows(){
+        for(let [key, value] of this.openWindows){
+            this.closeWindow(this.allWindows.get(key).trueWindowID)
+        }
     }
 
     static reinitialiseWindow(trueWindowID, componentType, componentID, parentWindowID){
@@ -289,9 +292,12 @@ function getLinkID(){
 }
 
 function terminateApp(){
-    WindowHandler.writeComponents()
+    // console.log('writecompoennts')
+    // WindowHandler.writeComponents()
+    console.log('writewindows')
     WindowHandler.writeWindows()
-    app.quit()
+    console.log('closeallwindow')
+    WindowHandler.closeAllWindows()
 }
 
 function initialiseApp(){
@@ -487,6 +493,7 @@ ipcMain.handle('get-window-component-id', (e) => {
 ipcMain.on('save-whiteboard-html', (e, html) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
+    console.log('save html wb: ' + symbolicWinID)
     const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
     if(!fs.existsSync(saveWhiteboardDir)){
@@ -502,6 +509,7 @@ ipcMain.on('save-whiteboard-html', (e, html) => {
 ipcMain.on('save-whiteboard-state', (e, stateObj) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
+    console.log('save json wb: ' + symbolicWinID)
     const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
     if(!fs.existsSync(saveWhiteboardDir)){
