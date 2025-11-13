@@ -55,7 +55,7 @@ class WindowHandler{
         this.overwriteWindow(entryFilePath, trueWindowID)
     }
 
-    static createWindow(componentType, componentID, parentWindowID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y, url){
+    static createWindow(componentType, componentID, parentWindowID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y, url = null){
         let preloadFilePath = path.join(__dirname, 'preload.js')
         let entryFilePath
         switch(componentType){
@@ -103,7 +103,7 @@ class WindowHandler{
                 })
                 this.trueWinIDToLink.set(linkWin.id, url)
 
-                this.initialiseWindow(linkWin.id, componentType, getLinkID(), parentWindowID)
+                this.initialiseWindow(linkWin.id, componentType, getLinkID(), parentWindowID, url)
                 linkWin.on('focus', () => {
                     const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(linkWin.id)
                     this.allWindows.get(symbolicWindowID).isMinimized = false
@@ -170,7 +170,7 @@ class WindowHandler{
         this.initialiseWindow(trueWindowID, componentType, componentID, parentWindowID)
     }
 
-    static initialiseWindow(trueWindowID, componentType, componentID, parentWindowID){
+    static initialiseWindow(trueWindowID, componentType, componentID, parentWindowID, url = null){
         const symbolicWindowID = this.getWindowID()
         const win = BrowserWindow.fromId(trueWindowID)
         const bounds = win.getBounds()
@@ -199,7 +199,8 @@ class WindowHandler{
             isMaximized: win.isMaximized(),
             type: componentType,
             componentID,
-            parentWindowID
+            parentWindowID,
+            url
         })
 
         this.openWindows.set(symbolicWindowID, {symbolicWindowID, type: componentType, componentID})
@@ -334,10 +335,15 @@ function initialiseApp(){
                         winData.width, winData.height, winData.x, winData.y)
                     break
                 case 'w':
-                    const filePath = path.join(savesWhiteboardsPath, `${winData.componentID}`, `${winData.componentID}-index.html`)
                     win = WindowHandler.createWindow('w', winData.componentID, winData.parentWindowID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
                         winData.width, winData.height, winData.x, winData.y)
+                    break
+                case 'l':
+                    win = WindowHandler.createWindow('l', winData.componentID, winData.parentWindowID,
+                        winData.isMinimized, winData.isMaximized, winData.isFullScreen,
+                        winData.width, winData.height, winData.x, winData.y, winData.url)
+                    break
             }
         }
     }else{
