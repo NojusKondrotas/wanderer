@@ -90,12 +90,24 @@ class WindowHandler{
                         contextIsolation: true,
                         nodeIntegration: false,
                         webviewTag: true,
-                    }
+                    },
+                    show: false,
                 })
-                linkWin.loadFile(entryFilePath)
+                linkWin.loadFile(entryFilePath).then(() => {
+                    if(!fullscreen){
+                        if(maximized) linkWin.maximize()
+                        if(minimized) linkWin.minimize()
+                    }
+
+                    if (!minimized) linkWin.show()
+                })
                 this.trueWinIDToLink.set(linkWin.id, url)
 
                 this.initialiseWindow(linkWin.id, componentType, getLinkID(), parentWindowID)
+                linkWin.on('focus', () => {
+                    const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(linkWin.id)
+                    this.allWindows.get(symbolicWindowID).isMinimized = false
+                })
 
                 return linkWin
         }
@@ -112,13 +124,23 @@ class WindowHandler{
                 preload: path.join(preloadFilePath),
                 contextIsolation: true,
                 nodeIntegration: false,
-            }
+            },
+            show: false,
         })
-        if(maximized) win.maximize()
-        if(minimized) win.minimize()
-        win.loadFile(entryFilePath)
+        win.loadFile(entryFilePath).then(() => {
+            if(!fullscreen){
+                if(maximized) win.maximize()
+                if(minimized) win.minimize()
+            }
+
+            if (!minimized) win.show()
+        })
 
         this.initialiseWindow(win.id, componentType, componentID, parentWindowID)
+        win.on('focus', () => {
+            const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(win.id)
+            this.allWindows.get(symbolicWindowID).isMinimized = false
+        })
 
         return win
     }
@@ -319,7 +341,7 @@ function initialiseApp(){
             }
         }
     }else{
-        WindowHandler.createWindow('0', null, null, false, true)
+        WindowHandler.createWindow('0', null, null, false, false, true)
     }
 }
 
@@ -512,7 +534,7 @@ ipcMain.handle('is-fullscreen', (e) => {
 
 ipcMain.handle('set-fullscreen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    const symbolicWindowID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id)
+    const symbolicWindowID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     WindowHandler.allWindows.get(symbolicWindowID).isFullScreen = !senderWindow.isFullScreen()
     senderWindow.setFullScreen(!senderWindow.isFullScreen())
     
@@ -520,7 +542,7 @@ ipcMain.handle('set-fullscreen', (e) => {
 
 ipcMain.handle('set-maximized', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    const symbolicWindowID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id)
+    const symbolicWindowID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     WindowHandler.allWindows.get(symbolicWindowID).isMaximized = !senderWindow.isMaximized()
     if(senderWindow.isMaximized()) senderWindow.unmaximize()
     else senderWindow.maximize()
@@ -528,7 +550,7 @@ ipcMain.handle('set-maximized', (e) => {
 
 ipcMain.handle('set-minimized', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    const symbolicWindowID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id)
+    const symbolicWindowID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     WindowHandler.allWindows.get(symbolicWindowID).isMinimized = true
     senderWindow.minimize()
 })
