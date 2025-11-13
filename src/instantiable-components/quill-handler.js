@@ -46,7 +46,7 @@ function configureQuill(quill, ql_container, content = ''){
 }
 
 function configureQuillToolbar(qlToolbar){
-    qlToolbar.addEventListener('mousedown', (e) => { e.stopPropagation(); StatesHandler.isQuillToolbarEdit = true })
+    qlToolbar.addEventListener('mousedown', (e) => { e.stopPropagation(); StatesHandler.isQuillToolbarEdit = 2 })
 }
 
 function saveAllQuillToolbars(){

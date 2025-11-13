@@ -5,7 +5,7 @@ class StatesHandler{
     static isDrawingPath = false
     static isDrawingPathEnd = true
 
-    static isQuillToolbarEdit = false
+    static isQuillToolbarEdit = 0
 
     static isContextMenuOpen = false
 

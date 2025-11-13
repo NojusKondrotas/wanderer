@@ -132,7 +132,7 @@ class WhiteboardPositioningHandler{
 
     static startDrag(ev, isBoard, isEl, isResizingElement, isWindow, isWinResizing){
         if(ev.button === 2) return
-        if(StatesHandler.isQuillToolbarEdit) return
+        if(StatesHandler.isQuillToolbarEdit > 0) return
 
         if(StatesHandler.isContextMenuOpen){
             turnOffContextMenu()
@@ -168,13 +168,17 @@ class WhiteboardPositioningHandler{
 
     static endDrag(ev){
         if(ev.button === 2) return
-        
+
         if(this.isResizingElement){
             this.isResizingElement = false
             document.body.style.cursor = 'default'
         }
-        if(StatesHandler.isQuillToolbarEdit){
-            StatesHandler.isQuillToolbarEdit = false
+        if(StatesHandler.isQuillToolbarEdit > 0){
+            StatesHandler.isQuillToolbarEdit -= 1
+            return
+        }
+        if(StatesHandler.isWritingElement){
+            toggleQuillWritingMode(false, selectedElement.id)
             return
         }
         if(suppressNextMouseUp){
