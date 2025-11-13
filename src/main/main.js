@@ -32,6 +32,21 @@ class WindowHandler{
         return `window-${this.largestWindowID - 1}`
     }
 
+    static getWindowDimensions(win, bounds){
+        let x = bounds.x, y = bounds.y
+        let wWidth = bounds.width, wHeight = bounds.height
+        if(win.isFullScreen()){
+            const primaryDisplay = screen.getPrimaryDisplay()
+            let { width, height } = primaryDisplay.workAreaSize
+            wWidth = 800
+            wHeight = 600
+            x = Math.round((width - wWidth) / 2)
+            y = Math.round((height - wHeight) / 2)
+        }
+
+        return { x, y, width: wWidth, height: wHeight }
+    }
+
     static openComponent(componentType, componentID, parentWindowID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y){
         if(this.componentToWindowMapping.has(componentID)){
             const winData = this.allWindows.get(this.componentToWindowMapping.get(componentID))
@@ -177,23 +192,14 @@ class WindowHandler{
 
         this.componentToWindowMapping.set(componentID, symbolicWindowID)
 
-        let x = bounds.x, y = bounds.y
-        let wWidth = bounds.width, wHeight = bounds.height
-        if(win.isFullScreen()){
-            const primaryDisplay = screen.getPrimaryDisplay()
-            let { width, height } = primaryDisplay.workAreaSize
-            wWidth = 800
-            wHeight = 600
-            x = Math.round((width - wWidth) / 2)
-            y = Math.round((height - wHeight) / 2)
-        }
+        let { x, y, width, height } = this.getWindowDimensions(win, bounds)
 
         this.allWindows.set(symbolicWindowID, {
             trueWindowID,
             x,
             y,
-            width: wWidth,
-            height: wHeight,
+            width,
+            height,
             isFullScreen: win.isFullScreen(),
             isMinimized: win.isMinimized(),
             isMaximized: win.isMaximized(),
@@ -226,8 +232,13 @@ class WindowHandler{
     static writeWindows(){
         const map = new Array()
         this.allWindows.forEach((value, key) => {
-            if(value.type !== '0')
+            if(value.type !== '0'){
+                const win = BrowserWindow.fromId(value.trueWindowID)
+                const bounds = win.getBounds()
+                let { x, y, width, height } = this.getWindowDimensions(win, bounds)
+                value.x = x; value.y = y; value.width = width; value.height = height;
                 map.push(value)
+            }
         })
         const savesPath = path.join(__dirname, '..', 'saves')
         const windowsFilePath = path.join(savesPath, 'windows.json')
