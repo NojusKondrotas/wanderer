@@ -63,7 +63,7 @@ function reinstateAllNoteBorders(elements){
 }
 
 function instantiateNoteResizingBorders(note){
-    const borders = ['top', 'right', 'bottom', 'left']
+    const borders = ['right', 'left']
     borders.forEach(border => {
         const borderDiv = document.createElement('div')
         borderDiv.classList.add(`note-border`, `note-border-${border}`)
@@ -76,7 +76,7 @@ function instantiateNoteResizingBorders(note){
             activeBorder = border
             selectedElement = note
             WhiteboardPositioningHandler.startDrag(e, false, false, true)
-            document.body.style.cursor = (border === 'left' || border === 'right') ? 'ew-resize' : 'ns-resize'
+            document.body.style.cursor = 'ew-resize'
         })
 
         borderDiv.addEventListener('mouseup', function(e) {
