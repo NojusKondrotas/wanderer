@@ -56,13 +56,6 @@ function createNewElement(container, el, id, centerX = 0, centerY = 0){
     el.style.visibility = 'visible'
 }
 
-function configurePWHeight(el){
-    el.style.height = 'fit-content'
-    el.style.width = 'fit-content'
-    el.style.minHeight = '60px'
-    el.style.minWidth = '60px'
-}
-
 function deleteComponentByID(container, elID){
     container.removeChild(document.getElementById(elID))
     unusedElementIDs.push(elID)
