@@ -38,20 +38,21 @@ function configureAllPaths(paths){
         configurePath(value)
 }
 
+function addElementToPositioning(el, centerX = 0, centerY = 0){
+    const rect = el.getBoundingClientRect()
+    const boardSpace = convertToWhiteboardSpace(centerX - rect.width / 2, centerY - rect.height / 2)
+    elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y })
+    updateElementPositionByID(el.id)
+}
+
 function createNewElement(container, el, id, centerX = 0, centerY = 0){
     container.appendChild(el)
     el.style.visibility = 'hidden'
 
-    const rect = el.getBoundingClientRect()
-
-    const boardSpace = convertToWhiteboardSpace(centerX - rect.width / 2, centerY - rect.height / 2)
-
     el.id = id
-    elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y })
 
-    updateElementPositionByID(el.id)
+    addElementToPositioning(el, centerX, centerY)
 
-    el.style.width = '60px'
     el.style.visibility = 'visible'
 }
 
