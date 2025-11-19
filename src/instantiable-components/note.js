@@ -11,34 +11,34 @@ function getQlEditorID(){
     }
 }
 
-function addNoteListeners(note){
-    note.addEventListener('contextmenu', (e) => {
+function addNoteListeners(newNote){
+    newNote.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
+        if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id)
         
-        selectedElement = note
+        selectedElement = newNote
 
         openNewContextMenu(e.clientX, e.clientY, npwcm)
     })
 
-    note.addEventListener('mousedown', (e) => {
+    newNote.addEventListener('mousedown', (e) => {
         e.stopPropagation()
         if(StatesHandler.isWritingElement) return
-        WhiteboardPositioningHandler.element_MouseDown(e, note)
+        WhiteboardPositioningHandler.element_MouseDown(e, newNote)
     })
 
-    note.addEventListener('mouseup', (e) => {
+    newNote.addEventListener('mouseup', (e) => {
         e.stopPropagation()
-        WhiteboardPositioningHandler.element_MouseUp(e, note)
+        WhiteboardPositioningHandler.element_MouseUp(e, newNote)
     })
 
-    note.addEventListener('dblclick', (e) => {
-        selectedElement = note
+    newNote.addEventListener('dblclick', (e) => {
+        selectedElement = newNote
         if(!StatesHandler.isWritingElement){
-            toggleQuillWritingMode(true, note.id)
+            toggleWritingMode(true, newNote.id)
 
-            note.focus()
+            newNote.focus()
 
             const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
             range = document.createRange()
@@ -69,7 +69,6 @@ function instantiateNoteResizingBorders(note){
         borderDiv.classList.add(`note-border`, `note-border-${border}`)
         note.appendChild(borderDiv)
 
-        // Add resizing logic
         borderDiv.addEventListener('mousedown', function(e) {
             e.stopPropagation()
             this.isResizing = true
@@ -86,19 +85,13 @@ function instantiateNoteResizingBorders(note){
 }
 
 function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
-    const newNote = document.createElement('div')
+    const newNote = document.createElement('p')
     newNote.classList.add('note')
     newNote.spellcheck = false
 
     createNewElement(container, newNote, getElementID(), xOffset, yOffset)
+
     addNoteListeners(newNote)
-
-    document.getElementById(newNote.id).addEventListener("input", (e) => {
-        updateQuillToolbarPosition(newNote)
-    })
-
-    createQuill(newNote.id, content)
-    instantiateNoteResizingBorders(newNote)
 }
 
 function deleteNoteByID(container, noteID){
