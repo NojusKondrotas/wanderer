@@ -2,47 +2,22 @@ let allQuills = new Map(), allQuillToolbars = new Map()
 
 let activeQlToolbar = null
 
-function queryQuillToolbar(qlToolbarID){
-    return document.querySelector(`[data-parent-id="${qlToolbarID}"]`)
-}
-
-function updateQuillToolbarPosition(component){
-    const componentRect = component.getBoundingClientRect()
-    const quillToolbarRect = activeQlToolbar.getBoundingClientRect()
-    const x = elementPositions.get(component.id).x + componentRect.width / 2
-    const y = elementPositions.get(component.id).y - quillToolbarRect.height
-    activeQlToolbar.style.left = `${x}px`
-    activeQlToolbar.style.top = `${y}px`
-}
-
-function toggleQuillWritingMode(toggle = false, editableElID){
+function toggleWritingMode(toggle = false, editableElID){
     const editableEl = document.getElementById(editableElID)
     if(toggle){
-        editableEl.querySelector(':scope > .ql-editor').contentEditable = 'true'
-
-        activeQlToolbar = queryQuillToolbar(editableElID)
-        activeQlToolbar.style.display = 'inline'
-        updateQuillToolbarPosition(editableEl)
+        editableEl.style.userSelect = 'auto'
+        editableEl.contentEditable = 'true'
 
         StatesHandler.isWritingElement = true
         selectedElement = editableEl
     }
     else{
-        editableEl.querySelector(':scope > .ql-editor').contentEditable = 'false'
-        if(activeQlToolbar) activeQlToolbar.style.display = 'none'
-
-        activeQlToolbar = null
+        editableEl.contentEditable = 'false'
+        editableEl.style.userSelect = 'none'
+        
         StatesHandler.isWritingElement = false
         selectedElement = null
     }
-}
-
-function configureQuill(quill, ql_container, content = ''){
-    const editor = ql_container.querySelector(':scope > .ql-editor')
-    quill.setContents(content)
-    editor.contentEditable = 'false'
-
-    ql_container.querySelector(':scope > .ql-clipboard').remove()
 }
 
 function configureQuillToolbar(qlToolbar){

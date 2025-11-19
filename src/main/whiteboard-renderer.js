@@ -52,7 +52,7 @@ window.addEventListener('mousemove', (e) => {
 window.addEventListener('contextmenu', (e) => {
     e.preventDefault()
     e.stopPropagation()
-    if(StatesHandler.isWritingElement) toggleQuillWritingMode(false, selectedElement.id)
+    if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id)
 
     openNewContextMenu(e.clientX, e.clientY, gcm)
 })

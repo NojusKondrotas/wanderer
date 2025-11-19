@@ -31,7 +31,7 @@ class WhiteboardPositioningHandler{
     static element_MouseDown(ev, el){
         if(ev.button !== 2){
             ev.stopPropagation()
-            if(StatesHandler.isWritingElement) return toggleQuillWritingMode(false, selectedElement.id)
+            if(StatesHandler.isWritingElement) return toggleWritingMode(false, selectedElement.id)
             if(StatesHandler.isContextMenuOpen){
                 turnOffContextMenu()
                 return
@@ -39,7 +39,7 @@ class WhiteboardPositioningHandler{
 
             WhiteboardPositioningHandler.startDrag(ev, false, true, false)
             
-            if(el.classList.contains('.note')) toggleQuillWritingMode(false, el.id)
+            if(el.classList.contains('.note')) toggleWritingMode(false, el.id)
 
             selectedElement = el
         }
@@ -140,7 +140,7 @@ class WhiteboardPositioningHandler{
             return
         }
         if(StatesHandler.isWritingElement){
-            toggleQuillWritingMode(false, selectedElement.id)
+            toggleWritingMode(false, selectedElement.id)
             return
         }
 
@@ -179,7 +179,7 @@ class WhiteboardPositioningHandler{
             return
         }
         if(StatesHandler.isWritingElement){
-            toggleQuillWritingMode(false, selectedElement.id)
+            toggleWritingMode(false, selectedElement.id)
             return
         }
         if(suppressNextMouseUp){
