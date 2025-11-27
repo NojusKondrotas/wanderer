@@ -55,7 +55,7 @@ function addNoteListeners(newNote){
         if(e.key === 'Enter'){
             e.preventDefault();
             const pos = getAbsolutePosition(newNote);
-            const childNote = createNewNote(parentWhiteboard, '', pos.left + pos.width / 2, pos.top + pos.height + 10);
+            const childNote = createNewNote(parentWhiteboard, '', [newNote.id], [], pos.left + pos.width / 2, pos.top + pos.height + 10);
             toggleWritingMode(false, newNote.id);
             toggleWritingMode(true, childNote.id);
         }
@@ -92,12 +92,13 @@ function instantiateNoteResizingBorders(note){
     })
 }
 
-function createNewNote(container, content = '', centerX = 0, centerY = 0){
+function createNewNote(container, content = '', parent_ids, child_ids, centerX = 0, centerY = 0){
     const newNote = document.createElement('p')
     newNote.classList.add('note')
     newNote.spellcheck = false
 
     createNewElement(container, newNote, getElementID(), centerX, centerY)
+    elementHierarchy.set(newNote.id, [new Set(parent_ids),new Set(child_ids)])
 
     addNoteListeners(newNote)
 
