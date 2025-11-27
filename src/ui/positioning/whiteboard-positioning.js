@@ -213,6 +213,21 @@ class WhiteboardPositioningHandler{
     }
 }
 
+function getAbsolutePosition(el) {
+    const rect = el.getBoundingClientRect();
+    const parentRect = el.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 };
+    const style = window.getComputedStyle(el);
+    const marginTop = parseFloat(style.marginTop) || 0;
+    const marginLeft = parseFloat(style.marginLeft) || 0;
+
+    return {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top - parentRect.top - marginTop,
+        left: rect.left - parentRect.left - marginLeft
+    };
+}
+
 function updateElementPositionByID(elID) {
     const elPos = elementPositions.get(elID)
 

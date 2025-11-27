@@ -45,6 +45,12 @@ function addElementToPositioning(el, centerX = 0, centerY = 0){
     updateElementPositionByID(el.id)
 }
 
+function addElementToPositioningLeftTopOffset(el, offsetX = 0, offsetY = 0){
+    const boardSpace = convertToWhiteboardSpace(offsetX, offsetY)
+    elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y })
+    updateElementPositionByID(el.id)
+}
+
 function createNewElement(container, el, id, centerX = 0, centerY = 0){
     container.appendChild(el)
     el.style.visibility = 'hidden'
@@ -52,6 +58,17 @@ function createNewElement(container, el, id, centerX = 0, centerY = 0){
     el.id = id
 
     addElementToPositioning(el, centerX, centerY)
+
+    el.style.visibility = 'visible'
+}
+
+function createNewElementLeftTopOffset(container, el, id, offsetX = 0, offsetY = 0){
+    container.appendChild(el)
+    el.style.visibility = 'hidden'
+
+    el.id = id
+
+    addElementToPositioningLeftTopOffset(el, offsetX, offsetY)
 
     el.style.visibility = 'visible'
 }

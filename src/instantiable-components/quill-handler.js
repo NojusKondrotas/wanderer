@@ -7,6 +7,7 @@ function toggleWritingMode(toggle = false, editableElID){
     if(toggle){
         editableEl.style.userSelect = 'auto'
         editableEl.contentEditable = 'true'
+        editableEl.focus()
 
         StatesHandler.isWritingElement = true
         selectedElement = editableEl

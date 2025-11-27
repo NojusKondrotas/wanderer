@@ -38,8 +38,6 @@ function addNoteListeners(newNote){
         if(!StatesHandler.isWritingElement){
             toggleWritingMode(true, newNote.id)
 
-            newNote.focus()
-
             const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
             range = document.createRange()
             range.setStart(pos.offsetNode, pos.offset)
@@ -50,6 +48,16 @@ function addNoteListeners(newNote){
                 sel.removeAllRanges()
                 sel.addRange(range)
             }
+        }
+    })
+
+    newNote.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter'){
+            e.preventDefault();
+            const pos = getAbsolutePosition(newNote);
+            const childNote = createNewNote(parentWhiteboard, '', pos.left + pos.width / 2, pos.top + pos.height + 10);
+            toggleWritingMode(false, newNote.id);
+            toggleWritingMode(true, childNote.id);
         }
     })
 }
@@ -84,14 +92,28 @@ function instantiateNoteResizingBorders(note){
     })
 }
 
-function createNewNote(container, content = '', xOffset = 0, yOffset = 0){
+function createNewNote(container, content = '', centerX = 0, centerY = 0){
     const newNote = document.createElement('p')
     newNote.classList.add('note')
     newNote.spellcheck = false
 
-    createNewElement(container, newNote, getElementID(), xOffset, yOffset)
+    createNewElement(container, newNote, getElementID(), centerX, centerY)
 
     addNoteListeners(newNote)
+
+    return newNote
+}
+
+function createNewNoteLeftTopOffset(container, content = '', offsetX = 0, offsetY = 0){
+    const newNote = document.createElement('p')
+    newNote.classList.add('note')
+    newNote.spellcheck = false
+
+    createNewElementLeftTopOffset(container, newNote, getElementID(), offsetX, offsetY)
+
+    addNoteListeners(newNote)
+
+    return newNote
 }
 
 function deleteNoteByID(container, noteID){
