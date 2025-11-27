@@ -1,7 +1,11 @@
 node_modules/
 
 src/saves/
+
 src/main/*.css
 src/main/*.css.map
+
+src/main/**/*.html
+
 src/dev/titlebars/prompts/link/*.css
 src/dev/titlebars/prompts/link/*.css.map
