@@ -15,17 +15,6 @@ class WhiteboardPositioningHandler{
             selectedElement.style.width = newWidth + 'px'
             selectedElement.style.left = selectedElement.offsetLeft - Math.floor(dragDiff.x) + 'px'
         }
-        // else if(activeBorder === 'bottom'){
-        //     const currentHeight = parseInt(selectedElement.style.height) || 25.65
-        //     selectedElement.style.height = Math.max(currentHeight + Math.floor(dragDiff.y) * -1, 25.65) + 'px'
-        // }else if(activeBorder === 'top'){
-        //     const currentHeight = parseInt(selectedElement.style.height) || 25.65
-        //     const newHeight = Math.max(currentHeight + Math.floor(dragDiff.y), 25.65)
-        //     if(newHeight === 25.65 && dragDiff.y <= 0) return
-            
-        //     selectedElement.style.height = newHeight + 'px'
-        //     selectedElement.style.top = (selectedElement.offsetTop - Math.floor(dragDiff.y)) + 'px'
-        // }
     }
 
     static element_MouseDown(ev, el){
@@ -235,10 +224,10 @@ function updateElementPositionByID(elID) {
     const offsetY = elPos.y - dragDiff.y
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
-    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1)`
+    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
 }
 
-function updateComponentPositions(container){
+function updateComponentPositions(){
     for (let [key, value] of elementPositions){
         updateElementPositionByID(key)
     }
