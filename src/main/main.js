@@ -521,11 +521,11 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
         unusedElementIDs: stateObj.unusedElementIDs,
         largestPathID: stateObj.largestPathID,
         unusedPathIDs: stateObj.unusedPathIDs,
-        largestQlEditorID: stateObj.largestQlEditorID,
-        unusedQlEditorIDs: stateObj.unusedQlEditorIDs,
+        largestNoteEditorID: stateObj.largestNoteEditorID,
+        unusedNoteEditorIDs: stateObj.unusedNoteEditorIDs,
         elementPositions: stateObj.elementPositions,
         allPaths: stateObj.allPaths,
-        allQuillToolbars: stateObj.allQuillToolbars,
+        allNotes: stateObj.allNotes,
         isTitlebarLocked: stateObj.isTitlebarLocked
     }
 

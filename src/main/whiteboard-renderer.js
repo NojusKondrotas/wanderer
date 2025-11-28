@@ -14,18 +14,18 @@ window.addEventListener('DOMContentLoaded', async () => {
         unusedElementIDs = stateObj.unusedElementIDs
         largestPathID = stateObj.largestPathID
         unusedPathIDs = stateObj.unusedPathIDs
-        largestQlEditorID = stateObj.largestQlEditorID
-        unusedQlEditorIDs = stateObj.unusedQlEditorIDs
+        largestNoteEditorID = stateObj.largestNoteEditorID
+        unusedNoteEditorIDs = stateObj.unusedNoteEditorIDs
 
         elementPositions = new Map(stateObj.elementPositions)
         allPaths = new Map(stateObj.allPaths)
-        allQuillToolbars = new Map(stateObj.allQuillToolbars)
+        allNotes = new Map(stateObj.allNotes)
 
         StatesHandler.isTitlebarLocked = stateObj.isTitlebarLocked
 
         configureAllElements(parentWhiteboard.children)
         configureAllPaths(allPaths)
-        reinstateAllQuillToolbars()
+        reinstateAllNotes()
         reinstateAllNoteBorders(elementPositions)
 
         document.body.style.cursor = 'default'
@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(unusedPathIDs)
         console.log(elementPositions)
         console.log(allPaths)
-        console.log(allQuillToolbars)
+        console.log(allNotes)
         console.log(StatesHandler.isTitlebarLocked)
     }
 
@@ -66,23 +66,23 @@ window.addEventListener('mouseup', (e) => {
 })
 
 function save(){
-    saveAllQuillToolbars()
+    saveAllNotes()
     window.wandererAPI.saveWhiteboardHTML()
 
     const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
     const allPathsArr = Array.from(allPaths, ([id, path]) => [id, path])
-    const allQuillToolbarsArr = Array.from(allQuillToolbars, ([elID, quill]) => [elID, quill])
+    const allNotesArr = Array.from(allNotes, ([elID, note]) => [elID, note])
 
     window.wandererAPI.saveWhiteboardState({
         largestElementID,
         unusedElementIDs,
         largestPathID,
         unusedPathIDs,
-        largestQlEditorID,
-        unusedQlEditorIDs,
+        largestNoteEditorID,
+        unusedNoteEditorIDs,
         elementPositions: elementPositionsArr,
         allPaths: allPathsArr,
-        allQuillToolbars: allQuillToolbarsArr,
+        allNotes: allNotesArr,
         isTitlebarLocked: StatesHandler.isTitlebarLocked
     })
 }

@@ -122,7 +122,7 @@ class WhiteboardPositioningHandler{
 
     static startDrag(ev, isBoard, isEl, isResizingElement, isWindow, isWinResizing){
         if(ev.button === 2) return
-        if(StatesHandler.isQuillToolbarEdit > 0) return
+        if(StatesHandler.isNoteToolbarEdit > 0) return
 
         if(StatesHandler.isContextMenuOpen){
             turnOffContextMenu()
@@ -133,8 +133,8 @@ class WhiteboardPositioningHandler{
             return
         }
 
-        document.querySelectorAll('.ql-editor').forEach((qlEditor) => {
-            document.getElementById(qlEditor.id).contentEditable = 'false'
+        document.querySelectorAll('.note-editor').forEach((noteEditor) => {
+            document.getElementById(noteEditor.id).contentEditable = 'false'
         })
 
         resetMouseDrag(ev)
@@ -163,8 +163,8 @@ class WhiteboardPositioningHandler{
             this.isResizingElement = false
             document.body.style.cursor = 'default'
         }
-        if(StatesHandler.isQuillToolbarEdit > 0){
-            StatesHandler.isQuillToolbarEdit -= 1
+        if(StatesHandler.isNoteToolbarEdit > 0){
+            StatesHandler.isNoteToolbarEdit -= 1
             return
         }
         if(StatesHandler.isWritingElement){

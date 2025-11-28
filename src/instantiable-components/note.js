@@ -1,13 +1,13 @@
-let largestQlEditorID = 0, unusedQlEditorIDs = new Array()
+let largestNoteEditorID = 0, unusedNoteEditorIDs = new Array()
 
 let activeBorder = null
 
-function getQlEditorID(){
-    if(unusedQlEditorIDs.length !== 0)
-        return unusedQlEditorIDs.pop()
+function getNoteEditorID(){
+    if(unusedNoteEditorIDs.length !== 0)
+        return unusedNoteEditorIDs.pop()
     else{
-        ++largestQlEditorID
-        return `editor-${largestQlEditorID - 1}`
+        ++largestNoteEditorID
+        return `editor-${largestNoteEditorID - 1}`
     }
 }
 
