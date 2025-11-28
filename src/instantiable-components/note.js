@@ -59,7 +59,7 @@ function addNoteListeners(newNote){
             const posChild = getAbsolutePosition(childNote);
             createPath({ x: posParent.left + posParent.width / 2, y: posParent.top + posParent.height / 2 },
                 { x: posChild.left + posChild.width / 2, y: posChild.top + posChild.height / 2 },
-                newNote.id, childNote.id, false)
+                newNote.id, childNote.id, false, false, true)
             toggleWritingMode(false, newNote.id);
             toggleWritingMode(true, childNote.id);
         }

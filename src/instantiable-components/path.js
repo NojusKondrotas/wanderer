@@ -16,7 +16,7 @@ function getPathID(){
     }
 }
 
-function createPath(startPos, endPos, startElement_id = null, endElement_id = null, isDrawing = false){
+function createPath(startPos, endPos, startElement_id = null, endElement_id = null, isDrawing = false, isHierarchicalStart = false, isHierarchicalEnd = false){
     const div = document.createElement('div')
     div.classList.add('path-container')
 
@@ -55,6 +55,8 @@ function createPath(startPos, endPos, startElement_id = null, endElement_id = nu
         endNoteID: endElement_id,
         startPosition: { ...boardSpaceStartPos },
         endPosition: { ...boardSpaceEndPos },
+        isHierarchicalStart,
+        isHierarchicalEnd,
         shape: pathVisualShape
     }
     configurePath(path)
@@ -79,28 +81,67 @@ function addPathListeners(path){
     })
 }
 
-function updatePathData(x1, y1, x2, y2, shape = 'line') {
-    let pathData
+function addPathArrows(x1, y1, x2, y2){
+    const angle = Math.atan2(y2 - y1, x2 - x1)
+    const size = 8
+    const a1 = angle + Math.PI / 6
+    const a2 = angle - Math.PI / 6
+
+    const ax1 = x2 - size * Math.cos(a1)
+    const ay1 = y2 - size * Math.sin(a1)
+    const ax2 = x2 - size * Math.cos(a2)
+    const ay2 = y2 - size * Math.sin(a2)
+
+    const arrow = ` M ${ax1} ${ay1} L ${x2} ${y2} L ${ax2} ${ay2}`
+
+    return arrow
+}
+
+function updatePathData(x1, y1, x2, y2, isStartPoint = false, isEndPoint = false, shape = 'line') {
+    let pathData, startPrevX, startPrevY, endPrevX, endPrevY
     switch(shape){
         case 'line':
             pathData = `M ${x1} ${y1} L ${x2} ${y2}`
-            return pathData
+            startPrevX = x2, startPrevY = y2
+            endPrevX = x1, endPrevY = y1
+            break
         case 'curve':
             const dx = (x2 - x1) / 2
             pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`
-            return pathData
+            startPrevX = x1 + dx, startPrevY = y1
+            endPrevX = x2 - dx, endPrevY = y2
+            break
         case 'right-angle':
             pathData = `M ${x1} ${y1} L ${x1} ${y2} L ${x2} ${y2}`
-            return pathData
+            startPrevX = x1, startPrevY = y2
+            endPrevX = x2, endPrevY = y2
+            break
         case 'zigzag':
             const midX = (x1 + x2) / 2
             pathData = `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`
-            return pathData
+            startPrevX = midX, startPrevY = y1
+            endPrevX = midX, endPrevY = y2
+            break
     }
+
+    let arrowStart, arrowEnd
+    if(isStartPoint)
+        arrowStart = addPathArrows(x1, y1, startPrevX, startPrevY)
+    if(isEndPoint)
+        arrowEnd = addPathArrows(x2, y2, endPrevX, endPrevY)
+
+    if(arrowStart == null){
+        if(arrowEnd == null)
+            return pathData
+        return pathData + arrowEnd
+        }
+    if(arrowEnd == null)
+        return pathData + arrowStart
+    return pathData + arrowStart + arrowEnd
 }
 
 function updatePathPosition(path, startPosition, endPosition){
-    const updatedPath = updatePathData(startPosition.x, startPosition.y, endPosition.x, endPosition.y, path.shape)
+    const updatedPath = updatePathData(startPosition.x, startPosition.y, endPosition.x, endPosition.y, path.isHierarchicalStart, path.isHierarchicalEnd, path.shape)
     document.getElementById(path.pathVisualID).setAttribute('d', updatedPath)
     document.getElementById(path.hitPathID).setAttribute('d', updatedPath)
 }
