@@ -99,24 +99,26 @@ function createNewNote(container, content = '', parent_ids, child_ids, centerX =
 
     createNewElement(container, newNote, getElementID(), centerX, centerY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
-
+    configureNoteEditor(newNote.id)
     addNoteListeners(newNote)
 
     return newNote
 }
 
-function createNewNoteLeftTopOffset(container, content = '', offsetX = 0, offsetY = 0){
+function createNewNoteLeftTopOffset(container, content = '', parent_ids, child_ids, offsetX = 0, offsetY = 0){
     const newNote = document.createElement('p')
     newNote.classList.add('note')
     newNote.spellcheck = false
 
     createNewElementLeftTopOffset(container, newNote, getElementID(), offsetX, offsetY)
-
+    instantiateHierarchy(newNote.id, parent_ids, child_ids)
+    configureNoteEditor(newNote.id)
     addNoteListeners(newNote)
 
     return newNote
 }
 
-function deleteNoteByID(container, noteID){
-    deleteComponentByID(container, noteID)
+function deleteNoteByID(container, n_id){
+    deleteComponentByID(container, n_id)
+    deleteNoteEditor(n_id)
 }

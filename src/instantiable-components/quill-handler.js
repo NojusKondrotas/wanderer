@@ -25,6 +25,14 @@ function configureNoteToolbar(noteToolbar){
     noteToolbar.addEventListener('mousedown', (e) => { e.stopPropagation(); StatesHandler.isNoteToolbarEdit = 2 })
 }
 
+function configureNoteEditor(n_id){
+    allNotes.set(n_id, "")
+}
+
+function deleteNoteEditor(n_id){
+    allNotes.delete(n_id)
+}
+
 function saveAllNotes(){
     document.querySelectorAll('.note').forEach(note => allNotes.set(note.id, document.getElementById(note.id).textContent))
 }
