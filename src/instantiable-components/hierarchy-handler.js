@@ -48,15 +48,18 @@ function removeNoteChild(n_id, c_id){
 function switchFocusToChild(n_id){
     let [parents, children] = elementHierarchy.get(n_id);
     if(children.size > 0){
-        toggleWritingMode(false, n_id);
-        toggleWritingMode(true, children.values().next().value);
+        switchFocus(n_id, children.values().next().value);
     }
 }
 
 function switchFocusToParent(n_id){
     let [parents, children] = elementHierarchy.get(n_id);
     if(parents.size > 0){
-        toggleWritingMode(false, n_id);
-        toggleWritingMode(true, parents.values().next().value);
+        switchFocus(n_id, parents.values().next().value);
     }
+}
+
+function switchFocus(from_id, to_id){
+    toggleWritingMode(false, from_id);
+    toggleWritingMode(true, to_id);
 }
