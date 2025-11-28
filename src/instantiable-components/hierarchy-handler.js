@@ -31,3 +31,19 @@ function removeNoteChild(n_id, c_id){
     let [parents, children] = elementHierarchy.get(n_id)
     children.delete(c_id)
 }
+
+function switchFocusToChild(n_id){
+    let [parents, children] = elementHierarchy.get(n_id);
+    if(children.size > 0){
+        toggleWritingMode(false, n_id);
+        toggleWritingMode(true, children.values().next().value);
+    }
+}
+
+function switchFocusToParent(n_id){
+    let [parents, children] = elementHierarchy.get(n_id);
+    if(parents.size > 0){
+        toggleWritingMode(false, n_id);
+        toggleWritingMode(true, parents.values().next().value);
+    }
+}
