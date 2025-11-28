@@ -524,7 +524,7 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
         elementPositions: stateObj.elementPositions,
         elementHierarchy: stateObj.elementHierarchy,
         allPaths: stateObj.allPaths,
-        allNotes: stateObj.allNotes,
+        allNotesContents: stateObj.allNotesContents,
         isTitlebarLocked: stateObj.isTitlebarLocked
     }
 

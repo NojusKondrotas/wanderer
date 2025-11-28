@@ -1,4 +1,4 @@
-let allNotes = new Map()
+let allNotesContents = new Map()
 
 let activeBorder = null
 
@@ -21,12 +21,12 @@ function toggleWritingMode(toggle = false, editableElID){
     }
 }
 
-function saveAllNotes(){
-    document.querySelectorAll('.note').forEach(note => allNotes.set(note.id, document.getElementById(note.id).textContent))
+function saveAllNotesContents(){
+    document.querySelectorAll('.note').forEach(note => allNotesContents.set(note.id, document.getElementById(note.id).textContent))
 }
 
-function reinstateAllNotes(){
-    for(const [key, value] of allNotes){
+function reinstateAllNotesContents(){
+    for(const [key, value] of allNotesContents){
         const el = document.getElementById(key)
         el.innerHTML = value
     }
@@ -131,7 +131,7 @@ function createNewNote(container, content = '', parent_ids, child_ids, centerX =
     createNewElement(container, newNote, getElementID(), centerX, centerY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
-    allNotes.set(newNote.id, "")
+    allNotesContents.set(newNote.id, "")
 
     return newNote
 }
@@ -144,12 +144,12 @@ function createNewNoteLeftTopOffset(container, content = '', parent_ids, child_i
     createNewElementLeftTopOffset(container, newNote, getElementID(), offsetX, offsetY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
-    allNotes.set(newNote.id, "")
+    allNotesContents.set(newNote.id, "")
 
     return newNote
 }
 
 function deleteNoteByID(container, n_id){
     deleteComponentByID(container, n_id)
-    allNotes.delete(n_id)
+    allNotesContents.delete(n_id)
 }

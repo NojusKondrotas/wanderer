@@ -22,13 +22,13 @@ window.addEventListener('DOMContentLoaded', async () => {
             value[1] = new Set(value[1]);
         }
         allPaths = new Map(stateObj.allPaths)
-        allNotes = new Map(stateObj.allNotes)
+        allNotesContents = new Map(stateObj.allNotesContents)
 
         StatesHandler.isTitlebarLocked = stateObj.isTitlebarLocked
 
         configureAllElements(parentWhiteboard.children)
         configureAllPaths(allPaths)
-        reinstateAllNotes()
+        reinstateAllNotesContents()
         reinstateAllNoteBorders(elementPositions)
 
         document.body.style.cursor = 'default'
@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(elementPositions)
         console.log(elementHierarchy)
         console.log(allPaths)
-        console.log(allNotes)
+        console.log(allNotesContents)
         console.log(StatesHandler.isTitlebarLocked)
     }
 
@@ -70,13 +70,13 @@ window.addEventListener('mouseup', (e) => {
 })
 
 function save(){
-    saveAllNotes()
+    saveAllNotesContents()
     window.wandererAPI.saveWhiteboardHTML()
 
     const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
     const elementHierarchyArr = Array.from(elementHierarchy, ([elID, [parents, children]]) => [elID, [Array.from(parents), Array.from(children)]])
     const allPathsArr = Array.from(allPaths, ([id, path]) => [id, path])
-    const allNotesArr = Array.from(allNotes, ([elID, note]) => [elID, note])
+    const allNotesContentsArr = Array.from(allNotesContents, ([elID, note]) => [elID, note])
 
     window.wandererAPI.saveWhiteboardState({
         largestElementID,
@@ -86,7 +86,7 @@ function save(){
         elementPositions: elementPositionsArr,
         elementHierarchy: elementHierarchyArr,
         allPaths: allPathsArr,
-        allNotes: allNotesArr,
+        allNotesContents: allNotesContentsArr,
         isTitlebarLocked: StatesHandler.isTitlebarLocked
     })
 }
