@@ -33,13 +33,14 @@ function toggleWritingMode(toggle = false, editableElID){
 }
 
 function saveAllNotesContents(){
-    document.querySelectorAll('.note').forEach(note => allNotesContents.set(note.id, document.getElementById(note.id).textContent))
+    document.querySelectorAll('.note-container').forEach(note => allNotesContents.set(note.id, document.getElementById(note.id).querySelector('p').textContent))
 }
 
 function reinstateAllNotesContents(){
     for(const [key, value] of allNotesContents){
         const el = document.getElementById(key)
-        el.innerHTML = value
+        const p = el.querySelector('p')
+        p.innerHTML = value
     }
 }
 
