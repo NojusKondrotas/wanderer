@@ -1,9 +1,6 @@
 let largestQlEditorID = 0, unusedQlEditorIDs = new Array()
 
 let activeBorder = null
-let activeControlKeysInWriting = new Set()
-
-const altKeyCode = 'Alt'
 
 function getQlEditorID(){
     if(unusedQlEditorIDs.length !== 0)
@@ -55,17 +52,13 @@ function addNoteListeners(newNote){
     })
 
     newNote.addEventListener('keydown', (e) => {
-        activeControlKeysInWriting.add(e.key)
-        
-        if(e.key === 'ArrowDown'){
-            if(activeControlKeysInWriting.has(altKeyCode)){
-                switchFocusToChild(newNote.id)
-            }
-        }else if(e.key === 'ArrowUp'){
-            if(activeControlKeysInWriting.has(altKeyCode)){
-                switchFocusToParent(newNote.id)
-            }
+        if(isCombo(keybinds[noteWriteFocusDown])){
+            switchFocusToChild(newNote.id)
         }
+        if(isCombo(keybinds[noteWriteFocusUp])){
+            switchFocusToParent(newNote.id)
+        }
+
         if(e.key === 'Enter'){
             e.preventDefault();
             const posParent = getAbsolutePosition(newNote);
@@ -77,10 +70,6 @@ function addNoteListeners(newNote){
             toggleWritingMode(false, newNote.id);
             toggleWritingMode(true, childNote.id);
         }
-    })
-
-    newNote.addEventListener('keyup', (e) => {
-        activeControlKeysInWriting.delete(e.key)
     })
 }
 
