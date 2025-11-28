@@ -2,6 +2,17 @@ let allNotesContents = new Map()
 
 let activeBorder = null
 
+let largestNoteContainerID = 0, unusedNoteContainerIDs = new Array()
+
+function getNoteContainerID(){
+    if(unusedNoteContainerIDs.length !== 0)
+        return unusedNoteContainerIDs.pop()
+    else{
+        ++largestNoteContainerID
+        return `note-container-${largestNoteContainerID - 1}`
+    }
+}
+
 function toggleWritingMode(toggle = false, editableElID){
     const editableEl = document.getElementById(editableElID)
     if(toggle){
@@ -56,8 +67,9 @@ function addNoteListeners(newNote){
 
     newNote.addEventListener('dblclick', (e) => {
         selectedElement = newNote
+        const p = newNote.querySelector('p')
         if(!StatesHandler.isWritingElement){
-            toggleWritingMode(true, newNote.id)
+            toggleWritingMode(true, p.id)
 
             const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
             range = document.createRange()
@@ -124,26 +136,36 @@ function instantiateNoteResizingBorders(note){
 }
 
 function createNewNote(container, content = '', parent_ids, child_ids, centerX = 0, centerY = 0){
-    const newNote = document.createElement('p')
-    newNote.classList.add('note')
-    newNote.spellcheck = false
+    const newNote = document.createElement('div')
+    const p = document.createElement('p')
+    newNote.classList.add('note-container')
+    p.id = getElementID()
+    p.classList.add('note')
+    p.spellcheck = false
+    newNote.appendChild(p)
 
-    createNewElement(container, newNote, getElementID(), centerX, centerY)
+    createNewElement(container, newNote, getNoteContainerID(), centerX, centerY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
+    instantiateNoteResizingBorders(newNote)
     allNotesContents.set(newNote.id, "")
 
     return newNote
 }
 
 function createNewNoteLeftTopOffset(container, content = '', parent_ids, child_ids, offsetX = 0, offsetY = 0){
-    const newNote = document.createElement('p')
-    newNote.classList.add('note')
-    newNote.spellcheck = false
+    const newNote = document.createElement('div')
+    const p = document.createElement('p')
+    newNote.classList.add('note-container')
+    p.id = getElementID()
+    p.classList.add('note')
+    p.spellcheck = false
+    newNote.appendChild(p)
 
-    createNewElementLeftTopOffset(container, newNote, getElementID(), offsetX, offsetY)
+    createNewElementLeftTopOffset(container, newNote, getNoteContainerID(), offsetX, offsetY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
+    instantiateNoteResizingBorders(newNote)
     allNotesContents.set(newNote.id, "")
 
     return newNote

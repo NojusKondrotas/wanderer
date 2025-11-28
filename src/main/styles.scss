@@ -125,12 +125,12 @@ body {
 }
 
 .notepad, .whiteboard, .note, .open-window {
-    position: absolute;
-
     background-color: white;
 }
 
 .notepad, .whiteboard, .open-window {
+    position: absolute;
+
     border: 2px solid #dadada; 
 }
 
@@ -191,9 +191,27 @@ body {
 }
 
 .note {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    line-height: 20px;
+
+    outline: none;
+
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+
+    z-index: $medium-index;
+}
+
+.note-container {
+    position: absolute;
     min-width: 20px;
     width: fit-content;
     min-height: 20px;
+    height: fit-content;
     margin: 0px;
     padding: 0px 5px;
 
@@ -207,24 +225,20 @@ body {
 
 .note-border {
     position: absolute;
+    top: 0;
+    height: 100%;
     z-index: 2;
 }
 
 .note-border-right {
-    top: 0;
     right: 0;
     width: 3px;
-    height: 100%;
-    border-radius: 0 3px 3px 0;
     cursor: ew-resize;
 }
 
 .note-border-left {
-    top: 0;
     left: 0;
     width: 3px;
-    height: 100%;
-    border-radius: 3px 0 0 3px;
     cursor: ew-resize;
 }
 

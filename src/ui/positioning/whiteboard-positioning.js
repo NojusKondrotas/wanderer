@@ -5,10 +5,16 @@ class WhiteboardPositioningHandler{
 
     static resize(){
         if(activeBorder === 'right'){
-            const currentWidth = parseInt(selectedElement.style.width) || 20
+            let currentWidth = parseInt(selectedElement.style.width)
+            if(isNaN(currentWidth)){
+                currentWidth = selectedElement.getBoundingClientRect().width - 10
+            }
             selectedElement.style.width = Math.max(currentWidth - Math.floor(dragDiff.x), 20) + 'px'
         }else if(activeBorder === 'left'){
-            const currentWidth = parseInt(selectedElement.style.width) || 20
+            let currentWidth = parseInt(selectedElement.style.width)
+            if(isNaN(currentWidth)){
+                currentWidth = selectedElement.getBoundingClientRect().width - 10
+            }
             const newWidth = Math.max(currentWidth + Math.floor(dragDiff.x), 20)
             if(newWidth === 20 && dragDiff.x <= 0) return
 
