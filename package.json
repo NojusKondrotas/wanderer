@@ -25,7 +25,6 @@
     "sass": "^1.91.0"
   },
   "dependencies": {
-    "@hurdlegroup/robotjs": "^0.12.3",
-    "quill": "^2.0.3"
+    "@hurdlegroup/robotjs": "^0.12.3"
   }
 }
