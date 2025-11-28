@@ -521,8 +521,6 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
         unusedElementIDs: stateObj.unusedElementIDs,
         largestPathID: stateObj.largestPathID,
         unusedPathIDs: stateObj.unusedPathIDs,
-        largestNoteEditorID: stateObj.largestNoteEditorID,
-        unusedNoteEditorIDs: stateObj.unusedNoteEditorIDs,
         elementPositions: stateObj.elementPositions,
         allPaths: stateObj.allPaths,
         allNotes: stateObj.allNotes,

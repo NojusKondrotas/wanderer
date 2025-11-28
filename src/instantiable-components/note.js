@@ -1,15 +1,4 @@
-let largestNoteEditorID = 0, unusedNoteEditorIDs = new Array()
-
 let activeBorder = null
-
-function getNoteEditorID(){
-    if(unusedNoteEditorIDs.length !== 0)
-        return unusedNoteEditorIDs.pop()
-    else{
-        ++largestNoteEditorID
-        return `editor-${largestNoteEditorID - 1}`
-    }
-}
 
 function addNoteListeners(newNote){
     newNote.addEventListener('contextmenu', (e) => {
