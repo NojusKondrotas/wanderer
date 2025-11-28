@@ -54,8 +54,12 @@ function addNoteListeners(newNote){
     newNote.addEventListener('keydown', (e) => {
         if(e.key === 'Enter'){
             e.preventDefault();
-            const pos = getAbsolutePosition(newNote);
-            const childNote = createNewNote(parentWhiteboard, '', [newNote.id], [], pos.left + pos.width / 2, pos.top + pos.height + 10);
+            const posParent = getAbsolutePosition(newNote);
+            const childNote = createNewNote(parentWhiteboard, '', [newNote.id], [], posParent.left + posParent.width / 2, posParent.top + posParent.height + 10);
+            const posChild = getAbsolutePosition(childNote);
+            createPath({ x: posParent.left + posParent.width / 2, y: posParent.top + posParent.height / 2 },
+                { x: posChild.left + posChild.width / 2, y: posChild.top + posChild.height / 2 },
+                newNote.id, childNote.id, false)
             toggleWritingMode(false, newNote.id);
             toggleWritingMode(true, childNote.id);
         }
