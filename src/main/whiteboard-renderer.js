@@ -16,6 +16,11 @@ window.addEventListener('DOMContentLoaded', async () => {
         unusedPathIDs = stateObj.unusedPathIDs
 
         elementPositions = new Map(stateObj.elementPositions)
+        elementHierarchy = new Map(stateObj.elementHierarchy)
+        for(let [key,value] of elementHierarchy){
+            value[0] = new Set(value[0]);
+            value[1] = new Set(value[1]);
+        }
         allPaths = new Map(stateObj.allPaths)
         allNotes = new Map(stateObj.allNotes)
 
@@ -33,6 +38,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(largestPathID)
         console.log(unusedPathIDs)
         console.log(elementPositions)
+        console.log(elementHierarchy)
         console.log(allPaths)
         console.log(allNotes)
         console.log(StatesHandler.isTitlebarLocked)
@@ -68,6 +74,7 @@ function save(){
     window.wandererAPI.saveWhiteboardHTML()
 
     const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
+    const elementHierarchyArr = Array.from(elementHierarchy, ([elID, [parents, children]]) => [elID, [Array.from(parents), Array.from(children)]])
     const allPathsArr = Array.from(allPaths, ([id, path]) => [id, path])
     const allNotesArr = Array.from(allNotes, ([elID, note]) => [elID, note])
 
@@ -77,6 +84,7 @@ function save(){
         largestPathID,
         unusedPathIDs,
         elementPositions: elementPositionsArr,
+        elementHierarchy: elementHierarchyArr,
         allPaths: allPathsArr,
         allNotes: allNotesArr,
         isTitlebarLocked: StatesHandler.isTitlebarLocked
