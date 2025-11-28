@@ -1,5 +1,17 @@
 let elementHierarchy = new Map()
 
+function instantiateHierarchy(n_id, parent_ids, child_ids){
+    elementHierarchy.set(n_id, [new Set(parent_ids),new Set(child_ids)])
+    for(let p_id of parent_ids){
+        let [p_parent_ids, p_child_ids] = elementHierarchy.get(p_id)
+        p_child_ids.add(n_id)
+    }
+    for(let c_id of child_ids){
+        let [p_parent_ids, p_child_ids] = elementHierarchy.get(c_id)
+        p_parent_ids.add(n_id)
+    }
+}
+
 function addNoteParent(n_id, p_id){
     let [parents, children] = elementHierarchy.get(n_id)
     parents.add(p_id)
