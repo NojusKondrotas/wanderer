@@ -1,4 +1,36 @@
+let allNotes = new Map()
+
 let activeBorder = null
+
+function toggleWritingMode(toggle = false, editableElID){
+    const editableEl = document.getElementById(editableElID)
+    if(toggle){
+        editableEl.style.userSelect = 'auto'
+        editableEl.contentEditable = 'true'
+        editableEl.focus()
+
+        StatesHandler.isWritingElement = true
+        selectedElement = editableEl
+    }
+    else{
+        editableEl.contentEditable = 'false'
+        editableEl.style.userSelect = 'none'
+        
+        StatesHandler.isWritingElement = false
+        selectedElement = null
+    }
+}
+
+function saveAllNotes(){
+    document.querySelectorAll('.note').forEach(note => allNotes.set(note.id, document.getElementById(note.id).textContent))
+}
+
+function reinstateAllNotes(){
+    for(const [key, value] of allNotes){
+        const el = document.getElementById(key)
+        el.innerHTML = value
+    }
+}
 
 function addNoteListeners(newNote){
     newNote.addEventListener('contextmenu', (e) => {
@@ -99,8 +131,8 @@ function createNewNote(container, content = '', parent_ids, child_ids, centerX =
 
     createNewElement(container, newNote, getElementID(), centerX, centerY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
-    configureNoteEditor(newNote.id)
     addNoteListeners(newNote)
+    allNotes.set(newNote.id, "")
 
     return newNote
 }
@@ -112,13 +144,13 @@ function createNewNoteLeftTopOffset(container, content = '', parent_ids, child_i
 
     createNewElementLeftTopOffset(container, newNote, getElementID(), offsetX, offsetY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
-    configureNoteEditor(newNote.id)
     addNoteListeners(newNote)
+    allNotes.set(newNote.id, "")
 
     return newNote
 }
 
 function deleteNoteByID(container, n_id){
     deleteComponentByID(container, n_id)
-    deleteNoteEditor(n_id)
+    allNotes.delete(n_id)
 }
