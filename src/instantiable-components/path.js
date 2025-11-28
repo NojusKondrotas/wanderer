@@ -16,12 +16,12 @@ function getPathID(){
     }
 }
 
-function createPath(mousePos, startX = 0, startY = 0){
+function createPath(startPos, endPos, startElement_id = null, endElement_id = null, isDrawing = false){
     const div = document.createElement('div')
     div.classList.add('path-container')
 
-    const boardSpaceMousePos = convertToWhiteboardSpace(mousePos.x, mousePos.y)
-    const boardSpaceStart = convertToWhiteboardSpace(startX, startY)
+    const boardSpaceStartPos = convertToWhiteboardSpace(startPos.x, startPos.y)
+    const boardSpaceEndPos = convertToWhiteboardSpace(endPos.x, endPos.y)
 
     const drawnPath = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
 
@@ -51,18 +51,18 @@ function createPath(mousePos, startX = 0, startY = 0){
         ID: div.id,
         pathVisualID: pathVisual.id,
         hitPathID: hitPath.id,
-        startNoteID: selectedElement ? selectedElement.id : null,
-        endNoteID: null,
-        startPosition: { ...boardSpaceStart },
-        endPosition: { ...boardSpaceMousePos },
+        startNoteID: startElement_id,
+        endNoteID: endElement_id,
+        startPosition: { ...boardSpaceStartPos },
+        endPosition: { ...boardSpaceEndPos },
         shape: pathVisualShape
     }
     configurePath(path)
     allPaths.set(div.id, path)
     selectedPath = path
-    suppressNextMouseUp = true
-    StatesHandler.isDrawingPath = true
-    StatesHandler.isDrawingPathEnd = true
+    suppressNextMouseUp = isDrawing
+    StatesHandler.isDrawingPath = isDrawing
+    StatesHandler.isDrawingPathEnd = isDrawing
     updatePathPosition(path, path.startPosition, path.endPosition)
     return path
 }

@@ -35,7 +35,7 @@ document.getElementById('gcm-new-whiteboard').addEventListener('mousedown', (e) 
 document.getElementById('gcm-new-connection').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    createPath({ x: e.clientX, y: e.clientY }, contextMenuCenter.x, contextMenuCenter.y)
+    createPath({ x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, null, null, true)
 
     forgetContextMenus()
 })
