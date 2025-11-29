@@ -453,7 +453,7 @@ ipcMain.handle('open-whiteboard', (e, whiteboardID) => {
     }else WindowHandler.openComponent('w', whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
 })
 
-ipcMain.handle('save-quill-delta', (e, contents) => {
+ipcMain.handle('save-editor-contents', (e, contents) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     const componentID = WindowHandler.allWindows.get(symbolicID).componentID
@@ -461,7 +461,7 @@ ipcMain.handle('save-quill-delta', (e, contents) => {
     fs.writeFileSync(savesJSON, JSON.stringify(contents, null, 2), 'utf-8')
 })
 
-ipcMain.handle('load-quill-delta', (e) => {
+ipcMain.handle('load-editor-contents', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     const componentID = WindowHandler.allWindows.get(symbolicID).componentID

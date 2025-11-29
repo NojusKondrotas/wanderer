@@ -48,8 +48,8 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   addWhiteboard: () => ipcRenderer.invoke('add-whiteboard'),
   openWhiteboard: (whiteboardID) => ipcRenderer.invoke('open-whiteboard', whiteboardID),
 
-  saveQuillDelta: (contents) => ipcRenderer.invoke('save-quill-delta', contents),
-  loadQuillDelta: () => ipcRenderer.invoke('load-quill-delta'),
+  saveEditorContents: (contents) => ipcRenderer.invoke('save-editor-contents', contents),
+  loadEditorContents: () => ipcRenderer.invoke('load-editor-contents'),
 })
 
 ipcRenderer.on('app-before-quit', () => {

@@ -1,17 +1,21 @@
-let quill
+let editor
 async function initNotepad() {
-    const delta = await window.wandererAPI.loadQuillDelta()
-    quill = initQuill('#notepad', delta)
+    const contents = await window.wandererAPI.loadEditorContents()
+    editorContents = initEditor('#notepad', contents) // unimplemented function
 }
 
 initNotepad()
 StatesHandler.isComponentNotepad = true
 
 document.getElementById('but').addEventListener('click', () => {
-    window.wandererAPI.saveQuillDelta(quill.getContents())
+    window.wandererAPI.saveEditorContents(editor.getContents())
     window.wandererAPI.closeWindow()
 })
 
 window.wandererAPI.onTerminateWindow(() => {
-    window.wandererAPI.saveQuillDelta(quill.getContents())
+    window.wandererAPI.saveEditorContents(editor.getContents())
 })
+
+function initEditor(dom_id, contents = ''){
+
+}
