@@ -1,8 +1,7 @@
-const { app, BrowserWindow, ipcMain, globalShortcut, screen, webFrame } = require('electron')
+const { app, BrowserWindow, ipcMain, globalShortcut, screen } = require('electron')
 const path = require('path')
 const fs = require('fs')
 const robot = require('@hurdlegroup/robotjs')
-const { send, windowsStore } = require('process')
 
 let allNotepads = new Set(), allWhiteboards = new Set()
 let largestNotepadID = 0, unusedNotepadIDs = new Array()
