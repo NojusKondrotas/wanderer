@@ -13,15 +13,22 @@ function getNoteContainerID(){
     }
 }
 
-function toggleWritingMode(toggle = false, editableElID){
-    const editableEl = document.getElementById(editableElID)
+function getEditableNote(noteID){
+    const note = document.getElementById(noteID)
+    const p = note.querySelector('p')
+    return p
+}
+
+function toggleWritingMode(toggle = false, editableElContainerID){
+    const editableElContainer = document.getElementById(editableElContainerID)
+    const editableEl = getEditableNote(editableElContainerID)
     if(toggle){
         editableEl.style.userSelect = 'auto'
         editableEl.contentEditable = 'true'
         editableEl.focus()
 
         StatesHandler.isWritingElement = true
-        selectedElement = editableEl
+        selectedElement = editableElContainer
     }
     else{
         editableEl.contentEditable = 'false'
@@ -68,9 +75,8 @@ function addNoteListeners(newNote){
 
     newNote.addEventListener('dblclick', (e) => {
         selectedElement = newNote
-        const p = newNote.querySelector('p')
         if(!StatesHandler.isWritingElement){
-            toggleWritingMode(true, p.id)
+            toggleWritingMode(true, newNote.id)
 
             const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
             range = document.createRange()
