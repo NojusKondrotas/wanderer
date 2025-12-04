@@ -14,7 +14,7 @@ function getElementID(){
 }
 
 function configureElement(element){
-    if(element.classList.contains('note')){
+    if(element.classList.contains('note-container')){
         addNoteListeners(element)
     }else if(element.classList.contains('notepad')){
         addNotepadListeners(element)
