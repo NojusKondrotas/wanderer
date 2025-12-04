@@ -14,6 +14,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         unusedElementIDs = stateObj.unusedElementIDs
         largestPathID = stateObj.largestPathID
         unusedPathIDs = stateObj.unusedPathIDs
+        largestNoteContainerID = stateObj.largestNoteContainerID
+        unusedNoteContainerIDs = stateObj.unusedNoteContainerIDs
 
         elementPositions = new Map(stateObj.elementPositions)
         elementHierarchy = new Map(stateObj.elementHierarchy)
@@ -37,6 +39,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(unusedElementIDs)
         console.log(largestPathID)
         console.log(unusedPathIDs)
+        console.log(largestNoteContainerID)
+        console.log(unusedNoteContainerIDs)
         console.log(elementPositions)
         console.log(elementHierarchy)
         console.log(allPaths)
@@ -83,6 +87,8 @@ function save(){
         unusedElementIDs,
         largestPathID,
         unusedPathIDs,
+        largestNoteContainerID,
+        unusedNoteContainerIDs,
         elementPositions: elementPositionsArr,
         elementHierarchy: elementHierarchyArr,
         allPaths: allPathsArr,
