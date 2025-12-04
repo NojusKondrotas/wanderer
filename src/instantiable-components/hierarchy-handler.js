@@ -15,34 +15,40 @@ function instantiateHierarchy(n_id, parent_ids = [], child_ids = []){
 function deleteFromHierarchy(n_id){
     let [parents, children] = elementHierarchy.get(n_id);
     for(let p_id of parents){
-        let [p_parents, p_children] = elementHierarchy.get(p_id);
-        p_children.delete(n_id);
+        removeNoteParent(n_id, p_id);
     }
     for(let c_id of children){
-        let [c_parents, c_children] = elementHierarchy.get(c_id);
-        c_parents.delete(n_id);
+        removeNoteChild(n_id, c_id);
     }
     elementHierarchy.delete(n_id);
 }
 
 function addNoteParent(n_id, p_id){
-    let [parents, children] = elementHierarchy.get(n_id)
-    parents.add(p_id)
+    let [n_parents, n_children] = elementHierarchy.get(n_id);
+    let [p_parents, p_children] = elementHierarchy.get(p_id);
+    n_parents.add(p_id);
+    p_children.add(n_id);
 }
 
 function removeNoteParent(n_id, p_id){
-    let [parents, children] = elementHierarchy.get(n_id)
-    parents.delete(p_id)
+    let [n_parents, n_children] = elementHierarchy.get(n_id);
+    let [p_parents, p_children] = elementHierarchy.get(p_id);
+    n_parents.delete(p_id);
+    p_children.delete(n_id);
 }
 
 function addNoteChild(n_id, c_id){
-    let [parents, children] = elementHierarchy.get(n_id)
-    children.add(c_id)
+    let [n_parents, n_children] = elementHierarchy.get(n_id);
+    let [c_parents, c_children] = elementHierarchy.get(c_id);
+    n_children.add(c_id);
+    c_parents.add(n_id);
 }
 
 function removeNoteChild(n_id, c_id){
-    let [parents, children] = elementHierarchy.get(n_id)
-    children.delete(c_id)
+    let [n_parents, n_children] = elementHierarchy.get(n_id);
+    let [c_parents, c_children] = elementHierarchy.get(c_id);
+    n_children.delete(c_id);
+    c_parents.delete(n_id);
 }
 
 function switchFocusToChild(n_id){
