@@ -11,7 +11,7 @@ const gcm = {
 document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    createNewNote(parentWhiteboard, '', [], [], contextMenuCenter.x, contextMenuCenter.y)
+    createNewNote(parentWhiteboard, '', new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y)
 
     turnOffContextMenu()
 })
