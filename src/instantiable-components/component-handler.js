@@ -56,6 +56,7 @@ function createNewElement(container, el, id, centerX = 0, centerY = 0){
     el.style.visibility = 'hidden'
 
     el.id = id
+    el.classList.add('component-text')
 
     addElementToPositioning(el, centerX, centerY)
 
@@ -67,6 +68,7 @@ function createNewElementLeftTopOffset(container, el, id, offsetX = 0, offsetY =
     el.style.visibility = 'hidden'
 
     el.id = id
+    el.classList.add('component-text')
 
     addElementToPositioningLeftTopOffset(el, offsetX, offsetY)
 

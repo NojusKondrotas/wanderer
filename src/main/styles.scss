@@ -38,6 +38,10 @@ body {
     z-index: $low-index;
 }
 
+.component-text {
+    font-size: 0.9rem;
+}
+
 #keybind-guide {
     position: absolute;
     display: flex;
@@ -92,6 +96,8 @@ body {
     width: 0;
     height: 0;
 
+    font-size: 0.85rem;
+
     transition: left 240ms ease, top 240ms ease;
 }
 
@@ -103,6 +109,8 @@ body {
     background-color: transparent;
     border: 3px double;
     border-color: rgb(97, 97, 97);
+
+    font-size: 0.85rem;
 
     user-select: none;
 
@@ -195,6 +203,7 @@ body {
     height: 100%;
     padding: 0;
     margin: 0;
+
     line-height: 20px;
 
     outline: none;
@@ -202,6 +211,8 @@ body {
     word-break: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
+
+    font-size: 1em;
 
     z-index: $medium-index;
 }
