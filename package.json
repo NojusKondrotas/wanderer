@@ -4,6 +4,7 @@
   "main": "src/main/main.js",
   "description": "A lightweight experimental cross-platform note-taking app.",
   "repository": "https://github.com/NojusKondrotas/wanderer",
+  "type": "module",
   "scripts": {
     "b-ejs": "node ./src/dev/build-ejs.js",
     "test": "echo \"Error: no test specified\" && exit 1",

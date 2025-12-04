@@ -1,7 +1,11 @@
-const { app, BrowserWindow, ipcMain, globalShortcut, screen } = require('electron')
-const path = require('path')
-const fs = require('fs')
-const robot = require('@hurdlegroup/robotjs')
+import { app, BrowserWindow, ipcMain, globalShortcut, screen } from 'electron'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import fs from 'fs'
+import robot from '@hurdlegroup/robotjs'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 let allNotepads = new Set(), allWhiteboards = new Set()
 let largestNotepadID = 0, unusedNotepadIDs = new Array()
