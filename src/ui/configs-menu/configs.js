@@ -1,3 +1,4 @@
+const configsDiv = document.getElementById('configs');
 const sections = [
     document.getElementById('configs-templates'),
     document.getElementById('configs-notes'),
@@ -5,6 +6,21 @@ const sections = [
     document.getElementById('configs-notepads'),
     document.getElementById('configs-internal')
 ];
+const abstracts = [
+    document.getElementById('configs-abstract-templates'),
+    document.getElementById('configs-abstract-notes'),
+    document.getElementById('configs-abstract-whiteboards'),
+    document.getElementById('configs-abstract-notepads'),
+    document.getElementById('configs-abstract-internal')
+];
+const menus = [
+    document.getElementById('configs-menus-templates'),
+    document.getElementById('configs-menus-notes'),
+    document.getElementById('configs-menus-whiteboards'),
+    document.getElementById('configs-menus-notepads'),
+    document.getElementById('configs-menus-internal')
+];
+const infoTag = document.getElementById('configs-infotag');
 
 function addConfigsEventListeners() {
     sections.forEach((section) => {
