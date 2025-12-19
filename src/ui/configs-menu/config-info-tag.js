@@ -2,9 +2,12 @@ const configsInfoTag = document.getElementById('configs-infotag');
 const configsInfoTagField = document.getElementById('configs-infotag-field');
 
 (function addConfigsInfoTagListeners() {
-    configsInfoTag.addEventListener('click', () => console.log('hi!!!'));
+    configsInfoTag.addEventListener('click', () => {
+        toggleSingleConfigAbstract(true, abstracts[activeSectionIdx]);
+    });
     configsInfoTagField.addEventListener('mouseleave', () => {
         toggleSingleConfigInfoTag(false);
+        activeSectionIdx = -1;
     });
 })();
 

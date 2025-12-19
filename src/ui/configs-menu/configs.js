@@ -6,13 +6,7 @@ const sections = [
     document.getElementById('configs-notepads'),
     document.getElementById('configs-internal')
 ];
-const abstracts = [
-    document.getElementById('configs-abstract-templates'),
-    document.getElementById('configs-abstract-notes'),
-    document.getElementById('configs-abstract-whiteboards'),
-    document.getElementById('configs-abstract-notepads'),
-    document.getElementById('configs-abstract-internal')
-];
+let activeSectionIdx = -1;
 const menus = [
     document.getElementById('configs-menus-templates'),
     document.getElementById('configs-menus-notes'),
@@ -22,18 +16,20 @@ const menus = [
 ];
 
 (function addConfigsEventListeners() {
-    sections.forEach((section) => {
+    for(let i = 0; i < sections.length; ++i) {
+        const section = sections[i];
         if (section != null) {
             section.addEventListener('click', () => {
                 displaySingleConfigMenu(section);
             });
             section.addEventListener('mouseenter', () => {
                 toggleSingleConfigInfoTag(true, section);
+                activeSectionIdx = i;
             });
         } else {
             // throw error, irrecoverable state !!
         }
-    });
+    }
 })();
 
 function hideSingleConfigMenu() {
@@ -49,13 +45,5 @@ function hideAllConfigs() {
 }
 
 function displayAllConfigs() {
-
-}
-
-function toggleAllConfigsAbstracts(flag) {
-    
-}
-
-function toggleSingleConfigAbstract(flag) {
 
 }
