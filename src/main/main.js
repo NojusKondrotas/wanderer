@@ -348,6 +348,7 @@ function initialiseApp(){
     if(Array.isArray(windowsObj) && windowsObj.length > 0){
         for(let i = 0; i < windowsObj.length; ++i){
             const winData = windowsObj[i]
+            let win = null;
             switch(winData.type){
                 case 'p':
                     win = WindowHandler.createWindow('p', winData.componentID, winData.parentWindowID,
