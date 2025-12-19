@@ -345,7 +345,7 @@ path {
     z-index: $higher-index;
 }
 
-#configs-infotag > img {
+#configs-infotag > img, .cg-abst-exit > img {
     width: 16px;
     height: auto;
 }
@@ -357,6 +357,9 @@ path {
 .cg-abst-exit {
     display: none;
     position: absolute;
+
+    background: transparent;
+    border: transparent;
 
     z-index: $highest-index;
 }
