@@ -20,25 +20,21 @@ const menus = [
     document.getElementById('configs-menus-notepads'),
     document.getElementById('configs-menus-internal')
 ];
-const infoTag = document.getElementById('configs-infotag');
 
-function addConfigsEventListeners() {
+(function addConfigsEventListeners() {
     sections.forEach((section) => {
         if (section != null) {
             section.addEventListener('click', () => {
                 displaySingleConfigMenu(section);
             });
             section.addEventListener('mouseenter', () => {
-                toggleSingleConfigInfoTag(true);
-            });
-            section.addEventListener('mouseleave', () => {
-                toggleSingleConfigInfoTag(false);
+                toggleSingleConfigInfoTag(true, section);
             });
         } else {
             // throw error, irrecoverable state !!
         }
     });
-}
+})();
 
 function hideSingleConfigMenu() {
 
@@ -56,8 +52,8 @@ function displayAllConfigs() {
 
 }
 
-function toggleSingleConfigInfoTag(flag) {
-
+function toggleAllConfigsAbstracts(flag) {
+    
 }
 
 function toggleSingleConfigAbstract(flag) {

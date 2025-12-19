@@ -330,7 +330,17 @@ path {
     align-self: center;
 }
 
-#configs-infotag {
+#configs-infotag, #configs-infotag-field {
     display: none;
     position: absolute;
+    transform: translateY(-50%);
+}
+
+#configs-infotag {
+    pointer-events: auto;
+    z-index: $higher-index;
+}
+
+#configs-infotag-field {
+    z-index: $highest-index;
 }
