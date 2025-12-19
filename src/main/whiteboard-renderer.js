@@ -124,5 +124,11 @@ window.wandererAPI.openTabMenu((mousePos, windows) => {
     openTabsMenu(mousePos, windows)
 })
 
+window.wandererAPI.closeTabMenu(async () => {
+    closeTabsMenu();
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    window.wandererAPI.closeTabMenuDone();
+})
+
 window.wandererAPI.zoomInWindow((mousePos) => zoomWhiteboard(mousePos, true))
 window.wandererAPI.zoomOutWindow((mousePos) => zoomWhiteboard(mousePos, false))

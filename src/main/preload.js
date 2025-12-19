@@ -34,6 +34,10 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   openTabMenu: (callback) => ipcRenderer.on('open-tab-menu',
     (_, mousePos, windows) => callback(mousePos, windows)
   ),
+  closeTabMenu: (callback) => ipcRenderer.on('close-tab-menu',
+    () => callback()
+  ),
+  closeTabMenuDone: () => ipcRenderer.send('close-tab-menu-done'),
   setMousePosition: (x, y) => {
     ipcRenderer.invoke('set-mouse-position', x, y)
   },

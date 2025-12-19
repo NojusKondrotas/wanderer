@@ -387,15 +387,31 @@ app.whenReady().then(() => {
         const senderWindow = BrowserWindow.getFocusedWindow()
         if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', getMousePos(senderWindow))
     })
-    globalShortcut.register('CmdOrCtrl+2', () => {
-        const senderWindow = BrowserWindow.getFocusedWindow()
-        const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj))
-        if(senderWindow) senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements)
+    globalShortcut.register('CmdOrCtrl+2', async () => {
+        const senderWindow = BrowserWindow.getFocusedWindow();
+        const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj));
+        if(!senderWindow) {
+            // handle
+            return;
+        }
+        await new Promise(resolve => {
+            ipcMain.once('close-tab-menu-done', resolve);
+            senderWindow.webContents.send('close-tab-menu');
+        });
+        senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements);
     })
-    globalShortcut.register('CmdOrCtrl+num2', () => {
-        const senderWindow = BrowserWindow.getFocusedWindow()
-        const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj))
-        if(senderWindow) senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements)
+    globalShortcut.register('CmdOrCtrl+num2', async () => {
+        const senderWindow = BrowserWindow.getFocusedWindow();
+        const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj));
+        if(!senderWindow) {
+            // handle
+            return;
+        }
+        await new Promise(resolve => {
+            ipcMain.once('close-tab-menu-done', resolve);
+            senderWindow.webContents.send('close-tab-menu');
+        });
+        senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements);
     })
     globalShortcut.register('CmdOrCtrl+X', () => {
         terminateApp()
