@@ -337,8 +337,16 @@ path {
 }
 
 #configs-infotag {
+    background: transparent;
+    border: transparent;
+
     pointer-events: auto;
     z-index: $higher-index;
+}
+
+#configs-infotag > img {
+    width: 16px;
+    height: auto;
 }
 
 #configs-infotag-field {
