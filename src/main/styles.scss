@@ -353,3 +353,10 @@ path {
 #configs-infotag-field {
     z-index: $highest-index;
 }
+
+.cg-abst-exit {
+    display: none;
+    position: absolute;
+
+    z-index: $highest-index;
+}

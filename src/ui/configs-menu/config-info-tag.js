@@ -3,7 +3,7 @@ const configsInfoTagField = document.getElementById('configs-infotag-field');
 
 (function addConfigsInfoTagListeners() {
     configsInfoTag.addEventListener('click', () => {
-        toggleSingleConfigAbstract(true, abstracts[activeSectionIdx]);
+        toggleSingleConfigAbstract(true, activeSectionIdx);
     });
     configsInfoTagField.addEventListener('mouseleave', () => {
         toggleSingleConfigInfoTag(false);
