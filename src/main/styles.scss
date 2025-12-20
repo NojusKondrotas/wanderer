@@ -127,7 +127,7 @@ body {
 
     transform: translate(-50%, -50%);
     
-    transition: transform 240ms ease, left 240ms ease, top 240ms ease, color 250ms ease-out, border-color 250ms ease-out;
+    transition: transform 200ms ease, left 200ms ease, top 200ms ease, color 200ms ease-out, border-color 200ms ease-out;
 
     z-index: $index-20;
 }
@@ -352,7 +352,7 @@ path {
     border: 1px double;
     border-color: black;
 
-    transition:  transform 240ms ease, color 250ms ease-out, border-color 250ms ease-out;
+    transition:  transform 200ms ease, color 200ms ease-out, border-color 200ms ease-out;
 }
 
 .cfg-flex {
