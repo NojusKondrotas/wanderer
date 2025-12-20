@@ -2,7 +2,11 @@ const configsInfoTag = document.getElementById('cfg-itag');
 const configsInfoTagField = document.getElementById('cfg-itag-field');
 
 (function addConfigsInfoTagListeners() {
-    configsInfoTag.addEventListener('click', () => {
+    configsInfoTag.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    configsInfoTag.addEventListener('click', (e) => {
+        e.stopPropagation();
         toggleSingleConfigAbstract(true, activeSectionIdx);
     });
     configsInfoTagField.addEventListener('mouseleave', () => {

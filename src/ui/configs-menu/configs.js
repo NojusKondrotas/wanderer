@@ -41,9 +41,13 @@ function displaySingleConfigMenu() {
 }
 
 function hideAllConfigs() {
-
+    configsDiv.style.display = 'none';
+    toggleAllConfigsAbstracts(false);
+    toggleSingleConfigInfoTag(false);
+    StatesHandler.isConfigsOpen = false;
 }
 
 function displayAllConfigs() {
-
+    configsDiv.style.display = 'flex';
+    StatesHandler.isConfigsOpen = true;
 }

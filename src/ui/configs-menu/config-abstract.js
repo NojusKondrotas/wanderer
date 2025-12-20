@@ -16,7 +16,11 @@ const abstractsExits = [
 (function addCfgAbstExitListeners() {
     for(let i = 0; i < abstractsExits.length; ++i){
         const exit = abstractsExits[i];
-        exit.addEventListener('click', () => {
+        exit.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+        });
+        exit.addEventListener('click', (e) => {
+            e.stopPropagation();
             toggleSingleConfigAbstract(false, i);
         });
     }
@@ -31,7 +35,13 @@ function placeConfigAbstractExit(abstract, exit) {
 }
 
 function toggleAllConfigsAbstracts(flag) {
-    
+    if (flag) {
+        abstracts.forEach(abstract => abstract.style.display = 'block');
+        abstractsExits.forEach(exit => exit.style.display = 'block');
+    } else {
+        abstracts.forEach(abstract => abstract.style.display = 'none');
+        abstractsExits.forEach(exit => exit.style.display = 'none');
+    }
 }
 
 function toggleSingleConfigAbstract(flag, abstractIdx) {

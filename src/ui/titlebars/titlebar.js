@@ -104,3 +104,9 @@ titlebarCloseCtrlFrame.addEventListener('click', (e) => {
     e.stopPropagation()
     closeWindow()
 })
+
+titlebarGlobalConfigurationFrame.addEventListener('click', (e) => {
+    e.stopPropagation();
+    titlebarGlobalConfigurationFrame.blur();
+    displayAllConfigs();
+})
