@@ -1,9 +1,9 @@
 $whiteboard-color: #f8f8f8;
 
-$low-index: 5;
-$medium-index: 10;
-$higher-index: 15;
-$highest-index: 20;
+$index-5: 5;
+$index-10: 10;
+$index-15: 15;
+$index-20: 20;
 
 #titlebar-visual {
     position: fixed;
@@ -21,7 +21,7 @@ $highest-index: 20;
     height: 80px;
     background-color: rgba(143, 170, 176, 0.5);
 
-    z-index: $highest-index;
+    z-index: $index-20;
 }
 
 .window-control {
@@ -40,7 +40,7 @@ $highest-index: 20;
 
     transition: transform 100ms ease;
 
-    z-index: $highest-index;
+    z-index: $index-20;
 }
 
 .window-control > img {

@@ -2,10 +2,10 @@ $whiteboard-color: #f8f8f8;
 $semi-imp-text-color: rgb(108, 116, 116);
 $unimp-text-color: rgba(126, 135, 135, 0.33);
 
-$low-index: 5;
-$medium-index: 10;
-$higher-index: 15;
-$highest-index: 20;
+$index-5: 5;
+$index-10: 10;
+$index-15: 15;
+$index-20: 20;
 
 body {
     width: 100vw;
@@ -26,7 +26,7 @@ body {
 
     transition: transform 85ms ease-out;
 
-    z-index: $medium-index;
+    z-index: $index-10;
 }
 
 #parent-whiteboard {
@@ -41,7 +41,7 @@ body {
 
     transition: transform 150ms ease-out;
 
-    z-index: $low-index;
+    z-index: $index-5;
 }
 
 .component-text {
@@ -56,7 +56,7 @@ body {
     right: 0px;
     bottom: 0px;
 
-    z-index: $low-index;
+    z-index: $index-5;
 }
 
 #keybind-container {
@@ -127,7 +127,7 @@ body {
     
     transition: transform 240ms ease, left 240ms ease, top 240ms ease, color 250ms ease-out, border-color 250ms ease-out;
 
-    z-index: $highest-index;
+    z-index: $index-20;
 }
 
 .text-small {
@@ -174,7 +174,7 @@ body {
     min-height: 60px;
     padding: 2px;
 
-    z-index: $medium-index;
+    z-index: $index-10;
 }
 
 .open-window {
@@ -197,7 +197,7 @@ body {
 
     transition: transform 100ms ease-out;
 
-    z-index: $higher-index;
+    z-index: $index-15;
 }
 
 .open-window img {
@@ -237,7 +237,7 @@ body {
 
     font-size: 1em;
 
-    z-index: $medium-index;
+    z-index: $index-10;
 }
 
 .note-container {
@@ -254,7 +254,7 @@ body {
 
     outline: none;
 
-    z-index: $medium-index;
+    z-index: $index-10;
 }
 
 .note-border {
@@ -308,7 +308,21 @@ path {
 
     transform: translate(-50%, -50%);
 
-    z-index: $medium-index;
+    z-index: $index-10;
+}
+
+#cfg-blur {
+    display: none;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+
+    pointer-events: none;
+
+    background-color: transparent;
+    backdrop-filter: blur(7px);
+    z-index: 15;
 }
 
 #configs {
@@ -360,7 +374,7 @@ path {
     border: transparent;
 
     pointer-events: auto;
-    z-index: $higher-index;
+    z-index: $index-15;
 }
 
 #cfg-itag > img, .cfg-abst-exit > img {
@@ -369,7 +383,7 @@ path {
 }
 
 #cfg-itag-field {
-    z-index: $highest-index;
+    z-index: $index-20;
 }
 
 .cfg-abst-exit {
@@ -379,5 +393,5 @@ path {
     background: transparent;
     border: transparent;
 
-    z-index: $highest-index;
+    z-index: $index-20;
 }
