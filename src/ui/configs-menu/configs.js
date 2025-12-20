@@ -1,4 +1,5 @@
 const configsDiv = document.getElementById('configs');
+const cfgBlur = document.getElementById('cfg-blur');
 const sections = [
     document.getElementById('cfg-templates'),
     document.getElementById('cfg-n'),
@@ -42,6 +43,7 @@ function displaySingleConfigMenu() {
 
 function hideAllConfigs() {
     configsDiv.style.display = 'none';
+    cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
     toggleAllConfigsAbstracts(false);
     toggleSingleConfigInfoTag(false);
     StatesHandler.isConfigsOpen = false;
@@ -49,5 +51,6 @@ function hideAllConfigs() {
 
 function displayAllConfigs() {
     configsDiv.style.display = 'flex';
+    cfgBlur.style.backdropFilter = 'blur(4px) opacity(1)';
     StatesHandler.isConfigsOpen = true;
 }

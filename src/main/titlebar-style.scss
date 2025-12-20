@@ -15,7 +15,7 @@ $index-25: 25;
     margin: 0;
     padding: 0;
     
-    z-index: $index-15;
+    z-index: $index-20;
 }
 
 #titlebar-visual {
@@ -28,7 +28,7 @@ $index-25: 25;
     background-color: rgba(143, 170, 176, 0.5);
 
     transition: transform 85ms ease-out;
-    z-index: $index-20;
+    z-index: $index-25;
 }
 
 .window-control {
