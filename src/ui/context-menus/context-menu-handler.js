@@ -48,10 +48,15 @@ function moveContextMenu(centerX, centerY, blueprint){
 }
 
 function concealContextMenuChildren(cm){
-    Array.from(cm.children).forEach(option => {
-        option.style.borderColor = borderColorCM.transparent
-        option.style.color = colorCM.transparent
-    })
+    Array.from(cm.children).forEach((option) => {
+        let truePos = getAbsolutePosition(option);
+        const offsetX = generateRandom(-50, 50);
+        const offsetY = generateRandom(-50, 50);
+        option.style.left = `${truePos.left + offsetX}px`;
+        option.style.top = `${truePos.top + offsetY}px`;
+        option.style.borderColor = borderColorCM.transparent;
+        option.style.color = colorCM.transparent;
+    });
 }
 
 function concealContextMenu(){
