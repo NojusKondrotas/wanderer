@@ -1,16 +1,16 @@
 const abstracts = [
-    document.getElementById('configs-abstract-templates'),
-    document.getElementById('configs-abstract-notes'),
-    document.getElementById('configs-abstract-whiteboards'),
-    document.getElementById('configs-abstract-notepads'),
-    document.getElementById('configs-abstract-internal')
+    document.getElementById('cfg-abst-templates'),
+    document.getElementById('cfg-abst-n'),
+    document.getElementById('cfg-abst-w'),
+    document.getElementById('cfg-abst-p'),
+    document.getElementById('cfg-abst-internal')
 ];
 const abstractsExits = [
-    document.getElementById('cg-abst-templates-exit'),
-    document.getElementById('cg-abst-n-exit'),
-    document.getElementById('cg-abst-w-exit'),
-    document.getElementById('cg-abst-np-exit'),
-    document.getElementById('cg-abst-internal-exit')
+    document.getElementById('cfg-abst-templates-exit'),
+    document.getElementById('cfg-abst-n-exit'),
+    document.getElementById('cfg-abst-w-exit'),
+    document.getElementById('cfg-abst-p-exit'),
+    document.getElementById('cfg-abst-internal-exit')
 ];
 
 (function addCfgAbstExitListeners() {

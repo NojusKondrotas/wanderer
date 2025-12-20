@@ -325,14 +325,14 @@ path {
     flex-wrap: nowrap;
 }
 
-.config-style {
+.cfg-style {
     padding: 10px;
     background-color: $whiteboard-color;
     border: 1px double;
     border-color: black;
 }
 
-.configs-flex-layout {
+.cfg-flex {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -340,7 +340,7 @@ path {
     flex: 1 1 0;
 }
 
-.configs-abstracts {
+.cfg-abst {
     display: none;
     overflow-wrap: break-word;
     align-self: center;
@@ -349,13 +349,13 @@ path {
     background-color: $whiteboard-color;
 }
 
-#configs-infotag, #configs-infotag-field {
+#cfg-itag, #cfg-itag-field {
     display: none;
     position: absolute;
     transform: translateY(-50%);
 }
 
-#configs-infotag {
+#cfg-itag {
     background: transparent;
     border: transparent;
 
@@ -363,16 +363,16 @@ path {
     z-index: $higher-index;
 }
 
-#configs-infotag > img, .cg-abst-exit > img {
+#cfg-itag > img, .cfg-abst-exit > img {
     width: 16px;
     height: auto;
 }
 
-#configs-infotag-field {
+#cfg-itag-field {
     z-index: $highest-index;
 }
 
-.cg-abst-exit {
+.cfg-abst-exit {
     display: none;
     position: absolute;
 

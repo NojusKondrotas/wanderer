@@ -1,5 +1,5 @@
-const configsInfoTag = document.getElementById('configs-infotag');
-const configsInfoTagField = document.getElementById('configs-infotag-field');
+const configsInfoTag = document.getElementById('cfg-itag');
+const configsInfoTagField = document.getElementById('cfg-itag-field');
 
 (function addConfigsInfoTagListeners() {
     configsInfoTag.addEventListener('click', () => {

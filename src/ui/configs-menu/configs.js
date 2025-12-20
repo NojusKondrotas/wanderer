@@ -1,18 +1,18 @@
 const configsDiv = document.getElementById('configs');
 const sections = [
-    document.getElementById('configs-templates'),
-    document.getElementById('configs-notes'),
-    document.getElementById('configs-whiteboards'),
-    document.getElementById('configs-notepads'),
-    document.getElementById('configs-internal')
+    document.getElementById('cfg-templates'),
+    document.getElementById('cfg-n'),
+    document.getElementById('cfg-w'),
+    document.getElementById('cfg-p'),
+    document.getElementById('cfg-internal')
 ];
 let activeSectionIdx = -1;
 const menus = [
-    document.getElementById('configs-menus-templates'),
-    document.getElementById('configs-menus-notes'),
-    document.getElementById('configs-menus-whiteboards'),
-    document.getElementById('configs-menus-notepads'),
-    document.getElementById('configs-menus-internal')
+    document.getElementById('cfg-menus-templates'),
+    document.getElementById('cfg-menus-n'),
+    document.getElementById('cfg-menus-w'),
+    document.getElementById('cfg-menus-p'),
+    document.getElementById('cfg-menus-internal')
 ];
 
 (function addConfigsEventListeners() {
