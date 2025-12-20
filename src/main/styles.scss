@@ -7,6 +7,7 @@ $index-10: 10;
 $index-15: 15;
 $index-20: 20;
 $index-25: 25;
+$index-30: 30;
 
 body {
     width: 100vw;
@@ -373,8 +374,10 @@ path {
     display: none;
     position: absolute;
     transform: translateY(-50%);
+}
 
-    z-index: $index-20;
+#cfg-itag-field {
+    z-index: $index-25;
 }
 
 #cfg-itag {
@@ -382,7 +385,7 @@ path {
     border: transparent;
 
     pointer-events: auto;
-    z-index: $index-15;
+    z-index: $index-30;
 }
 
 #cfg-itag > img, .cfg-abst-exit > img {
@@ -397,5 +400,5 @@ path {
     background: transparent;
     border: transparent;
 
-    z-index: $index-20;
+    z-index: $index-25;
 }

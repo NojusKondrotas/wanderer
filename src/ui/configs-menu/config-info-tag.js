@@ -9,6 +9,10 @@ const configsInfoTagField = document.getElementById('cfg-itag-field');
         e.stopPropagation();
         toggleSingleConfigAbstract(true, activeSectionIdx);
     });
+    configsInfoTagField.addEventListener('mousedown', () => {
+        toggleSingleConfigInfoTag(false);
+        activeSectionIdx = -1;
+    });
     configsInfoTagField.addEventListener('mouseleave', () => {
         toggleSingleConfigInfoTag(false);
         activeSectionIdx = -1;
