@@ -8,6 +8,12 @@ $higher-index: 15;
 $highest-index: 20;
 
 body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+
+    background-color: $whiteboard-color;
+
     overflow: hidden;
 }
 
