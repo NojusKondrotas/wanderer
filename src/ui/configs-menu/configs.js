@@ -7,6 +7,8 @@ const sections = [
     document.getElementById('cfg-p'),
     document.getElementById('cfg-internal')
 ];
+const sectionsBorderColor = { opaque: "black", transparent: "transparent" };
+const sectionsColor = { opaque: "black", transparent: "transparent" };
 let activeSectionIdx = -1;
 const menus = [
     document.getElementById('cfg-menus-templates'),
@@ -51,6 +53,20 @@ function hideAllConfigs() {
 
 function displayAllConfigs() {
     configsDiv.style.display = 'flex';
+    sections.forEach(section => {
+        const offsetX = generateRandom(-50, 50);
+        const offsetY = generateRandom(-50, 50);
+        section.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        section.style.borderColor = sectionsBorderColor.transparent;
+        section.style.color = sectionsColor.transparent;
+    });
+    requestAnimationFrame(() => {
+        sections.forEach(section => {
+            section.style.transform = 'translate(0, 0)';
+            section.style.borderColor = sectionsBorderColor.opaque;
+            section.style.color = sectionsColor.opaque;
+        });
+    });
     cfgBlur.style.backdropFilter = 'blur(4px) opacity(1)';
     StatesHandler.isConfigsOpen = true;
 }
