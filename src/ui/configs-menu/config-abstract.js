@@ -13,6 +13,15 @@ const abstractsExits = [
     document.getElementById('cg-abst-internal-exit')
 ];
 
+(function addCfgAbstExitListeners() {
+    for(let i = 0; i < abstractsExits.length; ++i){
+        const exit = abstractsExits[i];
+        exit.addEventListener('click', () => {
+            toggleSingleConfigAbstract(false, i);
+        });
+    }
+})();
+
 function placeConfigAbstractExit(abstract, exit) {
     const rect = abstract.getBoundingClientRect();
     const { x, y } = convertToWhiteboardSpace(rect.left, rect.top);
