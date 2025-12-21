@@ -120,7 +120,7 @@ body {
     align-self: center;
     
     background-color: transparent;
-    border: 3px double;
+    border: 1px solid;
     border-color: rgb(97, 97, 97);
 
     user-select: none;
@@ -352,7 +352,7 @@ path {
     border: 1px double;
     border-color: black;
 
-    transition:  transform 200ms ease, color 200ms ease-out, border-color 200ms ease-out;
+    transition:  transform 100ms ease, color 100ms ease-out, border-color 100ms ease-out;
 }
 
 .cfg-flex {

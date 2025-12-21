@@ -9,6 +9,7 @@ const sections = [
 ];
 const sectionsBorderColor = { opaque: "black", transparent: "transparent" };
 const sectionsColor = { opaque: "black", transparent: "transparent" };
+const timeoutCfg = 100;
 let activeSectionIdx = -1;
 const menus = [
     document.getElementById('cfg-menus-templates'),
@@ -44,7 +45,14 @@ function displaySingleConfigMenu() {
 }
 
 function hideAllConfigs() {
-    configsDiv.style.display = 'none';
+    sections.forEach(section => {
+        const offsetX = generateRandom(-50, 50);
+        const offsetY = generateRandom(-50, 50);
+        section.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        section.style.borderColor = sectionsBorderColor.transparent;
+        section.style.color = sectionsColor.transparent;
+    });
+    setTimeout(() => configsDiv.style.display = 'none', timeoutCfg)
     cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
     toggleAllConfigsAbstracts(false);
     toggleSingleConfigInfoTag(false);
