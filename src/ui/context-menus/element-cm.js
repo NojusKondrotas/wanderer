@@ -1,4 +1,4 @@
-const elementContextMenu = document.getElementById('element-context-menu')
+const elementContextMenu = document.getElementById('element-context-menu');
 const npwcm = {
     blueprint : elementContextMenu,
     angleSize : 360 / elementContextMenu.children.length,
@@ -6,46 +6,67 @@ const npwcm = {
     angleOffset : 0,
     xOffset : 0,
     yOffset : -10
-}
+};
 
 document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-    
-    copy(selectedElement)
+    e.stopPropagation();
 
-    turnOffContextMenu()
-})
+    if(e.button === 2){
+        return;
+    }
+    
+    copy(selectedElement);
+
+    turnOffContextMenu();
+});
 
 document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-    
-    copy(selectedElement)
-    
-    deleteComponentByID(parentWhiteboard, selectedElement.id)
+    e.stopPropagation();
 
-    turnOffContextMenu()
-})
+    if(e.button === 2){
+        return;
+    }
+    
+    copy(selectedElement);
+    
+    deleteComponentByID(parentWhiteboard, selectedElement.id);
+
+    turnOffContextMenu();
+});
 
 document.getElementById('npwcm-delete').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
 
-    deleteNoteByID(parentWhiteboard, selectedElement.id)
+    if(e.button === 2){
+        return;
+    }
 
-    turnOffContextMenu()
-})
+    deleteNoteByID(parentWhiteboard, selectedElement.id);
+
+    turnOffContextMenu();
+});
 
 document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-    forgetContextMenus()
-    if (!selectedElement) return
+    e.stopPropagation();
 
-    createPath({ x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, selectedElement.id, null, true)
-})
+    if(e.button === 2){
+        return;
+    }
+
+    forgetContextMenus();
+    if (!selectedElement) return;
+
+    createPath({ x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, selectedElement.id, null, true);
+});
 
 document.getElementById('npwcm-disconnect').addEventListener('mousedown', (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
 
-    disconnectConnectedPaths(selectedElement.id)
+    if(e.button === 2){
+        return;
+    }
 
-    turnOffContextMenu()
-})
+    disconnectConnectedPaths(selectedElement.id);
+
+    turnOffContextMenu();
+});

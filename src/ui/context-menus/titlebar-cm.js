@@ -1,4 +1,4 @@
-const titlebarContextMenu = document.getElementById('titlebar-context-menu')
+const titlebarContextMenu = document.getElementById('titlebar-context-menu');
 const tcm = {
     blueprint : titlebarContextMenu,
     angleSize : 360 / titlebarContextMenu.children.length,
@@ -6,30 +6,50 @@ const tcm = {
     angleOffset : 234,
     xOffset : -10,
     yOffset : -10
-}
+};
 
-const titlebarFullScreenCtrlContextMenu = document.getElementById('tcm-fullscreen-window')
-const titlebarMaximizeCtrlContextMenu = document.getElementById('tcm-maximize-window')
-const titlebarMinimizeCtrlContextMenu = document.getElementById('tcm-minimize-window')
-const titlebarCloseCtrlContextMenu = document.getElementById('tcm-close-window')
-const titlebarGlobalConfigurationContextMenu = document.getElementById('tcm-global-config-menu')
+const titlebarFullScreenCtrlContextMenu = document.getElementById('tcm-fullscreen-window');
+const titlebarMaximizeCtrlContextMenu = document.getElementById('tcm-maximize-window');
+const titlebarMinimizeCtrlContextMenu = document.getElementById('tcm-minimize-window');
+const titlebarCloseCtrlContextMenu = document.getElementById('tcm-close-window');
+const titlebarGlobalConfigurationContextMenu = document.getElementById('tcm-global-config-menu');
 
 titlebarFullScreenCtrlContextMenu.addEventListener('click', (e) => {
-    e.stopPropagation()
-    titlebarToggleFullScreen()
-})
+    e.stopPropagation();
+
+    if(e.button === 2){
+        return;
+    }
+
+    titlebarToggleFullScreen();
+});
 
 titlebarMaximizeCtrlContextMenu.addEventListener('click', (e) => {
-    e.stopPropagation()
-    titlebarToggleMaximized()
-})
+    e.stopPropagation();
+
+    if(e.button === 2){
+        return;
+    }
+
+    titlebarToggleMaximized();
+});
 
 titlebarMinimizeCtrlContextMenu.addEventListener('click', (e) => {
-    e.stopPropagation()
-    titlebarToggleMinimized()
-})
+    e.stopPropagation();
+
+    if(e.button === 2){
+        return;
+    }
+
+    titlebarToggleMinimized();
+});
 
 titlebarCloseCtrlContextMenu.addEventListener('click', (e) => {
-    e.stopPropagation()
-    closeWindow()
-})
+    e.stopPropagation();
+
+    if(e.button === 2){
+        return;
+    }
+
+    closeWindow();
+});
