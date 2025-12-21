@@ -8,13 +8,7 @@ const tcm = {
     yOffset : -10
 };
 
-const titlebarFullScreenCtrlContextMenu = document.getElementById('tcm-fullscreen-window');
-const titlebarMaximizeCtrlContextMenu = document.getElementById('tcm-maximize-window');
-const titlebarMinimizeCtrlContextMenu = document.getElementById('tcm-minimize-window');
-const titlebarCloseCtrlContextMenu = document.getElementById('tcm-close-window');
-const titlebarGlobalConfigurationContextMenu = document.getElementById('tcm-global-config-menu');
-
-titlebarFullScreenCtrlContextMenu.addEventListener('click', (e) => {
+document.getElementById('tcm-fullscreen-window').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -24,7 +18,7 @@ titlebarFullScreenCtrlContextMenu.addEventListener('click', (e) => {
     titlebarToggleFullScreen();
 });
 
-titlebarMaximizeCtrlContextMenu.addEventListener('click', (e) => {
+document.getElementById('tcm-maximize-window').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -34,7 +28,7 @@ titlebarMaximizeCtrlContextMenu.addEventListener('click', (e) => {
     titlebarToggleMaximized();
 });
 
-titlebarMinimizeCtrlContextMenu.addEventListener('click', (e) => {
+document.getElementById('tcm-minimize-window').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -44,7 +38,7 @@ titlebarMinimizeCtrlContextMenu.addEventListener('click', (e) => {
     titlebarToggleMinimized();
 });
 
-titlebarCloseCtrlContextMenu.addEventListener('click', (e) => {
+document.getElementById('tcm-close-window').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -52,4 +46,14 @@ titlebarCloseCtrlContextMenu.addEventListener('click', (e) => {
     }
 
     closeWindow();
+});
+
+document.getElementById('tcm-global-config-menu').addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    if(e.button === 2){
+        return;
+    }
+
+    displayAllConfigs();
 });
