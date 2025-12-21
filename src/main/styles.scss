@@ -160,7 +160,7 @@ body {
 }
 
 .notepad, .whiteboard, .note, .open-window {
-    background-color: white;
+    background-color: $whiteboard-color;
 }
 
 .notepad, .whiteboard, .open-window {
@@ -230,6 +230,7 @@ body {
     margin: 0;
 
     line-height: 20px;
+    min-height: 20px;
 
     outline: none;
 
