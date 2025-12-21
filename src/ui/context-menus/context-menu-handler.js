@@ -85,9 +85,9 @@ function turnOffContextMenu(){
 }
 
 function openNewContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
-    if(activeContextMenu !== null){
-        contextMenuCenter = { x: centerX, y: centerY }
-        return moveContextMenu(centerX, centerY, blueprint)
+    if(activeContextMenu === blueprint){
+        contextMenuCenter = { x: centerX, y: centerY };
+        return moveContextMenu(centerX, centerY, blueprint);
     }
     activeContextMenu = blueprint
     closeTabsMenu()
