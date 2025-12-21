@@ -10,6 +10,9 @@ const npwcm = {
 
 document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
     e.stopPropagation();
+});
+document.getElementById('npwcm-copy').addEventListener('click', (e) => {
+    e.stopPropagation();
 
     if(e.button === 2){
         return;
@@ -21,6 +24,9 @@ document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
 });
 
 document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+document.getElementById('npwcm-cut').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -36,6 +42,9 @@ document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
 
 document.getElementById('npwcm-delete').addEventListener('mousedown', (e) => {
     e.stopPropagation();
+});
+document.getElementById('npwcm-delete').addEventListener('click', (e) => {
+    e.stopPropagation();
 
     if(e.button === 2){
         return;
@@ -47,6 +56,9 @@ document.getElementById('npwcm-delete').addEventListener('mousedown', (e) => {
 });
 
 document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+document.getElementById('npwcm-connect').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -60,6 +72,9 @@ document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
 });
 
 document.getElementById('npwcm-disconnect').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+document.getElementById('npwcm-disconnect').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){

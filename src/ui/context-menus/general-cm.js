@@ -10,6 +10,9 @@ const gcm = {
 
 document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
     e.stopPropagation();
+});
+document.getElementById('gcm-new-note').addEventListener('click', (e) => {
+    e.stopPropagation();
 
     if(e.button === 2){
         return;
@@ -21,6 +24,9 @@ document.getElementById('gcm-new-note').addEventListener('mousedown', (e) => {
 });
 
 document.getElementById('gcm-new-notepad').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+document.getElementById('gcm-new-notepad').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -34,6 +40,9 @@ document.getElementById('gcm-new-notepad').addEventListener('mousedown', (e) => 
 
 document.getElementById('gcm-new-whiteboard').addEventListener('mousedown', (e) => {
     e.stopPropagation();
+});
+document.getElementById('gcm-new-whiteboard').addEventListener('click', (e) => {
+    e.stopPropagation();
 
     if(e.button === 2){
         return;
@@ -46,6 +55,9 @@ document.getElementById('gcm-new-whiteboard').addEventListener('mousedown', (e) 
 
 document.getElementById('gcm-new-connection').addEventListener('mousedown', (e) => {
     e.stopPropagation();
+});
+document.getElementById('gcm-new-connection').addEventListener('click', (e) => {
+    e.stopPropagation();
 
     if(e.button === 2){
         return;
@@ -56,7 +68,10 @@ document.getElementById('gcm-new-connection').addEventListener('mousedown', (e) 
     forgetContextMenus();
 });
 
-document.getElementById('gcm-paste').addEventListener('mousedown', async (e) => {
+document.getElementById('gcm-paste').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+document.getElementById('gcm-paste').addEventListener('click', async (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
