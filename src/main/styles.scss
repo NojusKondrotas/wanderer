@@ -167,8 +167,6 @@ body {
 
 .notepad, .whiteboard, .open-window {
     position: absolute;
-
-    border: 1px solid black; 
 }
 
 .notepad, .whiteboard {
@@ -178,6 +176,9 @@ body {
     min-height: 60px;
     padding: 2px;
 
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+
     z-index: $index-10;
 }
 
@@ -186,7 +187,6 @@ body {
     width: 200px;
     margin: 0;
     padding: 0;
-    border-radius: 8px;
 
     flex-direction: column;
 
@@ -196,7 +196,7 @@ body {
 
     user-select: none;
 
-    border: 2px solid grey;
+    border: 1px solid black;
     background: none;
 
     transition: transform 100ms ease-out;
