@@ -126,8 +126,10 @@ body {
     user-select: none;
 
     transform: translate(-50%, -50%);
+
+    backdrop-filter: blur(2px) opacity(0);
     
-    transition: transform 170ms ease, left 170ms ease, top 170ms ease, color 170ms ease-out, border-color 170ms ease-out;
+    transition: backdrop-filter 170ms ease-out, transform 170ms ease, left 170ms ease, top 170ms ease, color 170ms ease-out, border-color 170ms ease-out;
 
     z-index: $index-20;
 }

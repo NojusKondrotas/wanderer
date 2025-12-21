@@ -21,8 +21,6 @@ function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, r
 
         option.style.left = `${x + offsetX}px`
         option.style.top = `${y + offsetY}px`
-        option.style.borderColor = borderColorCM.transparent
-        option.style.color = colorCM.transparent
     })
 
     requestAnimationFrame(() => {
@@ -37,6 +35,7 @@ function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, r
             option.style.top = `${y}px`
             option.style.borderColor = borderColorCM.opaque
             option.style.color = colorCM.opaque
+            option.style.backdropFilter = 'blur(2px) opacity(1)';
         })
         })
     })
@@ -56,6 +55,7 @@ function concealContextMenuChildren(cm){
         option.style.top = `${truePos.top + offsetY}px`;
         option.style.borderColor = borderColorCM.transparent;
         option.style.color = colorCM.transparent;
+        option.style.backdropFilter = 'blur(2px) opacity(0)';
     });
 }
 
