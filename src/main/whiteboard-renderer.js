@@ -58,9 +58,8 @@ window.addEventListener('mousemove', (e) => {
 })
 
 window.addEventListener('contextmenu', (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id)
+    if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id);
+    if(StatesHandler.isConfigsOpen) hideAllConfigs();
 
     openNewContextMenu(e.clientX, e.clientY, gcm)
 })
@@ -73,7 +72,8 @@ window.addEventListener('mouseup', (e) => {
     genMouseUp_WhiteboardMoveHandler(e)
 })
 
-function save(){
+async function save(){
+    await hideAllConfigs();
     saveAllNotesContents()
     window.wandererAPI.saveWhiteboardHTML()
 
@@ -121,7 +121,6 @@ window.wandererAPI.openTitlebarContextMenu((mousePos) => {
 })
 
 window.wandererAPI.openTabMenu((mousePos, windows) => {
-    console.log(StatesHandler.isTabsMenuOpen);
     if (StatesHandler.isTabsMenuOpen) {
         closeTabsMenu();
         setTimeout(() => openTabsMenu(mousePos, windows), timeoutTab);

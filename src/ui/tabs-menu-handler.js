@@ -1,5 +1,5 @@
 let openTabs = new Map();
-let timeoutTab = 230, areTabsClosed = true;
+let timeoutTab = 230;
 
 function getTabsMenuCircleCaps(amount){
     let circleCap = 6

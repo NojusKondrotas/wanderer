@@ -45,21 +45,24 @@ function displaySingleConfigMenu() {
 }
 
 function hideAllConfigs() {
-    sections.forEach(section => {
-        const offsetX = generateRandom(-50, 50);
-        const offsetY = generateRandom(-50, 50);
-        section.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-        section.style.borderColor = sectionsBorderColor.transparent;
-        section.style.color = sectionsColor.transparent;
+    return new Promise(resolve => {
+        sections.forEach(section => {
+            const offsetX = generateRandom(-50, 50);
+            const offsetY = generateRandom(-50, 50);
+            section.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+            section.style.borderColor = sectionsBorderColor.transparent;
+            section.style.color = sectionsColor.transparent;
+        });
+        setTimeout(() => configsDiv.style.display = 'none', timeoutCfg)
+        cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
+        toggleAllConfigsAbstracts(false);
+        toggleSingleConfigInfoTag(false);
+        StatesHandler.isConfigsOpen = false;
     });
-    setTimeout(() => configsDiv.style.display = 'none', timeoutCfg)
-    cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
-    toggleAllConfigsAbstracts(false);
-    toggleSingleConfigInfoTag(false);
-    StatesHandler.isConfigsOpen = false;
 }
 
 function displayAllConfigs() {
+    turnOffContextMenu();
     configsDiv.style.display = 'flex';
     sections.forEach(section => {
         const offsetX = generateRandom(-50, 50);
