@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('wandererAPI', {
+  logMessage: (message) => ipcRenderer.send('log-message', message),
   openLink: (link) => ipcRenderer.invoke('open-link', link),
   getLink: () => ipcRenderer.invoke('get-link'),
   getWindowPreview: (symbolicWindowID) => ipcRenderer.invoke('get-window-preview', symbolicWindowID),

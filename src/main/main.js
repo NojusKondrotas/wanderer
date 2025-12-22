@@ -419,6 +419,8 @@ app.whenReady().then(() => {
     })
 })
 
+ipcMain.on('log-message', (_, message) => console.log(message));
+
 app.on('window-all-closed', () => {
     if(process.platform !== 'darwin') app.quit()
 })
