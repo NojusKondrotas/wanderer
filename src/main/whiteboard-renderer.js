@@ -121,8 +121,14 @@ window.wandererAPI.openTitlebarContextMenu((mousePos) => {
 })
 
 window.wandererAPI.openTabMenu((mousePos, windows) => {
-    openTabsMenu(mousePos, windows)
-})
+    console.log(StatesHandler.isTabsMenuOpen);
+    if (StatesHandler.isTabsMenuOpen) {
+        closeTabsMenu();
+        setTimeout(() => openTabsMenu(mousePos, windows), timeoutTab);
+    } else {
+        openTabsMenu(mousePos, windows);
+    }
+});
 
 window.wandererAPI.closeTabMenu(async () => {
     closeTabsMenu();

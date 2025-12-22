@@ -1,4 +1,5 @@
-let openTabs = new Map()
+let openTabs = new Map();
+let timeoutTab = 230, areTabsClosed = true;
 
 function getTabsMenuCircleCaps(amount){
     let circleCap = 6
@@ -76,7 +77,6 @@ function toggleChildrenFilter(container, cssFunction){
 }
 
 function openTabsMenu(mousePos, windows){
-    closeTabsMenu()
     turnOffContextMenu()
     toggleChildrenFilter(parentWhiteboard, 'blur(3px)')
     generateAllTabsMenuCircles(mousePos.x, mousePos.y, windows.length, 162, 250, 0, 0, -10, windows)
@@ -84,7 +84,7 @@ function openTabsMenu(mousePos, windows){
         // console.log(w, windows.length)
     })
 
-    StatesHandler.isTabsMenuOpen = true
+    StatesHandler.isTabsMenuOpen = true;
 }
 
 function closeTabsMenu(){
@@ -95,6 +95,5 @@ function closeTabsMenu(){
         elementPositions.delete(w.id)
     })
     toggleChildrenFilter(parentWhiteboard, 'none')
-
-    StatesHandler.isTabsMenuOpen = false
+    StatesHandler.isTabsMenuOpen = false;
 }
