@@ -55,8 +55,3 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   saveEditorContents: (contents) => ipcRenderer.invoke('save-editor-contents', contents),
   loadEditorContents: () => ipcRenderer.invoke('load-editor-contents'),
 })
-
-ipcRenderer.on('app-before-quit', () => {
-  const html = document.documentElement.outerHTML
-  ipcRenderer.send('save-html', html)
-})
