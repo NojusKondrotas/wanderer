@@ -53,7 +53,10 @@ function hideAllConfigs() {
             section.style.borderColor = sectionsBorderColor.transparent;
             section.style.color = sectionsColor.transparent;
         });
-        setTimeout(() => configsDiv.style.display = 'none', timeoutCfg)
+        setTimeout(() => {
+            configsDiv.style.display = 'none';
+            resolve();
+        }, timeoutCfg)
         cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
         toggleAllConfigsAbstracts(false);
         toggleSingleConfigInfoTag(false);

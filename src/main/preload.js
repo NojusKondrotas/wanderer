@@ -23,7 +23,8 @@ contextBridge.exposeInMainWorld('wandererAPI', {
     ipcRenderer.send('save-notepad-html', html)
   },
   onTerminateWindow: (callback) => ipcRenderer.on('terminate-window', (_) => callback()),
-  onSaveComponent: (callback) => ipcRenderer.on('save-component', (_) => callback()),
+  onSaveComponent: (callback) => ipcRenderer.once('save-component', callback),
+  saveComponentDone: () => ipcRenderer.send('save-component-done'),
 
   setFullScreen: () => ipcRenderer.invoke('set-fullscreen'),
   setMaximized: () => ipcRenderer.invoke('set-maximized'),

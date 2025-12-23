@@ -13,11 +13,36 @@ let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
 let largestLinkID = 0, unusedLinkIDs = new Array()
 
 class WindowHandler{
-    static trueWinIDToSymbolicWinIDMapping = new Map()
-    static componentToWindowMapping = new Map()
-    static trueWinIDToLink = new Map()
-    static allWindows = new Map()
-    static openWindows = new Map()
+    static trueWinIDToSymbolicWinIDMapping = new Map();
+    // k: trueWindowID
+    // v: symbolicWindowID
+    static componentToWindowMapping = new Map();
+    // k: componentID
+    // v: symbolicWindowID
+    static trueWinIDToLink = new Map();
+    static allWindows = new Map();
+    // k :symbolicWindowID
+    // v: {
+    //         trueWindowID,
+    //         x,
+    //         y,
+    //         width,
+    //         height,
+    //         isFullScreen: win.isFullScreen(),
+    //         isMinimized: win.isMinimized(),
+    //         isMaximized: win.isMaximized(),
+    //         type: componentType,
+    //         componentID,
+    //         parentWindowID,
+    //         url
+    //    }
+    static openWindows = new Map();
+    // k: symbolicWindowID
+    // v: {
+    //         symbolicWindowID,
+    //         type: componentType,
+    //         componentID
+    //    }
 
     static largestWindowID = 0
     static unusedWindowIDs = new Array()
@@ -166,18 +191,23 @@ class WindowHandler{
     static closeWindow(trueWindowID){
         // console.log('trueWinIDToSymbolicWinIDMapping', this.trueWinIDToSymbolicWinIDMapping, '\n', 'allWindows', this.allWindows, '\n',
         //     'openWindows', this.openWindows, '\n', 'componentToWindowMapping', this.componentToWindowMapping, '\n')
+        const win = BrowserWindow.fromId(trueWindowID);
         if(!this.isClosingWindow)
-            BrowserWindow.fromId(trueWindowID).webContents.send('terminate-window')
-        BrowserWindow.fromId(trueWindowID).webContents.send('save-component')
-        const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID)
-        this.openWindows.delete(symbolicWindowID)
-        BrowserWindow.fromId(trueWindowID).close()
-        this.isClosingWindow = false
+            win.webContents.send('terminate-window');
+        win.webContents.send('save-component');
+    }
+
+    static finishCloseWindow(trueWindowID){
+        const win = BrowserWindow.fromId(trueWindowID);
+        const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID);
+        this.openWindows.delete(symbolicWindowID);
+        win.close();
+        this.isClosingWindow = false;
     }
 
     static closeAllWindows(){
         for(let [key, value] of this.openWindows){
-            this.closeWindow(this.allWindows.get(key).trueWindowID)
+            this.closeWindow(this.allWindows.get(key).trueWindowID);
         }
     }
 
@@ -256,6 +286,11 @@ class WindowHandler{
         }, null, 2), 'utf-8')
     }
 }
+
+ipcMain.on('save-component-done', async (e) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender);
+    WindowHandler.finishCloseWindow(senderWindow.id);
+});
 
 function getMousePos(senderWindow){
     const mousePos = screen.getCursorScreenPoint()
@@ -505,6 +540,7 @@ ipcMain.handle('get-window-component-id', (e) => {
 })
 
 ipcMain.on('save-whiteboard-html', (e, html) => {
+    console.log('saving html in main')
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     console.log('save html wb: ' + symbolicWinID)
@@ -521,6 +557,7 @@ ipcMain.on('save-whiteboard-html', (e, html) => {
 })
 
 ipcMain.on('save-whiteboard-state', (e, stateObj) => {
+    console.log('saving state in main')
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     console.log('save json wb: ' + symbolicWinID)
@@ -595,16 +632,21 @@ ipcMain.handle('set-minimized', (e) => {
     senderWindow.minimize()
 })
 
-ipcMain.handle('close-window', (e) => {
-    const windows = BrowserWindow.getAllWindows()
-    if(windows.length === 1){
-        terminateApp()
-    }else{
-        const senderWindow = BrowserWindow.fromWebContents(e.sender)
-        WindowHandler.isClosingWindow = true
-        WindowHandler.closeWindow(senderWindow.id)
-    }
+ipcMain.handle('remove-from-windows', (e) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender);
+    WindowHandler.removeFromWindows(senderWindow.id);
 })
+
+ipcMain.handle('close-window', async (e) => {
+    const windows = BrowserWindow.getAllWindows();
+    if(windows.length === 1){
+        terminateApp();
+    }else{
+        const senderWindow = BrowserWindow.fromWebContents(e.sender);
+        WindowHandler.isClosingWindow = true;
+        WindowHandler.closeWindow(senderWindow.id);
+    }
+});
 
 ipcMain.handle('open-link', (e, link) => {
     const win = BrowserWindow.fromWebContents(e.sender)

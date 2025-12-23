@@ -75,14 +75,14 @@ window.addEventListener('mouseup', (e) => {
 async function save(){
     await hideAllConfigs();
     saveAllNotesContents()
-    window.wandererAPI.saveWhiteboardHTML()
+    await window.wandererAPI.saveWhiteboardHTML()
 
     const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
     const elementHierarchyArr = Array.from(elementHierarchy, ([elID, [parents, children]]) => [elID, [Array.from(parents), Array.from(children)]])
     const allPathsArr = Array.from(allPaths, ([id, path]) => [id, path])
     const allNotesContentsArr = Array.from(allNotesContents, ([elID, note]) => [elID, note])
 
-    window.wandererAPI.saveWhiteboardState({
+    await window.wandererAPI.saveWhiteboardState({
         largestElementID,
         unusedElementIDs,
         largestPathID,
@@ -106,13 +106,15 @@ window.wandererAPI.onTerminateWindow(() => {
     isWindowClosing = true
 })
 
-window.wandererAPI.onSaveComponent(() => {
-    save()
+window.wandererAPI.onSaveComponent(async () => {
+    await save();
+    window.wandererAPI.saveComponentDone();
 })
 
 window.addEventListener("beforeunload", () => {
     if(!isWindowClosing){
-        save()
+        logMessage('berfore unload triggered');
+        save();
     }
 })
 
