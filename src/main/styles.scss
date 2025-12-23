@@ -384,6 +384,13 @@ path {
     flex: 1 1 0;
 }
 
+.cfg-flex-horiz {
+    display: flex;
+    position: inherit;
+
+    gap: 10px;
+}
+
 .cfg-abst {
     display: none;
     overflow-wrap: break-word;
@@ -422,9 +429,6 @@ path {
 
 .cfg-abst-exit {
     display: none;
-    float: right;
-
-    margin: 0 0 1em 1em;
 
     background: transparent;
     border: transparent;
