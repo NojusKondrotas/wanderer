@@ -207,7 +207,8 @@ class WhiteboardPositioningHandler{
         resetMouseDrag(ev)
         resetWindowDrag(ev)
 
-        selectedElement = null
+        selectedElement = null;
+        selectedPath = null;
         handleKeybindGuideAppearance(true)
     }
 }
