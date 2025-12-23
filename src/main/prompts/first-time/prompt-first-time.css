@@ -14,6 +14,8 @@ body {
     height: 100vh;
     flex-direction: column;
 
+    color: #0A0A0A;
+
     justify-content: center;
     align-items: center;
 
@@ -38,7 +40,8 @@ body {
     align-items: center;
     font-size: 3em;
 
-    /* border: 1px solid red; */
+    color: #0A0A0A;
+
     border: none;
     background-color: transparent;
 }

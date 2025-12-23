@@ -1,6 +1,6 @@
 const allContextMenus = document.getElementsByClassName('cm-logic')
-const borderColorCM = { opaque: "rgb(97, 97, 97)", transparent: "rgba(97, 97, 97, 0)" }
-const colorCM = { opaque: "rgb(0, 0, 0)", transparent: "rgba(0, 0, 0, 0)" }
+const borderColorCM = { opaque: "rgb(10, 10, 10)", transparent: "rgba(10, 10, 10, 0)" }
+const colorCM = { opaque: "rgb(10, 10, 10)", transparent: "rgba(10, 10, 10, 0)" }
 const timeoutCM = 170
 
 let activeContextMenu = null, contextMenuCenter = {x:0, y:0}

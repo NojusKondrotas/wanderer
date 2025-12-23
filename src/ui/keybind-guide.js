@@ -6,7 +6,7 @@ const keybindContainerChildren = keybindContainer.children;
 
 function keybindGuide_MouseOverHandler(){
     for(let child of keybindContainerChildren){
-        child.style.color = 'rgba(126, 135, 135, 1)';
+        child.style.color = 'rgba(10, 10, 10, 1)';
     }
     keybindGuideCloseImg.style.opacity = '1';
 }
@@ -14,7 +14,7 @@ function keybindGuide_MouseOverHandler(){
 function keybindGuide_MouseOutHandler(){
     keybindGuideCloseImg.style.opacity = '0';
     for(let child of keybindContainerChildren){
-        child.style.color = 'rgba(126, 135, 135, 0.33)';
+        child.style.color = 'rgba(10, 10, 10, 0.33)';
     }
 }
 
@@ -23,7 +23,7 @@ function handleKeybindGuideAppearance(flag){
         keybindGuide.style.pointerEvents = "auto";
         keybindGuideCloseImg.style.color = '0';
         for(let child of keybindContainerChildren){
-            child.style.color = 'rgba(126, 135, 135, 0.33)';
+            child.style.color = 'rgba(10, 10, 10, 0.33)';
         }
         keybindGuide.addEventListener('mouseover', keybindGuide_MouseOverHandler);
 
@@ -32,7 +32,7 @@ function handleKeybindGuideAppearance(flag){
         keybindGuide.style.pointerEvents = "none";
         keybindGuideCloseImg.style.opacity = '0';
         for(let child of keybindContainerChildren){
-            child.style.color = 'rgba(126, 135, 135, 0)';
+            child.style.color = 'rgba(10, 10, 10, 0)';
         }
         keybindGuide.removeEventListener('mouseover', keybindGuide_MouseOverHandler);
 

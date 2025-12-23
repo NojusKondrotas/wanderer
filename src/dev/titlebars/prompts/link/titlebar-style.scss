@@ -1,4 +1,5 @@
 $whiteboard-color: #f8f8f8;
+$rich-black: #0A0A0A;
 
 $index-5: 5;
 $index-10: 10;
@@ -36,7 +37,7 @@ $index-25: 25;
 
     user-select: none;
 
-    background-color: rgba(0, 0, 0, 0);
+    background-color: $rich-black;
     border: 0;
 
     transition: transform 100ms ease;

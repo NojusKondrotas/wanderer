@@ -7,8 +7,8 @@ const sections = [
     document.getElementById('cfg-p'),
     document.getElementById('cfg-internal')
 ];
-const sectionsBorderColor = { opaque: "#0A0A0A", transparent: "transparent" };
-const sectionsColor = { opaque: "#0A0A0A", transparent: "transparent" };
+const sectionsBorderColor = { opaque: "rgb(10, 10, 10)", transparent: "transparent" };
+const sectionsColor = { opaque: "rgb(10, 10, 10)", transparent: "transparent" };
 const timeoutCfg = 100;
 let activeSectionIdx = -1;
 const menus = [

@@ -1,5 +1,6 @@
 $whiteboard-color: #f8f8f8;
 $rich-black: #0A0A0A;
+$rich-black-033: rgba(10, 10, 10, 0.33);
 $semi-imp-text-color: rgb(108, 116, 116);
 $unimp-text-color: rgba(126, 135, 135, 0.33);
 
@@ -81,11 +82,13 @@ body {
 }
 
 .im-whiteboard-text {
-    color: $unimp-text-color;
+    color: $rich-black-033;
     margin: 7px;
 }
 
 .keybind-text {
+    color: $rich-black;
+
     transition: color 140ms linear;
 
     user-select: none;
@@ -174,6 +177,10 @@ body {
     background-color: $whiteboard-color;
 }
 
+.notepad, .whiteboard, .note, .open-window {
+    color: $rich-black;
+}
+
 .notepad, .whiteboard, .open-window {
     position: absolute;
 }
@@ -226,7 +233,7 @@ body {
 }
 
 .open-window div {
-    color: $semi-imp-text-color;
+    color: $rich-black;
     margin: 5px 0px;
 }
 
