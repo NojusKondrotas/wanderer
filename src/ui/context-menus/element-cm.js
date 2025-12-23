@@ -11,6 +11,9 @@ const npwcm = {
 document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
+document.getElementById('npwcm-copy').addEventListener('mouseup', (e) => {
+    e.stopPropagation();
+});
 document.getElementById('npwcm-copy').addEventListener('click', (e) => {
     e.stopPropagation();
 
@@ -24,6 +27,9 @@ document.getElementById('npwcm-copy').addEventListener('click', (e) => {
 });
 
 document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+document.getElementById('npwcm-cut').addEventListener('mouseup', (e) => {
     e.stopPropagation();
 });
 document.getElementById('npwcm-cut').addEventListener('click', (e) => {
@@ -43,6 +49,9 @@ document.getElementById('npwcm-cut').addEventListener('click', (e) => {
 document.getElementById('npwcm-delete').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
+document.getElementById('npwcm-delete').addEventListener('mouseup', (e) => {
+    e.stopPropagation();
+});
 document.getElementById('npwcm-delete').addEventListener('click', (e) => {
     e.stopPropagation();
 
@@ -58,6 +67,9 @@ document.getElementById('npwcm-delete').addEventListener('click', (e) => {
 document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
+document.getElementById('npwcm-connect').addEventListener('mouseup', (e) => {
+    e.stopPropagation();
+});
 document.getElementById('npwcm-connect').addEventListener('click', (e) => {
     e.stopPropagation();
 
@@ -69,9 +81,13 @@ document.getElementById('npwcm-connect').addEventListener('click', (e) => {
     if (!selectedElement) return;
 
     createPath({ x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, selectedElement.id, null, true);
+    console.log('path created');
 });
 
 document.getElementById('npwcm-disconnect').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+document.getElementById('npwcm-disconnect').addEventListener('mouseup', (e) => {
     e.stopPropagation();
 });
 document.getElementById('npwcm-disconnect').addEventListener('click', (e) => {

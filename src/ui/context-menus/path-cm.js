@@ -11,6 +11,9 @@ const acm = {
 document.getElementById('acm-connect').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
+document.getElementById('acm-connect').addEventListener('mouseup', (e) => {
+    e.stopPropagation();
+});
 document.getElementById('acm-connect').addEventListener('click', (e) => {
     e.stopPropagation();
 
@@ -24,6 +27,9 @@ document.getElementById('acm-connect').addEventListener('click', (e) => {
 document.getElementById('acm-disconnect').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
+document.getElementById('acm-disconnect').addEventListener('mouseup', (e) => {
+    e.stopPropagation();
+});
 document.getElementById('acm-disconnect').addEventListener('click', (e) => {
     e.stopPropagation();
 
@@ -35,6 +41,9 @@ document.getElementById('acm-disconnect').addEventListener('click', (e) => {
 });
 
 document.getElementById('acm-delete').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+document.getElementById('acm-delete').addEventListener('mouseup', (e) => {
     e.stopPropagation();
 });
 document.getElementById('acm-delete').addEventListener('click', (e) => {
