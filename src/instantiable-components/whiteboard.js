@@ -34,9 +34,8 @@ async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
     newWhiteboard.textContent = id
 
     createNewElement(container, newWhiteboard, id, xOffset, yOffset)
-    addWhiteboardListeners(newWhiteboard)
-    
-    //instantiateNoteResizingBorders(newWhiteboard)
+    addWhiteboardListeners(newWhiteboard);
+    instantiateResizingBorders(newWhiteboard);
 }
 
 function deleteWhiteboardByID(container, whiteboardID){

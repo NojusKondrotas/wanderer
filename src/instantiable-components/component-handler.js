@@ -13,6 +13,29 @@ function getElementID(){
     }
 }
 
+function instantiateResizingBorders(el){
+    const borders = ['right', 'left'];
+    borders.forEach(border => {
+        const borderDiv = document.createElement('div');
+        borderDiv.classList.add(`note-border`, `note-border-${border}`);
+        el.appendChild(borderDiv);
+
+        borderDiv.addEventListener('mousedown', function(e) {
+            e.stopPropagation();
+            this.isResizing = true;
+            activeBorder = border;
+            selectedElement = el;
+            WhiteboardPositioningHandler.startDrag(e, false, false, true);
+            document.body.style.cursor = 'ew-resize';
+        });
+
+        borderDiv.addEventListener('mouseup', function(e) {
+            WhiteboardPositioningHandler.endDrag(e);
+            document.body.style.cursor = 'default';
+        });
+    })
+}
+
 function configureElement(element){
     if(element.classList.contains('note-container')){
         addNoteListeners(element)

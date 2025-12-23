@@ -114,32 +114,9 @@ function addNoteListeners(newNote){
 
 function reinstateAllNoteBorders(elements){
     for(let [key, value] of elements){
-        const el = document.getElementById(key)
-        if(el.classList.contains('note'))
-            instantiateNoteResizingBorders(el)
+        const el = document.getElementById(key);
+        instantiateResizingBorders(el);
     }
-}
-
-function instantiateNoteResizingBorders(note){
-    const borders = ['right', 'left']
-    borders.forEach(border => {
-        const borderDiv = document.createElement('div')
-        borderDiv.classList.add(`note-border`, `note-border-${border}`)
-        note.appendChild(borderDiv)
-
-        borderDiv.addEventListener('mousedown', function(e) {
-            e.stopPropagation()
-            this.isResizing = true
-            activeBorder = border
-            selectedElement = note
-            WhiteboardPositioningHandler.startDrag(e, false, false, true)
-            document.body.style.cursor = 'ew-resize'
-        })
-
-        borderDiv.addEventListener('mouseup', function(e) {
-            WhiteboardPositioningHandler.endDrag(e)
-        })
-    })
 }
 
 function createNewNote(container, content = '', parent_ids = new Set(), child_ids = new Set(), centerX = 0, centerY = 0){
@@ -154,10 +131,10 @@ function createNewNote(container, content = '', parent_ids = new Set(), child_id
     createNewElement(container, newNote, getNoteContainerID(), centerX, centerY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
-    instantiateNoteResizingBorders(newNote)
+    instantiateResizingBorders(newNote)
     allNotesContents.set(newNote.id, "")
 
-    return newNote
+    return newNote;
 }
 
 function createNewNoteLeftTopOffset(container, content = '', parent_ids = new Set(), child_ids = new Set(), offsetX = 0, offsetY = 0){
@@ -172,7 +149,7 @@ function createNewNoteLeftTopOffset(container, content = '', parent_ids = new Se
     createNewElementLeftTopOffset(container, newNote, getNoteContainerID(), offsetX, offsetY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
-    instantiateNoteResizingBorders(newNote)
+    instantiateResizingBorders(newNote);
     allNotesContents.set(newNote.id, "")
 
     return newNote
