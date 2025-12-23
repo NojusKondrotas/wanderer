@@ -26,14 +26,6 @@ const abstractsExits = [
     }
 })();
 
-function placeConfigAbstractExit(abstract, exit) {
-    const rect = abstract.getBoundingClientRect();
-    const { x, y } = convertToWhiteboardSpace(rect.left, rect.top);
-
-    exit.style.left = `${x + rect.width}px`;
-    exit.style.top = `${y}px`;
-}
-
 function toggleAllConfigsAbstracts(flag) {
     if (flag) {
         abstracts.forEach(abstract => abstract.style.display = 'block');
@@ -48,7 +40,6 @@ function toggleSingleConfigAbstract(flag, abstractIdx) {
     if (flag) {
         abstracts[abstractIdx].style.display = 'block';
         abstractsExits[abstractIdx].style.display = 'block';
-        placeConfigAbstractExit(abstracts[abstractIdx], abstractsExits[abstractIdx]);
     } else {
         abstracts[abstractIdx].style.display = 'none';
         abstractsExits[abstractIdx].style.display = 'none';
