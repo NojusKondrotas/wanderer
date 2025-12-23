@@ -1,4 +1,5 @@
 $whiteboard-color: #f8f8f8;
+$rich-black: #0A0A0A;
 $semi-imp-text-color: rgb(108, 116, 116);
 $unimp-text-color: rgba(126, 135, 135, 0.33);
 
@@ -184,8 +185,8 @@ body {
     min-height: 20px;
     padding: 2px;
 
-    border-left: 1px solid black;
-    border-right: 1px solid black;
+    border-left: 1px solid $rich-black;
+    border-right: 1px solid $rich-black;
 
     word-break: break-word;
     overflow-wrap: break-word;
@@ -208,7 +209,7 @@ body {
 
     user-select: none;
 
-    border: 1px solid black;
+    border: 1px solid $rich-black;
     background: none;
 
     transition: transform 100ms ease-out;
@@ -266,8 +267,8 @@ body {
     margin: 0px;
     padding: 0px 5px;
 
-    border-left: 1px solid black;
-    border-right: 1px solid black;
+    border-left: 1px solid $rich-black;
+    border-right: 1px solid $rich-black;
 
     outline: none;
 
@@ -370,7 +371,7 @@ path {
     padding: 10px;
     background-color: $whiteboard-color;
     border: 1px double;
-    border-color: black;
+    border-color: $rich-black;
 
     transition:  transform 100ms ease, color 100ms ease-out, border-color 100ms ease-out;
 }
