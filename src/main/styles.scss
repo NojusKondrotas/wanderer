@@ -180,12 +180,16 @@ body {
 .notepad, .whiteboard {
     width: fit-content;
     height: fit-content;
-    min-width: 60px;
-    min-height: 60px;
+    min-width: 20px;
+    min-height: 20px;
     padding: 2px;
 
     border-left: 1px solid black;
     border-right: 1px solid black;
+
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 
     z-index: $index-10;
 }
@@ -274,19 +278,22 @@ body {
     position: absolute;
     top: 0;
     height: 100%;
+
     z-index: 2;
+}
+
+.note-border:hover {
+    cursor: ew-resize;
 }
 
 .note-border-right {
     right: 0;
     width: 3px;
-    cursor: ew-resize;
 }
 
 .note-border-left {
     left: 0;
     width: 3px;
-    cursor: ew-resize;
 }
 
 .path-container {
@@ -402,6 +409,10 @@ path {
     z-index: $index-30;
 }
 
+#cfg-itag:hover {
+    cursor: pointer;   
+}
+
 #cfg-itag > img, .cfg-abst-exit > img {
     width: 16px;
     height: auto;
@@ -417,4 +428,8 @@ path {
     border: transparent;
 
     z-index: $index-25;
+}
+
+.cfg-abst-exit:hover {
+    cursor: pointer;   
 }
