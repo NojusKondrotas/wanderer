@@ -161,7 +161,7 @@ body {
     transition: filter 230ms ease-out;
 }
 
-.notepad, .whiteboard, .note, .open-window {
+.notepad, .whiteboard, .note-container, .open-window {
     background-color: $whiteboard-color;
 }
 
