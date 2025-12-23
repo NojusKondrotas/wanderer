@@ -77,12 +77,17 @@ class WindowHandler{
 
     static openComponent(componentType, componentID, parentWindowID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y){
         if(this.componentToWindowMapping.has(componentID)){
-            const winData = this.allWindows.get(this.componentToWindowMapping.get(componentID))
-            const win = BrowserWindow.fromId(winData.trueWindowID)
-            win.show()
-            win.focus()
+            const symbolID = this.componentToWindowMapping.get(componentID);
+            const winData = this.allWindows.get(this.componentToWindowMapping.get(componentID));
+            if(this.openWindows.has(symbolID)){
+                const win = BrowserWindow.fromId(winData.trueWindowID);
+                win.show();
+                win.focus();
+            } else {
+                this.createWindow(winData.type, componentID, parentWindowID, winData.isMinimized, winData.isMaximized, winData.isFullScreen, winData.width, winData.height, winData.x, winData.y);
+            }
         }else{
-            this.createWindow(componentType, componentID, parentWindowID, minimized, maximized, fullscreen, width, height, x, y)
+            this.createWindow(componentType, componentID, parentWindowID, minimized, maximized, fullscreen, width, height, x, y);
         }
     }
 
