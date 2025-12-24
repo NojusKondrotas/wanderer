@@ -72,6 +72,9 @@ function createPath(startPos, endPos, startElement_id = null, endElement_id = nu
 function addPathListeners(path){
     document.getElementById(path.hitPathID).addEventListener('contextmenu', (e) => {
         e.preventDefault()
+        if(StatesHandler.isDrawingPath){
+            return;
+        }
         e.stopPropagation()
         console.log('right clicked on hitPath')
         if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id)

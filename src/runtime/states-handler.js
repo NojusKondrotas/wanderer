@@ -3,7 +3,7 @@ class StatesHandler{
 
     static isConnecting = false
     static isDrawingPath = false
-    static isDrawingPathEnd = true
+    static isDrawingPathEnd = false
 
     static isContextMenuOpen = false
 

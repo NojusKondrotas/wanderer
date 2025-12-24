@@ -60,6 +60,12 @@ window.addEventListener('mousemove', (e) => {
 window.addEventListener('contextmenu', (e) => {
     if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id);
     if(StatesHandler.isConfigsOpen) hideAllConfigs();
+    if(StatesHandler.isTabsMenuOpen){
+        closeTabsMenu();
+    }
+    if(StatesHandler.isDrawingPath){
+        terminatePathDrawing(e, null);
+    }
 
     openNewContextMenu(e.clientX, e.clientY, gcm)
 })
