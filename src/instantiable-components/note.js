@@ -102,7 +102,7 @@ function addNoteListeners(newNote){
         if(e.key === 'Enter'){
             e.preventDefault();
             const posParent = getAbsolutePosition(newNote);
-            const childNote = createNewNote(parentWhiteboard, '', new Set([newNote.id]), new Set(), posParent.left + posParent.width / 2, posParent.top + posParent.height + 10);
+            const childNote = createNewNoteLeftAlignment(parentWhiteboard, '', new Set([newNote.id]), new Set(), posParent.left, posParent.top + posParent.height);
             const posChild = getAbsolutePosition(childNote);
             createPath({ x: posParent.left + posParent.width / 2, y: posParent.top + posParent.height / 2 },
                 { x: posChild.left + posChild.width / 2, y: posChild.top + posChild.height / 2 },
@@ -137,7 +137,7 @@ function createNewNote(container, content = '', parent_ids = new Set(), child_id
     return newNote;
 }
 
-function createNewNoteLeftTopOffset(container, content = '', parent_ids = new Set(), child_ids = new Set(), offsetX = 0, offsetY = 0){
+function createNewNoteLeftAlignment(container, content = '', parent_ids = new Set(), child_ids = new Set(), offsetX = 0, offsetY = 0){
     const newNote = document.createElement('div')
     const p = document.createElement('p')
     newNote.classList.add('note-container')
@@ -146,7 +146,7 @@ function createNewNoteLeftTopOffset(container, content = '', parent_ids = new Se
     p.spellcheck = false
     newNote.appendChild(p)
 
-    createNewElementLeftTopOffset(container, newNote, getNoteContainerID(), offsetX, offsetY)
+    createNewElementLeftAlignment(container, newNote, getNoteContainerID(), offsetX, offsetY)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
     instantiateResizingBorders(newNote);
