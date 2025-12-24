@@ -128,7 +128,6 @@ class WhiteboardPositioningHandler{
 
     static startDrag(ev, isBoard, isEl, isResizingElement, isWindow, isWinResizing){
         if(ev.button === 2) return
-        if(StatesHandler.isNoteToolbarEdit > 0) return
 
         if(StatesHandler.isContextMenuOpen){
             turnOffContextMenu()
@@ -177,10 +176,6 @@ class WhiteboardPositioningHandler{
         if(this.isResizingElement){
             this.isResizingElement = false
             document.body.style.cursor = 'default'
-        }
-        if(StatesHandler.isNoteToolbarEdit > 0){
-            StatesHandler.isNoteToolbarEdit -= 1
-            return
         }
         if(StatesHandler.isWritingElement){
             toggleWritingMode(false, selectedElement.id)
