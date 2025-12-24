@@ -33,5 +33,5 @@ function updateMouseDrag(ev){
 }
 
 function checkIfDraggedEnough(){
-    return dragAbsoluteTotalDiff.x > 5 || dragAbsoluteTotalDiff.y > 5
+    return dragAbsoluteTotalDiff.x > 10 || dragAbsoluteTotalDiff.y > 10
 }
