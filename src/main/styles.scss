@@ -335,12 +335,13 @@ path {
     border-radius: 50%;
     border: 2px solid #dadada;
     background-color: transparent;
+    opacity: 0.33;
 
     user-select: none;
 
     transform: translate(-50%, -50%) scale(0);
 
-    transition: transform 40ms ease-out;
+    transition: transform 40ms ease-out, opacity 40ms ease-out;
 
     z-index: $index-10;
 }

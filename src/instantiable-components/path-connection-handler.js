@@ -107,9 +107,12 @@ function openPathConnectionContextMenu(isConnecting = false){
         pathEndPoint.style.transform = 'translate(-50%, -50%) scale(1)';
         pathStartPointInner.style.transform = 'scale(1)';
         pathEndPointInner.style.transform = 'scale(1)';
+        pathStartPoint.style.opacity = '1'
+        pathEndPoint.style.opacity = '1'
         if(!isConnecting){
             pathMiddlePoint.style.transform = 'translate(-50%, -50%) scale(1)';
             pathMiddlePointInner.style.transform = 'scale(1)';
+            pathMiddlePoint.style.opacity = '1'
         }
     });
 
@@ -124,6 +127,9 @@ function closePathConnectionContextMenu(){
     pathStartPointInner.style.transform = 'scale(0)'
     pathMiddlePointInner.style.transform = 'scale(0)';
     pathEndPointInner.style.transform = 'scale(0)'
+    pathStartPoint.style.opacity = '0'
+    pathMiddlePoint.style.opacity = '0'
+    pathEndPoint.style.opacity = '0'
     setTimeout(() => {
         pathStartPoint.style.display = 'none'
         pathMiddlePoint.style.display = 'none'
