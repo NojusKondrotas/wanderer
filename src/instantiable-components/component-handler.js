@@ -77,18 +77,22 @@ function addElementToPositioningLeftAlignment(el, offsetX = 0, offsetY = 0){
 
 function createNewElement(container, el, id, centerX = 0, centerY = 0){
     container.appendChild(el)
+    el.style.transition = 'none'
     el.style.visibility = 'hidden'
 
     el.id = id
     el.classList.add('component-text')
 
     addElementToPositioning(el, centerX, centerY)
-
+    setTimeout(() => {
+        el.style.transition = ''
+    }, 20);
     el.style.visibility = 'visible'
 }
 
 function createNewElementLeftAlignment(container, el, id, offsetX = 0, offsetY = 0){
     container.appendChild(el)
+    el.style.transition = 'none'
     el.style.visibility = 'hidden'
 
     el.id = id
@@ -96,6 +100,9 @@ function createNewElementLeftAlignment(container, el, id, offsetX = 0, offsetY =
 
     addElementToPositioningLeftAlignment(el, offsetX, offsetY)
 
+    setTimeout(() => {
+        el.style.transition = ''
+    }, 20);
     el.style.visibility = 'visible'
 }
 
