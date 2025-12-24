@@ -44,6 +44,7 @@ class WhiteboardPositioningHandler{
         if(StatesHandler.isWritingElement) return
         if(StatesHandler.isDrawingPath){
             if(!checkIfDraggedEnough()){
+                this.isDraggingElement = false;
                 if(el.id === selectedPath.startNoteID){
                     deletePathByID(selectedPath.id)
                     return this.endDrag(ev)
