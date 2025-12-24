@@ -81,6 +81,12 @@ function addPathListeners(path){
     })
 }
 
+function getPathMiddle(path) {
+    const pathEl = document.getElementById(path.pathVisualID);
+    const len = pathEl.getTotalLength();
+    return pathEl.getPointAtLength(len / 2);
+}
+
 function addPathArrows(x1, y1, x2, y2){
     const angle = Math.atan2(y2 - y1, x2 - x1)
     const size = 8
