@@ -70,15 +70,16 @@ class WhiteboardPositioningHandler{
         }else if(this.isDraggingElement){
             updateElementPositionByID(selectedElement.id)
 
-            for(let [key, value] of allPaths){
+            const values = allPaths.values();
+            for(const v of values){
                 let hasUpdated = false
-                if(value.startNoteID === selectedElement.id){
-                    value.startPosition.x -= dragDiff.x
-                    value.startPosition.y -= dragDiff.y
+                if(v.startNoteID === selectedElement.id){
+                    v.startPosition.x -= dragDiff.x
+                    v.startPosition.y -= dragDiff.y
                     hasUpdated = true
-                }else if(value.endNoteID === selectedElement.id){
-                    value.endPosition.x -= dragDiff.x
-                    value.endPosition.y -= dragDiff.y
+                }else if(v.endNoteID === selectedElement.id){
+                    v.endPosition.x -= dragDiff.x
+                    v.endPosition.y -= dragDiff.y
                     hasUpdated = true
                 }
 
@@ -87,32 +88,32 @@ class WhiteboardPositioningHandler{
                     let startPoint, endPoint
                     if(StatesHandler.isDrawingPathEnd){
                         startPoint = {
-                            x: value.startPosition.x,
-                            y: value.startPosition.y
+                            x: v.startPosition.x,
+                            y: v.startPosition.y
                         }
-                        if(StatesHandler.isDrawingPath && value === selectedPath){
+                        if(StatesHandler.isDrawingPath && v === selectedPath){
                             endPoint = mousePos
                         }else{
                             endPoint = {
-                                x: value.endPosition.x,
-                                y: value.endPosition.y
+                                x: v.endPosition.x,
+                                y: v.endPosition.y
                             }
                         }
                     }else{
                         endPoint = {
-                            x: value.endPosition.x,
-                            y: value.endPosition.y
+                            x: v.endPosition.x,
+                            y: v.endPosition.y
                         }
-                        if(StatesHandler.isDrawingPath && value === selectedPath){
+                        if(StatesHandler.isDrawingPath && v === selectedPath){
                             startPoint = mousePos
                         }else{
                             startPoint = {
-                                x: value.startPosition.x,
-                                y: value.startPosition.y
+                                x: v.startPosition.x,
+                                y: v.startPosition.y
                             }
                         }
                     }
-                    updatePathPosition(value, startPoint, endPoint)
+                    updatePathPosition(v, startPoint, endPoint)
                 }
             }
         }
@@ -240,8 +241,9 @@ function updateElementPositionByID(elID) {
 }
 
 function updateComponentPositions(){
-    for (let [key, value] of elementPositions){
-        updateElementPositionByID(key)
+    const keys = elementPositions.keys();
+    for (const k of keys){
+        updateElementPositionByID(k)
     }
     
     allPaths.forEach(path => {

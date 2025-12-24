@@ -211,8 +211,9 @@ class WindowHandler{
     }
 
     static closeAllWindows(){
-        for(let [key, value] of this.openWindows){
-            this.closeWindow(this.allWindows.get(key).trueWindowID);
+        const keys = this.openWindows.keys();
+        for(const k of keys){
+            this.closeWindow(this.allWindows.get(k).trueWindowID);
         }
     }
 
@@ -430,7 +431,7 @@ app.whenReady().then(() => {
     })
     globalShortcut.register('CmdOrCtrl+2', () => {
         const senderWindow = BrowserWindow.getFocusedWindow();
-        const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj));
+        const serializedElements = Array.from(WindowHandler.openWindows.values());
         if(!senderWindow) {
             // handle
             return;
@@ -439,7 +440,7 @@ app.whenReady().then(() => {
     })
     globalShortcut.register('CmdOrCtrl+num2', () => {
         const senderWindow = BrowserWindow.getFocusedWindow();
-        const serializedElements = Array.from(WindowHandler.openWindows, ([id, obj]) => (obj));
+        const serializedElements = Array.from(WindowHandler.openWindows.values());
         if(!senderWindow) {
             // handle
             return;

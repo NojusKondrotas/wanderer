@@ -73,11 +73,12 @@ pathEndPoint.addEventListener('click', (e) => {
 })
 
 function disconnectConnectedPaths(elID){
-    for(let [key, value] of allPaths){
-        if(value.startNoteID === elID){
-            value.startNoteID = null
-        }else if(value.endNoteID === elID){
-            value.endNoteID = null
+    const values = allPaths.values();
+    for(const v of values){
+        if(v.startNoteID === elID){
+            v.startNoteID = null
+        }else if(v.endNoteID === elID){
+            v.endNoteID = null
         }
     }
 }

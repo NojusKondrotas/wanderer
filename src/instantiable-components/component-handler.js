@@ -57,8 +57,9 @@ function configurePath(path){
 }
 
 function configureAllPaths(paths){
-    for(let [key, value] of paths)
-        configurePath(value)
+    const values = paths.values()
+    for(let v of values)
+        configurePath(v)
 }
 
 function addElementToPositioning(el, centerX = 0, centerY = 0){

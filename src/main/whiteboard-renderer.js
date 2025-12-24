@@ -19,9 +19,10 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         elementPositions = new Map(stateObj.elementPositions)
         elementHierarchy = new Map(stateObj.elementHierarchy)
-        for(let [key,value] of elementHierarchy){
-            value[0] = new Set(value[0]);
-            value[1] = new Set(value[1]);
+        const values = elementHierarchy.values();
+        for(const v of values){
+            v[0] = new Set(v[0]);
+            v[1] = new Set(v[1]);
         }
         allPaths = new Map(stateObj.allPaths)
         allNotesContents = new Map(stateObj.allNotesContents)

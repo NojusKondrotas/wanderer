@@ -27,8 +27,9 @@ function addNotepadListeners(notepad){
 }
 
 function reinstateAllNotepadBorders(elements){
-    for(let [key, value] of elements){
-        const el = document.getElementById(key)
+    const keys = elements.keys();
+    for(const k of keys){
+        const el = document.getElementById(k)
         if(el.classList.contains('note'))
             instantiateResizingBorders(el)
     }

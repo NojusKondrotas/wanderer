@@ -44,10 +44,11 @@ function saveAllNotesContents(){
 }
 
 function reinstateAllNotesContents(){
-    for(const [key, value] of allNotesContents){
-        const el = document.getElementById(key)
+    const entries = allNotesContents.entries();
+    for(const [k, v] of entries){
+        const el = document.getElementById(k)
         const p = el.querySelector('p')
-        p.innerHTML = value
+        p.innerHTML = v
     }
 }
 
@@ -113,8 +114,9 @@ function addNoteListeners(newNote){
 }
 
 function reinstateAllNoteBorders(elements){
-    for(let [key, value] of elements){
-        const el = document.getElementById(key);
+    const keys = elements.keys();
+    for(const k of keys){
+        const el = document.getElementById(k);
         instantiateResizingBorders(el);
     }
 }
