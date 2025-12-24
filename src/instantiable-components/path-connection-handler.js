@@ -51,7 +51,7 @@ function disconnectConnectedPaths(elID){
     }
 }
 
-function openPathConnectionContextMenu(){
+function openPathConnectionContextMenu(isConnecting = false){
     forgetContextMenus()
 
     const startPos = convertFromWhiteboardSpace(selectedPath.startPosition.x, selectedPath.startPosition.y)
@@ -65,7 +65,7 @@ function openPathConnectionContextMenu(){
     pathEndPoint.style.display = 'inline'
 
     StatesHandler.isContextMenuOpen = true
-    StatesHandler.isConnecting = true
+    StatesHandler.isConnecting = isConnecting
 }
 
 function closePathConnectionContextMenu(){

@@ -21,7 +21,7 @@ document.getElementById('acm-connect').addEventListener('click', (e) => {
         return;
     }
 
-    openPathConnectionContextMenu();
+    openPathConnectionContextMenu(true);
 });
 
 document.getElementById('acm-disconnect').addEventListener('mousedown', (e) => {
@@ -32,12 +32,13 @@ document.getElementById('acm-disconnect').addEventListener('mouseup', (e) => {
 });
 document.getElementById('acm-disconnect').addEventListener('click', (e) => {
     e.stopPropagation();
+    console.log('acm-disconnect');
 
     if(e.button === 2){
         return;
     }
 
-    closePathConnectionContextMenu();
+    openPathConnectionContextMenu(false);
 });
 
 document.getElementById('acm-delete').addEventListener('mousedown', (e) => {
