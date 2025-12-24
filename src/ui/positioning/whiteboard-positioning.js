@@ -132,6 +132,7 @@ class WhiteboardPositioningHandler{
 
         if(StatesHandler.isContextMenuOpen){
             turnOffContextMenu()
+            closePathConnectionContextMenu()
             return
         }
         if(StatesHandler.isConfigsOpen){
@@ -169,6 +170,10 @@ class WhiteboardPositioningHandler{
     static endDrag(ev){
         if(ev.button === 2) return
 
+        if(StatesHandler.isContextMenuOpen){
+            turnOffContextMenu()
+            closePathConnectionContextMenu()
+        }
         if(this.isResizingElement){
             this.isResizingElement = false
             document.body.style.cursor = 'default'

@@ -26,6 +26,12 @@ function disconnectPathEnd(path){
 }
 
 pathStartPoint.addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+pathStartPoint.addEventListener('mouseup', (e) => {
+    e.stopPropagation();
+});
+pathStartPoint.addEventListener('click', (e) => {
     e.stopPropagation()
 
     if(StatesHandler.isConnecting) connectPathStart(selectedPath)
@@ -34,6 +40,12 @@ pathStartPoint.addEventListener('mousedown', (e) => {
 })
 
 pathEndPoint.addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+pathEndPoint.addEventListener('mouseup', (e) => {
+    e.stopPropagation();
+});
+pathEndPoint.addEventListener('click', (e) => {
     e.stopPropagation()
     
     if(StatesHandler.isConnecting) connectPathEnd(selectedPath)
