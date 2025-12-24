@@ -175,6 +175,8 @@ body {
 
 .notepad, .whiteboard, .note-container, .open-window {
     background-color: $whiteboard-color;
+
+    transition: transform 20ms ease;
 }
 
 .notepad, .whiteboard, .note, .open-window {
