@@ -1,5 +1,8 @@
 const pathStartPoint = document.getElementById('path-end-0')
 const pathEndPoint = document.getElementById('path-end-1')
+const pathStartPointInner = document.getElementById('path-end-inner-0')
+const pathEndPointInner = document.getElementById('path-end-inner-1')
+const timeoutACCM = 40;
 
 function connectPathStart(path){
     StatesHandler.isDrawingPath = true
@@ -73,16 +76,28 @@ function openPathConnectionContextMenu(isConnecting = false){
     pathEndPoint.style.left = `${endPos.x}px`
     pathEndPoint.style.top = `${endPos.y}px`
 
-    pathStartPoint.style.display = 'inline'
-    pathEndPoint.style.display = 'inline'
+    pathStartPoint.style.display = 'flex'
+    pathEndPoint.style.display = 'flex'
+    requestAnimationFrame(() => {
+        pathStartPoint.style.transform = 'translate(-50%, -50%) scale(1)';
+        pathEndPoint.style.transform = 'translate(-50%, -50%) scale(1)';
+        pathStartPointInner.style.transform = 'scale(1)';
+        pathEndPointInner.style.transform = 'scale(1)';
+    });
 
     StatesHandler.isContextMenuOpen = true
     StatesHandler.isConnecting = isConnecting
 }
 
 function closePathConnectionContextMenu(){
-    pathStartPoint.style.display = 'none'
-    pathEndPoint.style.display = 'none'
+    pathStartPoint.style.transform = 'translate(-50%, -50%) scale(0)'
+    pathEndPoint.style.transform = 'translate(-50%, -50%) scale(0)'
+    pathStartPointInner.style.transform = 'scale(0)'
+    pathEndPointInner.style.transform = 'scale(0)'
+    setTimeout(() => {
+        pathStartPoint.style.display = 'none'
+        pathEndPoint.style.display = 'none'
+    }, timeoutACCM);
 
     StatesHandler.isContextMenuOpen = false
     StatesHandler.isConnecting = false
