@@ -116,7 +116,7 @@ class WindowHandler{
         this.overwriteWindow(entryFilePath, trueWindowID)
     }
 
-    static createWindow(componentType, componentID, parentWindowID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y, url = null){
+    static createWindow(componentType, componentID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y){
         let preloadFilePath = path.join(__dirname, 'preload.js')
         let entryFilePath
         switch(componentType){
@@ -184,13 +184,14 @@ class WindowHandler{
             if (!minimized) win.show()
         })
 
-        this.initialiseWindow(win.id, componentType, componentID, parentWindowID, url)
+        this.trueWinIDToSymbolicWinIDMapping.set(win.id, this.getWindowID());
+
         win.on('restore', () => {
-            const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(win.id)
+            let symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(win.id)
             this.allWindows.get(symbolicWindowID).isMinimized = false
         })
 
-        return win
+        return win;
     }
 
     static closeWindow(trueWindowID){
@@ -249,16 +250,11 @@ class WindowHandler{
     }
 
     static initialiseWindow(trueWindowID, componentType, componentID, parentWindowID, url = null){
-        const symbolicWindowID = this.getWindowID()
-        const win = BrowserWindow.fromId(trueWindowID)
-
         this.componentToWindowMapping.set(componentID, symbolicWindowID)
 
         this.saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url, win);
 
         this.openWindows.set(symbolicWindowID, {symbolicWindowID, componentType, componentID})
-
-        this.trueWinIDToSymbolicWinIDMapping.set(trueWindowID, symbolicWindowID)
     }
 
     static writeComponents(){
