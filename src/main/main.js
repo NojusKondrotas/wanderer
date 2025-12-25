@@ -97,10 +97,12 @@ class WindowHandler{
                 win.show();
                 win.focus();
             } else {
-                this.createWindow(winData.componentType, componentID, parentWindowID, winData.isMinimized, winData.isMaximized, winData.isFullScreen, winData.width, winData.height, winData.x, winData.y);
+                const win = this.createWindow(winData.componentType, componentID, winData.isMinimized, winData.isMaximized, winData.isFullScreen, winData.width, winData.height, winData.x, winData.y);
+                this.initialiseWindow(win.id, winData.componentType, componentID, parentWindowID);
             }
         }else{
-            this.createWindow(componentType, componentID, parentWindowID, minimized, maximized, fullscreen, width, height, x, y);
+            const win = this.createWindow(componentType, componentID, minimized, maximized, fullscreen, width, height, x, y);
+            this.initialiseWindow(win.id, componentType, componentID, parentWindowID);
         }
     }
 
@@ -250,9 +252,10 @@ class WindowHandler{
     }
 
     static initialiseWindow(trueWindowID, componentType, componentID, parentWindowID, url = null){
+        const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID);
         this.componentToWindowMapping.set(componentID, symbolicWindowID)
 
-        this.saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url, win);
+        this.saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url, BrowserWindow.fromId(trueWindowID));
 
         this.openWindows.set(symbolicWindowID, {symbolicWindowID, componentType, componentID})
     }
@@ -393,24 +396,28 @@ function initialiseApp(){
             let win = null;
             switch(winData.componentType){
                 case ComponentType.whiteboard:
-                    win = WindowHandler.createWindow(ComponentType.whiteboard, winData.componentID, winData.parentWindowID,
+                    win = WindowHandler.createWindow(ComponentType.whiteboard, winData.componentID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
-                        winData.width, winData.height, winData.x, winData.y)
-                    break
+                        winData.width, winData.height, winData.x, winData.y);
+                    WindowHandler.initialiseWindow(win.id, ComponentType.whiteboard, winData.componentID, winData.parentWindowID);
+                    break;
                 case ComponentType.notepad:
-                    win = WindowHandler.createWindow(ComponentType.notepad, winData.componentID, winData.parentWindowID,
+                    win = WindowHandler.createWindow(ComponentType.notepad, winData.componentID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
-                        winData.width, winData.height, winData.x, winData.y)
-                    break
+                        winData.width, winData.height, winData.x, winData.y);
+                    WindowHandler.initialiseWindow(win.id, ComponentType.notepad, winData.componentID, winData.parentWindowID);
+                    break;
                 case ComponentType.link:
-                    win = WindowHandler.createWindow(ComponentType.link, winData.componentID, winData.parentWindowID,
+                    win = WindowHandler.createWindow(ComponentType.link, winData.componentID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
-                        winData.width, winData.height, winData.x, winData.y, winData.url)
-                    break
+                        winData.width, winData.height, winData.x, winData.y);
+                    WindowHandler.initialiseWindow(win.id, ComponentType.link, winData.componentID, winData.parentWindowID, winData.url);
+                    break;
             }
         }
     }else{
-        WindowHandler.createWindow(ComponentType.firstTime, null, null, false, false, true)
+        const win = WindowHandler.createWindow(ComponentType.firstTime, null, false, false, true);
+        WindowHandler.initialiseWindow(win.id, ComponentType.firstTime, null, null);
     }
 }
 
@@ -548,8 +555,9 @@ ipcMain.handle('open-link', (e, link) => {
     const win = BrowserWindow.fromWebContents(e.sender)
         //WindowHandler.openComponent('l', link,+--------------------------------------------------poooooooooooooooooooooooooooooooooo WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
 
-    WindowHandler.createWindow(ComponentType.link, null, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id), false, false, false,
-        undefined, undefined, undefined, undefined, link)
+    WindowHandler.createWindow(ComponentType.link, null, false, false, false,
+        undefined, undefined, undefined, undefined, link);
+    WindowHandler.initialiseWindow(win.id, ComponentType.link, getLinkID(), WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id), link);
 })
 
 ipcMain.handle('get-link', (e) => {
