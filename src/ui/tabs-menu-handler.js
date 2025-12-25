@@ -1,5 +1,5 @@
 let openTabs = new Map();
-let timeoutTab = 230;
+let timeoutTab = 20;
 
 function getTabsMenuCircleCaps(amount){
     let circleCap = 6
@@ -19,7 +19,7 @@ function getTabsMenuCircleCaps(amount){
     return res
 }
 
-async function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, winIdx){
+async function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, previews, winIdx){
     for(let i = 0; i < amount; ++i){
         const option = document.createElement('button')
         option.classList.add('option-control-style')
@@ -30,7 +30,7 @@ async function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize,
         preview.alt = windows[winIdx].componentID
         idDiv.textContent = windows[winIdx].componentID
 
-        const dataUrl = await window.wandererAPI.getWindowPreview(windows[winIdx].symbolicWindowID)
+        const dataUrl = previews[winIdx];
         preview.src = dataUrl
 
         option.appendChild(preview)
@@ -57,12 +57,12 @@ async function generateSingleTabsMenuCircle(centerX, centerY, amount, angleSize,
     }
 }
 
-function generateAllTabsMenuCircles(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows){
+function generateAllTabsMenuCircles(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, previews){
     const circleCaps = getTabsMenuCircleCaps(amount)
 
     let radiusExt = 0, angleOffsetExt = 0, i = 0
     circleCaps.forEach(cap => {
-        generateSingleTabsMenuCircle(centerX, centerY, cap, 360 / cap, radius + radiusExt, angleOffset + angleOffsetExt, xOffset, yOffset, windows, i)
+        generateSingleTabsMenuCircle(centerX, centerY, cap, 360 / cap, radius + radiusExt, angleOffset + angleOffsetExt, xOffset, yOffset, windows, previews, i)
         radiusExt += 250
         angleOffsetExt += 45
         i += cap
@@ -76,10 +76,10 @@ function toggleChildrenFilter(container, cssFunction){
     })
 }
 
-function openTabsMenu(mousePos, windows){
+function openTabsMenu(mousePos, windows, previews){
     turnOffContextMenu()
     toggleChildrenFilter(parentWhiteboard, 'blur(3px)')
-    generateAllTabsMenuCircles(mousePos.x, mousePos.y, windows.length, 162, 250, 0, 0, -10, windows)
+    generateAllTabsMenuCircles(mousePos.x, mousePos.y, windows.length, 162, 250, 0, 0, -10, windows, previews)
     windows.forEach(w => {
         // console.log(w, windows.length)
     })
@@ -96,4 +96,25 @@ function closeTabsMenu(){
     })
     toggleChildrenFilter(parentWhiteboard, 'none')
     StatesHandler.isTabsMenuOpen = false;
+}
+
+function waitUntilTabsRemoved() {
+    return new Promise(resolve => {
+        if (!document.querySelector('.open-window')) {
+            resolve();
+            return;
+        }
+
+        const observer = new MutationObserver(() => {
+            if (!document.querySelector('.open-window')) {
+                observer.disconnect();
+                resolve();
+            }
+        });
+
+        observer.observe(parentWhiteboard, {
+            childList: true,
+            subtree: true
+        });
+    });
 }

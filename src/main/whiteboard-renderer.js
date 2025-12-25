@@ -129,19 +129,17 @@ window.wandererAPI.openTitlebarContextMenu((mousePos) => {
     openNewContextMenu(mousePos.x, mousePos.y, tcm)
 })
 
-window.wandererAPI.openTabMenu((mousePos, windows) => {
-    if (StatesHandler.isTabsMenuOpen) {
-        closeTabsMenu();
-        setTimeout(() => openTabsMenu(mousePos, windows), timeoutTab);
-    } else {
-        openTabsMenu(mousePos, windows);
-    }
+window.wandererAPI.openTabMenu(async (mousePos, windows, previews) => {
+    openTabsMenu(mousePos, windows, previews);
 });
 
 window.wandererAPI.closeTabMenu(async () => {
     closeTabsMenu();
-    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-    window.wandererAPI.closeTabMenuDone();
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            window.wandererAPI.closeTabMenuDone();
+        });
+    });
 })
 
 window.wandererAPI.zoomInWindow((mousePos) => zoomWhiteboard(mousePos, true))

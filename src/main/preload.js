@@ -4,7 +4,7 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   logMessage: (message) => ipcRenderer.send('log-message', message),
   openLink: (link) => ipcRenderer.invoke('open-link', link),
   getLink: () => ipcRenderer.invoke('get-link'),
-  getWindowPreview: (symbolicWindowID) => ipcRenderer.invoke('get-window-preview', symbolicWindowID),
+  // getWindowPreview: (symbolicWindowID) => ipcRenderer.invoke('get-window-preview', symbolicWindowID),
   firstTimeNotepadChosen: () => ipcRenderer.invoke('first-time-notepad-chosen'),
   firstTimeWhiteboardChosen: () => ipcRenderer.invoke('first-time-whiteboard-chosen'),
 
@@ -34,7 +34,7 @@ contextBridge.exposeInMainWorld('wandererAPI', {
     (_, mousePos) => callback(mousePos)
   ),
   openTabMenu: (callback) => ipcRenderer.on('open-tab-menu',
-    (_, mousePos, windows) => callback(mousePos, windows)
+    (_, mousePos, windows, previews) => callback(mousePos, windows, previews)
   ),
   closeTabMenu: (callback) => ipcRenderer.on('close-tab-menu',
     () => callback()
