@@ -207,6 +207,8 @@ class WindowHandler{
     static finishCloseWindow(trueWindowID){
         const win = BrowserWindow.fromId(trueWindowID);
         const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID);
+        const winData = this.allWindows.get(symbolicWindowID);
+        this.saveWindowFeatures(symbolicWindowID, trueWindowID, winData.type, winData.componentID, winData.parentWindowID, winData.url, win);
         this.openWindows.delete(symbolicWindowID);
         win.close();
         this.isClosingWindow = false;
@@ -229,14 +231,10 @@ class WindowHandler{
         this.initialiseWindow(trueWindowID, componentType, componentID, parentWindowID)
     }
 
-    static initialiseWindow(trueWindowID, componentType, componentID, parentWindowID, url = null){
-        const symbolicWindowID = this.getWindowID()
-        const win = BrowserWindow.fromId(trueWindowID)
-        const bounds = win.getBounds()
+    static saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url = null, window){
+        const bounds = window.getBounds();
 
-        this.componentToWindowMapping.set(componentID, symbolicWindowID)
-
-        let { x, y, width, height } = this.getWindowDimensions(win, bounds)
+        let { x, y, width, height } = this.getWindowDimensions(window, bounds);
 
         this.allWindows.set(symbolicWindowID, {
             trueWindowID,
@@ -244,14 +242,23 @@ class WindowHandler{
             y,
             width,
             height,
-            isFullScreen: win.isFullScreen(),
-            isMinimized: win.isMinimized(),
-            isMaximized: win.isMaximized(),
+            isFullScreen: window.isFullScreen(),
+            isMinimized: window.isMinimized(),
+            isMaximized: window.isMaximized(),
             type: componentType,
             componentID,
             parentWindowID,
             url
-        })
+        });
+    }
+
+    static initialiseWindow(trueWindowID, componentType, componentID, parentWindowID, url = null){
+        const symbolicWindowID = this.getWindowID()
+        const win = BrowserWindow.fromId(trueWindowID)
+
+        this.componentToWindowMapping.set(componentID, symbolicWindowID)
+
+        this.saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url, win);
 
         this.openWindows.set(symbolicWindowID, {symbolicWindowID, type: componentType, componentID})
 
