@@ -7,6 +7,13 @@ import robot from '@hurdlegroup/robotjs'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+const ComponentType = {
+    firstTime: '0',
+    whiteboard: 'w',
+    notepad: 'p',
+    link: 'l'
+}
+
 let allNotepads = new Set(), allWhiteboards = new Set()
 let largestNotepadID = 0, unusedNotepadIDs = new Array()
 let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
@@ -113,7 +120,7 @@ class WindowHandler{
         let preloadFilePath = path.join(__dirname, 'preload.js')
         let entryFilePath
         switch(componentType){
-            case 'w':
+            case ComponentType.whiteboard:
                 const saves = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
                 if(!fs.existsSync(saves))
                     fs.mkdirSync(saves)
@@ -123,18 +130,18 @@ class WindowHandler{
                     entryFilePath = defaultHTML
                 }else entryFilePath = savedHTML
                 break
-            case 'p':
+            case ComponentType.notepad:
                 entryFilePath = path.join(__dirname, 'notepad-index.html')
                 break
-            case '0':
+            case ComponentType.firstTime:
                 entryFilePath = path.join(__dirname, 'prompts', 'first-time', 'prompt-first-time.html')
                 break
-            case 'l':
+            case ComponentType.link:
                 entryFilePath = path.join(__dirname, 'prompts', 'link', 'prompt-link.html')
         }
         
         let win;
-        if(componentType === 'l'){
+        if(componentType === ComponentType.link){
             win = new BrowserWindow({
                 x,
                 y,
@@ -272,7 +279,7 @@ class WindowHandler{
     static writeWindows(){
         const map = new Array();
         this.openWindows.forEach((value, key) => {
-            if(value.componentType !== '0'){
+            if(value.componentType !== ComponentType.firstTime){
                 const winData = this.allWindows.get(key);
                 const win = BrowserWindow.fromId(winData.trueWindowID);
                 let { x, y, width, height } = this.getWindowDimensions(win);
@@ -389,25 +396,25 @@ function initialiseApp(){
             const winData = windowsObj[i]
             let win = null;
             switch(winData.componentType){
-                case 'p':
-                    win = WindowHandler.createWindow('p', winData.componentID, winData.parentWindowID,
+                case ComponentType.whiteboard:
+                    win = WindowHandler.createWindow(ComponentType.whiteboard, winData.componentID, winData.parentWindowID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
                         winData.width, winData.height, winData.x, winData.y)
                     break
-                case 'w':
-                    win = WindowHandler.createWindow('w', winData.componentID, winData.parentWindowID,
+                case ComponentType.notepad:
+                    win = WindowHandler.createWindow(ComponentType.notepad, winData.componentID, winData.parentWindowID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
                         winData.width, winData.height, winData.x, winData.y)
                     break
-                case 'l':
-                    win = WindowHandler.createWindow('l', winData.componentID, winData.parentWindowID,
+                case ComponentType.link:
+                    win = WindowHandler.createWindow(ComponentType.link, winData.componentID, winData.parentWindowID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
                         winData.width, winData.height, winData.x, winData.y, winData.url)
                     break
             }
         }
     }else{
-        WindowHandler.createWindow('0', null, null, false, false, true)
+        WindowHandler.createWindow(ComponentType.firstTime, null, null, false, false, true)
     }
 }
 
@@ -513,11 +520,11 @@ ipcMain.handle('open-notepad', (e, notepadID) => {
     const win = BrowserWindow.fromWebContents(e.sender)
     const winData = WindowHandler.allWindows.get(notepadID)
     if(winData){
-        WindowHandler.openComponent('p', notepadID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
+        WindowHandler.openComponent(ComponentType.notepad, notepadID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
             winData.isMinimized, winData.isMaximized, winData.isFullScreen,
             winData.width, winData.height, winData.x, winData.y
         )
-    }else WindowHandler.openComponent('p', notepadID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
+    }else WindowHandler.openComponent(ComponentType.notepad, notepadID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
 })
 
 function addWhiteboard(){
@@ -534,18 +541,18 @@ ipcMain.handle('open-whiteboard', (e, whiteboardID) => {
     const win = BrowserWindow.fromWebContents(e.sender)
     const winData = WindowHandler.allWindows.get(whiteboardID)
     if(winData){
-        WindowHandler.openComponent('w', whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
+        WindowHandler.openComponent(ComponentType.whiteboard, whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
             winData.isMinimized, winData.isMaximized, winData.isFullScreen,
             winData.width, winData.height, winData.x, winData.y
         )
-    }else WindowHandler.openComponent('w', whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
+    }else WindowHandler.openComponent(ComponentType.whiteboard, whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
 })
 
 ipcMain.handle('open-link', (e, link) => {
     const win = BrowserWindow.fromWebContents(e.sender)
         //WindowHandler.openComponent('l', link,+--------------------------------------------------poooooooooooooooooooooooooooooooooo WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
 
-    WindowHandler.createWindow('l', null, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id), false, false, false,
+    WindowHandler.createWindow(ComponentType.link, null, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id), false, false, false,
         undefined, undefined, undefined, undefined, link)
 })
 
@@ -578,12 +585,12 @@ ipcMain.handle('load-editor-contents', (e) => {
 
 ipcMain.handle('first-time-notepad-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    WindowHandler.overwriteComponentWindow(path.join(__dirname, 'notepad-index.html'), senderWindow.id, 'p', addNotepad())
+    WindowHandler.overwriteComponentWindow(path.join(__dirname, 'notepad-index.html'), senderWindow.id, ComponentType.notepad, addNotepad())
 })
 
 ipcMain.handle('first-time-whiteboard-chosen', (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    WindowHandler.overwriteComponentWindow(path.join(__dirname, 'whiteboard-index.html'), senderWindow.id, 'w', addWhiteboard())
+    WindowHandler.overwriteComponentWindow(path.join(__dirname, 'whiteboard-index.html'), senderWindow.id, ComponentType.whiteboard, addWhiteboard())
 })
 
 ipcMain.handle('get-window-component-id', (e) => {
