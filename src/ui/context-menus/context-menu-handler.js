@@ -36,6 +36,7 @@ function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, r
             option.style.borderColor = borderColorCM.opaque
             option.style.color = colorCM.opaque
             option.style.backdropFilter = 'blur(2px) opacity(1)';
+            option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0.77)';
         })
         })
     })
@@ -56,6 +57,7 @@ function concealContextMenuChildren(cm){
         option.style.borderColor = borderColorCM.transparent;
         option.style.color = colorCM.transparent;
         option.style.backdropFilter = 'blur(2px) opacity(0)';
+        option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0)';
     });
 }
 

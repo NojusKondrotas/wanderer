@@ -140,8 +140,10 @@ body {
     transform: translate(-50%, -50%);
 
     backdrop-filter: blur(2px) opacity(0);
+
+    box-shadow: 0px 0px 15px -8px rgba(0, 0, 0, 0.77);
     
-    transition: backdrop-filter 170ms ease-out, transform 170ms ease, left 170ms ease, top 170ms ease, color 170ms ease-out, border-color 170ms ease-out;
+    transition: box-shadow 170ms ease-out, backdrop-filter 170ms ease-out, transform 170ms ease, left 170ms ease, top 170ms ease, color 170ms ease-out, border-color 170ms ease-out;
 
     z-index: $index-20;
 }
