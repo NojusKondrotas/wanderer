@@ -62,7 +62,8 @@ class WindowHandler{
         return `window-${this.largestWindowID - 1}`
     }
 
-    static getWindowDimensions(win, bounds){
+    static getWindowDimensions(win){
+        const bounds = window.getBounds();
         let x = bounds.x, y = bounds.y
         let wWidth = bounds.width, wHeight = bounds.height
         if(win.isFullScreen()){
@@ -232,9 +233,7 @@ class WindowHandler{
     }
 
     static saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url = null, window){
-        const bounds = window.getBounds();
-
-        let { x, y, width, height } = this.getWindowDimensions(window, bounds);
+        let { x, y, width, height } = this.getWindowDimensions(window);
 
         this.allWindows.set(symbolicWindowID, {
             trueWindowID,
@@ -286,8 +285,7 @@ class WindowHandler{
             if(value.type !== '0'){
                 const winData = this.allWindows.get(key);
                 const win = BrowserWindow.fromId(winData.trueWindowID);
-                const bounds = win.getBounds();
-                let { x, y, width, height } = this.getWindowDimensions(win, bounds);
+                let { x, y, width, height } = this.getWindowDimensions(win);
                 winData.x = x; winData.y = y; winData.width = width; winData.height = height;
                 map.push(winData);
             }
