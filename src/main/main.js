@@ -24,6 +24,8 @@ class WindowHandler{
     // k: componentID
     // v: symbolicWindowID
     static trueWinIDToLink = new Map();
+    // k: trueWindowID
+    // v: url
     static allWindows = new Map();
     // primary window structure
     // k :symbolicWindowID
@@ -555,6 +557,19 @@ ipcMain.handle('open-whiteboard', (e, whiteboardID) => {
     }else WindowHandler.openComponent('w', whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
 })
 
+ipcMain.handle('open-link', (e, link) => {
+    const win = BrowserWindow.fromWebContents(e.sender)
+        //WindowHandler.openComponent('l', link,+--------------------------------------------------poooooooooooooooooooooooooooooooooo WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
+
+    WindowHandler.createWindow('l', null, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id), false, false, false,
+        undefined, undefined, undefined, undefined, link)
+})
+
+ipcMain.handle('get-link', (e) => {
+    const win = BrowserWindow.fromWebContents(e.sender)
+    return WindowHandler.trueWinIDToLink.get(win.id)
+})
+
 ipcMain.handle('save-editor-contents', (e, contents) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
@@ -700,16 +715,3 @@ ipcMain.handle('close-window', async (e) => {
         WindowHandler.closeWindow(senderWindow.id);
     }
 });
-
-ipcMain.handle('open-link', (e, link) => {
-    const win = BrowserWindow.fromWebContents(e.sender)
-        //WindowHandler.openComponent('l', link,+--------------------------------------------------poooooooooooooooooooooooooooooooooo WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
-
-    WindowHandler.createWindow('l', null, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id), false, false, false,
-        undefined, undefined, undefined, undefined, link)
-})
-
-ipcMain.handle('get-link', (e) => {
-    const win = BrowserWindow.fromWebContents(e.sender)
-    return WindowHandler.trueWinIDToLink.get(win.id)
-})
