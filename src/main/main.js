@@ -23,9 +23,6 @@ class WindowHandler{
     // support structure for checking whether a component is already open in a separate window
     // k: componentID
     // v: symbolicWindowID
-    static trueWinIDToLink = new Map();
-    // k: trueWindowID
-    // v: url
     static allWindows = new Map();
     // primary window structure
     // k :symbolicWindowID
@@ -69,7 +66,7 @@ class WindowHandler{
     }
 
     static getWindowDimensions(win){
-        const bounds = window.getBounds();
+        const bounds = win.getBounds();
         let x = bounds.x, y = bounds.y
         let wWidth = bounds.width, wHeight = bounds.height
         if(win.isFullScreen()){
@@ -133,57 +130,44 @@ class WindowHandler{
                 entryFilePath = path.join(__dirname, 'prompts', 'first-time', 'prompt-first-time.html')
                 break
             case 'l':
-                entryFilePath = path.join(__dirname, 'prompts', 'link', 'link.html')
-                const linkWin = new BrowserWindow({
-                    x,
-                    y,
-                    width,
-                    height,
-                    frame: false,
-                    titleBarStyle: 'hidden',
-                    fullscreen,
-                    webPreferences: {
-                        preload: path.join(preloadFilePath),
-                        contextIsolation: true,
-                        nodeIntegration: false,
-                        webviewTag: true,
-                    },
-                    show: false,
-                })
-                linkWin.loadFile(entryFilePath).then(() => {
-                    if(!fullscreen){
-                        if(maximized) linkWin.maximize()
-                        if(minimized) linkWin.minimize()
-                    }
-
-                    if (!minimized) linkWin.show()
-                })
-                this.trueWinIDToLink.set(linkWin.id, url)
-
-                this.initialiseWindow(linkWin.id, componentType, getLinkID(), parentWindowID, url)
-                linkWin.on('focus', () => {
-                    const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(linkWin.id)
-                    this.allWindows.get(symbolicWindowID).isMinimized = false
-                })
-
-                return linkWin
+                entryFilePath = path.join(__dirname, 'prompts', 'link', 'prompt-link.html')
         }
         
-        const win = new BrowserWindow({
-            x,
-            y,
-            width,
-            height,
-            frame: false,
-            titleBarStyle: 'hidden',
-            fullscreen,
-            webPreferences: {
-                preload: path.join(preloadFilePath),
-                contextIsolation: true,
-                nodeIntegration: false,
-            },
-            show: false,
-        })
+        let win;
+        if(componentType === 'l'){
+            win = new BrowserWindow({
+                x,
+                y,
+                width,
+                height,
+                frame: false,
+                titleBarStyle: 'hidden',
+                fullscreen,
+                webPreferences: {
+                    preload: path.join(preloadFilePath),
+                    contextIsolation: true,
+                    nodeIntegration: false,
+                    webviewTag: true
+                },
+                show: false,
+            })
+        }else{
+            win = new BrowserWindow({
+                x,
+                y,
+                width,
+                height,
+                frame: false,
+                titleBarStyle: 'hidden',
+                fullscreen,
+                webPreferences: {
+                    preload: path.join(preloadFilePath),
+                    contextIsolation: true,
+                    nodeIntegration: false,
+                },
+                show: false,
+            })
+        }
         win.loadFile(entryFilePath).then(() => {
             if(!fullscreen){
                 if(maximized) win.maximize()
@@ -193,7 +177,7 @@ class WindowHandler{
             if (!minimized) win.show()
         })
 
-        this.initialiseWindow(win.id, componentType, componentID, parentWindowID)
+        this.initialiseWindow(win.id, componentType, componentID, parentWindowID, url)
         win.on('restore', () => {
             const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(win.id)
             this.allWindows.get(symbolicWindowID).isMinimized = false
@@ -566,8 +550,9 @@ ipcMain.handle('open-link', (e, link) => {
 })
 
 ipcMain.handle('get-link', (e) => {
-    const win = BrowserWindow.fromWebContents(e.sender)
-    return WindowHandler.trueWinIDToLink.get(win.id)
+    const win = BrowserWindow.fromWebContents(e.sender);
+    const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id);
+    return WindowHandler.allWindows.get(symbolicWinID).url;
 })
 
 ipcMain.handle('save-editor-contents', (e, contents) => {
