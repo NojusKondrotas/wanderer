@@ -38,7 +38,7 @@ class WindowHandler{
     //         isFullScreen: win.isFullScreen(),
     //         isMinimized: win.isMinimized(),
     //         isMaximized: win.isMaximized(),
-    //         type: componentType,
+    //         componentType,
     //         componentID,
     //         parentWindowID,
     //         url
@@ -48,7 +48,7 @@ class WindowHandler{
     // k: symbolicWindowID
     // v: {
     //         symbolicWindowID,
-    //         type: componentType,
+    //         componentType,
     //         componentID
     //    }
 
@@ -93,7 +93,7 @@ class WindowHandler{
                 win.show();
                 win.focus();
             } else {
-                this.createWindow(winData.type, componentID, parentWindowID, winData.isMinimized, winData.isMaximized, winData.isFullScreen, winData.width, winData.height, winData.x, winData.y);
+                this.createWindow(winData.componentType, componentID, parentWindowID, winData.isMinimized, winData.isMaximized, winData.isFullScreen, winData.width, winData.height, winData.x, winData.y);
             }
         }else{
             this.createWindow(componentType, componentID, parentWindowID, minimized, maximized, fullscreen, width, height, x, y);
@@ -215,7 +215,7 @@ class WindowHandler{
         const win = BrowserWindow.fromId(trueWindowID);
         const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID);
         const winData = this.allWindows.get(symbolicWindowID);
-        this.saveWindowFeatures(symbolicWindowID, trueWindowID, winData.type, winData.componentID, winData.parentWindowID, winData.url, win);
+        this.saveWindowFeatures(symbolicWindowID, trueWindowID, winData.componentType, winData.componentID, winData.parentWindowID, winData.url, win);
         this.openWindows.delete(symbolicWindowID);
         win.close();
         this.isClosingWindow = false;
@@ -250,7 +250,7 @@ class WindowHandler{
             isFullScreen: window.isFullScreen(),
             isMinimized: window.isMinimized(),
             isMaximized: window.isMaximized(),
-            type: componentType,
+            componentType,
             componentID,
             parentWindowID,
             url
@@ -265,7 +265,7 @@ class WindowHandler{
 
         this.saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url, win);
 
-        this.openWindows.set(symbolicWindowID, {symbolicWindowID, type: componentType, componentID})
+        this.openWindows.set(symbolicWindowID, {symbolicWindowID, componentType, componentID})
 
         this.trueWinIDToSymbolicWinIDMapping.set(trueWindowID, symbolicWindowID)
     }
@@ -288,7 +288,7 @@ class WindowHandler{
     static writeWindows(){
         const map = new Array();
         this.openWindows.forEach((value, key) => {
-            if(value.type !== '0'){
+            if(value.componentType !== '0'){
                 const winData = this.allWindows.get(key);
                 const win = BrowserWindow.fromId(winData.trueWindowID);
                 let { x, y, width, height } = this.getWindowDimensions(win);
@@ -404,7 +404,7 @@ function initialiseApp(){
         for(let i = 0; i < windowsObj.length; ++i){
             const winData = windowsObj[i]
             let win = null;
-            switch(winData.type){
+            switch(winData.componentType){
                 case 'p':
                     win = WindowHandler.createWindow('p', winData.componentID, winData.parentWindowID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
