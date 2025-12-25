@@ -16,13 +16,16 @@ let activeTabMenuWindow = null;
 
 class WindowHandler{
     static trueWinIDToSymbolicWinIDMapping = new Map();
+    // support structure for associating true system window IDs with in-app symbolic ones
     // k: trueWindowID
     // v: symbolicWindowID
     static componentToWindowMapping = new Map();
+    // support structure for checking whether a component is already open in a separate window
     // k: componentID
     // v: symbolicWindowID
     static trueWinIDToLink = new Map();
     static allWindows = new Map();
+    // primary window structure
     // k :symbolicWindowID
     // v: {
     //         trueWindowID,
@@ -39,6 +42,7 @@ class WindowHandler{
     //         url
     //    }
     static openWindows = new Map();
+    // copies the relevant entries of allWindows
     // k: symbolicWindowID
     // v: {
     //         symbolicWindowID,
