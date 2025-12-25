@@ -12,6 +12,8 @@ let largestNotepadID = 0, unusedNotepadIDs = new Array()
 let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
 let largestLinkID = 0, unusedLinkIDs = new Array()
 
+let activeTabMenuWindow = null;
+
 class WindowHandler{
     static trueWinIDToSymbolicWinIDMapping = new Map();
     // k: trueWindowID
@@ -414,18 +416,24 @@ function initialiseApp(){
     }
 }
 
-function waitForTabMenuClose() {
-    return new Promise(resolve => {
+ipcMain.handle('close-tab-menu-done', () => {
+    activeTabMenuWindow = null;
+})
+
+async function waitForTabMenuClose() {
+    if(activeTabMenuWindow == null) return;
+
+    activeTabMenuWindow.webContents.send('close-tab-menu');
+    await new Promise(resolve => {
         ipcMain.once('close-tab-menu-done', resolve);
     });
+
+    activeTabMenuWindow = null;
 }
 
 async function getWindowPreview(symbolicWindowID){
     const winData = WindowHandler.allWindows.get(symbolicWindowID)
     const win = BrowserWindow.fromId(winData.trueWindowID);
-
-    win.webContents.send('close-tab-menu');
-    await waitForTabMenuClose();
 
     const image = await win.capturePage()
     return image.toDataURL()
@@ -449,6 +457,7 @@ app.whenReady().then(() => {
     globalShortcut.register('CmdOrCtrl+2', async () => {
         const senderWindow = BrowserWindow.getFocusedWindow();
         const serializedElements = Array.from(WindowHandler.openWindows.values());
+        await waitForTabMenuClose();
         const previews = [];
         for (const el of serializedElements) {
             previews.push(await getWindowPreview(el.symbolicWindowID));
@@ -457,11 +466,13 @@ app.whenReady().then(() => {
             // handle
             return;
         }
+        activeTabMenuWindow = senderWindow;
         senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements, previews);
     })
     globalShortcut.register('CmdOrCtrl+num2', async () => {
         const senderWindow = BrowserWindow.getFocusedWindow();
         const serializedElements = Array.from(WindowHandler.openWindows.values());
+        await waitForTabMenuClose();
         const previews = [];
         for (const el of serializedElements) {
             previews.push(await getWindowPreview(el.symbolicWindowID));
@@ -470,6 +481,7 @@ app.whenReady().then(() => {
             // handle
             return;
         }
+        activeTabMenuWindow = senderWindow;
         senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements, previews);
     })
     globalShortcut.register('CmdOrCtrl+X', () => {

@@ -81,6 +81,7 @@ window.addEventListener('mouseup', (e) => {
 
 async function save(){
     await hideAllConfigs();
+    closeTabsMenu();
     saveAllNotesContents()
     await window.wandererAPI.saveWhiteboardHTML()
 
