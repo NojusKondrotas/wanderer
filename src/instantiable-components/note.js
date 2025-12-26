@@ -75,20 +75,22 @@ function addNoteListeners(newNote){
     })
 
     newNote.addEventListener('dblclick', (e) => {
-        selectedElement = newNote
         if(!StatesHandler.isWritingElement){
             toggleWritingMode(true, newNote.id)
+        } else {
+            switchFocus(selectedElement.id, newNote.id);
+        }
 
-            const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
-            range = document.createRange()
-            range.setStart(pos.offsetNode, pos.offset)
-            range.collapse(true)
+        selectedElement = newNote
+        const pos = document.caretPositionFromPoint(e.clientX, e.clientY)
+        range = document.createRange()
+        range.setStart(pos.offsetNode, pos.offset)
+        range.collapse(true)
 
-            if (range) {
-                const sel = window.getSelection()
-                sel.removeAllRanges()
-                sel.addRange(range)
-            }
+        if (range) {
+            const sel = window.getSelection()
+            sel.removeAllRanges()
+            sel.addRange(range)
         }
     })
 
