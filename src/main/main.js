@@ -50,11 +50,7 @@ class WindowHandler{
     static openWindows = new Map();
     // copies the relevant entries of allWindows
     // k: symbolicWindowID
-    // v: {
-    //         symbolicWindowID,
-    //         componentType,
-    //         componentID
-    //    }
+    // v: allWindows.get(symbolicWindowID)
 
     static largestWindowID = 0
     static unusedWindowIDs = new Array()
@@ -220,9 +216,9 @@ class WindowHandler{
     }
 
     static closeAllWindows(){
-        const keys = this.openWindows.keys();
-        for(const k of keys){
-            this.closeWindow(this.allWindows.get(k).trueWindowID);
+        const values = this.openWindows.values();
+        for(const v of values){
+            this.closeWindow(v.trueWindowID);
         }
     }
 
@@ -263,7 +259,7 @@ class WindowHandler{
 
         this.saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url, BrowserWindow.fromId(trueWindowID));
 
-        this.openWindows.set(symbolicWindowID, {symbolicWindowID, componentType, componentID})
+        this.openWindows.set(symbolicWindowID, this.allWindows.get(symbolicWindowID));
     }
 
     static writeComponents(){
@@ -285,11 +281,9 @@ class WindowHandler{
         const openWindowsMap = new Array();
         this.openWindows.forEach((value, key) => {
             if(value.componentType !== ComponentType.firstTime){
-                const winData = this.allWindows.get(key);
-                const win = BrowserWindow.fromId(winData.trueWindowID);
-                let { x, y, width, height } = this.getWindowDimensions(win);
-                winData.x = x; winData.y = y; winData.width = width; winData.height = height;
-                openWindowsMap.push(winData);
+                const win = BrowserWindow.fromId(value.trueWindowID);
+                WindowHandler.saveWindowFeatures(key, value.trueWindowID, value.componentType, value.componentID, value.parentWindowID, value.url, win);
+                openWindowsMap.push(value);
             }
         });
         const allWindowsMap = new Array();
@@ -486,7 +480,15 @@ app.whenReady().then(() => {
     })
     globalShortcut.register('CmdOrCtrl+2', async () => {
         const senderWindow = BrowserWindow.getFocusedWindow();
-        const serializedElements = Array.from(WindowHandler.openWindows.values());
+        const serializedElements = Array();
+        WindowHandler.openWindows.forEach((value, key) => {
+            const data = {
+                symbolicWindowID: key,
+                componentType: value.componentType,
+                componentID: value.componentID
+            };
+            serializedElements.push(data);
+        });
         await waitForTabMenuClose();
         const previews = [];
         for (const el of serializedElements) {
@@ -501,7 +503,15 @@ app.whenReady().then(() => {
     })
     globalShortcut.register('CmdOrCtrl+num2', async () => {
         const senderWindow = BrowserWindow.getFocusedWindow();
-        const serializedElements = Array.from(WindowHandler.openWindows.values());
+        const serializedElements = Array();
+        WindowHandler.openWindows.forEach((value, key) => {
+            const data = {
+                symbolicWindowID: value.symbolicWindowID,
+                componentType: value.componentType,
+                componentID: value.componentID
+            };
+            serializedElements.push(data);
+        });
         await waitForTabMenuClose();
         const previews = [];
         for (const el of serializedElements) {
