@@ -2,7 +2,7 @@
   "name": "wanderer",
   "version": "1.0.0",
   "main": "src/main/main.js",
-  "description": "A lightweight experimental cross-platform note-taking app.",
+  "description": "An experimental cross-platform organising app for wandering ideas.",
   "repository": "https://github.com/NojusKondrotas/wanderer",
   "type": "module",
   "scripts": {

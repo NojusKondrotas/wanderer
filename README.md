@@ -1,2 +1,2 @@
 # wanderer
-A lightweight experimental cross-platform note-taking app.
+An experimental cross-platform organising app for wandering ideas.
