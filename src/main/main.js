@@ -276,19 +276,27 @@ class WindowHandler{
     }
 
     static writeWindows(){
-        const map = new Array();
+        const openWindowsMap = new Array();
         this.openWindows.forEach((value, key) => {
             if(value.componentType !== ComponentType.firstTime){
                 const winData = this.allWindows.get(key);
                 const win = BrowserWindow.fromId(winData.trueWindowID);
                 let { x, y, width, height } = this.getWindowDimensions(win);
                 winData.x = x; winData.y = y; winData.width = width; winData.height = height;
-                map.push(winData);
+                openWindowsMap.push(winData);
+            }
+        });
+        const allWindowsMap = new Array();
+        this.allWindows.forEach((value, key) => {
+            if(value.componentType !== ComponentType.firstTime){
+                allWindowsMap.push(value);
             }
         });
         const savesPath = path.join(__dirname, '..', 'saves');
-        const windowsFilePath = path.join(savesPath, 'windows.json');
-        fs.writeFileSync(windowsFilePath, JSON.stringify(map, null, 2), 'utf-8');
+        const openWindowsFilePath = path.join(savesPath, 'open-windows.json');
+        fs.writeFileSync(openWindowsFilePath, JSON.stringify(openWindowsMap, null, 2), 'utf-8');
+        const allWindowsFilePath = path.join(savesPath, 'all-windows.json');
+        fs.writeFileSync(allWindowsFilePath, JSON.stringify(allWindowsMap, null, 2), 'utf-8');
         const windowsIDsJSON = path.join(savesPath, 'windows-IDs.json');
         fs.writeFileSync(windowsIDsJSON, JSON.stringify({
             largestNotepadID, largestWhiteboardID, unusedNotepadIDs, unusedWhiteboardIDs,
@@ -372,9 +380,12 @@ function initialiseApp(){
     if(!fs.existsSync(defaultPathPreload))
         process.exit
 
-    const windowsJSON = path.join(savesPath, 'windows.json')
-    if(!fs.existsSync(windowsJSON))
-        fs.writeFileSync(windowsJSON, JSON.stringify([], null, 2), 'utf-8')
+    const openWindowsJSON = path.join(savesPath, 'open-windows.json')
+    if(!fs.existsSync(openWindowsJSON))
+        fs.writeFileSync(openWindowsJSON, JSON.stringify([], null, 2), 'utf-8')
+    const allWindowsJSON = path.join(savesPath, 'all-windows.json')
+    if(!fs.existsSync(allWindowsJSON))
+        fs.writeFileSync(allWindowsJSON, JSON.stringify([], null, 2), 'utf-8')
     const windowsIDsJSON = path.join(savesPath, 'windows-IDs.json')
     if(!fs.existsSync(windowsIDsJSON))
         fs.writeFileSync(windowsIDsJSON, JSON.stringify({}, null, 2), 'utf-8')
@@ -388,11 +399,17 @@ function initialiseApp(){
         allNotepads = new Set(stateWindowsIDs.allNotepads)
         allWhiteboards = new Set(stateWindowsIDs.allWhiteboards)
     }
-
-    const windowsObj = JSON.parse(fs.readFileSync(windowsJSON, 'utf-8'))
-    if(Array.isArray(windowsObj) && windowsObj.length > 0){
-        for(let i = 0; i < windowsObj.length; ++i){
-            const winData = windowsObj[i]
+    const allWindowObj = JSON.parse(fs.readFileSync(allWindowsJSON, 'utf-8'));
+    if(Array.isArray(allWindowObj) && allWindowObj.length > 0){
+        for(let i = 0; i < allWindowObj.length; ++i){
+            const winData = allWindowObj[i];
+            WindowHandler.allWindows.set(WindowHandler.getWindowID(), winData);
+        }
+    }
+    const openWindowsObj = JSON.parse(fs.readFileSync(openWindowsJSON, 'utf-8'))
+    if(Array.isArray(openWindowsObj) && openWindowsObj.length > 0){
+        for(let i = 0; i < openWindowsObj.length; ++i){
+            const winData = openWindowsObj[i]
             let win = null;
             switch(winData.componentType){
                 case ComponentType.whiteboard:
