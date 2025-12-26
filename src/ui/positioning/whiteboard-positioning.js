@@ -230,6 +230,16 @@ function getAbsolutePosition(el) {
     };
 }
 
+function updateElementPositionByIDByOffset(elID, x, y) {
+    const elPos = elementPositions.get(elID)
+
+    const offsetX = elPos.x - x
+    const offsetY = elPos.y - y
+    elementPositions.set(elID, { x: offsetX, y: offsetY})
+
+    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
+}
+
 function updateElementPositionByID(elID) {
     const elPos = elementPositions.get(elID)
 
@@ -238,6 +248,22 @@ function updateElementPositionByID(elID) {
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
     document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
+}
+
+function updateComponentPositionsByOffset(x, y){
+    const keys = elementPositions.keys();
+    for (const k of keys){
+        updateElementPositionByIDByOffset(k, x, y)
+    }
+    
+    allPaths.forEach(path => {
+        path.startPosition.x -= x
+        path.startPosition.y -= y
+        path.endPosition.x -= x
+        path.endPosition.y -= y
+
+        updatePathPosition(path, path.startPosition, path.endPosition)
+    })
 }
 
 function updateComponentPositions(){

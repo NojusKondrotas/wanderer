@@ -1,5 +1,8 @@
 let isWindowClosing = false
 
+let scrollLastX = window.scrollX, scrollLastY = window.scrollY;
+let scrollIsChanging = false;
+
 window.addEventListener('DOMContentLoaded', async () => {
     StatesHandler.isComponentWhiteboard = true
 
@@ -78,6 +81,18 @@ window.addEventListener('mousedown', (e) => {
 window.addEventListener('mouseup', (e) => {
     genMouseUp_WhiteboardMoveHandler(e)
 })
+
+window.addEventListener("scroll", () => {
+    const dx = window.scrollX - scrollLastX;
+    const dy = window.scrollY - scrollLastY;
+    scrollLastX = window.scrollX;
+    scrollLastY = window.scrollY;
+    window.scrollTo(0, 0);
+    if(!scrollIsChanging){
+        updateComponentPositionsByOffset(dx, dy);
+        scrollIsChanging = true;
+    } else scrollIsChanging = false;
+});
 
 async function save(){
     await hideAllConfigs();
