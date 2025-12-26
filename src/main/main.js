@@ -186,7 +186,11 @@ class WindowHandler{
             if (!minimized) win.show()
         })
 
-        this.trueWinIDToSymbolicWinIDMapping.set(win.id, this.getWindowID());
+        if(this.componentToWindowMapping.has(componentID)){
+            this.trueWinIDToSymbolicWinIDMapping.set(win.id, this.componentToWindowMapping.get(componentID));
+        }else{
+            this.trueWinIDToSymbolicWinIDMapping.set(win.id, this.getWindowID());
+        }
 
         win.on('restore', () => {
             let symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(win.id)
@@ -253,7 +257,9 @@ class WindowHandler{
 
     static initialiseWindow(trueWindowID, componentType, componentID, parentWindowID, url = null){
         const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID);
-        this.componentToWindowMapping.set(componentID, symbolicWindowID)
+        if(!this.componentToWindowMapping.has(componentID)){
+            this.componentToWindowMapping.set(componentID, symbolicWindowID)
+        }
 
         this.saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url, BrowserWindow.fromId(trueWindowID));
 
@@ -403,7 +409,9 @@ function initialiseApp(){
     if(Array.isArray(allWindowObj) && allWindowObj.length > 0){
         for(let i = 0; i < allWindowObj.length; ++i){
             const winData = allWindowObj[i];
-            WindowHandler.allWindows.set(WindowHandler.getWindowID(), winData);
+            const id = WindowHandler.getWindowID();
+            WindowHandler.allWindows.set(id, winData);
+            WindowHandler.componentToWindowMapping.set(winData.componentID, id);
         }
     }
     const openWindowsObj = JSON.parse(fs.readFileSync(openWindowsJSON, 'utf-8'))
