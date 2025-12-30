@@ -60,12 +60,10 @@ function hideAllConfigs() {
         cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
         toggleAllConfigsAbstracts(false);
         toggleSingleConfigInfoTag(false);
-        StatesHandler.isConfigsOpen = false;
     });
 }
 
 function displayAllConfigs() {
-    turnOffContextMenu();
     configsDiv.style.display = 'flex';
     sections.forEach(section => {
         const offsetX = generateRandom(-50, 50);
@@ -82,5 +80,4 @@ function displayAllConfigs() {
         });
     });
     cfgBlur.style.backdropFilter = 'blur(4px) opacity(1)';
-    StatesHandler.isConfigsOpen = true;
 }

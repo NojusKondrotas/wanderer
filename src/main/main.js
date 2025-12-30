@@ -11,7 +11,9 @@ const ComponentType = {
     firstTime: '0',
     whiteboard: 'w',
     notepad: 'p',
-    link: 'l'
+    link: 'l',
+    configs: 'c',
+    tabs: 't'
 }
 
 let allNotepads = new Set(), allWhiteboards = new Set()
@@ -19,7 +21,7 @@ let largestNotepadID = 0, unusedNotepadIDs = new Array()
 let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
 let largestLinkID = 0, unusedLinkIDs = new Array()
 
-let activeTabMenuWindow = null;
+let activeConfigsWindow = null, activeTabMenuWindow = null;
 
 class WindowHandler{
     static trueWinIDToSymbolicWinIDMapping = new Map();
@@ -84,14 +86,18 @@ class WindowHandler{
         return { x, y, width: wWidth, height: wHeight }
     }
 
+    static focusWindow(win){
+        win.show();
+        win.focus();
+    }
+
     static openComponent(componentType, componentID, parentWindowID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y){
         if(this.componentToWindowMapping.has(componentID)){
             const symbolID = this.componentToWindowMapping.get(componentID);
             const winData = this.allWindows.get(this.componentToWindowMapping.get(componentID));
             if(this.openWindows.has(symbolID)){
                 const win = BrowserWindow.fromId(winData.trueWindowID);
-                win.show();
-                win.focus();
+                this.focusWindow(win);
             } else {
                 const win = this.createWindow(winData.componentType, componentID, winData.isMinimized, winData.isMaximized, winData.isFullScreen, winData.width, winData.height, winData.x, winData.y);
                 this.initialiseWindow(win.id, winData.componentType, componentID, parentWindowID);
@@ -136,6 +142,8 @@ class WindowHandler{
                 break
             case ComponentType.link:
                 entryFilePath = path.join(__dirname, 'prompts', 'link', 'prompt-link.html')
+            case ComponentType.configs:
+                entryFilePath = path.join(__dirname, 'prompts', 'configs', 'configs.html')
         }
         
         let win;
@@ -280,7 +288,7 @@ class WindowHandler{
     static writeWindows(){
         const openWindowsMap = new Array();
         this.openWindows.forEach((value, key) => {
-            if(value.componentType !== ComponentType.firstTime){
+            if(value.componentType !== ComponentType.firstTime && value.componentType !== ComponentType.configs){
                 const win = BrowserWindow.fromId(value.trueWindowID);
                 WindowHandler.saveWindowFeatures(key, value.trueWindowID, value.componentType, value.componentID, value.parentWindowID, value.url, win);
                 openWindowsMap.push(value);
@@ -288,7 +296,7 @@ class WindowHandler{
         });
         const allWindowsMap = new Array();
         this.allWindows.forEach((value, key) => {
-            if(value.componentType !== ComponentType.firstTime){
+            if(value.componentType !== ComponentType.firstTime && value.componentType !== ComponentType.configs){
                 allWindowsMap.push(value);
             }
         });
@@ -439,6 +447,15 @@ function initialiseApp(){
         WindowHandler.initialiseWindow(win.id, ComponentType.firstTime, null, null);
     }
 }
+
+ipcMain.handle('open-configs', () => {
+    if(activeConfigsWindow != null) {
+        return this.focusWindow(activeConfigsWindow);
+    }
+
+    activeConfigsWindow = WindowHandler.createWindow(ComponentType.configs, null);
+    WindowHandler.initialiseWindow(activeConfigsWindow.id, ComponentType.configs, null, null);
+})
 
 ipcMain.handle('close-tab-menu-done', () => {
     activeTabMenuWindow = null;

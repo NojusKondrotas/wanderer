@@ -108,5 +108,5 @@ titlebarCloseCtrlFrame.addEventListener('click', (e) => {
 titlebarGlobalConfigurationFrame.addEventListener('click', (e) => {
     e.stopPropagation();
     titlebarGlobalConfigurationFrame.blur();
-    displayAllConfigs();
+    window.wandererAPI.openConfigs();
 })

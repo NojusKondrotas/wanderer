@@ -86,35 +86,3 @@ function openTabsMenu(mousePos, windows, previews){
 
     StatesHandler.isTabsMenuOpen = true;
 }
-
-function closeTabsMenu(){
-    const allWindowOptions = document.querySelectorAll('.open-window')
-
-    allWindowOptions.forEach(w => {
-        w.remove()
-        elementPositions.delete(w.id)
-    })
-    toggleChildrenFilter(parentWhiteboard, 'none')
-    StatesHandler.isTabsMenuOpen = false;
-}
-
-function waitUntilTabsRemoved() {
-    return new Promise(resolve => {
-        if (!document.querySelector('.open-window')) {
-            resolve();
-            return;
-        }
-
-        const observer = new MutationObserver(() => {
-            if (!document.querySelector('.open-window')) {
-                observer.disconnect();
-                resolve();
-            }
-        });
-
-        observer.observe(parentWhiteboard, {
-            childList: true,
-            subtree: true
-        });
-    });
-}

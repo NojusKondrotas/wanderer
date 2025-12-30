@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wanderer-configs</title>
+    <link rel="stylesheet" href="../../titlebar-style.css">
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <%- include('../titlebars/prompts/first-time/lock') %>
+
+    <div id="cfg-blur"></div>
+    <div id="cfg-itag-field">
+        <button id="cfg-itag"><img src="../../../../res/info-tag-mvboli.png"></button>
+    </div>
+
+    <div id="configs">
+        <div class="cfg-flex">
+            <button id="cfg-templates" class="cfg-style text-large">
+                templates
+            </button>
+            <div class="cfg-flex-horiz margin-0 padding-0">
+                <button id="cfg-abst-templates-exit" class="cfg-abst-exit"><img src="../../../../res/config-close.png"></button>
+                <p id="cfg-abst-templates" class="margin-0 padding-0 cfg-abst">
+                    Configurations' layouts and unsaved deviations from the active layout.
+                </p>
+            </div>
+        </div>
+        <div class="cfg-flex">
+            <button id="cfg-n" class="cfg-style text-large">
+                notes
+            </button>
+            <div class="cfg-flex-horiz margin-0 padding-0">
+                <button id="cfg-abst-n-exit" class="cfg-abst-exit"><img src="../../../../res/config-close.png"></button>
+                <p id="cfg-abst-n" class="margin-0 padding-0 cfg-abst">
+                    Styling of notes.
+                </p>
+            </div>
+        </div>
+        <div class="cfg-flex">
+            <button id="cfg-w" class="cfg-style text-large">
+                whiteboards
+            </button>
+            <div class="cfg-flex-horiz margin-0 padding-0">
+                <button id="cfg-abst-w-exit" class="cfg-abst-exit"><img src="../../../../res/config-close.png"></button>
+                <p id="cfg-abst-w" class="margin-0 padding-0 cfg-abst">
+                    Styling of whiteboards.
+                </p>
+            </div>
+        </div>
+        <div class="cfg-flex">
+            <button id="cfg-p" class="cfg-style text-large">
+                notepads
+            </button>
+            <div class="cfg-flex-horiz margin-0 padding-0">
+                <button id="cfg-abst-p-exit" class="cfg-abst-exit"><img src="../../../../res/config-close.png"></button>
+                <p id="cfg-abst-p" class="margin-0 padding-0 cfg-abst">
+                    Styling of notepads.
+                </p>
+            </div>
+        </div>
+        <div class="cfg-flex">
+            <button id="cfg-internal" class="cfg-style text-large">
+                internal
+            </button>
+            <div class="cfg-flex-horiz margin-0 padding-0">
+                <button id="cfg-abst-internal-exit" class="cfg-abst-exit"><img src="../../../../res/config-close.png"></button>
+                <p id="cfg-abst-internal" class="margin-0 padding-0 cfg-abst">
+                    Configurations related to the state of the application and unrelated to style. For example, paths of saves and keybinds.
+                    Any layout encapsulates these changes, too.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="cfg-menu-templates" class="cfg-menus">
+
+    </div>
+    <div id="cfg-menu-n" class="cfg-menus">
+
+    </div>
+    <div id="cfg-menu-w" class="cfg-menus">
+
+    </div>
+    <div id="cfg-menu-p" class="cfg-menus">
+
+    </div>
+    <div id="cfg-menu-internal" class="cfg-menus">
+
+    </div>
+
+    <script src="../../../runtime/logger.js"></script>
+    <script src="../../../runtime/error-handler.js"></script>
+    <script src="../../../runtime/numerics.js"></script>
+    <script src="../../../runtime/states-handler.js"></script>
+    <script src="../../../ui/titlebars/titlebar.js"></script>
+    <script src="../../../ui/titlebars/whiteboard/lock.js"></script>
+    <script src="../../../ui/keybinds.js"></script>
+    <script src="../../../ui/positioning/mouse-drag-calc.js"></script>
+    <script src="../../../ui/positioning/window-positioning.js"></script>
+    <script src="../../../ui/positioning/whiteboard-positioning.js"></script>
+    <script src="../../../ui/configs-menu/config-abstract.js"></script>
+    <script src="../../../ui/configs-menu/config-info-tag.js"></script>
+    <script src="../../../ui/configs-menu/configs.js"></script>
+    <script src="configs-renderer.js"></script>
+</body>
+</html>

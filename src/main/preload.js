@@ -4,7 +4,8 @@ contextBridge.exposeInMainWorld('wandererAPI', {
   logMessage: (message) => ipcRenderer.send('log-message', message),
   openLink: (link) => ipcRenderer.invoke('open-link', link),
   getLink: () => ipcRenderer.invoke('get-link'),
-  // getWindowPreview: (symbolicWindowID) => ipcRenderer.invoke('get-window-preview', symbolicWindowID),
+  openConfigs: () => ipcRenderer.invoke('open-configs'),
+  openTabs: () => ipcRenderer.invoke('open-tabs'),
   firstTimeNotepadChosen: () => ipcRenderer.invoke('first-time-notepad-chosen'),
   firstTimeWhiteboardChosen: () => ipcRenderer.invoke('first-time-whiteboard-chosen'),
 

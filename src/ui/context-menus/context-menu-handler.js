@@ -92,7 +92,6 @@ function openNewContextMenu(centerX, centerY, { blueprint, angleSize, radius, an
         return moveContextMenu(centerX, centerY, blueprint);
     }
     activeContextMenu = blueprint
-    closeTabsMenu()
     concealContextMenu()
     blueprint.style.display = 'block'
     StatesHandler.isContextMenuOpen = true

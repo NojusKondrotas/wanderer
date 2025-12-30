@@ -187,11 +187,6 @@ class WhiteboardPositioningHandler{
             suppressNextMouseUp = false
             return
         }
-        if(StatesHandler.isTabsMenuOpen){
-            if(!checkIfDraggedEnough()){
-                closeTabsMenu()
-            }
-        }
         if(StatesHandler.isDrawingPath){
             if(!checkIfDraggedEnough()){
                 terminatePathDrawing(ev, null)
