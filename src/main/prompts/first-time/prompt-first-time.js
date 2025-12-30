@@ -5,6 +5,10 @@ function closeWindow(){
     window.wandererAPI.closeWindow()
 }
 
+window.wandererAPI.onSaveComponent(async () => {
+    window.wandererAPI.saveComponentDone();
+})
+
 document.getElementById('notepad-choice').addEventListener('click', () => {
     window.wandererAPI.firstTimeNotepadChosen()
 })
