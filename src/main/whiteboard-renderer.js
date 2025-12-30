@@ -63,7 +63,6 @@ window.addEventListener('mousemove', (e) => {
 
 window.addEventListener('contextmenu', (e) => {
     if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id);
-    if(StatesHandler.isConfigsOpen) hideAllConfigs();
     if(StatesHandler.isDrawingPath){
         terminatePathDrawing(e, null);
     }
@@ -92,7 +91,6 @@ window.addEventListener("scroll", () => {
 });
 
 async function save(){
-    await hideAllConfigs();
     saveAllNotesContents()
     await window.wandererAPI.saveWhiteboardHTML()
 

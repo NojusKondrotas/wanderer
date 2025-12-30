@@ -136,10 +136,6 @@ class WhiteboardPositioningHandler{
             closePathConnectionContextMenu()
             return
         }
-        if(StatesHandler.isConfigsOpen){
-            hideAllConfigs();
-            return;
-        }
         if(StatesHandler.isWritingElement){
             toggleWritingMode(false, selectedElement.id)
             return
