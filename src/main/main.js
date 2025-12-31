@@ -219,6 +219,11 @@ class WindowHandler{
         const winData = this.allWindows.get(symbolicWindowID);
         this.saveWindowFeatures(symbolicWindowID, trueWindowID, winData.componentType, winData.componentID, winData.parentWindowID, winData.url, win);
         this.openWindows.delete(symbolicWindowID);
+        if(winData.componentType === ComponentType.configs) {
+            this.allWindows.delete(symbolicWindowID);
+            this.trueWinIDToSymbolicWinIDMapping.delete(win.id);
+            activeConfigsWindow = null;
+        }
         win.close();
         this.isClosingWindow = false;
     }
