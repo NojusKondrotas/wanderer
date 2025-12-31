@@ -1,11 +1,10 @@
 const configsMenu = document.getElementById('configs');
-const elementContextMenu = document.getElementById('element-context-menu');
 const configscm = {
     blueprint : configsMenu,
     angleSize : 360 / configsMenu.children.length,
-    radius : 90,
-    angleOffset : 0,
-    xOffset : 0,
+    radius : 150,
+    angleOffset : 162,
+    xOffset : -10,
     yOffset : -10
 };
 const sections = [
