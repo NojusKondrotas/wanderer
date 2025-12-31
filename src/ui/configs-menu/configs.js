@@ -31,10 +31,10 @@ const menus = [
         const section = sections[i];
         if (section != null) {
             section.addEventListener('click', () => {
-                displaySingleConfigMenu(section);
+                displayConfigMenu(section);
             });
             section.addEventListener('mouseenter', () => {
-                toggleSingleConfigInfoTag(true, section);
+                toggleConfigInfoTag(true, section);
                 activeSectionIdx = i;
             });
         } else {
@@ -43,15 +43,15 @@ const menus = [
     }
 })();
 
-function hideSingleConfigMenu() {
+function hideConfigMenu() {
 
 }
 
-function displaySingleConfigMenu() {
+function displayConfigMenu() {
 
 }
 
-function hideAllConfigs() {
+function hideConfigs() {
     return new Promise(resolve => {
         sections.forEach(section => {
             const offsetX = generateRandom(-50, 50);
@@ -65,12 +65,12 @@ function hideAllConfigs() {
             resolve();
         }, timeoutCfg)
         cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
-        toggleAllConfigsAbstracts(false);
-        toggleSingleConfigInfoTag(false);
+        toggleConfigsAbstract(false);
+        toggleConfigInfoTag(false);
     });
 }
 
-function displayAllConfigs(x, y) {
+function displayConfigs(x, y) {
     configscm.blueprint.style.display = 'block'
     generateCircularContextMenu(x, y, configscm);
 }

@@ -10,5 +10,5 @@ window.wandererAPI.onSaveComponent(async () => {
 
 (async () => {
     const center = await window.wandererAPI.getWindowCenter();
-    displayAllConfigs(center.x, center.y);
+    displayConfigs(center.x, center.y);
 })();

@@ -7,14 +7,14 @@ const configsInfoTagField = document.getElementById('cfg-itag-field');
     });
     configsInfoTag.addEventListener('click', (e) => {
         e.stopPropagation();
-        toggleSingleConfigAbstract(true, activeSectionIdx);
+        toggleConfigAbstract(true, activeSectionIdx);
     });
     configsInfoTagField.addEventListener('mousedown', () => {
-        toggleSingleConfigInfoTag(false);
+        toggleConfigInfoTag(false);
         activeSectionIdx = -1;
     });
     configsInfoTagField.addEventListener('mouseleave', () => {
-        toggleSingleConfigInfoTag(false);
+        toggleConfigInfoTag(false);
         activeSectionIdx = -1;
     });
 })();
@@ -34,7 +34,7 @@ function placeConfigInfoTag(element) {
     configsInfoTagField.style.height = `${rect.height + 22}px`;
 }
 
-function toggleSingleConfigInfoTag(flag, section=null) {
+function toggleConfigInfoTag(flag, section=null) {
     if (flag) {
         configsInfoTag.style.display = 'block';
         configsInfoTagField.style.display = 'block';

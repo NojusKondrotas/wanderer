@@ -55,5 +55,5 @@ document.getElementById('tcm-global-config-menu').addEventListener('click', (e) 
         return;
     }
 
-    displayAllConfigs();
+    displayConfigs();
 });
