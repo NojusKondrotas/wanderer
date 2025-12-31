@@ -448,6 +448,19 @@ function initialiseApp(){
     }
 }
 
+ipcMain.handle('get-window-center', () => {
+    const win = BrowserWindow.getFocusedWindow();
+    if(!win) {
+        return null;
+    }
+
+    const { x, y, width, height } = win.getBounds();
+    return {
+        x: x + width / 2,
+        y: y + height / 2
+    };
+});
+
 ipcMain.handle('open-configs', () => {
     if(activeConfigsWindow != null) {
         return this.focusWindow(activeConfigsWindow);
