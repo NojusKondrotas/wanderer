@@ -65,12 +65,13 @@ function hideConfigs() {
             resolve();
         }, timeoutCfg)
         cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
-        toggleConfigsAbstract(false);
+        toggleConfigAbstract(false);
         toggleConfigInfoTag(false);
     });
 }
 
 function displayConfigs(x, y) {
     configscm.blueprint.style.display = 'block'
+    contextMenuCenter = { x, y }
     generateCircularContextMenu(x, y, configscm);
 }
