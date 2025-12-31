@@ -22,7 +22,7 @@ const configsInfoTagField = document.getElementById('cfg-itag-field');
 function placeConfigInfoTag(element) {
     const configsInfoTagRect = configsInfoTag.getBoundingClientRect();
     const rect = element.getBoundingClientRect();
-    const { left: x, right: y } = rect;
+    const { left: x, top: y } = rect;
 
     const xTag = rect.width + 33;
     const yTag = rect.height / 2 + 11;
