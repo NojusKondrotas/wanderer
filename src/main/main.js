@@ -472,7 +472,7 @@ ipcMain.handle('get-window-center', () => {
 
 ipcMain.handle('open-configs', () => {
     if(activeConfigsWindow != null) {
-        return this.focusWindow(activeConfigsWindow);
+        return WindowHandler.focusWindow(activeConfigsWindow);
     }
 
     activeConfigsWindow = WindowHandler.createWindow(ComponentType.configs, null, false, false, true);
