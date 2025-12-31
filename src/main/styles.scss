@@ -142,10 +142,16 @@ body {
     backdrop-filter: blur(2px) opacity(0);
 
     box-shadow: 0px 0px 15px -8px rgba(0, 0, 0, 0.77);
-    
-    transition: box-shadow 170ms ease-out, backdrop-filter 170ms ease-out, transform 170ms ease, left 170ms ease, top 170ms ease, color 170ms ease-out, border-color 170ms ease-out;
 
     z-index: $index-20;
+}
+
+.option-control-trans-short {
+    transition: box-shadow 170ms ease-out, backdrop-filter 170ms ease-out, transform 170ms ease, left 170ms ease, top 170ms ease, color 170ms ease-out, border-color 170ms ease-out;
+}
+
+.option-control-trans-long {
+    transition: box-shadow 370ms ease-out, backdrop-filter 370ms ease-out, transform 370ms ease, left 370ms ease, top 370ms ease, color 370ms ease-out, border-color 370ms ease-out;
 }
 
 .text-small {
