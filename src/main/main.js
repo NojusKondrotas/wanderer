@@ -466,7 +466,7 @@ ipcMain.handle('open-configs', () => {
         return this.focusWindow(activeConfigsWindow);
     }
 
-    activeConfigsWindow = WindowHandler.createWindow(ComponentType.configs, null);
+    activeConfigsWindow = WindowHandler.createWindow(ComponentType.configs, null, false, false, true);
     WindowHandler.initialiseWindow(activeConfigsWindow.id, ComponentType.configs, null, null);
 })
 
