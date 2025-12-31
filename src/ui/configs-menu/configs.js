@@ -1,5 +1,13 @@
-const configsDiv = document.getElementById('configs');
-const cfgBlur = document.getElementById('cfg-blur');
+const configsMenu = document.getElementById('configs');
+const elementContextMenu = document.getElementById('element-context-menu');
+const configscm = {
+    blueprint : configsMenu,
+    angleSize : 360 / configsMenu.children.length,
+    radius : 90,
+    angleOffset : 0,
+    xOffset : 0,
+    yOffset : -10
+};
 const sections = [
     document.getElementById('cfg-templates'),
     document.getElementById('cfg-n'),
@@ -63,21 +71,7 @@ function hideAllConfigs() {
     });
 }
 
-function displayAllConfigs() {
-    configsDiv.style.display = 'flex';
-    sections.forEach(section => {
-        const offsetX = generateRandom(-50, 50);
-        const offsetY = generateRandom(-50, 50);
-        section.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-        section.style.borderColor = sectionsBorderColor.transparent;
-        section.style.color = sectionsColor.transparent;
-    });
-    requestAnimationFrame(() => {
-        sections.forEach(section => {
-            section.style.transform = 'translate(0, 0)';
-            section.style.borderColor = sectionsBorderColor.opaque;
-            section.style.color = sectionsColor.opaque;
-        });
-    });
-    cfgBlur.style.backdropFilter = 'blur(4px) opacity(1)';
+function displayAllConfigs(x, y) {
+    configscm.blueprint.style.display = 'block'
+    generateCircularContextMenu(x, y, configscm);
 }
