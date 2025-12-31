@@ -5,26 +5,6 @@ const abstracts = [
     document.getElementById('cfg-abst-p'),
     document.getElementById('cfg-abst-internal')
 ];
-const abstractsExits = [
-    document.getElementById('cfg-abst-templates-exit'),
-    document.getElementById('cfg-abst-n-exit'),
-    document.getElementById('cfg-abst-w-exit'),
-    document.getElementById('cfg-abst-p-exit'),
-    document.getElementById('cfg-abst-internal-exit')
-];
-
-(function addCfgAbstExitListeners() {
-    for(let i = 0; i < abstractsExits.length; ++i){
-        const exit = abstractsExits[i];
-        exit.addEventListener('mousedown', (e) => {
-            e.stopPropagation();
-        });
-        exit.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleSingleConfigAbstract(false, i);
-        });
-    }
-})();
 
 function toggleAllConfigsAbstracts(flag) {
     if (flag) {
