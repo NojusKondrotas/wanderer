@@ -6,6 +6,9 @@ function closeWindow(){
 
 window.wandererAPI.onSaveComponent(async () => {
     window.wandererAPI.saveComponentDone();
-})
+});
 
-displayAllConfigs();
+(async () => {
+    const center = await window.wandererAPI.getWindowCenter();
+    displayAllConfigs(center.x, center.y);
+})();
