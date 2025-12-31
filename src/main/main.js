@@ -266,8 +266,10 @@ class WindowHandler{
 
     static initialiseWindow(trueWindowID, componentType, componentID, parentWindowID, url = null){
         const symbolicWindowID = this.trueWinIDToSymbolicWinIDMapping.get(trueWindowID);
-        if(!this.componentToWindowMapping.has(componentID)){
-            this.componentToWindowMapping.set(componentID, symbolicWindowID)
+        if(componentID != null) {
+            if(!this.componentToWindowMapping.has(componentID)){
+                this.componentToWindowMapping.set(componentID, symbolicWindowID)
+            }
         }
 
         this.saveWindowFeatures(symbolicWindowID, trueWindowID, componentType, componentID, parentWindowID, url, BrowserWindow.fromId(trueWindowID));
@@ -418,7 +420,9 @@ function initialiseApp(){
             const winData = allWindowObj[i];
             const id = WindowHandler.getWindowID();
             WindowHandler.allWindows.set(id, winData);
-            WindowHandler.componentToWindowMapping.set(winData.componentID, id);
+            if(winData.componentID != null) {
+                WindowHandler.componentToWindowMapping.set(winData.componentID, id);
+            }
         }
     }
     const openWindowsObj = JSON.parse(fs.readFileSync(openWindowsJSON, 'utf-8'))
