@@ -1,0 +1,78 @@
+$whiteboard-color: #f8f8f8;
+$rich-black: #0A0A0A;
+$rich-black-033: rgba(10, 10, 10, 0.33);
+$semi-imp-text-color: rgb(108, 116, 116);
+$unimp-text-color: rgba(126, 135, 135, 0.33);
+
+$index-5: 5;
+$index-10: 10;
+$index-15: 15;
+$index-20: 20;
+$index-25: 25;
+$index-30: 30;
+
+.cfg-flex > button {
+    width: 150px;
+}
+
+#configs {
+    display: none;
+    position: relative;
+    width: 0;
+    height: 0;
+
+    user-select: none;
+
+    z-index: $index-20;
+}
+
+.cfg-sect-layout {
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    padding: 5px 10px;
+}
+
+.cfg-style {
+    padding: 10px;
+    background-color: $whiteboard-color;
+    border: 1px double;
+    border-color: $rich-black;
+
+    transition:  transform 100ms ease, color 100ms ease-out, border-color 100ms ease-out;
+}
+
+.cfg-abst {
+    display: none;
+    overflow-wrap: break-word;
+
+    padding: 10px;
+    background-color: $whiteboard-color;
+}
+
+#cfg-itag, #cfg-itag-field {
+    display: none;
+    position: absolute;
+    transform: translateY(-50%);
+}
+
+#cfg-itag-field {
+    z-index: $index-25;
+}
+
+#cfg-itag {
+    background: transparent;
+    border: transparent;
+
+    pointer-events: auto;
+    z-index: $index-30;
+}
+
+#cfg-itag:hover {
+    cursor: pointer;   
+}
+
+#cfg-itag > img, .cfg-abst-exit > img {
+    width: 16px;
+    height: auto;
+}
