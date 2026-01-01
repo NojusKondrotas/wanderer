@@ -7,6 +7,7 @@ const configsInfoTagField = document.getElementById('cfg-itag-field');
     });
     configsInfoTag.addEventListener('click', (e) => {
         e.stopPropagation();
+        toggleConfigAbstract(false);
         toggleConfigAbstract(true, abstracts[activeSectionIdx]);
     });
     configsInfoTagField.addEventListener('mousedown', () => {
