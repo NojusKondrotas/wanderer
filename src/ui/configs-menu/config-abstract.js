@@ -6,21 +6,21 @@ const abstracts = [
     document.getElementById('cfg-abst-internal')
 ];
 let activeAbstract = null;
-
-function placeConfigAbstract(abstract) {
-    if(activeAbstract != null)
-        toggleConfigAbstract(false);
-    const rect = abstract.getBoundingClientRect();
-    abstract.style.transform = `translate(${contextMenuCenter.x - rect.width / 2}px, ${contextMenuCenter.y - rect.height / 2}px)`;
-    activeAbstract = abstract;
-}
+const abstractZIndex = 20;
 
 function toggleConfigAbstract(flag, abstract = null) {
     if (flag) {
-        placeConfigAbstract(abstract);
         abstract.style.display = 'block';
+        abstract.style.zIndex = abstractZIndex + 1;
+        showCMChild(contextMenuCenter.x, contextMenuCenter.y, abstract);
+        activeAbstract = abstract;
     } else {
-        activeAbstract.style.display = 'none';
-        activeAbstract = null;
+        if(activeAbstract == null) return;
+        concealCMChild(activeAbstract);
+        activeAbstract.style.zIndex = abstractZIndex;
+        setTimeout((currAbst) => {
+            currAbst.style.display = 'none';
+            currAbst = null;
+        }, timeoutCM, activeAbstract);
     }
 }
