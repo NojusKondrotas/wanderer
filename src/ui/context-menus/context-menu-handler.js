@@ -42,22 +42,45 @@ function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, r
     })
 }
 
+function showCMChild(x, y, option){
+    const offsetX = generateRandom(-50, 50);
+    const offsetY = generateRandom(-50, 50);
+
+    option.style.left = `${x + offsetX}px`;
+    option.style.top = `${y + offsetY}px`;
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            option.style.left = `${x}px`
+            option.style.top = `${y}px`
+            option.style.borderColor = borderColorCM.opaque
+            option.style.color = colorCM.opaque
+            option.style.backdropFilter = 'blur(2px) opacity(1)';
+            option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0.77)';
+        })
+    })
+}
+
 function moveContextMenu(centerX, centerY, blueprint){
     blueprint.style.left = `${centerX}px`
     blueprint.style.top = `${centerY}px`
 }
 
+function concealCMChild(option){
+    let truePos = getAbsolutePosition(option);
+    const offsetX = generateRandom(-50, 50);
+    const offsetY = generateRandom(-50, 50);
+    option.style.left = `${truePos.left + offsetX}px`;
+    option.style.top = `${truePos.top + offsetY}px`;
+    option.style.borderColor = borderColorCM.transparent;
+    option.style.color = colorCM.transparent;
+    option.style.backdropFilter = 'blur(2px) opacity(0)';
+    option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0)';
+}
+
 function concealContextMenuChildren(cm){
     Array.from(cm.children).forEach((option) => {
-        let truePos = getAbsolutePosition(option);
-        const offsetX = generateRandom(-50, 50);
-        const offsetY = generateRandom(-50, 50);
-        option.style.left = `${truePos.left + offsetX}px`;
-        option.style.top = `${truePos.top + offsetY}px`;
-        option.style.borderColor = borderColorCM.transparent;
-        option.style.color = colorCM.transparent;
-        option.style.backdropFilter = 'blur(2px) opacity(0)';
-        option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0)';
+        concealCMChild(option);
     });
 }
 
