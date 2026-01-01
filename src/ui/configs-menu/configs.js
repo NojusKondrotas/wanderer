@@ -2,7 +2,7 @@ const configsMenu = document.getElementById('configs');
 const configscm = {
     blueprint : configsMenu,
     angleSize : 360 / configsMenu.children.length,
-    radius : 150,
+    radius : 200,
     angleOffset : 162,
     xOffset : -10,
     yOffset : -10
