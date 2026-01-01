@@ -66,9 +66,9 @@ function moveContextMenu(centerX, centerY, blueprint){
     blueprint.style.top = `${centerY}px`
 }
 
-function concealCMChild(option){
-    const offsetX = generateRandom(-50, 50);
-    const offsetY = generateRandom(-50, 50);
+function concealCMChild(option, { x_lower = -50, x_higher = 50 } = {}, { y_lower = -50, y_higher = -50 } = {}){
+    const offsetX = generateRandom(x_lower, x_higher);
+    const offsetY = generateRandom(y_lower, y_higher);
     option.style.left = `${option.offsetLeft + offsetX}px`;
     option.style.top = `${option.offsetTop + offsetY}px`;
     option.style.borderColor = borderColorCM.transparent;
