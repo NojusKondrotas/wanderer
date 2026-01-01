@@ -16,7 +16,13 @@ function toggleConfigAbstract(flag, abstract = null) {
         activeAbstract = abstract;
     } else {
         if(activeAbstract == null) return;
-        concealCMChild(activeAbstract);
+        if(activeAbstract.id === 'cfg-abst-templates') concealCMChild(activeAbstract,
+            { x_lower: -35, x_higher: 35 }, { y_lower: -35, y_higher: 35 }
+        );
+        else if(activeAbstract.id === 'cfg-abst-internal') concealCMChild(activeAbstract,
+            { x_lower: -20, x_higher: 20 }, { y_lower: -20, y_higher: 20 }
+        );
+        else concealCMChild(activeAbstract);
         activeAbstract.style.zIndex = abstractZIndex;
         setTimeout((currAbst) => {
             currAbst.style.display = 'none';
