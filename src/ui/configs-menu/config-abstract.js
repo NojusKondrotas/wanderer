@@ -20,7 +20,6 @@ function toggleConfigAbstract(flag, abstract = null) {
         activeAbstract.style.zIndex = abstractZIndex;
         setTimeout((currAbst) => {
             currAbst.style.display = 'none';
-            currAbst = null;
         }, timeoutCM, activeAbstract);
     }
 }
