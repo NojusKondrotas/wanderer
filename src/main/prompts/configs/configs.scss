@@ -23,7 +23,7 @@ $index-30: 30;
 
     user-select: none;
 
-    z-index: $index-20;
+    z-index: $index-15;
 }
 
 .cfg-sect-layout {
@@ -47,6 +47,8 @@ $index-30: 30;
 
     padding: 10px;
     background-color: $whiteboard-color;
+
+    z-index: $index-20;
 }
 
 #cfg-itag, #cfg-itag-field {
