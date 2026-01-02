@@ -18,20 +18,36 @@ const sectionsBorderColor = { opaque: "rgb(10, 10, 10)", transparent: "transpare
 const sectionsColor = { opaque: "rgb(10, 10, 10)", transparent: "transparent" };
 const timeoutCfg = 100;
 let activeSectionIdx = -1;
-const menus = [
-    document.getElementById('cfg-menus-templates'),
-    document.getElementById('cfg-menus-n'),
-    document.getElementById('cfg-menus-w'),
-    document.getElementById('cfg-menus-p'),
-    document.getElementById('cfg-menus-internal')
+const menusLadders = [
+    {
+        blueprint: document.getElementById('cfg-menu-templates'),
+        gapSize: 5
+    },
+    {
+        blueprint: document.getElementById('cfg-menu-n'),
+        gapSize: 5
+    },
+    {
+        blueprint: document.getElementById('cfg-menu-w'),
+        gapSize: 5
+    },
+    {
+        blueprint: document.getElementById('cfg-menu-p'),
+        gapSize: 5
+    },
+    {
+        blueprint: document.getElementById('cfg-menu-internal'),
+        gapSize: 5
+    }
 ];
+let activeMenuLadder = null;
 
 (function addConfigsEventListeners() {
     for(let i = 0; i < sections.length; ++i) {
         const section = sections[i];
         if (section != null) {
-            section.addEventListener('click', () => {
-                displayConfigMenu(section);
+            section.addEventListener('mousedown', () => {
+                displayConfigMenu(menusLadders[i]);
             });
             section.addEventListener('mouseenter', () => {
                 toggleConfigInfoTag(true, section);
@@ -43,12 +59,59 @@ const menus = [
     }
 })();
 
+function generateLadderLayout(originX, originY, { blueprint, gapSize }){
+    blueprint.style.left = `${originX}px`
+    blueprint.style.top = `${originY}px`
+
+    let prevChild = null;
+    Array.from(blueprint.children).forEach((option, i) => {
+        const x = 0;
+        let y = i * gapSize;
+        if(prevChild != null){
+            y += prevChild.offsetHeight + option.offsetHeight / 2;
+        }
+        prevChild = option;
+
+        const offsetX = generateRandom(-50, 50)
+        const offsetY = generateRandom(-50, 50)
+
+        option.style.left = `${x + offsetX}px`
+        option.style.top = `${y + offsetY}px`
+    })
+
+    prevChild = null;
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+        Array.from(blueprint.children).forEach((option, i) => {
+            const x = 0;
+            let y = i * gapSize;
+            if(prevChild != null){
+                y += prevChild.offsetHeight + option.offsetHeight / 2;
+            }
+            prevChild = option;
+
+            option.style.left = `${x}px`
+            option.style.top = `${y}px`
+            option.style.borderColor = borderColorCM.opaque
+            option.style.color = colorCM.opaque
+            option.style.backdropFilter = 'blur(2px) opacity(1)';
+            option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0.77)';
+        })
+        })
+    })
+}
+
 function hideConfigMenu() {
 
 }
 
-function displayConfigMenu() {
-
+function displayConfigMenu(menu) {
+    if(activeMenuLadder != null){
+        activeMenuLadder.blueprint.style.display = 'none';
+    }
+    activeMenuLadder = menu;
+    menu.blueprint.style.display = 'block'
+    generateLadderLayout(contextMenuCenter.x, contextMenuCenter.y, menu);
 }
 
 function hideConfigs() {
