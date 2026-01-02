@@ -5,7 +5,7 @@ const timeoutCM = 170
 
 let activeContextMenu = null, contextMenuCenter = {x:0, y:0}
 
-function generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
+function generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
     blueprint.style.left = `${centerX}px`
     blueprint.style.top = `${centerY}px`
 
@@ -118,7 +118,7 @@ function openNewContextMenu(centerX, centerY, { blueprint, angleSize, radius, an
     blueprint.style.display = 'block'
     StatesHandler.isContextMenuOpen = true
     contextMenuCenter = { x: centerX, y: centerY }
-    generateCircularContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset })
+    generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset })
 }
 
 function genMouseMove_ContextMenuHandler(e){

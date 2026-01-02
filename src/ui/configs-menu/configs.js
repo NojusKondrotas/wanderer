@@ -73,5 +73,5 @@ function hideConfigs() {
 function displayConfigs(x, y) {
     configscm.blueprint.style.display = 'block'
     contextMenuCenter = { x, y }
-    generateCircularContextMenu(x, y, configscm);
+    generateCircularLayout(x, y, configscm);
 }
