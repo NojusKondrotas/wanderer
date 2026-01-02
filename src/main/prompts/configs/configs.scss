@@ -26,6 +26,14 @@ $index-30: 30;
     z-index: $index-15;
 }
 
+#configs > button {
+    pointer-events: all;
+}
+
+#configs > button:hover {
+    cursor: pointer;
+}
+
 .cfg-sect-layout {
     position: absolute;
     width: fit-content;
@@ -75,4 +83,11 @@ $index-30: 30;
 #cfg-itag > img, .cfg-abst-exit > img {
     width: 16px;
     height: auto;
+}
+
+.cfg-menus {
+    display: none;
+    position: relative;
+    width: 0;
+    height: 0;
 }
