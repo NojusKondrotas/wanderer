@@ -106,15 +106,16 @@ function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset 
 }
 
 function hideConfigMenu() {
-
+    activeMenuLadder.blueprint.style.display = 'none';
+    document.querySelectorAll('.path-container').forEach(c => {
+        c.remove();
+    })
+    activeMenuLadder = null;
 }
 
 function displayConfigMenu(menu) {
     if(activeMenuLadder != null){
-        activeMenuLadder.blueprint.style.display = 'none';
-        document.querySelectorAll('.path-container').forEach(c => {
-            c.remove();
-        })
+        hideConfigMenu();
     }
     activeMenuLadder = menu;
     menu.blueprint.style.display = 'block'
