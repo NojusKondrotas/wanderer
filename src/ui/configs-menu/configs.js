@@ -69,6 +69,10 @@ function generateLadderLayout(originX, originY, { blueprint, gapSize }){
         let y = i * gapSize;
         if(prevChild != null){
             y += prevChild.offsetHeight + option.offsetHeight / 2;
+            let prevChildY = prevChild.offsetTop + prevChild.offsetHeight;
+            createPath(document.body, { x: blueprint.offsetLeft, y: blueprint.offsetTop + prevChildY },
+                { x: blueprint.offsetLeft, y: blueprint.offsetTop + y },
+                prevChild.id, option.id, false, false, false);
         }
         prevChild = option;
 
@@ -108,6 +112,9 @@ function hideConfigMenu() {
 function displayConfigMenu(menu) {
     if(activeMenuLadder != null){
         activeMenuLadder.blueprint.style.display = 'none';
+        document.querySelectorAll('.path-container').forEach(c => {
+            c.remove();
+        })
     }
     activeMenuLadder = menu;
     menu.blueprint.style.display = 'block'
