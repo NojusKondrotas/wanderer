@@ -46,7 +46,8 @@ let activeMenuLadder = null;
     for(let i = 0; i < sections.length; ++i) {
         const section = sections[i];
         if (section != null) {
-            section.addEventListener('mousedown', () => {
+            section.addEventListener('click', (e) => {
+                e.stopPropagation();
                 displayConfigMenu(menusLadders[i]);
             });
             section.addEventListener('mouseenter', () => {
