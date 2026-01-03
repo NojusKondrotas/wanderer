@@ -16,7 +16,7 @@ function getPathID(){
     }
 }
 
-function createPath(startPos, endPos, startElement_id = null, endElement_id = null, isDrawing = false, isHierarchicalStart = false, isHierarchicalEnd = false){
+function createPath(container, startPos, endPos, startElement_id = null, endElement_id = null, isDrawing = false, isHierarchicalStart = false, isHierarchicalEnd = false){
     const div = document.createElement('div')
     div.classList.add('path-container')
 
@@ -43,7 +43,7 @@ function createPath(startPos, endPos, startElement_id = null, endElement_id = nu
     drawnPath.appendChild(hitPath)
     drawnPath.appendChild(pathVisual)
     div.appendChild(drawnPath)
-    parentWhiteboard.appendChild(div)
+    container.appendChild(div)
     div.id = `${getElementID()}`
     div.style.visibility = 'visible'
 

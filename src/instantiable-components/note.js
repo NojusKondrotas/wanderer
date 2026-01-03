@@ -107,7 +107,8 @@ function addNoteListeners(newNote){
             const posParent = getAbsolutePosition(newNote);
             const childNote = createNewNoteLeftAlignment(parentWhiteboard, '', new Set([newNote.id]), new Set(), posParent.left, posParent.top + posParent.height);
             const posChild = getAbsolutePosition(childNote);
-            createPath({ x: posParent.left + posParent.width / 2, y: posParent.top + posParent.height / 2 },
+            createPath(parentWhiteboard,
+                { x: posParent.left + posParent.width / 2, y: posParent.top + posParent.height / 2 },
                 { x: posChild.left + posChild.width / 2, y: posChild.top + posChild.height / 2 },
                 newNote.id, childNote.id, false, false, false)
             switchFocus(newNote.id, childNote.id)

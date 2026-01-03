@@ -80,7 +80,7 @@ document.getElementById('npwcm-connect').addEventListener('click', (e) => {
     forgetContextMenus();
     if (!selectedElement) return;
 
-    createPath({ x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, selectedElement.id, null, true);
+    createPath(parentWhiteboard, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, selectedElement.id, null, true);
     console.log('path created');
 });
 

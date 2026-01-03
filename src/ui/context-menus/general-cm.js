@@ -63,7 +63,7 @@ document.getElementById('gcm-new-connection').addEventListener('click', (e) => {
         return;
     }
 
-    createPath({ x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, null, null, true);
+    createPath(parentWhiteboard, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, null, null, true);
 
     forgetContextMenus();
 });
