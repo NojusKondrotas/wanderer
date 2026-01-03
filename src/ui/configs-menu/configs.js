@@ -21,23 +21,23 @@ let activeSectionIdx = -1;
 const menusLadders = [
     {
         blueprint: document.getElementById('cfg-menu-templates'),
-        gapSize: 5
+        gapSize: 10
     },
     {
         blueprint: document.getElementById('cfg-menu-n'),
-        gapSize: 5
+        gapSize: 10
     },
     {
         blueprint: document.getElementById('cfg-menu-w'),
-        gapSize: 5
+        gapSize: 10
     },
     {
         blueprint: document.getElementById('cfg-menu-p'),
-        gapSize: 5
+        gapSize: 10
     },
     {
         blueprint: document.getElementById('cfg-menu-internal'),
-        gapSize: 5
+        gapSize: 10
     }
 ];
 let activeMenuLadder = null;
@@ -64,16 +64,16 @@ function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset 
     blueprint.style.top = `${originY}px`
 
     let prevChild = null;
+    let totalY = blueprint.offsetTop + yOffset;
     Array.from(blueprint.children).forEach((option, i) => {
         const x = xOffset;
         let y = i * gapSize + yOffset;
         if(prevChild != null){
-            y += prevChild.offsetHeight + option.offsetHeight / 2;
-            let prevChildY = prevChild.offsetTop + prevChild.offsetHeight;
-            createPath(document.body, { x: blueprint.offsetLeft, y: blueprint.offsetTop + prevChildY },
-                { x: blueprint.offsetLeft, y: blueprint.offsetTop + y },
+            createPath(document.body, { x: blueprint.offsetLeft, y: totalY - gapSize },
+                { x: blueprint.offsetLeft, y: totalY },
                 prevChild.id, option.id, false, false, false);
         }
+        totalY += gapSize + option.offsetHeight;
         prevChild = option;
 
         const offsetX = generateRandom(-50, 50)
@@ -90,7 +90,7 @@ function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset 
             const x = xOffset;
             let y = i * gapSize + yOffset;
             if(prevChild != null){
-                y += prevChild.offsetHeight + option.offsetHeight / 2;
+                y += prevChild.offsetHeight;
             }
             prevChild = option;
 
