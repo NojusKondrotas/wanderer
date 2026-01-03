@@ -59,14 +59,14 @@ let activeMenuLadder = null;
     }
 })();
 
-function generateLadderLayout(originX, originY, { blueprint, gapSize }){
+function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset = -145, yOffset = -100){
     blueprint.style.left = `${originX}px`
     blueprint.style.top = `${originY}px`
 
     let prevChild = null;
     Array.from(blueprint.children).forEach((option, i) => {
-        const x = 0;
-        let y = i * gapSize;
+        const x = xOffset;
+        let y = i * gapSize + yOffset;
         if(prevChild != null){
             y += prevChild.offsetHeight + option.offsetHeight / 2;
             let prevChildY = prevChild.offsetTop + prevChild.offsetHeight;
@@ -87,8 +87,8 @@ function generateLadderLayout(originX, originY, { blueprint, gapSize }){
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
         Array.from(blueprint.children).forEach((option, i) => {
-            const x = 0;
-            let y = i * gapSize;
+            const x = xOffset;
+            let y = i * gapSize + yOffset;
             if(prevChild != null){
                 y += prevChild.offsetHeight + option.offsetHeight / 2;
             }
