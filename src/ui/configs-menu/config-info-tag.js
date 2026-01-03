@@ -26,6 +26,15 @@ const configsInfoTagField = document.getElementById('cfg-itag-field');
         toggleConfigAbstract(false);
         displayConfigMenu(menusLadders[i]);
     })
+    configsInfoTagField.addEventListener('mousemove', (e) => {
+        const els = document.elementsFromPoint(e.clientX, e.clientY);
+        const found = els.find(el => el.classList.contains('cfg-sect'));
+        if(found == null){
+            document.body.style.cursor = 'default';
+        }else{
+            document.body.style.cursor = 'pointer';
+        }
+    });
     configsInfoTagField.addEventListener('mouseleave', () => {
         toggleConfigInfoTag(false);
         activeSectionIdx = -1;
