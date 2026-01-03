@@ -46,10 +46,6 @@ let activeMenuLadder = null;
     for(let i = 0; i < sections.length; ++i) {
         const section = sections[i];
         if (section != null) {
-            section.addEventListener('click', (e) => {
-                e.stopPropagation();
-                displayConfigMenu(menusLadders[i]);
-            });
             section.addEventListener('mouseenter', () => {
                 toggleConfigInfoTag(true, section);
                 activeSectionIdx = i;
@@ -107,6 +103,7 @@ function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset 
 }
 
 function hideConfigMenu() {
+    if(activeMenuLadder == null) return;
     activeMenuLadder.blueprint.style.display = 'none';
     document.querySelectorAll('.path-container').forEach(c => {
         c.remove();

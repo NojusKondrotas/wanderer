@@ -2,11 +2,9 @@ const configsInfoTag = document.getElementById('cfg-itag');
 const configsInfoTagField = document.getElementById('cfg-itag-field');
 
 (function addConfigsInfoTagListeners() {
-    configsInfoTag.addEventListener('mousedown', (e) => {
-        e.stopPropagation();
-    });
     configsInfoTag.addEventListener('click', (e) => {
         e.stopPropagation();
+        hideConfigMenu();
         toggleConfigAbstract(false);
         toggleConfigAbstract(true, abstracts[activeSectionIdx]);
     });
@@ -16,6 +14,18 @@ const configsInfoTagField = document.getElementById('cfg-itag-field');
         toggleConfigAbstract(false);
         activeSectionIdx = -1;
     });
+    configsInfoTagField.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const els = document.elementsFromPoint(e.clientX, e.clientY);
+        const found = els.find(el => el.classList.contains('cfg-sect'));
+        if(found == null) return;
+        let i = 0;
+        for(; i < sections.length; ++i){
+            if(sections[i] === found) break;
+        }
+        toggleConfigAbstract(false);
+        displayConfigMenu(menusLadders[i]);
+    })
     configsInfoTagField.addEventListener('mouseleave', () => {
         toggleConfigInfoTag(false);
         activeSectionIdx = -1;
