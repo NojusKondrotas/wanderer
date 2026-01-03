@@ -10,7 +10,7 @@ const configsInfoTagField = document.getElementById('cfg-itag-field');
         toggleConfigAbstract(false);
         toggleConfigAbstract(true, abstracts[activeSectionIdx]);
     });
-    configsInfoTagField.addEventListener('mousedown', () => {
+    document.body.addEventListener('mousedown', () => {
         toggleConfigInfoTag(false);
         activeSectionIdx = -1;
     });
