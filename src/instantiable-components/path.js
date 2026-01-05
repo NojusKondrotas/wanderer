@@ -53,6 +53,8 @@ function createPath(container, startPos, endPos, startElement_id = null, endElem
         hitPathID: hitPath.id,
         startNoteID: startElement_id,
         endNoteID: endElement_id,
+        originStartPos: { ...boardSpaceStartPos },
+        originEndPos: { ...boardSpaceEndPos },
         startPosition: { ...boardSpaceStartPos },
         endPosition: { ...boardSpaceEndPos },
         isHierarchicalStart,
@@ -156,14 +158,16 @@ function updatePathPosition(path, startPosition, endPosition){
 }
 
 function terminatePathDrawing(ev, elID){
-    if(StatesHandler.isDrawingPathEnd)
-        selectedPath.endNoteID = elID
-    else
-        selectedPath.startNoteID = elID
-    if(StatesHandler.isDrawingPathEnd)
-        selectedPath.endPosition = convertToWhiteboardSpace(ev.clientX, ev.clientY)
-    else
-        selectedPath.startPosition = convertToWhiteboardSpace(ev.clientX, ev.clientY)
+    if(StatesHandler.isDrawingPathEnd){
+        selectedPath.endNoteID = elID;
+        selectedPath.endPosition = convertToWhiteboardSpace(ev.clientX, ev.clientY);
+        selectedPath.originEndPos = convertToWhiteboardSpace(ev.clientX, ev.clientY);
+    }else{
+        selectedPath.startNoteID = elID;
+        selectedPath.startPosition = convertToWhiteboardSpace(ev.clientX, ev.clientY);
+        selectedPath.originStartPos = convertToWhiteboardSpace(ev.clientX, ev.clientY);
+    }
+
     StatesHandler.isDrawingPath = false
     selectedPath = null
 }

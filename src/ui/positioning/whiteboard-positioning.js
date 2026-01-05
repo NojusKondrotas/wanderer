@@ -76,10 +76,14 @@ class WhiteboardPositioningHandler{
                 if(v.startNoteID === selectedElement.id){
                     v.startPosition.x -= dragDiff.x
                     v.startPosition.y -= dragDiff.y
+                    v.originStartPos.x -= dragDiff.x
+                    v.originStartPos.y -= dragDiff.y
                     hasUpdated = true
                 }else if(v.endNoteID === selectedElement.id){
                     v.endPosition.x -= dragDiff.x
                     v.endPosition.y -= dragDiff.y
+                    v.originEndPos.x -= dragDiff.x
+                    v.originEndPos.y -= dragDiff.y
                     hasUpdated = true
                 }
 
@@ -250,8 +254,13 @@ function updateComponentPositionsByOffset(x, y){
     allPaths.forEach(path => {
         path.startPosition.x -= x
         path.startPosition.y -= y
+        path.originStartPos.x -= x
+        path.originStartPos.y -= y
+
         path.endPosition.x -= x
         path.endPosition.y -= y
+        path.originEndPos.x -= x
+        path.originEndPos.y -= y
 
         updatePathPosition(path, path.startPosition, path.endPosition)
     })
@@ -266,8 +275,13 @@ function updateComponentPositions(){
     allPaths.forEach(path => {
         path.startPosition.x -= dragDiff.x
         path.startPosition.y -= dragDiff.y
+        path.originStartPos.x -= dragDiff.x
+        path.originStartPos.y -= dragDiff.y
+
         path.endPosition.x -= dragDiff.x
         path.endPosition.y -= dragDiff.y
+        path.originEndPos.x -= dragDiff.x
+        path.originEndPos.y -= dragDiff.y
 
         updatePathPosition(path, path.startPosition, path.endPosition)
     })
