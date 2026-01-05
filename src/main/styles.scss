@@ -284,12 +284,47 @@ body {
     margin: 0px;
     padding: 0px 5px;
 
-    border-left: 1px solid $rich-black;
-    border-right: 1px solid $rich-black;
-
     outline: none;
 
     z-index: $index-10;
+}
+
+.note-container::before,
+.note-container::after {
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    top: 0;
+
+    background: $rich-black;
+
+    content: "";
+
+    clip-path: inset(50% 0 50% 0);
+
+    transition: clip-path 170ms ease-out;
+}
+
+.note-container::before {
+    left: 0;
+}
+
+.note-container::after {
+    right: 0;
+}
+
+.note-container:has(.note:empty)::before,
+.note-container:has(.note:empty)::after {
+    clip-path: inset(0 0 0 0);
+}
+
+.note-container:has(.note:hover)::before,
+.note-container:has(.note:hover)::after,
+.note-container:has(.note:focus)::before,
+.note-container:has(.note:focus)::after,
+.note-container:has(.note:focus-visible)::before,
+.note-container:has(.note:focus-visible)::after {
+    clip-path: inset(0 0 0 0);
 }
 
 .note-border {
