@@ -9,14 +9,14 @@ class WhiteboardPositioningHandler{
             if(isNaN(currentWidth)){
                 currentWidth = selectedElement.getBoundingClientRect().width - 10
             }
-            selectedElement.style.width = Math.max(currentWidth - Math.floor(dragDiff.x), 20) + 'px'
+            selectedElement.style.width = Math.max(currentWidth - Math.floor(dragDiff.x), 22) + 'px'
         }else if(activeBorder === 'left'){
             let currentWidth = parseInt(selectedElement.style.width)
             if(isNaN(currentWidth)){
                 currentWidth = selectedElement.getBoundingClientRect().width - 10
             }
-            const newWidth = Math.max(currentWidth + Math.floor(dragDiff.x), 20)
-            if(newWidth === 20 && dragDiff.x <= 0) return
+            const newWidth = Math.max(currentWidth + Math.floor(dragDiff.x), 22)
+            if(newWidth === 22 && dragDiff.x <= 0) return
 
             selectedElement.style.width = newWidth + 'px'
             selectedElement.style.left = selectedElement.offsetLeft - Math.floor(dragDiff.x) + 'px'

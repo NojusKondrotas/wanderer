@@ -266,6 +266,8 @@ body {
 
     outline: none;
 
+    user-select: none;
+
     word-break: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
@@ -277,7 +279,7 @@ body {
 
 .note-container {
     position: absolute;
-    min-width: 20px;
+    min-width: 22px;
     width: fit-content;
     min-height: 20px;
     height: fit-content;
