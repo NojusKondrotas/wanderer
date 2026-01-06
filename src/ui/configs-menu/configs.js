@@ -56,52 +56,6 @@ let activeMenuLadder = null;
     }
 })();
 
-function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset = -145, yOffset = -100){
-    blueprint.style.left = `${originX}px`
-    blueprint.style.top = `${originY}px`
-
-    let prevChild = null;
-    let totalY = blueprint.offsetTop + yOffset;
-    Array.from(blueprint.children).forEach((option, i) => {
-        const x = xOffset;
-        let y = i * gapSize + yOffset;
-        if(prevChild != null){
-            createPath(document.body, { x: blueprint.offsetLeft, y: totalY - gapSize },
-                { x: blueprint.offsetLeft, y: totalY },
-                prevChild.id, option.id, false, false, false);
-        }
-        totalY += gapSize + option.offsetHeight;
-        prevChild = option;
-
-        const offsetX = generateRandom(-50, 50)
-        const offsetY = generateRandom(-50, 50)
-
-        option.style.left = `${x + offsetX}px`
-        option.style.top = `${y + offsetY}px`
-    })
-
-    prevChild = null;
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-        Array.from(blueprint.children).forEach((option, i) => {
-            const x = xOffset;
-            let y = i * gapSize + yOffset;
-            if(prevChild != null){
-                y += prevChild.offsetHeight;
-            }
-            prevChild = option;
-
-            option.style.left = `${x}px`
-            option.style.top = `${y}px`
-            option.style.borderColor = borderColorCM.opaque
-            option.style.color = colorCM.opaque
-            option.style.backdropFilter = 'blur(2px) opacity(1)';
-            option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0.77)';
-        })
-        })
-    })
-}
-
 function hideConfigMenu() {
     if(activeMenuLadder == null) return;
     activeMenuLadder.blueprint.style.display = 'none';

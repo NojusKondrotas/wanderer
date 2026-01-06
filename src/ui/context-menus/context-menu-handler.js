@@ -5,43 +5,6 @@ const timeoutCM = 170
 
 let activeContextMenu = null, contextMenuCenter = {x:0, y:0}
 
-function generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
-    blueprint.style.left = `${centerX}px`
-    blueprint.style.top = `${centerY}px`
-
-    Array.from(blueprint.children).forEach((option, i) => {
-        const angleDeg = angleOffset + i * angleSize
-        const angleRad = angleDeg * Math.PI / 180
-
-        let x = radius * Math.cos(angleRad) + xOffset
-        let y = radius * Math.sin(angleRad) + yOffset
-
-        const offsetX = generateRandom(-50, 50)
-        const offsetY = generateRandom(-50, 50)
-
-        option.style.left = `${x + offsetX}px`
-        option.style.top = `${y + offsetY}px`
-    })
-
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-        Array.from(blueprint.children).forEach((option, i) => {
-            const angleDeg = angleOffset + i * angleSize
-            const angleRad = angleDeg * Math.PI / 180
-            const x = radius * Math.cos(angleRad) + xOffset
-            const y = radius * Math.sin(angleRad) + yOffset
-
-            option.style.left = `${x}px`
-            option.style.top = `${y}px`
-            option.style.borderColor = borderColorCM.opaque
-            option.style.color = colorCM.opaque
-            option.style.backdropFilter = 'blur(2px) opacity(1)';
-            option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0.77)';
-        })
-        })
-    })
-}
-
 function showCMChild(x, y, option){
     const offsetX = generateRandom(-50, 50);
     const offsetY = generateRandom(-50, 50);
