@@ -43,8 +43,7 @@ const menusLadders = [
 let activeMenuLadder = null;
 
 (function addConfigsEventListeners() {
-    for(let i = 0; i < sections.length; ++i) {
-        const section = sections[i];
+    sections.forEach((section, i) => {
         if (section != null) {
             section.addEventListener('mouseenter', () => {
                 toggleConfigInfoTag(true, section);
@@ -53,7 +52,7 @@ let activeMenuLadder = null;
         } else {
             // throw error, irrecoverable state !!
         }
-    }
+    });
 })();
 
 function hideConfigMenu() {

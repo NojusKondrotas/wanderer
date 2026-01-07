@@ -416,19 +416,17 @@ function initialiseApp(){
     }
     const allWindowObj = JSON.parse(fs.readFileSync(allWindowsJSON, 'utf-8'));
     if(Array.isArray(allWindowObj) && allWindowObj.length > 0){
-        for(let i = 0; i < allWindowObj.length; ++i){
-            const winData = allWindowObj[i];
+        allWindowObj.forEach(winData => {
             const id = WindowHandler.getWindowID();
             WindowHandler.allWindows.set(id, winData);
             if(winData.componentID != null) {
                 WindowHandler.componentToWindowMapping.set(winData.componentID, id);
             }
-        }
+        });
     }
     const openWindowsObj = JSON.parse(fs.readFileSync(openWindowsJSON, 'utf-8'))
     if(Array.isArray(openWindowsObj) && openWindowsObj.length > 0){
-        for(let i = 0; i < openWindowsObj.length; ++i){
-            const winData = openWindowsObj[i]
+        openWindowsObj.forEach(winData => {
             let win = null;
             switch(winData.componentType){
                 case ComponentType.whiteboard:
@@ -450,7 +448,7 @@ function initialiseApp(){
                     WindowHandler.initialiseWindow(win.id, ComponentType.link, winData.componentID, winData.parentWindowID, winData.url);
                     break;
             }
-        }
+        });
     }else{
         const win = WindowHandler.createWindow(ComponentType.firstTime, null, false, false, true);
         WindowHandler.initialiseWindow(win.id, ComponentType.firstTime, null, null);
