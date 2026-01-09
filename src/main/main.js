@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, globalShortcut, screen } from 'electron'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import fs from 'fs'
+import { readFile, writeFile } from 'fs/promises'
 import robot from '@hurdlegroup/robotjs'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -292,7 +292,7 @@ class WindowHandler{
         }
     }
 
-    static writeWindows(){
+    static async writeWindows(){
         const openWindowsMap = new Array();
         this.openWindows.forEach((value, key) => {
             if(value.componentType !== ComponentType.firstTime && value.componentType !== ComponentType.configs){
@@ -309,14 +309,16 @@ class WindowHandler{
         });
         const savesPath = path.join(__dirname, '..', 'saves');
         const openWindowsFilePath = path.join(savesPath, 'open-windows.json');
-        fs.writeFileSync(openWindowsFilePath, JSON.stringify(openWindowsMap, null, 2), 'utf-8');
         const allWindowsFilePath = path.join(savesPath, 'all-windows.json');
-        fs.writeFileSync(allWindowsFilePath, JSON.stringify(allWindowsMap, null, 2), 'utf-8');
         const windowsIDsJSON = path.join(savesPath, 'windows-IDs.json');
-        fs.writeFileSync(windowsIDsJSON, JSON.stringify({
-            largestNotepadID, largestWhiteboardID, unusedNotepadIDs, unusedWhiteboardIDs,
-            allNotepads: Array.from(allNotepads), allWhiteboards: Array.from(allWhiteboards)
-        }, null, 2), 'utf-8');
+        await Promise.all([
+            writeFile(openWindowsFilePath, JSON.stringify(openWindowsMap, null, 2), 'utf-8'),
+            writeFile(allWindowsFilePath, JSON.stringify(allWindowsMap, null, 2), 'utf-8'),
+            writeFile(windowsIDsJSON, JSON.stringify({
+                largestNotepadID, largestWhiteboardID, unusedNotepadIDs, unusedWhiteboardIDs,
+                allNotepads: Array.from(allNotepads), allWhiteboards: Array.from(allWhiteboards)
+            }, null, 2), 'utf-8')
+        ]);
     }
 }
 
@@ -371,7 +373,7 @@ function terminateApp(){
     WindowHandler.closeAllWindows()
 }
 
-function initialiseApp(){
+async function initialiseApp(){
     const savesPath = path.join(__dirname, '..', 'saves')
     if(!fs.existsSync(savesPath)) fs.mkdirSync(savesPath)
 
@@ -396,14 +398,13 @@ function initialiseApp(){
         process.exit
 
     const openWindowsJSON = path.join(savesPath, 'open-windows.json')
-    if(!fs.existsSync(openWindowsJSON))
-        fs.writeFileSync(openWindowsJSON, JSON.stringify([], null, 2), 'utf-8')
     const allWindowsJSON = path.join(savesPath, 'all-windows.json')
-    if(!fs.existsSync(allWindowsJSON))
-        fs.writeFileSync(allWindowsJSON, JSON.stringify([], null, 2), 'utf-8')
     const windowsIDsJSON = path.join(savesPath, 'windows-IDs.json')
-    if(!fs.existsSync(windowsIDsJSON))
-        fs.writeFileSync(windowsIDsJSON, JSON.stringify({}, null, 2), 'utf-8')
+    await Promise.all([
+        writeFile(openWindowsJSON, JSON.stringify([], null, 2), 'utf-8'),
+        writeFile(allWindowsJSON, JSON.stringify([], null, 2), 'utf-8'),
+        writeFile(windowsIDsJSON, JSON.stringify({}, null, 2), 'utf-8')
+    ]);
 
     const stateWindowsIDs = JSON.parse(fs.readFileSync(windowsIDsJSON, 'utf-8'))
     if(stateWindowsIDs && Object.keys(stateWindowsIDs).length > 0){
@@ -638,12 +639,12 @@ ipcMain.handle('get-link', (e) => {
     return WindowHandler.allWindows.get(symbolicWinID).url;
 })
 
-ipcMain.handle('save-editor-contents', (e, contents) => {
-    const senderWindow = BrowserWindow.fromWebContents(e.sender)
-    const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
-    const componentID = WindowHandler.allWindows.get(symbolicID).componentID
-    const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${componentID}.json`)
-    fs.writeFileSync(savesJSON, JSON.stringify(contents, null, 2), 'utf-8')
+ipcMain.handle('save-editor-contents', async (e, contents) => {
+    const senderWindow = BrowserWindow.fromWebContents(e.sender);
+    const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id);
+    const componentID = WindowHandler.allWindows.get(symbolicID).componentID;
+    const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${componentID}.json`);
+    await writeFile(savesJSON, JSON.stringify(contents, null, 2), 'utf-8');
 })
 
 ipcMain.handle('load-editor-contents', (e) => {
@@ -652,7 +653,7 @@ ipcMain.handle('load-editor-contents', (e) => {
     const componentID = WindowHandler.allWindows.get(symbolicID).componentID
     const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${componentID}.json`)
     if(!fs.existsSync(savesJSON))
-        fs.writeFileSync(savesJSON, JSON.stringify({}, null, 2), 'utf-8')
+        writeFile(savesJSON, JSON.stringify({}, null, 2), 'utf-8');
 
     const fileContents = fs.readFileSync(savesJSON, 'utf-8')
     const delta = JSON.parse(fileContents)
@@ -675,7 +676,7 @@ ipcMain.handle('get-window-component-id', (e) => {
     return WindowHandler.allWindows.get(symbolicWinID).componentID
 })
 
-ipcMain.on('save-whiteboard-html', (e, html) => {
+ipcMain.on('save-whiteboard-html', async (e, html) => {
     console.log('saving html in main')
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
@@ -689,10 +690,10 @@ ipcMain.on('save-whiteboard-html', (e, html) => {
     if (!html.includes('../../../')) {
         html = html.replace(/((?:src|href)=["'])\.\.\//g, '$1../../../')
     }
-    fs.writeFileSync(saveWhiteboardHTML, html, 'utf-8')
+    await writeFile(saveWhiteboardHTML, html, 'utf-8');
 })
 
-ipcMain.on('save-whiteboard-state', (e, stateObj) => {
+ipcMain.on('save-whiteboard-state', async (e, stateObj) => {
     console.log('saving state in main')
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicWinID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
@@ -720,10 +721,10 @@ ipcMain.on('save-whiteboard-state', (e, stateObj) => {
     }
 
     const saveWhiteboardState = path.join(saveWhiteboardDir, `${componentID}-state.json`)
-    fs.writeFileSync(saveWhiteboardState, JSON.stringify(dataToSave, null, 2), 'utf-8')
+    await writeFile(saveWhiteboardState, JSON.stringify(dataToSave, null, 2), 'utf-8');
 })
 
-ipcMain.handle('load-whiteboard-state', (e) => {
+ipcMain.handle('load-whiteboard-state', async (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     const componentID = WindowHandler.allWindows.get(symbolicID).componentID
