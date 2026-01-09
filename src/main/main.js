@@ -555,15 +555,11 @@ app.whenReady().then(() => {
         if(BrowserWindow.getAllWindows().length === 0) initialiseApp()
     })
 
-    globalShortcut.register('CmdOrCtrl+1', (e) => {
-        const senderWindow = BrowserWindow.getFocusedWindow()
-        if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', getMousePos(senderWindow))
-    })
-    globalShortcut.register('CmdOrCtrl+num1', (e) => {
-        const senderWindow = BrowserWindow.getFocusedWindow()
-        if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', getMousePos(senderWindow))
-    })
-    globalShortcut.register('CmdOrCtrl+2', async () => {
+    function glblShrtct_openTitlebarCM() {
+        const senderWindow = BrowserWindow.getFocusedWindow();
+        if(senderWindow) senderWindow.webContents.send('open-titlebar-context-menu', getMousePos(senderWindow));
+    }
+    async function glblShrtct_openTabMenu() {
         const senderWindow = BrowserWindow.getFocusedWindow();
         const serializedElements = Array();
         WindowHandler.openWindows.forEach((value, key) => {
@@ -585,30 +581,12 @@ app.whenReady().then(() => {
         }
         activeTabMenuWindow = senderWindow;
         senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements, previews);
-    })
-    globalShortcut.register('CmdOrCtrl+num2', async () => {
-        const senderWindow = BrowserWindow.getFocusedWindow();
-        const serializedElements = Array();
-        WindowHandler.openWindows.forEach((value, key) => {
-            const data = {
-                symbolicWindowID: value.symbolicWindowID,
-                componentType: value.componentType,
-                componentID: value.componentID
-            };
-            serializedElements.push(data);
-        });
-        await waitForTabMenuClose();
-        const previews = [];
-        for (const el of serializedElements) {
-            previews.push(await getWindowPreview(el.symbolicWindowID));
-        }
-        if(!senderWindow) {
-            // handle
-            return;
-        }
-        activeTabMenuWindow = senderWindow;
-        senderWindow.webContents.send('open-tab-menu', getMousePos(senderWindow), serializedElements, previews);
-    })
+    }
+
+    globalShortcut.register('CmdOrCtrl+1', glblShrtct_openTitlebarCM);
+    globalShortcut.register('CmdOrCtrl+num1', glblShrtct_openTitlebarCM);
+    globalShortcut.register('CmdOrCtrl+2', glblShrtct_openTabMenu);
+    globalShortcut.register('CmdOrCtrl+num2', glblShrtct_openTabMenu);
     globalShortcut.register('CmdOrCtrl+X', () => {
         terminateApp()
     })
