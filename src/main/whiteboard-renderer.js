@@ -31,6 +31,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         allNotesContents = new Map(stateObj.allNotesContents)
 
         StatesHandler.isTitlebarLocked = stateObj.isTitlebarLocked
+        zoomFactor = stateObj.zoomFactor
+        boardOffset = stateObj.boardOffset
 
         configureAllElements(parentWhiteboard.children)
         configureAllPaths(allPaths)
@@ -50,6 +52,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(allPaths)
         console.log(allNotesContents)
         console.log(StatesHandler.isTitlebarLocked)
+        console.log(zoomFactor)
+        console.log(boardOffset)
     }
 
     handleKeybindGuideAppearance(true)
@@ -110,7 +114,9 @@ async function save(){
         elementHierarchy: elementHierarchyArr,
         allPaths: allPathsArr,
         allNotesContents: allNotesContentsArr,
-        isTitlebarLocked: StatesHandler.isTitlebarLocked
+        isTitlebarLocked: StatesHandler.isTitlebarLocked,
+        zoomFactor,
+        boardOffset
     })
 }
 
