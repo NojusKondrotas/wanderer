@@ -57,7 +57,10 @@ let activeMenuLadder = null;
 
 function hideConfigMenu() {
     if(activeMenuLadder == null) return;
-    activeMenuLadder.blueprint.style.display = 'none';
+    concealContextMenuChildren(activeMenuLadder.blueprint);
+    setTimeout((currActiveMenu) => {
+        currActiveMenu.blueprint.style.display = 'none';
+    }, timeoutCM, activeMenuLadder);
     document.querySelectorAll('.path-container').forEach(c => {
         c.remove();
     })
