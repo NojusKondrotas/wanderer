@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, globalShortcut, screen } from 'electron'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { access, constants, stat, readFile, writeFile } from 'fs/promises'
+import { access, constants, stat, readFile, writeFile, mkdir } from 'fs/promises'
 import robot from '@hurdlegroup/robotjs'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -163,7 +163,7 @@ class WindowHandler{
             case ComponentType.whiteboard:
                 const saves = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
                 if(!(await directoryExists(saves)))
-                    fs.mkdirSync(saves)
+                    await mkdir(saves)
                 const savedHTML = path.join(saves, `${componentID}-index.html`)
                 const defaultHTML = path.join(__dirname, 'whiteboard-index.html')
                 if(!(await fileExists(savedHTML))){
@@ -427,11 +427,11 @@ async function initialiseApp(){
     ]);
 
     if (!results[0])
-        fs.mkdirSync(savesPath)
+        await mkdir(savesPath)
     if (!results[1])
-        fs.mkdirSync(savesNotepadsPath)
+        await mkdir(savesNotepadsPath)
     if (!results[2])
-        fs.mkdirSync(savesWhiteboardsPath)
+        await mkdir(savesWhiteboardsPath)
     if (!results[3])
         process.exit
     if (!results[4])
@@ -726,7 +726,7 @@ ipcMain.on('save-whiteboard-html', async (e, html) => {
     const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
     if(!(await directoryExists(saveWhiteboardDir))) {
-        fs.mkdirSync(saveWhiteboardDir)
+        await mkdir(saveWhiteboardDir)
     }
     const saveWhiteboardHTML = path.join(saveWhiteboardDir, `${componentID}-index.html`)
     if (!html.includes('../../../')) {
@@ -743,7 +743,7 @@ ipcMain.on('save-whiteboard-state', async (e, stateObj) => {
     const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
     if(!(await directoryExists(saveWhiteboardDir))) {
-        fs.mkdirSync(saveWhiteboardDir)
+        await mkdir(saveWhiteboardDir)
     }
     
     const dataToSave = {
