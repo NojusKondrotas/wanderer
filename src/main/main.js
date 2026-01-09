@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, globalShortcut, screen } from 'electron'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { readFile, writeFile } from 'fs/promises'
+import { access, constants, stat, readFile, writeFile } from 'fs/promises'
 import robot from '@hurdlegroup/robotjs'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -22,6 +22,42 @@ let largestWhiteboardID = 0, unusedWhiteboardIDs = new Array()
 let largestLinkID = 0, unusedLinkIDs = new Array()
 
 let activeConfigsWindow = null, activeTabMenuWindow = null;
+
+async function fileExists(path) {
+    try {
+        const stats = await stat(path);
+
+        if (stats.isFile()) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            return false;
+        } else {
+            throw err;
+        }
+    }
+}
+
+async function directoryExists(path) {
+    try {
+        const stats = await stat(path);
+
+        if (stats.isDirectory()) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            return false;
+        } else {
+            throw err;
+        }
+    }
+}
 
 class WindowHandler{
     static trueWinIDToSymbolicWinIDMapping = new Map();
@@ -120,17 +156,17 @@ class WindowHandler{
         this.overwriteWindow(entryFilePath, trueWindowID)
     }
 
-    static createWindow(componentType, componentID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y){
+    static async createWindow(componentType, componentID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y){
         let preloadFilePath = path.join(__dirname, 'preload.js')
         let entryFilePath
         switch(componentType){
             case ComponentType.whiteboard:
                 const saves = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
-                if(!fs.existsSync(saves))
+                if(!(await directoryExists(saves)))
                     fs.mkdirSync(saves)
                 const savedHTML = path.join(saves, `${componentID}-index.html`)
                 const defaultHTML = path.join(__dirname, 'whiteboard-index.html')
-                if(!fs.existsSync(savedHTML)){
+                if(!(await fileExists(savedHTML))){
                     entryFilePath = defaultHTML
                 }else entryFilePath = savedHTML
                 break
@@ -364,37 +400,43 @@ function getLinkID(){
     }
 }
 
-function terminateApp(){
+async function terminateApp(){
     // console.log('writecompoennts')
     // WindowHandler.writeComponents()
     console.log('writewindows')
-    WindowHandler.writeWindows()
+    await WindowHandler.writeWindows()
     console.log('closeallwindow')
     WindowHandler.closeAllWindows()
 }
 
 async function initialiseApp(){
-    const savesPath = path.join(__dirname, '..', 'saves')
-    if(!fs.existsSync(savesPath)) fs.mkdirSync(savesPath)
-
+    const savesPath = path.join(__dirname, '..', 'saves');
     const savesNotepadsPath = path.join(savesPath, 'notepads')
-    if(!fs.existsSync(savesNotepadsPath))
-        fs.mkdirSync(savesNotepadsPath)
-
     const savesWhiteboardsPath = path.join(savesPath, 'whiteboards')
-    if(!fs.existsSync(savesWhiteboardsPath))
-        fs.mkdirSync(savesWhiteboardsPath)
-
     const defaultWhiteboardPathIndex = path.join(__dirname, 'whiteboard-index.html')
-    if(!fs.existsSync(defaultWhiteboardPathIndex))
-        process.exit
-
     const defaultNotepadPathIndex = path.join(__dirname, 'notepad-index.html')
-    if(!fs.existsSync(defaultNotepadPathIndex))
-        process.exit
-
     const defaultPathPreload = path.join(__dirname, 'preload.js')
-    if(!fs.existsSync(defaultPathPreload))
+
+    const results = await Promise.all([
+        directoryExists(savesPath),
+        directoryExists(savesNotepadsPath),
+        directoryExists(savesWhiteboardsPath),
+        fileExists(defaultWhiteboardPathIndex),
+        fileExists(defaultNotepadPathIndex),
+        fileExists(defaultPathPreload)
+    ]);
+
+    if (!results[0])
+        fs.mkdirSync(savesPath)
+    if (!results[1])
+        fs.mkdirSync(savesNotepadsPath)
+    if (!results[2])
+        fs.mkdirSync(savesWhiteboardsPath)
+    if (!results[3])
+        process.exit
+    if (!results[4])
+        process.exit
+    if (!results[5])
         process.exit
 
     const openWindowsJSON = path.join(savesPath, 'open-windows.json')
@@ -652,7 +694,7 @@ ipcMain.handle('load-editor-contents', async (e) => {
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     const componentID = WindowHandler.allWindows.get(symbolicID).componentID
     const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${componentID}.json`)
-    if(!fs.existsSync(savesJSON))
+    if(!(await fileExists(savesJSON)))
         await writeFile(savesJSON, JSON.stringify({}, null, 2), 'utf-8');
 
     const fileContents = await readFile(savesJSON, 'utf-8')
@@ -683,7 +725,7 @@ ipcMain.on('save-whiteboard-html', async (e, html) => {
     console.log('save html wb: ' + symbolicWinID)
     const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
-    if(!fs.existsSync(saveWhiteboardDir)){
+    if(!(await directoryExists(saveWhiteboardDir))) {
         fs.mkdirSync(saveWhiteboardDir)
     }
     const saveWhiteboardHTML = path.join(saveWhiteboardDir, `${componentID}-index.html`)
@@ -700,7 +742,7 @@ ipcMain.on('save-whiteboard-state', async (e, stateObj) => {
     console.log('save json wb: ' + symbolicWinID)
     const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
-    if(!fs.existsSync(saveWhiteboardDir)){
+    if(!(await directoryExists(saveWhiteboardDir))) {
         fs.mkdirSync(saveWhiteboardDir)
     }
     
@@ -729,7 +771,7 @@ ipcMain.handle('load-whiteboard-state', async (e) => {
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     const componentID = WindowHandler.allWindows.get(symbolicID).componentID
     const saveWhiteboardState = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`,  `${componentID}-state.json`)
-    if (fs.existsSync(saveWhiteboardState))
+    if (await fileExists(saveWhiteboardState))
         return JSON.parse(await readFile(saveWhiteboardState, 'utf-8'))
     return {}
 })
