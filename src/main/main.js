@@ -406,7 +406,7 @@ async function initialiseApp(){
         writeFile(windowsIDsJSON, JSON.stringify({}, null, 2), 'utf-8')
     ]);
 
-    const stateWindowsIDs = JSON.parse(fs.readFileSync(windowsIDsJSON, 'utf-8'))
+    const stateWindowsIDs = JSON.parse(await readFile(windowsIDsJSON, 'utf-8'))
     if(stateWindowsIDs && Object.keys(stateWindowsIDs).length > 0){
         largestNotepadID = stateWindowsIDs.largestNotepadID
         largestWhiteboardID = stateWindowsIDs.largestWhiteboardID
@@ -415,7 +415,7 @@ async function initialiseApp(){
         allNotepads = new Set(stateWindowsIDs.allNotepads)
         allWhiteboards = new Set(stateWindowsIDs.allWhiteboards)
     }
-    const allWindowObj = JSON.parse(fs.readFileSync(allWindowsJSON, 'utf-8'));
+    const allWindowObj = JSON.parse(await readFile(allWindowsJSON, 'utf-8'));
     if(Array.isArray(allWindowObj) && allWindowObj.length > 0){
         allWindowObj.forEach(winData => {
             const id = WindowHandler.getWindowID();
@@ -425,7 +425,7 @@ async function initialiseApp(){
             }
         });
     }
-    const openWindowsObj = JSON.parse(fs.readFileSync(openWindowsJSON, 'utf-8'))
+    const openWindowsObj = JSON.parse(await readFile(openWindowsJSON, 'utf-8'))
     if(Array.isArray(openWindowsObj) && openWindowsObj.length > 0){
         openWindowsObj.forEach(winData => {
             let win = null;
@@ -647,15 +647,15 @@ ipcMain.handle('save-editor-contents', async (e, contents) => {
     await writeFile(savesJSON, JSON.stringify(contents, null, 2), 'utf-8');
 })
 
-ipcMain.handle('load-editor-contents', (e) => {
+ipcMain.handle('load-editor-contents', async (e) => {
     const senderWindow = BrowserWindow.fromWebContents(e.sender)
     const symbolicID = WindowHandler.trueWinIDToSymbolicWinIDMapping.get(senderWindow.id)
     const componentID = WindowHandler.allWindows.get(symbolicID).componentID
     const savesJSON = path.join(__dirname, '..', 'saves', 'notepads', `${componentID}.json`)
     if(!fs.existsSync(savesJSON))
-        writeFile(savesJSON, JSON.stringify({}, null, 2), 'utf-8');
+        await writeFile(savesJSON, JSON.stringify({}, null, 2), 'utf-8');
 
-    const fileContents = fs.readFileSync(savesJSON, 'utf-8')
+    const fileContents = await readFile(savesJSON, 'utf-8')
     const delta = JSON.parse(fileContents)
     return delta
 })
@@ -730,7 +730,7 @@ ipcMain.handle('load-whiteboard-state', async (e) => {
     const componentID = WindowHandler.allWindows.get(symbolicID).componentID
     const saveWhiteboardState = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`,  `${componentID}-state.json`)
     if (fs.existsSync(saveWhiteboardState))
-        return JSON.parse(fs.readFileSync(saveWhiteboardState, 'utf-8'))
+        return JSON.parse(await readFile(saveWhiteboardState, 'utf-8'))
     return {}
 })
 
