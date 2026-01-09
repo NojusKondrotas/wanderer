@@ -436,9 +436,18 @@ async function initialiseApp(){
     const allWindowsJSON = path.join(savesPath, 'all-windows.json')
     const windowsIDsJSON = path.join(savesPath, 'windows-IDs.json')
     await Promise.all([
-        writeFile(openWindowsJSON, JSON.stringify([], null, 2), 'utf-8'),
-        writeFile(allWindowsJSON, JSON.stringify([], null, 2), 'utf-8'),
-        writeFile(windowsIDsJSON, JSON.stringify({}, null, 2), 'utf-8')
+        (async function() {
+            if (!await fileExists(openWindowsJSON))
+                await writeFile(openWindowsJSON, JSON.stringify([], null, 2), 'utf-8')
+        })(),
+        (async function() {
+            if (!await fileExists(allWindowsJSON))
+                await writeFile(allWindowsJSON, JSON.stringify([], null, 2), 'utf-8')
+        })(),
+        (async function() {
+            if (!await fileExists(windowsIDsJSON))
+                await writeFile(windowsIDsJSON, JSON.stringify({}, null, 2), 'utf-8')
+        })()
     ]);
 
     const stateWindowsIDs = JSON.parse(await readFile(windowsIDsJSON, 'utf-8'))
