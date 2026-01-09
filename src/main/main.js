@@ -507,12 +507,12 @@ ipcMain.handle('get-window-center', () => {
     };
 });
 
-ipcMain.handle('open-configs', () => {
+ipcMain.handle('open-configs', async () => {
     if(activeConfigsWindow != null) {
         return WindowHandler.focusWindow(activeConfigsWindow);
     }
 
-    activeConfigsWindow = WindowHandler.createWindow(ComponentType.configs, null, false, false, true);
+    activeConfigsWindow = await WindowHandler.createWindow(ComponentType.configs, null, false, false, true);
     WindowHandler.initialiseWindow(activeConfigsWindow.id, ComponentType.configs, null, null);
 })
 
@@ -662,11 +662,11 @@ ipcMain.handle('open-whiteboard', (e, whiteboardID) => {
     }else WindowHandler.openComponent(ComponentType.whiteboard, whiteboardID, WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id))
 })
 
-ipcMain.handle('open-link', (e, link) => {
+ipcMain.handle('open-link', async (e, link) => {
     const win = BrowserWindow.fromWebContents(e.sender)
         //WindowHandler.openComponent('l', link,+--------------------------------------------------poooooooooooooooooooooooooooooooooo WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id),
 
-    WindowHandler.createWindow(ComponentType.link, null, false, false, false,
+    await WindowHandler.createWindow(ComponentType.link, null, false, false, false,
         undefined, undefined, undefined, undefined, link);
     WindowHandler.initialiseWindow(win.id, ComponentType.link, getLinkID(), WindowHandler.trueWinIDToSymbolicWinIDMapping.get(win.id), link);
 })
