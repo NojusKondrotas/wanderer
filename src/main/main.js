@@ -162,8 +162,7 @@ class WindowHandler{
         switch(componentType){
             case ComponentType.whiteboard:
                 const saves = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
-                if(!(await directoryExists(saves)))
-                    await mkdir(saves)
+                await mkdir(saves, { recursive: true });
                 const savedHTML = path.join(saves, `${componentID}-index.html`)
                 const defaultHTML = path.join(__dirname, 'whiteboard-index.html')
                 if(!(await fileExists(savedHTML))){
@@ -418,20 +417,14 @@ async function initialiseApp(){
     const defaultPathPreload = path.join(__dirname, 'preload.js')
 
     const results = await Promise.all([
-        directoryExists(savesPath),
-        directoryExists(savesNotepadsPath),
-        directoryExists(savesWhiteboardsPath),
+        mkdir(savesPath, { recursive: true }),
+        mkdir(savesNotepadsPath, { recursive: true }),
+        mkdir(savesWhiteboardsPath, { recursive: true }),
         fileExists(defaultWhiteboardPathIndex),
         fileExists(defaultNotepadPathIndex),
         fileExists(defaultPathPreload)
     ]);
 
-    if (!results[0])
-        await mkdir(savesPath)
-    if (!results[1])
-        await mkdir(savesNotepadsPath)
-    if (!results[2])
-        await mkdir(savesWhiteboardsPath)
     if (!results[3])
         process.exit
     if (!results[4])
@@ -728,9 +721,7 @@ ipcMain.on('save-whiteboard-html', async (e, html) => {
     console.log('save html wb: ' + symbolicWinID)
     const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
-    if(!(await directoryExists(saveWhiteboardDir))) {
-        await mkdir(saveWhiteboardDir)
-    }
+    await mkdir(saveWhiteboardDir, { recursive: true })
     const saveWhiteboardHTML = path.join(saveWhiteboardDir, `${componentID}-index.html`)
     if (!html.includes('../../../')) {
         html = html.replace(/((?:src|href)=["'])\.\.\//g, '$1../../../')
@@ -745,9 +736,7 @@ ipcMain.on('save-whiteboard-state', async (e, stateObj) => {
     console.log('save json wb: ' + symbolicWinID)
     const componentID = WindowHandler.allWindows.get(symbolicWinID).componentID
     const saveWhiteboardDir = path.join(__dirname, '..', 'saves', 'whiteboards', `${componentID}`)
-    if(!(await directoryExists(saveWhiteboardDir))) {
-        await mkdir(saveWhiteboardDir)
-    }
+    await mkdir(saveWhiteboardDir, { recursive: true })
     
     const dataToSave = {
         largestElementID: stateObj.largestElementID,
