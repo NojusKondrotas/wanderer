@@ -94,6 +94,14 @@ window.addEventListener("scroll", () => {
     } else scrollIsChanging = false;
 });
 
+window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (e.ctrlKey || e.metaKey) {
+        const zoomIn = e.deltaY < 0;
+        zoomWhiteboard({ x: e.clientX, y: e.clientY }, zoomIn);
+    }
+}, { passive: false });
+
 async function save(){
     saveAllNotesContents()
     await window.wandererAPI.saveWhiteboardHTML()
