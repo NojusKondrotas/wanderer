@@ -27,5 +27,6 @@ function toggleConfigAbstract(flag, abstract = null) {
         setTimeout((currAbst) => {
             currAbst.style.display = 'none';
         }, timeoutCM, activeAbstract);
+        activeAbstract = null;
     }
 }
