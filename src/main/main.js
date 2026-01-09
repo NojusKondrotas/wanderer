@@ -469,31 +469,34 @@ async function initialiseApp(){
     }
     const openWindowsObj = JSON.parse(await readFile(openWindowsJSON, 'utf-8'))
     if(Array.isArray(openWindowsObj) && openWindowsObj.length > 0){
-        openWindowsObj.forEach(winData => {
+        const windowPromises = openWindowsObj.map(async (winData) => {
             let win = null;
             switch(winData.componentType){
                 case ComponentType.whiteboard:
-                    win = WindowHandler.createWindow(ComponentType.whiteboard, winData.componentID,
+                    win = await WindowHandler.createWindow(ComponentType.whiteboard, winData.componentID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
                         winData.width, winData.height, winData.x, winData.y);
-                    WindowHandler.initialiseWindow(win.id, ComponentType.whiteboard, winData.componentID, winData.parentWindowID);
                     break;
                 case ComponentType.notepad:
-                    win = WindowHandler.createWindow(ComponentType.notepad, winData.componentID,
+                    win = await WindowHandler.createWindow(ComponentType.notepad, winData.componentID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
                         winData.width, winData.height, winData.x, winData.y);
-                    WindowHandler.initialiseWindow(win.id, ComponentType.notepad, winData.componentID, winData.parentWindowID);
                     break;
                 case ComponentType.link:
-                    win = WindowHandler.createWindow(ComponentType.link, winData.componentID,
+                    win = await WindowHandler.createWindow(ComponentType.link, winData.componentID,
                         winData.isMinimized, winData.isMaximized, winData.isFullScreen,
                         winData.width, winData.height, winData.x, winData.y);
-                    WindowHandler.initialiseWindow(win.id, ComponentType.link, winData.componentID, winData.parentWindowID, winData.url);
                     break;
             }
+
+            if(win) {
+                WindowHandler.initialiseWindow(win.id, winData.componentType, winData.componentID, winData.parentWindowID);
+            }
         });
+
+        await Promise.all(windowPromises);
     }else{
-        const win = WindowHandler.createWindow(ComponentType.firstTime, null, false, false, true);
+        const win = await WindowHandler.createWindow(ComponentType.firstTime, null, false, false, true);
         WindowHandler.initialiseWindow(win.id, ComponentType.firstTime, null, null);
     }
 }
