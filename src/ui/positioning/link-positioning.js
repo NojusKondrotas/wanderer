@@ -15,15 +15,15 @@ class LinkPositioningHandler {
     static update(ev){
         updateMouseDrag(ev)
         if(isDraggingWindow){
-            moveWindow()
+            WindowPositioningHandler.moveWindow()
         }else if(isResizingWindow){
-            resizeWindow()
+            WindowPositioningHandler.resizeWindow()
         }
     }
 
     static endDrag(ev){
         resetMouseDrag(ev)
-        resetWindowDrag(ev)
+        WindowPositioningHandler.resetWindowDrag(ev)
         this.cover.style.display = 'none'
     }
 }

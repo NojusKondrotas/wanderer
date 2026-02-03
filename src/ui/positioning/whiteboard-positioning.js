@@ -71,10 +71,10 @@ class WhiteboardPositioningHandler{
             this.resize()
         }else if(this.isDraggingBoard){
             updateComponentPositions(parentWhiteboard)
-        }else if(isDraggingWindow){
-            moveWindow()
-        }else if (isResizingWindow) {
-            resizeWindow()
+        }else if(WindowPositioningHandler.isDraggingWindow){
+            WindowPositioningHandler.moveWindow()
+        }else if (WindowPositioningHandler.isResizingWindow) {
+            WindowPositioningHandler.resizeWindow()
         }else if(this.isDraggingElement){
             updateElementPositionByID(selectedElement.id)
 
@@ -158,13 +158,13 @@ class WhiteboardPositioningHandler{
         })
 
         resetMouseDrag(ev)
-        resetWindowDrag(ev)
+        WindowPositioningHandler.resetWindowDrag(ev);
 
         this.isDraggingBoard = dragState === this.dragStates.moveBoard;
         this.isDraggingElement = dragState === this.dragStates.moveElement;
         this.isResizingElement = dragState === this.dragStates.resizeElement;
-        isDraggingWindow = dragState === this.dragStates.moveWindow;
-        isResizingWindow = dragState === this.dragStates.resizeWindow;
+        WindowPositioningHandler.isDraggingWindow = dragState === this.dragStates.moveWindow;
+        WindowPositioningHandler.isResizingWindow = dragState === this.dragStates.resizeWindow;
 
         toggleTitlebar(false)
         handleKeybindGuideAppearance(false)
@@ -204,7 +204,7 @@ class WhiteboardPositioningHandler{
         this.isDraggingBoard = false
         this.isDraggingElement = false
         resetMouseDrag(ev)
-        resetWindowDrag(ev)
+        WindowPositioningHandler.resetWindowDrag(ev);
 
         selectedElement = null;
         selectedPath = null;
