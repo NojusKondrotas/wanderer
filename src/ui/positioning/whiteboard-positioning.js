@@ -40,7 +40,7 @@ class WhiteboardPositioningHandler{
                 return
             }
 
-            WhiteboardPositioningHandler.startDrag(ev, false, true, false)
+            WhiteboardPositioningHandler.startDrag(ev, WhiteboardPositioningHandler.dragStates.moveElement)
             
             if(el.classList.contains('.note')) toggleWritingMode(false, el.id)
 
@@ -289,9 +289,9 @@ function updateComponentPositions(){
 }
 
 function genMouseDown_WhiteboardMoveHandler(e){
-    if(isCombo(keybinds[windowDragKeybind])) WhiteboardPositioningHandler.startDrag(e, false, false, false, true, false)
-    else if(isCombo(keybinds[windowResizeKeybind])) WhiteboardPositioningHandler.startDrag(e, false, false, false, false, true)
-    else WhiteboardPositioningHandler.startDrag(e, true, false, false, false)
+    if(isCombo(keybinds[windowDragKeybind])) WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.moveWindow)
+    else if(isCombo(keybinds[windowResizeKeybind])) WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.resizeWindow)
+    else WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.moveBoard)
 }
 
 function genMouseMove_WhiteboardMoveHandler(e){

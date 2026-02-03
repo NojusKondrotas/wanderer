@@ -25,7 +25,7 @@ function instantiateResizingBorders(el){
             this.isResizing = true;
             activeBorder = border;
             selectedElement = el;
-            WhiteboardPositioningHandler.startDrag(e, false, false, true);
+            WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.resizeElement);
             document.body.style.cursor = 'ew-resize';
         });
 
