@@ -2,7 +2,7 @@ class LinkPositioningHandler {
     static cover = document.getElementById('cover')
 
     static startDrag(ev, isDraggingWin, isResizingWin){
-        resetMouseDrag(ev)
+        MouseDragHandler.resetMouseDrag(ev)
         resetWindowDrag(ev)
         this.cover.style.display = 'inline-block'
         if(isDraggingWin){
@@ -13,7 +13,7 @@ class LinkPositioningHandler {
     }
 
     static update(ev){
-        updateMouseDrag(ev)
+        MouseDragHandler.updateMouseDrag(ev)
         if(isDraggingWindow){
             WindowPositioningHandler.moveWindow()
         }else if(isResizingWindow){
@@ -22,7 +22,7 @@ class LinkPositioningHandler {
     }
 
     static endDrag(ev){
-        resetMouseDrag(ev)
+        MouseDragHandler.resetMouseDrag(ev)
         WindowPositioningHandler.resetWindowDrag(ev)
         this.cover.style.display = 'none'
     }

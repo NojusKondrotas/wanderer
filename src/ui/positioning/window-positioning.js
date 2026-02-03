@@ -15,8 +15,8 @@ class WindowPositioningHandler {
     }
 
     static moveWindow(){
-        const newX = dragStart.x - this.windowCornerOffset.x
-        const newY = dragStart.y - this.windowCornerOffset.y
+        const newX = MouseDragHandler.dragStart.x - this.windowCornerOffset.x
+        const newY = MouseDragHandler.dragStart.y - this.windowCornerOffset.y
 
         window.wandererAPI.moveWindow(
             newX,
@@ -27,8 +27,8 @@ class WindowPositioningHandler {
     }
 
     static resizeWindow(){
-        const dx = -dragDiff.x
-        const dy = -dragDiff.y
+        const dx = -MouseDragHandler.dragDiff.x
+        const dy = -MouseDragHandler.dragDiff.y
 
         let { width, height } = this.windowDimensions
         let newX = window.screenX

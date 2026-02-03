@@ -17,17 +17,17 @@ class WhiteboardPositioningHandler{
             if(isNaN(currentWidth)){
                 currentWidth = selectedElement.getBoundingClientRect().width - 10
             }
-            selectedElement.style.width = Math.max(currentWidth - Math.floor(dragDiff.x), 22) + 'px'
+            selectedElement.style.width = Math.max(currentWidth - Math.floor(MouseDragHandler.dragDiff.x), 22) + 'px'
         }else if(activeBorder === 'left'){
             let currentWidth = parseInt(selectedElement.style.width)
             if(isNaN(currentWidth)){
                 currentWidth = selectedElement.getBoundingClientRect().width - 10
             }
-            const newWidth = Math.max(currentWidth + Math.floor(dragDiff.x), 22)
-            if(newWidth === 22 && dragDiff.x <= 0) return
+            const newWidth = Math.max(currentWidth + Math.floor(MouseDragHandler.dragDiff.x), 22)
+            if(newWidth === 22 && MouseDragHandler.dragDiff.x <= 0) return
 
             selectedElement.style.width = newWidth + 'px'
-            selectedElement.style.left = selectedElement.offsetLeft - Math.floor(dragDiff.x) + 'px'
+            selectedElement.style.left = selectedElement.offsetLeft - Math.floor(MouseDragHandler.dragDiff.x) + 'px'
         }
     }
 
@@ -51,7 +51,7 @@ class WhiteboardPositioningHandler{
     static element_MouseUp(ev, el){
         if(StatesHandler.isWritingElement) return
         if(StatesHandler.isDrawingPath){
-            if(!checkIfDraggedEnough()){
+            if(!MouseDragHandler.checkIfDraggedEnough()){
                 this.isDraggingElement = false;
                 if(el.id === selectedPath.startNoteID){
                     deletePathByID(selectedPath.id)
@@ -65,7 +65,7 @@ class WhiteboardPositioningHandler{
     }
 
     static update(ev){
-        updateMouseDrag(ev)
+        MouseDragHandler.updateMouseDrag(ev)
         
         if (this.isResizingElement){
             this.resize()
@@ -82,16 +82,16 @@ class WhiteboardPositioningHandler{
             for(const v of values){
                 let hasUpdated = false
                 if(v.startNoteID === selectedElement.id){
-                    v.startPosition.x -= dragDiff.x
-                    v.startPosition.y -= dragDiff.y
-                    v.originStartPos.x -= dragDiff.x
-                    v.originStartPos.y -= dragDiff.y
+                    v.startPosition.x -= MouseDragHandler.dragDiff.x
+                    v.startPosition.y -= MouseDragHandler.dragDiff.y
+                    v.originStartPos.x -= MouseDragHandler.dragDiff.x
+                    v.originStartPos.y -= MouseDragHandler.dragDiff.y
                     hasUpdated = true
                 }else if(v.endNoteID === selectedElement.id){
-                    v.endPosition.x -= dragDiff.x
-                    v.endPosition.y -= dragDiff.y
-                    v.originEndPos.x -= dragDiff.x
-                    v.originEndPos.y -= dragDiff.y
+                    v.endPosition.x -= MouseDragHandler.dragDiff.x
+                    v.endPosition.y -= MouseDragHandler.dragDiff.y
+                    v.originEndPos.x -= MouseDragHandler.dragDiff.x
+                    v.originEndPos.y -= MouseDragHandler.dragDiff.y
                     hasUpdated = true
                 }
 
@@ -157,7 +157,7 @@ class WhiteboardPositioningHandler{
             document.getElementById(noteEditor.id).contentEditable = 'false'
         })
 
-        resetMouseDrag(ev)
+        MouseDragHandler.resetMouseDrag(ev)
         WindowPositioningHandler.resetWindowDrag(ev);
 
         this.isDraggingBoard = dragState === this.dragStates.moveBoard;
@@ -190,7 +190,7 @@ class WhiteboardPositioningHandler{
             return
         }
         if(StatesHandler.isDrawingPath){
-            if(!checkIfDraggedEnough()){
+            if(!MouseDragHandler.checkIfDraggedEnough()){
                 terminatePathDrawing(ev, null)
             }
         }
@@ -203,7 +203,7 @@ class WhiteboardPositioningHandler{
         
         this.isDraggingBoard = false
         this.isDraggingElement = false
-        resetMouseDrag(ev)
+        MouseDragHandler.resetMouseDrag(ev)
         WindowPositioningHandler.resetWindowDrag(ev);
 
         selectedElement = null;
@@ -239,8 +239,8 @@ function updateElementPositionByIDByOffset(elID, x, y) {
 function updateElementPositionByID(elID) {
     const elPos = elementPositions.get(elID)
 
-    const offsetX = elPos.x - dragDiff.x
-    const offsetY = elPos.y - dragDiff.y
+    const offsetX = elPos.x - MouseDragHandler.dragDiff.x
+    const offsetY = elPos.y - MouseDragHandler.dragDiff.y
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
     document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
@@ -274,15 +274,15 @@ function updateComponentPositions(){
     }
     
     allPaths.forEach(path => {
-        path.startPosition.x -= dragDiff.x
-        path.startPosition.y -= dragDiff.y
-        path.originStartPos.x -= dragDiff.x
-        path.originStartPos.y -= dragDiff.y
+        path.startPosition.x -= MouseDragHandler.dragDiff.x
+        path.startPosition.y -= MouseDragHandler.dragDiff.y
+        path.originStartPos.x -= MouseDragHandler.dragDiff.x
+        path.originStartPos.y -= MouseDragHandler.dragDiff.y
 
-        path.endPosition.x -= dragDiff.x
-        path.endPosition.y -= dragDiff.y
-        path.originEndPos.x -= dragDiff.x
-        path.originEndPos.y -= dragDiff.y
+        path.endPosition.x -= MouseDragHandler.dragDiff.x
+        path.endPosition.y -= MouseDragHandler.dragDiff.y
+        path.originEndPos.x -= MouseDragHandler.dragDiff.x
+        path.originEndPos.y -= MouseDragHandler.dragDiff.y
 
         updatePathPosition(path, path.startPosition, path.endPosition)
     })
