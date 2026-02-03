@@ -3,6 +3,8 @@ class WhiteboardPositioningHandler{
     static isDraggingElement = false
     static isResizingElement = false
 
+    static elementResizeStart = null
+
     static dragStates = {
         moveBoard: 'move-board',
         moveElement: 'move-element',
@@ -11,23 +13,18 @@ class WhiteboardPositioningHandler{
         resizeWindow: 'resize-window'
     };
 
-    static resize(){
-        if(activeBorder === 'right'){
-            let currentWidth = parseInt(selectedElement.style.width)
-            if(isNaN(currentWidth)){
-                currentWidth = selectedElement.getBoundingClientRect().width - 10
-            }
-            selectedElement.style.width = Math.max(currentWidth - Math.floor(MouseDragHandler.dragDiff.x), 22) + 'px'
-        }else if(activeBorder === 'left'){
-            let currentWidth = parseInt(selectedElement.style.width)
-            if(isNaN(currentWidth)){
-                currentWidth = selectedElement.getBoundingClientRect().width - 10
-            }
-            const newWidth = Math.max(currentWidth + Math.floor(MouseDragHandler.dragDiff.x), 22)
-            if(newWidth === 22 && MouseDragHandler.dragDiff.x <= 0) return
+    static resize(ev){
+        const dxResizeScreen = ev.clientX - this.elementResizeStart.dx;
+        const dxResizeBoard = dxResizeScreen / zoomFactor;
 
-            selectedElement.style.width = newWidth + 'px'
-            selectedElement.style.left = selectedElement.offsetLeft - Math.floor(MouseDragHandler.dragDiff.x) + 'px'
+        if (activeBorder === 'right') {
+            selectedElement.style.width = Math.max(this.elementResizeStart.width + dxResizeBoard, 22) + 'px';
+        } else if (activeBorder === 'left') {
+            const newWidth = Math.max(this.elementResizeStart.width - dxResizeBoard, 22);
+            if(newWidth === 22 && dxResizeBoard >= 0) return;
+
+            selectedElement.style.width = newWidth + 'px';
+            selectedElement.style.left = (this.elementResizeStart.offsetLeft + dxResizeBoard) + 'px';
         }
     }
 
@@ -68,7 +65,7 @@ class WhiteboardPositioningHandler{
         MouseDragHandler.updateMouseDrag(ev)
         
         if (this.isResizingElement){
-            this.resize()
+            this.resize(ev)
         }else if(this.isDraggingBoard){
             updateComponentPositions(parentWhiteboard)
         }else if(WindowPositioningHandler.isDraggingWindow){
@@ -140,6 +137,16 @@ class WhiteboardPositioningHandler{
         }
     }
 
+    static startResize(ev) {
+        const rect = selectedElement.getBoundingClientRect();
+
+        this.elementResizeStart = {
+            dx: ev.clientX,
+            width: parseFloat(selectedElement.style.width) || rect.width,
+            offsetLeft: selectedElement.offsetLeft
+        };
+    }
+
     static startDrag(ev, dragState){
         if(ev.button === 2) return
 
@@ -165,6 +172,8 @@ class WhiteboardPositioningHandler{
         this.isResizingElement = dragState === this.dragStates.resizeElement;
         WindowPositioningHandler.isDraggingWindow = dragState === this.dragStates.moveWindow;
         WindowPositioningHandler.isResizingWindow = dragState === this.dragStates.resizeWindow;
+
+        if(this.isResizingElement) this.startResize(ev);
 
         toggleTitlebar(false)
         handleKeybindGuideAppearance(false)
