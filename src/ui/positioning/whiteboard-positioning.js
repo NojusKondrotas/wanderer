@@ -3,6 +3,14 @@ class WhiteboardPositioningHandler{
     static isDraggingElement = false
     static isResizingElement = false
 
+    static dragStates = {
+        moveBoard: 'move-board',
+        moveElement: 'move-element',
+        moveWindow: 'move-window',
+        resizeElement: 'resize-element',
+        resizeWindow: 'resize-window'
+    };
+
     static resize(){
         if(activeBorder === 'right'){
             let currentWidth = parseInt(selectedElement.style.width)
@@ -132,7 +140,7 @@ class WhiteboardPositioningHandler{
         }
     }
 
-    static startDrag(ev, isBoard, isEl, isResizingElement, isWindow, isWinResizing){
+    static startDrag(ev, dragState){
         if(ev.button === 2) return
 
         if(StatesHandler.isContextMenuOpen){
@@ -152,17 +160,11 @@ class WhiteboardPositioningHandler{
         resetMouseDrag(ev)
         resetWindowDrag(ev)
 
-        if(isBoard){
-            this.isDraggingBoard = true
-        }else if(isEl){
-            this.isDraggingElement = true
-        }else if(isResizingElement){
-            this.isResizingElement = true
-        }else if(isWindow){
-            isDraggingWindow = true
-        }else if(isWinResizing){
-            isResizingWindow = true
-        }
+        this.isDraggingBoard = dragState === this.dragStates.moveBoard;
+        this.isDraggingElement = dragState === this.dragStates.moveElement;
+        this.isResizingElement = dragState === this.dragStates.resizeElement;
+        isDraggingWindow = dragState === this.dragStates.moveWindow;
+        isResizingWindow = dragState === this.dragStates.resizeWindow;
 
         toggleTitlebar(false)
         handleKeybindGuideAppearance(false)
