@@ -106,7 +106,8 @@ function addNoteListeners(newNote){
             e.preventDefault();
             const posParent = getAbsolutePosition(newNote);
             const childNote = createNewNoteLeftAlignment(parentWhiteboard, '', new Set([newNote.id]), new Set(), posParent.left, posParent.top + posParent.height);
-            setElementLeftPos(childNote.id, convertToWhiteboardSpace(posParent.left, posParent.top).x);
+            setElementLeftPos(childNote.id, convertToWhiteboardSpace(posParent.left, -1).x);
+            setElementTopPos(childNote.id, Math.floor(convertToWhiteboardSpace(-1, posParent.top + posParent.height).y));
             const posChild = getAbsolutePosition(childNote);
             createPath(parentWhiteboard,
                 { x: posParent.left + posParent.width / 2, y: posParent.top + posParent.height / 2 },

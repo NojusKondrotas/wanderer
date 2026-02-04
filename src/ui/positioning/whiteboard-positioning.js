@@ -245,6 +245,16 @@ function setElementLeftPos(elID, x) {
     document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
 }
 
+function setElementTopPos(elID, y) {
+    const elPos = elementPositions.get(elID);
+
+    const offsetX = elPos.x;
+    const offsetY = y;
+    elementPositions.set(elID, { x: offsetX, y: offsetY})
+
+    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
+}
+
 function updateElementPositionByIDByOffset(elID, x, y) {
     const elPos = elementPositions.get(elID)
 
