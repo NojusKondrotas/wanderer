@@ -55,6 +55,10 @@ class WhiteboardPositioningHandler{
             StatesHandler.willNotWrite = false;
         }
 
+        if(el.classList.contains('note-container')) {
+            document.body.style.cursor = 'text';
+        }
+
         if(StatesHandler.isDrawingPath){
             if(!draggedEnough){
                 this.isDraggingElement = false;
@@ -187,6 +191,7 @@ class WhiteboardPositioningHandler{
         handleKeybindGuideAppearance(false)
 
         StatesHandler.isDragging = true;
+        document.body.style.cursor = 'default';
     }
 
     static endDrag(ev){
