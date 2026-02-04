@@ -96,10 +96,8 @@ window.addEventListener("scroll", () => {
 
 window.addEventListener('wheel', (e) => {
     e.preventDefault();
-    if (e.ctrlKey || e.metaKey) {
-        const zoomIn = e.deltaY < 0;
-        zoomWhiteboard({ x: e.clientX, y: e.clientY }, zoomIn);
-    }
+    const zoomIn = e.deltaY < 0;
+    zoomWhiteboard({ x: e.clientX, y: e.clientY }, zoomIn);
 }, { passive: false });
 
 async function save(){
