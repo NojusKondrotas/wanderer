@@ -60,7 +60,9 @@ function addNoteEditableListeners(noteEd) {
     })
 
     noteEd.addEventListener('mouseleave', () => {
-        document.body.style.cursor = 'default';
+        if(!StatesHandler.isDragging) {
+            document.body.style.cursor = 'default';
+        }
     })
 }
 

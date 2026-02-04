@@ -20,6 +20,18 @@ function instantiateResizingBorders(el){
         borderDiv.classList.add(`note-border`, `note-border-${border}`);
         el.appendChild(borderDiv);
 
+        borderDiv.addEventListener('mouseenter', () => {
+            if(!StatesHandler.isDragging) {
+                document.body.style.cursor = 'ew-resize';
+            }
+        });
+
+        borderDiv.addEventListener('mouseleave', () => {
+            if(!StatesHandler.isDragging) {
+                document.body.style.cursor = 'default';
+            }
+        });
+
         borderDiv.addEventListener('mousedown', function(e) {
             e.stopPropagation();
             if(StatesHandler.isWritingElement) {
