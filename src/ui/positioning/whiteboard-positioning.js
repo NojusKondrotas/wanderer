@@ -235,6 +235,16 @@ function getAbsolutePosition(el) {
     };
 }
 
+function setElementLeftPos(elID, x) {
+    const elPos = elementPositions.get(elID);
+
+    const offsetX = x;
+    const offsetY = elPos.y;
+    elementPositions.set(elID, { x: offsetX, y: offsetY})
+
+    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
+}
+
 function updateElementPositionByIDByOffset(elID, x, y) {
     const elPos = elementPositions.get(elID)
 
