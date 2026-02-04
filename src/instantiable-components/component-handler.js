@@ -22,6 +22,9 @@ function instantiateResizingBorders(el){
 
         borderDiv.addEventListener('mousedown', function(e) {
             e.stopPropagation();
+            if(StatesHandler.isWritingElement) {
+                toggleWritingMode(false, selectedElement.id);
+            }
             this.isResizing = true;
             activeBorder = border;
             selectedElement = el;
