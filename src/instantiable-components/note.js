@@ -52,6 +52,18 @@ function reinstateAllNotesContents(){
     }
 }
 
+function addNoteEditableListeners(noteEd) {
+    noteEd.addEventListener('mouseenter', () => {
+        if(!StatesHandler.isDragging) {
+            document.body.style.cursor = 'text';
+        }
+    })
+
+    noteEd.addEventListener('mouseleave', () => {
+        document.body.style.cursor = 'default';
+    })
+}
+
 function addNoteListeners(newNote){
     newNote.addEventListener('contextmenu', (e) => {
         e.preventDefault()
@@ -133,6 +145,7 @@ function createNewNote(container, content = '', parent_ids = new Set(), child_id
     p.id = getElementID()
     p.classList.add('note')
     p.spellcheck = false
+    addNoteEditableListeners(p);
     newNote.appendChild(p)
 
     createNewElement(container, newNote, getNoteContainerID(), centerX, centerY)
@@ -151,6 +164,7 @@ function createNewNoteLeftAlignment(container, content = '', parent_ids = new Se
     p.id = getElementID()
     p.classList.add('note')
     p.spellcheck = false
+    addNoteEditableListeners(p);
     newNote.appendChild(p)
 
     createNewElementLeftAlignment(container, newNote, getNoteContainerID(), offsetX, offsetY)
