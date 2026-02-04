@@ -88,7 +88,9 @@ function addNoteListeners(newNote){
         WhiteboardPositioningHandler.element_MouseUp(e, newNote)
     })
 
-    newNote.addEventListener('dblclick', (e) => {
+    newNote.addEventListener('click', (e) => {
+        if(StatesHandler.willNotWrite) return;
+
         if(!StatesHandler.isWritingElement){
             toggleWritingMode(true, newNote.id)
         } else {

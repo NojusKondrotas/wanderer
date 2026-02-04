@@ -47,8 +47,16 @@ class WhiteboardPositioningHandler{
 
     static element_MouseUp(ev, el){
         if(StatesHandler.isWritingElement) return
+
+        let draggedEnough = MouseDragHandler.checkIfDraggedEnough();
+        if(draggedEnough) {
+            StatesHandler.willNotWrite = true;
+        } else {
+            StatesHandler.willNotWrite = false;
+        }
+
         if(StatesHandler.isDrawingPath){
-            if(!MouseDragHandler.checkIfDraggedEnough()){
+            if(!draggedEnough){
                 this.isDraggingElement = false;
                 if(el.id === selectedPath.startNoteID){
                     deletePathByID(selectedPath.id)

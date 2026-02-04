@@ -1,5 +1,6 @@
 class StatesHandler{
     static isWritingElement = false
+    static willNotWrite = false
 
     static isDragging = false
 
