@@ -177,6 +177,8 @@ class WhiteboardPositioningHandler{
 
         toggleTitlebar(false)
         handleKeybindGuideAppearance(false)
+
+        StatesHandler.isDragging = true;
     }
 
     static endDrag(ev){
@@ -218,6 +220,8 @@ class WhiteboardPositioningHandler{
         selectedElement = null;
         selectedPath = null;
         handleKeybindGuideAppearance(true)
+
+        StatesHandler.isDragging = false;
     }
 }
 

@@ -1,6 +1,8 @@
 class StatesHandler{
     static isWritingElement = false
 
+    static isDragging = false
+
     static isConnecting = false
     static isDrawingPath = false
     static isDrawingPathEnd = false
