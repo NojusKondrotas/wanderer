@@ -503,8 +503,8 @@ async function initialiseApp(){
     }
 }
 
-ipcMain.handle('get-window-center', () => {
-    const win = BrowserWindow.getFocusedWindow();
+ipcMain.handle('get-window-center', (e) => {
+    const win = BrowserWindow.fromWebContents(e.sender);
     if(!win) {
         return null;
     }
