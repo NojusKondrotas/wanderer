@@ -1,3 +1,5 @@
+const wbOffset = { x: 0, y: 0 }
+
 class WhiteboardPositioningHandler{
     static isDraggingBoard = false
     static isDraggingElement = false
@@ -79,7 +81,10 @@ class WhiteboardPositioningHandler{
         if (this.isResizingElement){
             this.resize(ev)
         }else if(this.isDraggingBoard){
-            updateComponentPositions(parentWhiteboard)
+            wbOffset.x -= MouseDragHandler.dragDiff.x * zoomFactor;
+            wbOffset.y -= MouseDragHandler.dragDiff.y * zoomFactor;
+
+            wbMovement.style.transform = `translate(${wbOffset.x}px, ${wbOffset.y}px)`;
         }else if(WindowPositioningHandler.isDraggingWindow){
             WindowPositioningHandler.moveWindow()
         }else if (WindowPositioningHandler.isResizingWindow) {

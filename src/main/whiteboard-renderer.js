@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         zoomFactor = stateObj.zoomFactor
         boardOffset = stateObj.boardOffset
 
-        configureAllElements(parentWhiteboard.children)
+        configureAllElements(wbZoom.children)
         configureAllPaths(allPaths)
         reinstateAllNotesContents()
         reinstateAllNoteBorders(elementPositions)

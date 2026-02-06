@@ -184,6 +184,6 @@ function deletePathByID(pathToRemoveID){
         const hitPath = document.getElementById(pathToRemove.hitPathID)
         pathVisual.remove()
         hitPath.remove()
-        deleteComponentByID(parentWhiteboard, pathToRemoveID)
+        deleteComponentByID(wbZoom, pathToRemoveID)
     }
 }

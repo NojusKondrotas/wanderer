@@ -122,7 +122,7 @@ async function generateSingleMultiCircularLayoutCircle(centerX, centerY, amount,
         let x = centerX + radius * Math.cos(angleRad) + xOffset
         let y = centerY + radius * Math.sin(angleRad) + yOffset
 
-        createNewElement(parentWhiteboard, option, `${windows[winIdx].componentID}-tab`, x, y)
+        createNewElement(wbZoom, option, `${windows[winIdx].componentID}-tab`, x, y)
 
         option.addEventListener('mouseover', () => {
             const pos = elementPositions.get(option.id)

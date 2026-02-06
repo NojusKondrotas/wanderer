@@ -13,7 +13,7 @@ function zoomWhiteboard(mousePos, zoomIn = false){
     boardOffset.x = mousePos.x - scaleChange * (mousePos.x - boardOffset.x)
     boardOffset.y = mousePos.y - scaleChange * (mousePos.y - boardOffset.y)
     
-    parentWhiteboard.style.transform = `translate(${boardOffset.x}px, ${boardOffset.y}px) scale(${zoomFactor})`
+    wbZoom.style.transform = `translate(${boardOffset.x}px, ${boardOffset.y}px) scale(${zoomFactor})`
 }
 
 function convertToWhiteboardSpace(x, y) {

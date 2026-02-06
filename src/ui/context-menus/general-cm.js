@@ -18,7 +18,7 @@ document.getElementById('gcm-new-note').addEventListener('click', (e) => {
         return;
     }
 
-    createNewNote(parentWhiteboard, '', new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
+    createNewNote(wbZoom, '', new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
 
     turnOffContextMenu();
 });
@@ -33,7 +33,7 @@ document.getElementById('gcm-new-notepad').addEventListener('click', (e) => {
         return;
     }
 
-    createNewNotepad(parentWhiteboard, contextMenuCenter.x, contextMenuCenter.y);
+    createNewNotepad(wbZoom, contextMenuCenter.x, contextMenuCenter.y);
 
     turnOffContextMenu();
 });
@@ -48,7 +48,7 @@ document.getElementById('gcm-new-whiteboard').addEventListener('click', (e) => {
         return;
     }
 
-    createNewWhiteboard(parentWhiteboard, contextMenuCenter.x, contextMenuCenter.y);
+    createNewWhiteboard(wbZoom, contextMenuCenter.x, contextMenuCenter.y);
 
     turnOffContextMenu();
 });
@@ -63,7 +63,7 @@ document.getElementById('gcm-new-connection').addEventListener('click', (e) => {
         return;
     }
 
-    createPath(parentWhiteboard, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, null, null, true);
+    createPath(wbZoom, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, null, null, true);
 
     forgetContextMenus();
 });
@@ -80,9 +80,9 @@ document.getElementById('gcm-paste').addEventListener('click', async (e) => {
 
     let clipboardContent = await readWandererClipboard();
     let {isHTML, element} = parseClipboardElement(clipboardContent);
-    if(!isHTML) return createNewNote(parentWhiteboard, clipboardContent, contextMenuCenter.x, contextMenuCenter.y);
+    if(!isHTML) return createNewNote(wbZoom, clipboardContent, contextMenuCenter.x, contextMenuCenter.y);
 
     if(element.type === 'n'){
-        return createNewNote(parentWhiteboard, element.content, contextMenuCenter.x, contextMenuCenter.y);
+        return createNewNote(wbZoom, element.content, contextMenuCenter.x, contextMenuCenter.y);
     }
 });

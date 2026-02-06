@@ -41,7 +41,7 @@ document.getElementById('npwcm-cut').addEventListener('click', (e) => {
     
     copy(selectedElement);
     
-    deleteComponentByID(parentWhiteboard, selectedElement.id);
+    deleteComponentByID(wbZoom, selectedElement.id);
 
     turnOffContextMenu();
 });
@@ -59,7 +59,7 @@ document.getElementById('npwcm-delete').addEventListener('click', (e) => {
         return;
     }
 
-    deleteNoteByID(parentWhiteboard, selectedElement.id);
+    deleteNoteByID(wbZoom, selectedElement.id);
 
     turnOffContextMenu();
 });
@@ -80,7 +80,7 @@ document.getElementById('npwcm-connect').addEventListener('click', (e) => {
     forgetContextMenus();
     if (!selectedElement) return;
 
-    createPath(parentWhiteboard, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, selectedElement.id, null, true);
+    createPath(wbZoom, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, selectedElement.id, null, true);
     console.log('path created');
 });
 

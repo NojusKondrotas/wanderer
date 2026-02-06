@@ -41,7 +41,7 @@ body {
     z-index: $index-10;
 }
 
-#parent-whiteboard {
+#wb-movement, #wb-zoom {
     width: 100vw;
     height: 100vh;
     top: 0;
@@ -51,9 +51,15 @@ body {
 
     transform-origin: 0 0;
 
-    transition: transform 150ms ease-out;
-
     z-index: $index-5;
+}
+
+#wb-movement {
+    transition: transform 20ms ease;
+}
+
+#wb-zoom {
+    transition: transform 150ms ease-out;
 }
 
 .component-text {

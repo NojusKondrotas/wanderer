@@ -1,4 +1,5 @@
-const parentWhiteboard = document.getElementById('parent-whiteboard')
+const wbMovement = document.getElementById('wb-movement')
+const wbZoom = document.getElementById('wb-zoom')
 
 // parentWhiteboard.addEventListener('contextmenu', (e) => {
 //     e.preventDefault()
@@ -8,10 +9,10 @@ const parentWhiteboard = document.getElementById('parent-whiteboard')
 //     openNewContextMenu(e.clientX, e.clientY, gcm)
 // })
 
-parentWhiteboard.addEventListener('mousedown', (e) => {
+wbMovement.addEventListener('mousedown', (e) => {
     genMouseDown_WhiteboardMoveHandler(e)
 })
 
-parentWhiteboard.addEventListener('mouseup', (e) => {
+wbMovement.addEventListener('mouseup', (e) => {
     genMouseUp_WhiteboardMoveHandler(e)
 })
