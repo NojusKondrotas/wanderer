@@ -127,7 +127,7 @@ class WindowHandler{
         win.focus();
     }
 
-    static openComponent(componentType, componentID, parentWindowID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y){
+    static async openComponent(componentType, componentID, parentWindowID, minimized = false, maximized = false, fullscreen = false, width = 800, height = 600, x, y){
         if(this.componentToWindowMapping.has(componentID)){
             const symbolID = this.componentToWindowMapping.get(componentID);
             const winData = this.allWindows.get(this.componentToWindowMapping.get(componentID));
@@ -135,11 +135,11 @@ class WindowHandler{
                 const win = BrowserWindow.fromId(winData.trueWindowID);
                 this.focusWindow(win);
             } else {
-                const win = this.createWindow(winData.componentType, componentID, winData.isMinimized, winData.isMaximized, winData.isFullScreen, winData.width, winData.height, winData.x, winData.y);
+                const win = await this.createWindow(winData.componentType, componentID, winData.isMinimized, winData.isMaximized, winData.isFullScreen, winData.width, winData.height, winData.x, winData.y);
                 this.initialiseWindow(win.id, winData.componentType, componentID, parentWindowID);
             }
         }else{
-            const win = this.createWindow(componentType, componentID, minimized, maximized, fullscreen, width, height, x, y);
+            const win = await this.createWindow(componentType, componentID, minimized, maximized, fullscreen, width, height, x, y);
             this.initialiseWindow(win.id, componentType, componentID, parentWindowID);
         }
     }
