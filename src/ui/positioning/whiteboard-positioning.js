@@ -1,4 +1,4 @@
-const wbOffset = { x: 0, y: 0 }
+let wbOffset = { x: 0, y: 0 }
 
 class WhiteboardPositioningHandler{
     static isDraggingBoard = false

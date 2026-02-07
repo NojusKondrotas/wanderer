@@ -33,6 +33,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         StatesHandler.isTitlebarLocked = stateObj.isTitlebarLocked
         zoomFactor = stateObj.zoomFactor
         boardOffset = stateObj.boardOffset
+        wbOffset = stateObj.wbOffset
 
         configureAllElements(wbZoom.children)
         configureAllPaths(allPaths)
@@ -54,6 +55,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(StatesHandler.isTitlebarLocked)
         console.log(zoomFactor)
         console.log(boardOffset)
+        console.log(wbOffset)
     }
 
     handleKeybindGuideAppearance(true)
@@ -124,7 +126,8 @@ async function save(){
         allNotesContents: allNotesContentsArr,
         isTitlebarLocked: StatesHandler.isTitlebarLocked,
         zoomFactor,
-        boardOffset
+        boardOffset,
+        wbOffset
     })
 }
 

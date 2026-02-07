@@ -739,7 +739,8 @@ ipcMain.on('save-whiteboard-state', async (e, stateObj) => {
         allNotesContents: stateObj.allNotesContents,
         isTitlebarLocked: stateObj.isTitlebarLocked,
         zoomFactor: stateObj.zoomFactor,
-        boardOffset: stateObj.boardOffset
+        boardOffset: stateObj.boardOffset,
+        wbOffset: stateObj.wbOffset
     }
 
     const saveWhiteboardState = path.join(saveWhiteboardDir, `${componentID}-state.json`)
