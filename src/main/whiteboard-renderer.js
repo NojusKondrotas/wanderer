@@ -75,6 +75,7 @@ window.addEventListener('contextmenu', (e) => {
 })
 
 window.addEventListener('mousedown', (e) => {
+    closeTabsMenu()
     genMouseDown_WhiteboardMoveHandler(e)
 })
 
@@ -101,6 +102,7 @@ window.addEventListener('wheel', (e) => {
 }, { passive: false });
 
 async function save(){
+    closeTabsMenu();
     saveAllNotesContents()
     await window.wandererAPI.saveWhiteboardHTML()
 
@@ -150,6 +152,19 @@ window.addEventListener("beforeunload", () => {
 window.wandererAPI.openTitlebarContextMenu((mousePos) => {
     openNewContextMenu(mousePos.x, mousePos.y, tcm)
 })
+
+window.wandererAPI.openTabMenu(async (mousePos, windows, previews) => {
+    openTabsMenu(mousePos, windows, previews);
+});
+
+window.wandererAPI.closeTabMenu(async () => {
+    closeTabsMenu();
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            window.wandererAPI.closeTabMenuDone();
+        });
+    });
+});
 
 window.wandererAPI.zoomInWindow((mousePos) => zoomWhiteboard(mousePos, true))
 window.wandererAPI.zoomOutWindow((mousePos) => zoomWhiteboard(mousePos, false))

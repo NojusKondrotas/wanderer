@@ -10,6 +10,8 @@ class StatesHandler{
 
     static isContextMenuOpen = false
 
+    static isTabsMenuOpen = false
+
     static isTitlebarLocked = false
 
     ////////////////////////////////

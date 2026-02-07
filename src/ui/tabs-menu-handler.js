@@ -18,3 +18,14 @@ function openTabsMenu(mousePos, windows, previews){
 
     StatesHandler.isTabsMenuOpen = true;
 }
+
+function closeTabsMenu(){
+    const allWindowOptions = document.querySelectorAll('.open-window')
+
+    allWindowOptions.forEach(w => {
+        w.remove()
+        elementPositions.delete(w.id)
+    })
+    toggleChildrenFilter(wbZoom, 'none')
+    StatesHandler.isTabsMenuOpen = false;
+}
