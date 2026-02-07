@@ -177,6 +177,7 @@ class WindowHandler{
                 break
             case ComponentType.link:
                 entryFilePath = path.join(__dirname, 'prompts', 'link', 'prompt-link.html')
+                break
             case ComponentType.configs:
                 entryFilePath = path.join(__dirname, 'prompts', 'configs', 'configs.html')
         }
