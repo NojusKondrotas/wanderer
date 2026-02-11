@@ -214,10 +214,6 @@ class WhiteboardPositioningHandler{
             toggleWritingMode(false, selectedElement.id)
             return
         }
-        if(suppressNextMouseUp){
-            suppressNextMouseUp = false
-            return
-        }
         if(StatesHandler.isDrawingPath){
             if(!MouseDragHandler.checkIfDraggedEnough()){
                 terminatePathDrawing(ev, null)

@@ -5,8 +5,6 @@ let selectedPath = null
 
 const pathVisualShape = 'line', pathVisualWidth = '2'
 
-let suppressNextMouseUp = false
-
 function getPathID(){
     if(unusedPathIDs.length !== 0)
         return unusedPathIDs.pop()
@@ -64,7 +62,6 @@ function createPath(container, startPos, endPos, startElement_id = null, endElem
     configurePath(path)
     allPaths.set(div.id, path)
     selectedPath = path
-    suppressNextMouseUp = isDrawing
     StatesHandler.isDrawingPath = isDrawing
     StatesHandler.isDrawingPathEnd = isDrawing
     updatePathPosition(path, path.startPosition, path.endPosition)

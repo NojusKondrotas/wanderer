@@ -10,16 +10,12 @@ function connectPathStart(path){
     StatesHandler.isDrawingPath = true
     selectedPath = path
     StatesHandler.isDrawingPathEnd = false
-
-    suppressNextMouseUp = true
 }
 
 function connectPathEnd(path){
     StatesHandler.isDrawingPath = true
     selectedPath = path
     StatesHandler.isDrawingPathEnd = true
-
-    suppressNextMouseUp = true
 }
 
 function disconnectPathStart(path){
