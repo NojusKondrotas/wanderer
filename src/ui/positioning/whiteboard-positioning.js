@@ -165,7 +165,7 @@ class WhiteboardPositioningHandler{
     }
 
     static startDrag(ev, dragState){
-        if(ev.button === 2) return
+        if(ev.button === 2) return;
 
         if(StatesHandler.isContextMenuOpen){
             turnOffContextMenu()
@@ -200,7 +200,7 @@ class WhiteboardPositioningHandler{
     }
 
     static endDrag(ev){
-        if(ev.button === 2) return
+        if(ev.button === 2) return;
 
         if(StatesHandler.isContextMenuOpen){
             turnOffContextMenu()
@@ -236,7 +236,6 @@ class WhiteboardPositioningHandler{
         WindowPositioningHandler.resetWindowDrag(ev);
 
         selectedElement = null;
-        selectedPath = null;
         handleKeybindGuideAppearance(true)
 
         StatesHandler.isDragging = false;
