@@ -7,13 +7,13 @@ class WhiteboardPositioningHandler{
 
     static elementResizeStart = null
 
-    static dragStates = {
+    static dragStates = Object.freeze({
         moveBoard: 'move-board',
         moveElement: 'move-element',
         moveWindow: 'move-window',
         resizeElement: 'resize-element',
         resizeWindow: 'resize-window'
-    };
+    });
 
     static resize(ev){
         const dxResizeScreen = ev.clientX - this.elementResizeStart.dx;
