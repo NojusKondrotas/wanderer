@@ -87,8 +87,6 @@ function configureAllPaths(paths){
 
 function addElementToPositioning(el, centerX = 0, centerY = 0){
     const rect = el.getBoundingClientRect()
-    centerX -= wbOffset.x;
-    centerY -= wbOffset.y;
     const boardSpace = convertToWhiteboardSpace(centerX - rect.width / 2, centerY - rect.height / 2)
     elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y })
     updateElementPositionByID(el.id)

@@ -8,7 +8,7 @@ class MouseDragHandler {
     static resetMouseDrag(ev){
         let boardSpace = { x: ev.screenX, y: ev.screenY }
         if (StatesHandler.isComponentWhiteboard) {
-            boardSpace = convertToWhiteboardSpace(ev.screenX, ev.screenY)
+            boardSpace = convertToZoomSpace(ev.screenX, ev.screenY)
         }
 
         this.dragStart = boardSpace
@@ -21,7 +21,7 @@ class MouseDragHandler {
     static updateMouseDrag(ev){
         let boardSpace = { x: ev.screenX, y: ev.screenY }
         if (StatesHandler.isComponentWhiteboard) {
-            boardSpace = convertToWhiteboardSpace(ev.screenX, ev.screenY)
+            boardSpace = convertToZoomSpace(ev.screenX, ev.screenY)
         }
 
         this.dragDiff = {

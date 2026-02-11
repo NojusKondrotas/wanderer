@@ -18,12 +18,26 @@ function zoomWhiteboard(mousePos, zoomIn = false){
 
 function convertToWhiteboardSpace(x, y) {
     return {
+        x: (x - wbOffset.x - boardOffset.x) / zoomFactor,
+        y: (y - wbOffset.y - boardOffset.y) / zoomFactor
+    }
+}
+
+function convertFromWhiteboardSpace(x, y){
+    return {
+        x: x * zoomFactor + boardOffset.x + wbOffset.x,
+        y: y * zoomFactor + boardOffset.y + wbOffset.y,
+    }
+}
+
+function convertToZoomSpace(x, y) {
+    return {
         x: (x - boardOffset.x) / zoomFactor,
         y: (y - boardOffset.y) / zoomFactor
     }
 }
 
-function convertFromWhiteboardSpace(x, y){
+function convertFromZoomSpace(x, y) {
     return {
         x: x * zoomFactor + boardOffset.x,
         y: y * zoomFactor + boardOffset.y,
