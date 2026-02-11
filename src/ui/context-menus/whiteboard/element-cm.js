@@ -1,5 +1,5 @@
 const elementContextMenu = document.getElementById('element-context-menu');
-const npwcm = {
+const ecm = {
     blueprint : elementContextMenu,
     angleSize : 360 / elementContextMenu.children.length,
     radius : 90,
@@ -8,13 +8,13 @@ const npwcm = {
     yOffset : -10
 };
 
-document.getElementById('npwcm-copy').addEventListener('mousedown', (e) => {
+document.getElementById('ecm-copy').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-copy').addEventListener('mouseup', (e) => {
+document.getElementById('ecm-copy').addEventListener('mouseup', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-copy').addEventListener('click', (e) => {
+document.getElementById('ecm-copy').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -26,13 +26,13 @@ document.getElementById('npwcm-copy').addEventListener('click', (e) => {
     turnOffContextMenu();
 });
 
-document.getElementById('npwcm-cut').addEventListener('mousedown', (e) => {
+document.getElementById('ecm-cut').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-cut').addEventListener('mouseup', (e) => {
+document.getElementById('ecm-cut').addEventListener('mouseup', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-cut').addEventListener('click', (e) => {
+document.getElementById('ecm-cut').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -46,13 +46,13 @@ document.getElementById('npwcm-cut').addEventListener('click', (e) => {
     turnOffContextMenu();
 });
 
-document.getElementById('npwcm-delete').addEventListener('mousedown', (e) => {
+document.getElementById('ecm-delete').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-delete').addEventListener('mouseup', (e) => {
+document.getElementById('ecm-delete').addEventListener('mouseup', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-delete').addEventListener('click', (e) => {
+document.getElementById('ecm-delete').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -64,13 +64,13 @@ document.getElementById('npwcm-delete').addEventListener('click', (e) => {
     turnOffContextMenu();
 });
 
-document.getElementById('npwcm-connect').addEventListener('mousedown', (e) => {
+document.getElementById('ecm-connect').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-connect').addEventListener('mouseup', (e) => {
+document.getElementById('ecm-connect').addEventListener('mouseup', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-connect').addEventListener('click', (e) => {
+document.getElementById('ecm-connect').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -84,13 +84,13 @@ document.getElementById('npwcm-connect').addEventListener('click', (e) => {
     console.log('path created');
 });
 
-document.getElementById('npwcm-disconnect').addEventListener('mousedown', (e) => {
+document.getElementById('ecm-disconnect').addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-disconnect').addEventListener('mouseup', (e) => {
+document.getElementById('ecm-disconnect').addEventListener('mouseup', (e) => {
     e.stopPropagation();
 });
-document.getElementById('npwcm-disconnect').addEventListener('click', (e) => {
+document.getElementById('ecm-disconnect').addEventListener('click', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){

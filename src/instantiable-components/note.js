@@ -74,7 +74,7 @@ function addNoteListeners(newNote){
         
         selectedElement = newNote
 
-        openNewContextMenu(e.clientX, e.clientY, npwcm)
+        openNewContextMenu(e.clientX, e.clientY, ecm)
     })
 
     newNote.addEventListener('mousedown', (e) => {

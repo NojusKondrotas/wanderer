@@ -6,7 +6,7 @@ function addWhiteboardListeners(whiteboard){
         
         selectedElement = whiteboard
 
-        openNewContextMenu(e.clientX, e.clientY, npwcm)
+        openNewContextMenu(e.clientX, e.clientY, ecm)
     })
 
     whiteboard.addEventListener('mousedown', (e) => {
