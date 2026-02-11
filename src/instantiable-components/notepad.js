@@ -26,15 +26,6 @@ function addNotepadListeners(notepad){
     })
 }
 
-function reinstateAllNotepadBorders(elements){
-    const keys = elements.keys();
-    for(const k of keys){
-        const el = document.getElementById(k)
-        if(el.classList.contains('note'))
-            instantiateResizingBorders(el)
-    }
-}
-
 async function createNewNotepad(container, xOffset = 0, yOffset = 0){
     const id = await window.wandererAPI.addNotepad()
     
