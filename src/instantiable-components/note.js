@@ -134,14 +134,6 @@ function addNoteListeners(newNote){
     })
 }
 
-function reinstateAllNoteBorders(elements){
-    const keys = elements.keys();
-    for(const k of keys){
-        const el = document.getElementById(k);
-        instantiateResizingBorders(el);
-    }
-}
-
 function createNewNote(container, content = '', parent_ids = new Set(), child_ids = new Set(), centerX = 0, centerY = 0){
     const newNote = document.createElement('div')
     const p = document.createElement('p')

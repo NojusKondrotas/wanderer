@@ -51,6 +51,14 @@ function instantiateResizingBorders(el){
     })
 }
 
+function reinstateAllBorders(elements){
+    const keys = elements.keys();
+    for(const k of keys){
+        const el = document.getElementById(k);
+        instantiateResizingBorders(el);
+    }
+}
+
 function configureElement(element){
     if(element.classList.contains('note-container')){
         addNoteListeners(element)

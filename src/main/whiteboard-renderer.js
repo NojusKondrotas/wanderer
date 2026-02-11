@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         configureAllElements(wbZoom.children)
         configureAllPaths(allPaths)
         reinstateAllNotesContents()
-        reinstateAllNoteBorders(elementPositions)
+        reinstateAllBorders(elementPositions)
 
         document.body.style.cursor = 'default'
 
