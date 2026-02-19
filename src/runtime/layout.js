@@ -1,8 +1,26 @@
-function generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
-    blueprint.style.left = `${centerX}px`
-    blueprint.style.top = `${centerY}px`
+function offsetAppearanceSingular(el, x, y) {
+    const offsetX = generateRandom(-50, 50)
+    const offsetY = generateRandom(-50, 50)
+    
+    el.style.left = `${x + offsetX}px`
+    el.style.top = `${y + offsetY}px`
+}
 
-    Array.from(blueprint.children).forEach((option, i) => {
+function situateAppearanceSingular(el, x, y) {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            el.style.left = `${x}px`
+            el.style.top = `${y}px`
+            el.style.borderColor = borderColorCM.opaque
+            el.style.color = colorCM.opaque
+            el.style.backdropFilter = 'blur(2px) opacity(1)';
+            el.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0.77)';
+        })
+    })
+}
+
+function offsetAppearanceCircular(els, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }) {
+    els.forEach((option, i) => {
         const angleDeg = angleOffset + i * angleSize
         const angleRad = angleDeg * Math.PI / 180
 
@@ -15,10 +33,12 @@ function generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius
         option.style.left = `${x + offsetX}px`
         option.style.top = `${y + offsetY}px`
     })
+}
 
+function situateAppearanceCircular(els, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }) {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            Array.from(blueprint.children).forEach((option, i) => {
+            els.forEach((option, i) => {
                 const angleDeg = angleOffset + i * angleSize
                 const angleRad = angleDeg * Math.PI / 180
                 const x = radius * Math.cos(angleRad) + xOffset
@@ -33,6 +53,17 @@ function generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius
             })
         })
     })
+}
+
+function generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
+    blueprint.style.left = `${centerX}px`
+    blueprint.style.top = `${centerY}px`
+
+    const children = Array.from(blueprint.children);
+
+    offsetAppearanceCircular(children, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset });
+
+    situateAppearanceCircular(children, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset });
 }
 
 function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset = -145, yOffset = -100){
