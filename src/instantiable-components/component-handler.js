@@ -142,6 +142,8 @@ function deleteComponentByID(container, elID, idsPush){
     container.removeChild(document.getElementById(elID))
     for(let id of idsPush) unusedElementIDs.push(id);
 
+    deleteFromHierarchy(elID);
+
     allElementConnections.delete(elID);
 
     disconnectConnectedPaths(elID)

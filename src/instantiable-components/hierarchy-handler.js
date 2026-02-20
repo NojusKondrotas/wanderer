@@ -11,7 +11,9 @@ function instantiateHierarchy(n_id, parent_ids = new Set(), child_ids = new Set(
 }
 
 function deleteFromHierarchy(n_id){
-    let [parents, children] = elementHierarchy.get(n_id);
+    let hierarchy = elementHierarchy.get(n_id);
+    if(!hierarchy) return;
+    
     for(let p_id of parents){
         removeNoteParent(n_id, p_id);
     }
