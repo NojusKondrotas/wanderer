@@ -1,4 +1,4 @@
-let allNotesContents = new Map()
+let allNotes = new Map()
 
 let activeBorder = null
 
@@ -40,15 +40,18 @@ function toggleWritingMode(toggle = false, editableElContainerID){
 }
 
 function saveAllNotesContents(){
-    document.querySelectorAll('.note-container').forEach(note => allNotesContents.set(note.id, document.getElementById(note.id).querySelector('p').textContent))
+    document.querySelectorAll('.note-container').forEach(note => allNotes.set(note.id, {
+        contents: document.getElementById(note.id).querySelector('p').textContent,
+        paths: allNotes.get(note.id).paths
+    }))
 }
 
 function reinstateAllNotesContents(){
-    const entries = allNotesContents.entries();
+    const entries = allNotes.entries();
     for(const [k, v] of entries){
         const el = document.getElementById(k)
         const p = el.querySelector('p')
-        p.innerHTML = v
+        p.innerHTML = v.contents
     }
 }
 
@@ -148,7 +151,10 @@ function createNewNote(container, content = '', parent_ids = new Set(), child_id
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
     instantiateResizingBorders(newNote)
-    allNotesContents.set(newNote.id, "")
+    allNotes.set(newNote.id, {
+        contents: "",
+        paths: []
+    });
 
     return newNote;
 }
@@ -167,12 +173,15 @@ function createNewNoteLeftAlignment(container, content = '', parent_ids = new Se
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
     instantiateResizingBorders(newNote);
-    allNotesContents.set(newNote.id, "")
+    allNotes.set(newNote.id, {
+        contents: "",
+        paths: []
+    });
 
     return newNote
 }
 
 function deleteNoteByID(container, n_id){
     deleteComponentByID(container, n_id)
-    allNotesContents.delete(n_id)
+    allNotes.delete(n_id)
 }

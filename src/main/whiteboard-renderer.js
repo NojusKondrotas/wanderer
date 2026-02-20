@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             v[1] = new Set(v[1]);
         }
         allPaths = new Map(stateObj.allPaths)
-        allNotesContents = new Map(stateObj.allNotesContents)
+        allNotes = new Map(stateObj.allNotes)
 
         StatesHandler.isTitlebarLocked = stateObj.isTitlebarLocked
         zoomFactor = stateObj.zoomFactor
@@ -51,7 +51,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(elementPositions)
         console.log(elementHierarchy)
         console.log(allPaths)
-        console.log(allNotesContents)
+        console.log(allNotes)
         console.log(StatesHandler.isTitlebarLocked)
         console.log(zoomFactor)
         console.log(boardOffset)
@@ -111,7 +111,7 @@ async function save(){
     const elementPositionsArr = Array.from(elementPositions, ([elID, pos]) => [elID, pos])
     const elementHierarchyArr = Array.from(elementHierarchy, ([elID, [parents, children]]) => [elID, [Array.from(parents), Array.from(children)]])
     const allPathsArr = Array.from(allPaths, ([id, path]) => [id, path])
-    const allNotesContentsArr = Array.from(allNotesContents, ([elID, note]) => [elID, note])
+    const allNotesArr = Array.from(allNotes, ([elID, note]) => [elID, note])
 
     await window.wandererAPI.saveWhiteboardState({
         largestElementID,
@@ -123,7 +123,7 @@ async function save(){
         elementPositions: elementPositionsArr,
         elementHierarchy: elementHierarchyArr,
         allPaths: allPathsArr,
-        allNotesContents: allNotesContentsArr,
+        allNotes: allNotesArr,
         isTitlebarLocked: StatesHandler.isTitlebarLocked,
         zoomFactor,
         boardOffset,
