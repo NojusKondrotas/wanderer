@@ -138,9 +138,9 @@ function createNewElementLeftAlignment(container, el, id, offsetX = 0, offsetY =
     allElementConnections.set(id, new Set())
 }
 
-function deleteComponentByID(container, elID){
+function deleteComponentByID(container, elID, idsPush){
     container.removeChild(document.getElementById(elID))
-    unusedElementIDs.push(elID)
+    for(let id of idsPush) unusedElementIDs.push(id);
 
     allElementConnections.delete(elID);
 

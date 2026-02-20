@@ -39,5 +39,5 @@ async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
 }
 
 function deleteWhiteboardByID(container, whiteboardID){
-    deleteComponentByID(container, whiteboardID)
+    deleteComponentByID(container, whiteboardID, [whiteboardID]);
 }

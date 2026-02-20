@@ -39,5 +39,5 @@ async function createNewNotepad(container, xOffset = 0, yOffset = 0){
 }
 
 function deleteNotepadByID(container, notepadID){
-    deleteComponentByID(container, notepadID)
+    deleteComponentByID(container, notepadID, [notepadID]);
 }

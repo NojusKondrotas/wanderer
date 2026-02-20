@@ -41,7 +41,7 @@ document.getElementById('ecm-cut').addEventListener('click', (e) => {
     
     copy(selectedElement);
     
-    deleteComponentByID(wbZoom, selectedElement.id);
+    deleteComponentByID(wbZoom, selectedElement.id, selectedElement.id);
 
     turnOffContextMenu();
 });

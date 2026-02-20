@@ -185,6 +185,6 @@ function deletePathByID(pathToRemoveID){
         const hitPath = document.getElementById(pathToRemove.hitPathID)
         pathVisual.remove()
         hitPath.remove()
-        deleteComponentByID(wbZoom, pathToRemoveID)
+        deleteComponentByID(wbZoom, pathToRemoveID, [pathToRemoveID]);
     }
 }

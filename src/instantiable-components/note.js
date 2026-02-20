@@ -182,6 +182,7 @@ function createNewNoteLeftAlignment(container, content = '', parent_ids = new Se
 }
 
 function deleteNoteByID(container, n_id){
-    deleteComponentByID(container, n_id)
-    allNotes.delete(n_id)
+    deleteComponentByID(container, n_id, [getEditableNote(n_id).id]);
+    unusedNoteContainerIDs.push(n_id);
+    allNotes.delete(n_id);
 }
