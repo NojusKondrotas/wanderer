@@ -52,8 +52,10 @@ contextBridge.exposeInMainWorld('wandererAPI', {
     (_, mousePos) => callback(mousePos)),
 
   addNotepad: () => ipcRenderer.invoke('add-notepad'),
+  deleteNotepad: (notepadID) => ipcRenderer.send('delete-notepad', notepadID),
   openNotepad: (notepadID) => ipcRenderer.invoke('open-notepad', notepadID),
   addWhiteboard: () => ipcRenderer.invoke('add-whiteboard'),
+  deleteWhiteboard: (whiteboardID) => ipcRenderer.send('delete-whiteboard', whiteboardID),
   openWhiteboard: (whiteboardID) => ipcRenderer.invoke('open-whiteboard', whiteboardID),
 
   saveEditorContents: (contents) => ipcRenderer.invoke('save-editor-contents', contents),

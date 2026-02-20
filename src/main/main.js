@@ -618,6 +618,15 @@ ipcMain.handle('add-notepad', async (e) => {
     return addNotepad()
 })
 
+function deleteNotepad(id) {
+    allNotepads.delete(id);
+    unusedNotepadIDs.push(id);
+}
+
+ipcMain.on('delete-notepad', (e, notepadID) => {
+    deleteNotepad(notepadID);
+})
+
 ipcMain.handle('open-notepad', (e, notepadID) => {
     const win = BrowserWindow.fromWebContents(e.sender)
     const winData = WindowHandler.allWindows.get(notepadID)
@@ -637,6 +646,15 @@ function addWhiteboard(){
 
 ipcMain.handle('add-whiteboard', async (e) => {
     return addWhiteboard()
+})
+
+function deleteWhiteboard(id) {
+    allWhiteboards.delete(id);
+    unusedWhiteboardIDs.push(id);
+}
+
+ipcMain.on('delete-whiteboard', (e, whiteboardID) => {
+    deleteWhiteboard(whiteboardID);
 })
 
 ipcMain.handle('open-whiteboard', (e, whiteboardID) => {
