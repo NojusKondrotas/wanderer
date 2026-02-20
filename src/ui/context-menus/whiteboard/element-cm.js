@@ -59,7 +59,13 @@ document.getElementById('ecm-delete').addEventListener('click', (e) => {
         return;
     }
 
-    deleteNoteByID(wbZoom, selectedElement.id);
+    if(selectedElement.classList.contains('note-container')) {
+        deleteNoteByID(wbZoom, selectedElement.id);
+    } else if(selectedElement.classList.contains('notepad')) {
+        deleteNotepadByID(wbZoom, selectedElement.id);
+    } else {
+        deleteWhiteboardByID(wbZoom, selectedElement.id);
+    }
 
     turnOffContextMenu();
 });
