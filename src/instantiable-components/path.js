@@ -59,7 +59,7 @@ function createPath(container, startPos, endPos, startElement_id = null, endElem
         isHierarchicalEnd,
         shape: pathVisualShape
     }
-    configurePath(path)
+    configurePath(path, startElement_id, endElement_id)
     allPaths.set(div.id, path)
     selectedPath = path
     StatesHandler.isDrawingPath = isDrawing
@@ -157,10 +157,12 @@ function updatePathPosition(path, startPosition, endPosition){
 function terminatePathDrawing(ev, elID){
     if(StatesHandler.isDrawingPathEnd){
         selectedPath.endNoteID = elID;
+        allElementConnections.get(elID)?.add(selectedPath.ID);
         selectedPath.endPosition = convertToWhiteboardSpace(ev.clientX, ev.clientY);
         selectedPath.originEndPos = convertToWhiteboardSpace(ev.clientX, ev.clientY);
     }else{
         selectedPath.startNoteID = elID;
+        allElementConnections.get(elID)?.add(selectedPath.ID);
         selectedPath.startPosition = convertToWhiteboardSpace(ev.clientX, ev.clientY);
         selectedPath.originStartPos = convertToWhiteboardSpace(ev.clientX, ev.clientY);
     }
@@ -173,6 +175,8 @@ function deletePathByID(pathToRemoveID){
     if(allPaths.has(pathToRemoveID)){
         const pathToRemove = allPaths.get(pathToRemoveID)
         allPaths.delete(pathToRemoveID)
+        allElementConnections.get(pathToRemove.startNoteID)?.delete(pathToRemove.ID)
+        allElementConnections.get(pathToRemove.endNoteID)?.delete(pathToRemove.ID)
 
         unusedPathIDs.push(pathToRemove.pathVisualID)
         unusedPathIDs.push(pathToRemove.hitPathID)

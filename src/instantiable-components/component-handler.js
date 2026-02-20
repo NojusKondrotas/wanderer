@@ -4,6 +4,8 @@ let selectedElement = null
 
 let elementPositions = new Map()
 
+let allElementConnections = new Map();
+
 function getElementID(){
     if(unusedElementIDs.length !== 0)
         return unusedElementIDs.pop()
@@ -75,8 +77,10 @@ function configureAllElements(elements){
     }
 }
 
-function configurePath(path){
+function configurePath(path, startID, endID){
     addPathListeners(path)
+    allElementConnections.get(startID)?.add(path.ID);
+    allElementConnections.get(endID)?.add(path.ID);
 }
 
 function configureAllPaths(paths){
@@ -112,6 +116,8 @@ function createNewElement(container, el, id, centerX = 0, centerY = 0){
         el.style.transition = ''
     }, 20);
     el.style.visibility = 'visible'
+
+    allElementConnections.set(id, new Set())
 }
 
 function createNewElementLeftAlignment(container, el, id, offsetX = 0, offsetY = 0){
@@ -128,11 +134,15 @@ function createNewElementLeftAlignment(container, el, id, offsetX = 0, offsetY =
         el.style.transition = ''
     }, 20);
     el.style.visibility = 'visible'
+
+    allElementConnections.set(id, new Set())
 }
 
 function deleteComponentByID(container, elID){
     container.removeChild(document.getElementById(elID))
     unusedElementIDs.push(elID)
+
+    allElementConnections.delete(elID);
 
     disconnectConnectedPaths(elID)
 

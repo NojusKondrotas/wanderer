@@ -19,11 +19,13 @@ function connectPathEnd(path){
 }
 
 function disconnectPathStart(path){
-    path.startNoteID = null
+    allElementConnections.get(path.startNoteID).delete(path.ID);
+    path.startNoteID = null;
 }
 
 function disconnectPathEnd(path){
-    path.endNoteID = null
+    allElementConnections.get(path.endNoteID).delete(path.ID);
+    path.endNoteID = null;
 }
 
 pathStartPoint.addEventListener('mousedown', (e) => {
@@ -69,13 +71,17 @@ pathEndPoint.addEventListener('click', (e) => {
 })
 
 function disconnectConnectedPaths(elID){
-    const values = allPaths.values();
-    for(const v of values){
-        if(v.startNoteID === elID){
-            v.startNoteID = null
-        }else if(v.endNoteID === elID){
-            v.endNoteID = null
+    const paths = allElementConnections.get(elID);
+    if(paths) {
+        for(const pathID of paths){
+            const path = allPaths.get(pathID);
+            if(path.startNoteID === elID){
+                path.startNoteID = null
+            }else if(path.endNoteID === elID){
+                path.endNoteID = null
+            }
         }
+        allElementConnections.set(elID, new Set());
     }
 }
 

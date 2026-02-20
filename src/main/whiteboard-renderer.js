@@ -29,6 +29,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
         allPaths = new Map(stateObj.allPaths)
         allNotes = new Map(stateObj.allNotes)
+        allElementConnections = new Map(stateObj.allElementConnections.map(([elID, paths_arr]) => [elID, new Set(paths_arr)]));
 
         StatesHandler.isTitlebarLocked = stateObj.isTitlebarLocked
         zoomFactor = stateObj.zoomFactor
@@ -52,6 +53,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(elementHierarchy)
         console.log(allPaths)
         console.log(allNotes)
+        console.log(allElementConnections)
         console.log(StatesHandler.isTitlebarLocked)
         console.log(zoomFactor)
         console.log(boardOffset)
@@ -112,6 +114,7 @@ async function save(){
     const elementHierarchyArr = Array.from(elementHierarchy, ([elID, [parents, children]]) => [elID, [Array.from(parents), Array.from(children)]])
     const allPathsArr = Array.from(allPaths, ([id, path]) => [id, path])
     const allNotesArr = Array.from(allNotes, ([elID, note]) => [elID, note])
+    const allElementConnectionsArr = Array.from(allElementConnections, ([elID, paths_set]) => [elID, Array.from(paths_set)]);
 
     await window.wandererAPI.saveWhiteboardState({
         largestElementID,
@@ -124,6 +127,7 @@ async function save(){
         elementHierarchy: elementHierarchyArr,
         allPaths: allPathsArr,
         allNotes: allNotesArr,
+        allElementConnections: allElementConnectionsArr,
         isTitlebarLocked: StatesHandler.isTitlebarLocked,
         zoomFactor,
         boardOffset,

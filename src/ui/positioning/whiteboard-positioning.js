@@ -91,55 +91,57 @@ class WhiteboardPositioningHandler{
             WindowPositioningHandler.resizeWindow()
         }else if(this.isDraggingElement){
             updateElementPositionByID(selectedElement.id)
+            const paths = allElementConnections.get(selectedElement.id);
+            if(paths) {
+                for(const pathID of paths) {
+                    const path = allPaths.get(pathID);
+                    let hasUpdated = false
+                    if(path.startNoteID === selectedElement.id){
+                        path.startPosition.x -= MouseDragHandler.dragDiff.x
+                        path.startPosition.y -= MouseDragHandler.dragDiff.y
+                        path.originStartPos.x -= MouseDragHandler.dragDiff.x
+                        path.originStartPos.y -= MouseDragHandler.dragDiff.y
+                        hasUpdated = true
+                    }else if(path.endNoteID === selectedElement.id){
+                        path.endPosition.x -= MouseDragHandler.dragDiff.x
+                        path.endPosition.y -= MouseDragHandler.dragDiff.y
+                        path.originEndPos.x -= MouseDragHandler.dragDiff.x
+                        path.originEndPos.y -= MouseDragHandler.dragDiff.y
+                        hasUpdated = true
+                    }
 
-            const values = allPaths.values();
-            for(const v of values){
-                let hasUpdated = false
-                if(v.startNoteID === selectedElement.id){
-                    v.startPosition.x -= MouseDragHandler.dragDiff.x
-                    v.startPosition.y -= MouseDragHandler.dragDiff.y
-                    v.originStartPos.x -= MouseDragHandler.dragDiff.x
-                    v.originStartPos.y -= MouseDragHandler.dragDiff.y
-                    hasUpdated = true
-                }else if(v.endNoteID === selectedElement.id){
-                    v.endPosition.x -= MouseDragHandler.dragDiff.x
-                    v.endPosition.y -= MouseDragHandler.dragDiff.y
-                    v.originEndPos.x -= MouseDragHandler.dragDiff.x
-                    v.originEndPos.y -= MouseDragHandler.dragDiff.y
-                    hasUpdated = true
-                }
-
-                if(hasUpdated){
-                    const mousePos = convertToWhiteboardSpace(ev.clientX, ev.clientY)
-                    let startPoint, endPoint
-                    if(StatesHandler.isDrawingPathEnd){
-                        startPoint = {
-                            x: v.startPosition.x,
-                            y: v.startPosition.y
-                        }
-                        if(StatesHandler.isDrawingPath && v === selectedPath){
-                            endPoint = mousePos
+                    if(hasUpdated){
+                        const mousePos = convertToWhiteboardSpace(ev.clientX, ev.clientY)
+                        let startPoint, endPoint
+                        if(StatesHandler.isDrawingPathEnd){
+                            startPoint = {
+                                x: path.startPosition.x,
+                                y: path.startPosition.y
+                            }
+                            if(StatesHandler.isDrawingPath && path === selectedPath){
+                                endPoint = mousePos
+                            }else{
+                                endPoint = {
+                                    x: path.endPosition.x,
+                                    y: path.endPosition.y
+                                }
+                            }
                         }else{
                             endPoint = {
-                                x: v.endPosition.x,
-                                y: v.endPosition.y
+                                x: path.endPosition.x,
+                                y: path.endPosition.y
+                            }
+                            if(StatesHandler.isDrawingPath && path === selectedPath){
+                                startPoint = mousePos
+                            }else{
+                                startPoint = {
+                                    x: path.startPosition.x,
+                                    y: path.startPosition.y
+                                }
                             }
                         }
-                    }else{
-                        endPoint = {
-                            x: v.endPosition.x,
-                            y: v.endPosition.y
-                        }
-                        if(StatesHandler.isDrawingPath && v === selectedPath){
-                            startPoint = mousePos
-                        }else{
-                            startPoint = {
-                                x: v.startPosition.x,
-                                y: v.startPosition.y
-                            }
-                        }
+                        updatePathPosition(path, startPoint, endPoint)
                     }
-                    updatePathPosition(v, startPoint, endPoint)
                 }
             }
         }
