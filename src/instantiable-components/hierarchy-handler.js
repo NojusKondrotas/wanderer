@@ -14,10 +14,10 @@ function deleteFromHierarchy(n_id){
     let hierarchy = elementHierarchy.get(n_id);
     if(!hierarchy) return;
     
-    for(let p_id of parents){
+    for(let p_id of hierarchy[0]){
         removeNoteParent(n_id, p_id);
     }
-    for(let c_id of children){
+    for(let c_id of hierarchy[1]){
         removeNoteChild(n_id, c_id);
     }
     elementHierarchy.delete(n_id);
