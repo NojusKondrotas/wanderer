@@ -6,6 +6,17 @@ let elementPositions = new Map()
 
 let allElementConnections = new Map();
 
+function isSupportedComponent(componentType) {
+    return componentType in componentTypes;
+}
+
+const componentTypes = Object.freeze({
+    NOTE: Symbol("Note"),
+    NOTEPAD: Symbol("Notepad"),
+    WHITEBOARD: Symbol("Whiteboard"),
+    PATH: Symbol("Path"),
+});
+
 function getElementID(){
     if(unusedElementIDs.length !== 0)
         return unusedElementIDs.pop()
