@@ -13,10 +13,7 @@ document.getElementById('ecm-copy').addEventListener('mousedown', (e) => {
 });
 document.getElementById('ecm-copy').addEventListener('mouseup', (e) => {
     e.stopPropagation();
-});
-document.getElementById('ecm-copy').addEventListener('click', (e) => {
-    e.stopPropagation();
-
+    
     if(e.button === 2){
         return;
     }
@@ -31,10 +28,7 @@ document.getElementById('ecm-cut').addEventListener('mousedown', (e) => {
 });
 document.getElementById('ecm-cut').addEventListener('mouseup', (e) => {
     e.stopPropagation();
-});
-document.getElementById('ecm-cut').addEventListener('click', (e) => {
-    e.stopPropagation();
-
+    
     if(e.button === 2){
         return;
     }
@@ -51,10 +45,7 @@ document.getElementById('ecm-delete').addEventListener('mousedown', (e) => {
 });
 document.getElementById('ecm-delete').addEventListener('mouseup', (e) => {
     e.stopPropagation();
-});
-document.getElementById('ecm-delete').addEventListener('click', (e) => {
-    e.stopPropagation();
-
+    
     if(e.button === 2){
         return;
     }
@@ -75,10 +66,7 @@ document.getElementById('ecm-connect').addEventListener('mousedown', (e) => {
 });
 document.getElementById('ecm-connect').addEventListener('mouseup', (e) => {
     e.stopPropagation();
-});
-document.getElementById('ecm-connect').addEventListener('click', (e) => {
-    e.stopPropagation();
-
+    
     if(e.button === 2){
         return;
     }
@@ -95,10 +83,7 @@ document.getElementById('ecm-disconnect').addEventListener('mousedown', (e) => {
 });
 document.getElementById('ecm-disconnect').addEventListener('mouseup', (e) => {
     e.stopPropagation();
-});
-document.getElementById('ecm-disconnect').addEventListener('click', (e) => {
-    e.stopPropagation();
-
+    
     if(e.button === 2){
         return;
     }
