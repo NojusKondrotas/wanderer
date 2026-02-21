@@ -16,14 +16,6 @@ const noteWriteFocusLeft = 3
 const noteWriteFocusRight = 4
 const noteWriteFocusUp = 5
 
-window.addEventListener('keydown', (e) => {
-    pressedKeys.add(e.key)
-}, { capture: true })
-
-window.addEventListener('keyup', (e) => {
-    pressedKeys.delete(e.key)
-}, { capture: true })
-
 function isCombo(combo) {
   return combo.every(key => pressedKeys.has(key))
 }

@@ -87,6 +87,14 @@ window.addEventListener('mouseup', (e) => {
     genMouseUp_WhiteboardMoveHandler(e)
 })
 
+window.addEventListener('keydown', (e) => {
+    pressedKeys.add(e.key)
+}, { capture: true })
+
+window.addEventListener('keyup', (e) => {
+    pressedKeys.delete(e.key)
+}, { capture: true })
+
 window.addEventListener("scroll", () => {
     const dx = window.scrollX - scrollLastX;
     const dy = window.scrollY - scrollLastY;
