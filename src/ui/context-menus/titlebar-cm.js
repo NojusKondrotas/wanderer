@@ -8,7 +8,18 @@ const tcm = {
     yOffset : -10
 };
 
-document.getElementById('tcm-fullscreen-window').addEventListener('click', (e) => {
+const tcmOpts = [
+    document.getElementById('tcm-fullscreen-window'),
+    document.getElementById('tcm-maximize-window'),
+    document.getElementById('tcm-minimize-window'),
+    document.getElementById('tcm-close-window'),
+    document.getElementById('tcm-global-config-menu')
+];
+
+tcmOpts[0].addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+tcmOpts[0].addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -18,7 +29,10 @@ document.getElementById('tcm-fullscreen-window').addEventListener('click', (e) =
     titlebarToggleFullScreen();
 });
 
-document.getElementById('tcm-maximize-window').addEventListener('click', (e) => {
+tcmOpts[1].addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+tcmOpts[1].addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -28,7 +42,10 @@ document.getElementById('tcm-maximize-window').addEventListener('click', (e) => 
     titlebarToggleMaximized();
 });
 
-document.getElementById('tcm-minimize-window').addEventListener('click', (e) => {
+tcmOpts[2].addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+tcmOpts[2].addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -38,7 +55,10 @@ document.getElementById('tcm-minimize-window').addEventListener('click', (e) => 
     titlebarToggleMinimized();
 });
 
-document.getElementById('tcm-close-window').addEventListener('click', (e) => {
+tcmOpts[3].addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+tcmOpts[3].addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -48,7 +68,10 @@ document.getElementById('tcm-close-window').addEventListener('click', (e) => {
     closeWindow();
 });
 
-document.getElementById('tcm-global-config-menu').addEventListener('click', (e) => {
+tcmOpts[4].addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+});
+tcmOpts[4].addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
