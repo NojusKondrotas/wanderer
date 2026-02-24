@@ -8,7 +8,7 @@ async function writeHTML(src, dest){
 }
 
 async function build() {
-    const mainDir = './src/main';
+    const mainDir = './dist/main';
     const srcs = [
         path.join('./src/dev/', 'notepad-index.ejs'),
         path.join('./src/dev/', 'whiteboard-index.ejs'),
