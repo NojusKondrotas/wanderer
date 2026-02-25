@@ -1,4 +1,6 @@
-initTitlebar()
+import * as Titlebar from '../../../ui/titlebars/titlebar.js'
+
+Titlebar.initTitlebar();
 StatesHandler.isPromptFirstTime = true
 
 function closeWindow(){
