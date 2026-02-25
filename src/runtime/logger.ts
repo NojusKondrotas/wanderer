@@ -1,3 +1,3 @@
-function logMessage(message) {
+export function logMessage(message) {
     window.wandererAPI.logMessage(message);
 }

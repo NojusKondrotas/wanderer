@@ -1,8 +1,19 @@
+import { generateUniqueHash } from "./numerics.js";
+import { ComponentTypes } from "../instantiable-components/component-handler.js";
+
 let copiedElements = new Map()
 
-function copy(element){
+export class CopiedElement {
+    componentType: ComponentTypes
+
+    constructor(componentType: ComponentTypes) {
+        this.componentType = componentType;
+    }
+}
+
+export function copy(element){
     let elementID = generateUniqueHash(copiedElements)
-    elementContent = element.textContent
+    let elementContent = element.textContent
 
     if(element.classList.contains('note'))
         copiedElements.set(elementID, { type : 'n', content : elementContent })

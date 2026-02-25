@@ -1,22 +1,21 @@
+import { ComponentTypes } from "../instantiable-components/component-handler.js"
+import { Path } from "../instantiable-components/path.js";
+
 const previousActions = [];
 
+enum ActionTypes {
+    CREATE,
+    COPY,
+    CUT,
+    PASTE,
+    DELETE,
+    CONNECT,
+    DISCONNECT,
+}
+
 class Action {
-    static _actionTypes = Object.freeze({
-        CREATE: Symbol("Create"),
-        COPY: Symbol("Copy"),
-        CUT: Symbol("Cut"),
-        PASTE: Symbol("Paste"),
-        DELETE: Symbol("Delete"),
-        CONNECT: Symbol("Connect"),
-        DISCONNECT: Symbol("Disconnect"),
-    });
-
-    static isSupportedAction(actionType) {
-        return actionType in this._actionTypes;
-    }
-
-    actionType;
-    changes;
+    actionType: ActionTypes;
+    changes: Array<Change>;
     
     // {
     //     actionType: ...,
@@ -30,11 +29,7 @@ class Action {
     //     ]
     // }
 
-    constructor(actionType, changes) {
-        if(!this.isSupportedAction(actionType)) {
-            logMessage(`Unsupported action in Action constructor: ${actionType}. The changes are such:\n${JSON.stringify(changes)}`);
-        }
-
+    constructor(actionType: ActionTypes, changes: Array<Change>) {
         this.actionType = actionType;
         this.changes = changes;
     }
@@ -42,24 +37,19 @@ class Action {
 }
 
 class Change {
-    componentType;
-    elementID;
-    contents;
-    pathObj;
+    componentType: ComponentTypes;
+    elementID: string;
+    contents?: string;
+    pathObj?: Path;
 
-    constructor(componentType, elementID, contents, pathObj) {
-        if(!isSupportedComponent(componentType)) {
-            logMessage(`Unsupported component type in Change constructor: ${componentType}. The changes are such:\n\
-                elementID: ${elementID},\ncontents: ${contents},\npathObj ${pathObj}`);
-        }
-
+    constructor(componentType: ComponentTypes, elementID: string, contents?: string, pathObj?: Path) {
         this.componentType = componentType;
         this.elementID = elementID;
         switch(componentType) {
-            case componentTypes.NOTE:
+            case ComponentTypes.NOTE:
                 this.contents = contents;
                 break;
-            case componentTypes.PATH:
+            case ComponentTypes.PATH:
                 this.pathObj = pathObj;
                 break;
         }

@@ -1,4 +1,10 @@
-function offsetAppearanceSingular(el, x, y) {
+import { createNewElement, elementPositions } from "../instantiable-components/component-handler.js";
+import { createPath } from "../instantiable-components/path.js";
+import { borderColorCM, colorCM } from "../ui/context-menus/handler-context-menu.js";
+import { wbZoom } from "../ui/parent-whiteboard-handler.js";
+import { generateRandom } from "./numerics.js";
+
+export function offsetAppearanceSingular(el: HTMLElement, x: number, y: number) {
     const offsetX = generateRandom(-50, 50)
     const offsetY = generateRandom(-50, 50)
     
@@ -6,7 +12,7 @@ function offsetAppearanceSingular(el, x, y) {
     el.style.top = `${y + offsetY}px`
 }
 
-function situateAppearanceSingular(el, x, y) {
+export function situateAppearanceSingular(el: HTMLElement, x: number, y: number) {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             el.style.left = `${x}px`
@@ -19,7 +25,7 @@ function situateAppearanceSingular(el, x, y) {
     })
 }
 
-function offsetAppearanceCircular(els, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }) {
+export function offsetAppearanceCircular(els: Array<HTMLElement>, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }) {
     els.forEach((option, i) => {
         const angleDeg = angleOffset + i * angleSize
         const angleRad = angleDeg * Math.PI / 180
@@ -35,7 +41,7 @@ function offsetAppearanceCircular(els, { blueprint, angleSize, radius, angleOffs
     })
 }
 
-function situateAppearanceCircular(els, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }) {
+export function situateAppearanceCircular(els: Array<HTMLElement>, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }) {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             els.forEach((option, i) => {
@@ -55,24 +61,24 @@ function situateAppearanceCircular(els, { blueprint, angleSize, radius, angleOff
     })
 }
 
-function generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
+export function generateCircularLayout(centerX: number, centerY: number, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
     blueprint.style.left = `${centerX}px`
     blueprint.style.top = `${centerY}px`
 
-    const children = Array.from(blueprint.children);
+    const children: Array<HTMLElement> = Array.from(blueprint.children);
 
     offsetAppearanceCircular(children, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset });
 
     situateAppearanceCircular(children, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset });
 }
 
-function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset = -145, yOffset = -100){
+export function generateLadderLayout(originX: number, originY: number, { blueprint, gapSize }, xOffset = -145, yOffset = -100){
     blueprint.style.left = `${originX}px`
     blueprint.style.top = `${originY}px`
 
-    let prevChild = null;
+    let prevChild: HTMLElement | null = null;
     let totalY = blueprint.offsetTop + yOffset;
-    Array.from(blueprint.children).forEach((option, i) => {
+    Array.from(blueprint.children as HTMLCollectionOf<HTMLElement>).forEach((option, i) => {
         const x = xOffset;
         let y = i * gapSize + yOffset;
         if(prevChild != null){
@@ -81,7 +87,7 @@ function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset 
                 prevChild.id, option.id, false, false, false);
         }
         totalY += gapSize + option.offsetHeight;
-        prevChild = option;
+        prevChild = option as HTMLElement;
 
         const offsetX = generateRandom(-50, 50)
         const offsetY = generateRandom(-50, 50)
@@ -93,7 +99,7 @@ function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset 
     prevChild = null;
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            Array.from(blueprint.children).forEach((option, i) => {
+            Array.from(blueprint.children as HTMLCollectionOf<HTMLElement>).forEach((option, i) => {
                 const x = xOffset;
                 let y = i * gapSize + yOffset;
                 if(prevChild != null){
@@ -112,7 +118,7 @@ function generateLadderLayout(originX, originY, { blueprint, gapSize }, xOffset 
     })
 }
 
-function getMultiCircularCaps(amount){
+function getMultiCircularCaps(amount: number){
     let circleCap = 6
     const res = new Array()
 
@@ -130,7 +136,9 @@ function getMultiCircularCaps(amount){
     return res
 }
 
-async function generateSingleMultiCircularLayoutCircle(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, previews, winIdx){
+async function generateSingleMultiCircularLayoutCircle(centerX: number, centerY: number, amount: number,
+    angleSize: number, radius: number, angleOffset: number,
+    xOffset = 0, yOffset = 0, windows, previews, winIdx){
     for(let i = 0; i < amount; ++i){
         const option = document.createElement('button')
         option.classList.add('option-control-style')
@@ -168,7 +176,7 @@ async function generateSingleMultiCircularLayoutCircle(centerX, centerY, amount,
     }
 }
 
-function generateMultiCircularLayout(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, previews){
+export function generateMultiCircularLayout(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, previews){
     const circleCaps = getMultiCircularCaps(amount)
 
     let radiusExt = 0, angleOffsetExt = 0, i = 0

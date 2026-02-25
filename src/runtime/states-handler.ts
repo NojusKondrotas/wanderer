@@ -1,23 +1,25 @@
 class StatesHandler{
-    static isWritingElement = false
-    static willNotWrite = false
+    isWritingElement = false
+    willNotWrite = false
 
-    static isDragging = false
+    isDragging = false
 
-    static isConnecting = false
-    static isDrawingPath = false
-    static isDrawingPathEnd = false
+    isConnecting = false
+    isDrawingPath = false
+    isDrawingPathEnd = false
 
-    static isContextMenuOpen = false
+    isContextMenuOpen = false
 
-    static isTabsMenuOpen = false
+    isTabsMenuOpen = false
 
-    static isTitlebarLocked = false
+    isTitlebarLocked = false
 
     ////////////////////////////////
 
-    static isPromptFirstTime = false
-    static isPromptLink = false
-    static isComponentNotepad = false
-    static isComponentWhiteboard = false
+    isPromptFirstTime = false
+    isPromptLink = false
+    isComponentNotepad = false
+    isComponentWhiteboard = false
 }
+
+export const AppStates = new StatesHandler();
