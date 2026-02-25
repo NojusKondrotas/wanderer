@@ -1,13 +1,19 @@
-const titlebar = document.getElementById('titlebar')
-const titlebarVisual = document.getElementById('titlebar-visual')
+import { selectedElement } from "../../instantiable-components/component-handler.js"
+import { toggleWritingMode } from "../../instantiable-components/note.js"
+import { closeWindow } from "../../main/whiteboard-renderer.js"
+import { AppStates } from "../../runtime/states-handler.js"
+import { turnOffContextMenu } from "../context-menus/handler-context-menu.js"
 
-const titlebarFullScreenCtrlFrame = document.getElementById('frame-fullscreen-window')
-const titlebarMaximizeCtrlFrame = document.getElementById('frame-maximize-window')
-const titlebarMinimizeCtrlFrame = document.getElementById('frame-minimize-window')
-const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')
-const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')
+export const titlebar = document.getElementById('titlebar')!
+const titlebarVisual = document.getElementById('titlebar-visual')!
 
-function toggleTitlebar(flag){
+const titlebarFullScreenCtrlFrame = document.getElementById('frame-fullscreen-window')!
+const titlebarMaximizeCtrlFrame = document.getElementById('frame-maximize-window')!
+const titlebarMinimizeCtrlFrame = document.getElementById('frame-minimize-window')!
+const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')!
+const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')!
+
+export function toggleTitlebar(flag: boolean){
     if(flag){
         titlebar.style.display = 'inline'
     }else{
@@ -15,7 +21,7 @@ function toggleTitlebar(flag){
     }
 }
 
-function toggleTitlebarVisualHover(flag){
+export function toggleTitlebarVisualHover(flag: boolean){
     if(flag){
         titlebar.addEventListener('mouseover', mouseOver_Titlebar)
     }else{
@@ -23,8 +29,8 @@ function toggleTitlebarVisualHover(flag){
     }
 }
 
-function initTitlebar(){
-    if(StatesHandler.isTitlebarLocked){
+export function initTitlebar(){
+    if(AppStates.isTitlebarLocked){
         titlebarVisual.style.transform = 'translateY(0px)'
         toggleTitlebarVisualHover(false)
     }else{
@@ -33,7 +39,7 @@ function initTitlebar(){
     }
 
     titlebar.addEventListener('mouseleave', () => {
-        if(!StatesHandler.isTitlebarLocked){
+        if(!AppStates.isTitlebarLocked){
             toggleTitlebarVisualHover(true)
             titlebarVisual.style.transform = 'translateY(-80px)'
         }
@@ -44,42 +50,42 @@ function mouseOver_Titlebar(){
     titlebarVisual.style.transform = 'translateY(0px)'
 }
 
-function titlebarToggleFullScreen(){
+export function titlebarToggleFullScreen(){
     window.wandererAPI.setFullScreen()
-    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+    if(!AppStates.isPromptFirstTime) turnOffContextMenu()
 }
 
-function titlebarToggleMaximized(){
+export function titlebarToggleMaximized(){
     window.wandererAPI.setMaximized()
-    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+    if(!AppStates.isPromptFirstTime) turnOffContextMenu()
 }
 
-function titlebarToggleMinimized(){
+export function titlebarToggleMinimized(){
     window.wandererAPI.setMinimized()
-    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+    if(!AppStates.isPromptFirstTime) turnOffContextMenu()
 }
 
-function titlebarToggleTitlebarLock(){
-    if(StatesHandler.isTitlebarLocked){
+export function titlebarToggleTitlebarLock(){
+    if(AppStates.isTitlebarLocked){
         titlebarVisual.style.transform = 'translateY(-80px)'
         toggleTitlebarVisualHover(true)
 
-        StatesHandler.isTitlebarLocked = false
+        AppStates.isTitlebarLocked = false
     }
     else{
         titlebarVisual.style.transform = 'translateY(0px)'
         toggleTitlebarVisualHover(false)
 
-        StatesHandler.isTitlebarLocked = true
+        AppStates.isTitlebarLocked = true
     }
 
-    if(!StatesHandler.isPromptFirstTime) turnOffContextMenu()
+    if(!AppStates.isPromptFirstTime) turnOffContextMenu()
 }
 
 titlebarVisual.addEventListener('mousedown', (e) => {
     e.stopPropagation()
 
-    if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id)
+    if(AppStates.isWritingElement) toggleWritingMode(false, selectedElement!.id)
 })
 
 titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
