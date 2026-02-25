@@ -1,6 +1,6 @@
-const pressedKeys = new Set()
+export const pressedKeys = new Set()
 
-const keybinds = [
+export const keybinds = [
   ['Shift', 'W'],
   ['Shift', 'S'],
   ['Alt', 'ArrowDown'],
@@ -9,13 +9,15 @@ const keybinds = [
   ['Alt', 'ArrowUp'],
 ]
 
-const windowDragKeybind = 0
-const windowResizeKeybind = 1
-const noteWriteFocusDown = 2
-const noteWriteFocusLeft = 3
-const noteWriteFocusRight = 4
-const noteWriteFocusUp = 5
+export enum KeybindIndices {
+  windowDragKeybind = 0,
+  windowResizeKeybind,
+  noteWriteFocusDown,
+  noteWriteFocusLeft,
+  noteWriteFocusRight,
+  noteWriteFocusUp
+}
 
-function isCombo(combo) {
+export function isCombo(combo) {
   return combo.every(key => pressedKeys.has(key))
 }

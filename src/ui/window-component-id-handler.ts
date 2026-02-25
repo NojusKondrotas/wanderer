@@ -1,4 +1,6 @@
-let windowComponentID, windowComponentIDEl
+export let windowComponentID, windowComponentIDEl
+export const setWindowComponentID = (id) => windowComponentID = id;
+export const setWindowComponentIDEl = (el) => windowComponentIDEl = el;
 
 // titlebar.addEventListener('mouseover', () => {
 //     windowComponentIDEl.style.color = 'rgba(126, 135, 135, 0)'

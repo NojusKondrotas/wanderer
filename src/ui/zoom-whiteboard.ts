@@ -1,8 +1,14 @@
-let zoomFactor = 1.0
-const zoomStep = 1.4
-let boardOffset = { x: 0, y: 0 }
+import { wbOffset } from "./positioning/whiteboard-positioning.js"
+import { wbZoom } from "./parent-whiteboard-handler.js"
+import { Vector2D } from "../runtime/numerics.js"
 
-function zoomWhiteboard(mousePos, zoomIn = false){
+export let zoomFactor = 1.0
+export const setZoomFactor = (factor: number) => zoomFactor = factor;
+export const zoomStep = 1.4
+export let boardOffset = new Vector2D(0, 0)
+export const setBoardOffset = (offset: Vector2D) => boardOffset = offset
+
+export function zoomWhiteboard(mousePos, zoomIn = false){
     const oldZoom = zoomFactor
     if(zoomIn)
         zoomFactor = Math.min(zoomFactor * zoomStep, 8)
@@ -16,30 +22,30 @@ function zoomWhiteboard(mousePos, zoomIn = false){
     wbZoom.style.transform = `translate(${boardOffset.x}px, ${boardOffset.y}px) scale(${zoomFactor})`
 }
 
-function convertToWhiteboardSpace(x, y) {
-    return {
-        x: (x - wbOffset.x - boardOffset.x) / zoomFactor,
-        y: (y - wbOffset.y - boardOffset.y) / zoomFactor
-    }
+export function convertToWhiteboardSpace(x: number, y: number) {
+    return new Vector2D(
+        (x - wbOffset.x - boardOffset.x) / zoomFactor,
+        (y - wbOffset.y - boardOffset.y) / zoomFactor
+    )
 }
 
-function convertFromWhiteboardSpace(x, y){
-    return {
-        x: x * zoomFactor + boardOffset.x + wbOffset.x,
-        y: y * zoomFactor + boardOffset.y + wbOffset.y,
-    }
+export function convertFromWhiteboardSpace(x: number, y: number){
+    return new Vector2D(
+        x * zoomFactor + boardOffset.x + wbOffset.x,
+        y * zoomFactor + boardOffset.y + wbOffset.y,
+    )
 }
 
-function convertToZoomSpace(x, y) {
-    return {
-        x: (x - boardOffset.x) / zoomFactor,
-        y: (y - boardOffset.y) / zoomFactor
-    }
+export function convertToZoomSpace(x: number, y: number) {
+    return new Vector2D(
+        (x - boardOffset.x) / zoomFactor,
+        (y - boardOffset.y) / zoomFactor
+    )
 }
 
-function convertFromZoomSpace(x, y) {
-    return {
-        x: x * zoomFactor + boardOffset.x,
-        y: y * zoomFactor + boardOffset.y,
-    }
+export function convertFromZoomSpace(x: number, y: number) {
+    return new Vector2D(
+        x * zoomFactor + boardOffset.x,
+        y * zoomFactor + boardOffset.y,
+    )
 }

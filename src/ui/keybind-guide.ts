@@ -1,11 +1,11 @@
-const keybindGuide = document.getElementById('keybind-guide');
-const keybindGuideCloseCtrl = document.getElementById('keybind-guide-close');
-const keybindGuideCloseImg = document.getElementById('kbn-gd-cl-img');
-const keybindContainer = document.getElementById('keybind-container');
-const keybindContainerChildren = keybindContainer.children;
+const keybindGuide = document.getElementById('keybind-guide')!
+const keybindGuideCloseCtrl = document.getElementById('keybind-guide-close')!
+const keybindGuideCloseImg = document.getElementById('kbn-gd-cl-img')!
+const keybindContainer = document.getElementById('keybind-container')!
+const keybindContainerChildren = keybindContainer.children
 
 function keybindGuide_MouseOverHandler(){
-    for(let child of keybindContainerChildren){
+    for(let child of Array.from(keybindContainerChildren as HTMLCollectionOf<HTMLElement>)) {
         child.style.color = 'rgba(10, 10, 10, 1)';
     }
     keybindGuideCloseImg.style.opacity = '1';
@@ -13,16 +13,16 @@ function keybindGuide_MouseOverHandler(){
 
 function keybindGuide_MouseOutHandler(){
     keybindGuideCloseImg.style.opacity = '0';
-    for(let child of keybindContainerChildren){
+    for(let child of Array.from(keybindContainerChildren as HTMLCollectionOf<HTMLElement>)) {
         child.style.color = 'rgba(10, 10, 10, 0.33)';
     }
 }
 
-function handleKeybindGuideAppearance(flag){
+export function handleKeybindGuideAppearance(flag){
     if(flag){
         keybindGuide.style.pointerEvents = "auto";
         keybindGuideCloseImg.style.color = '0';
-        for(let child of keybindContainerChildren){
+        for(let child of Array.from(keybindContainerChildren as HTMLCollectionOf<HTMLElement>)) {
             child.style.color = 'rgba(10, 10, 10, 0.33)';
         }
         keybindGuide.addEventListener('mouseover', keybindGuide_MouseOverHandler);
@@ -31,7 +31,7 @@ function handleKeybindGuideAppearance(flag){
     }else{
         keybindGuide.style.pointerEvents = "none";
         keybindGuideCloseImg.style.opacity = '0';
-        for(let child of keybindContainerChildren){
+        for(let child of Array.from(keybindContainerChildren as HTMLCollectionOf<HTMLElement>)) {
             child.style.color = 'rgba(10, 10, 10, 0)';
         }
         keybindGuide.removeEventListener('mouseover', keybindGuide_MouseOverHandler);
@@ -40,7 +40,7 @@ function handleKeybindGuideAppearance(flag){
     }
 }
 
-document.getElementById('keybind-guide-close').addEventListener('mousedown', (e) => {
+document.getElementById('keybind-guide-close')!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
     handleKeybindGuideAppearance(false);
     keybindGuide.style.display = 'none';
