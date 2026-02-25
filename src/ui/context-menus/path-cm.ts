@@ -1,5 +1,9 @@
-const pathContextMenu = document.getElementById('path-context-menu');
-const acm = {
+import { openPathConnectionContextMenu } from "../../instantiable-components/path-connection-handler.js";
+import { deletePathByID, selectedPath } from "../../instantiable-components/path.js";
+import { turnOffContextMenu } from "./handler-context-menu.js";
+
+const pathContextMenu = document.getElementById('path-context-menu')!
+export const acm = {
     blueprint : pathContextMenu,
     angleSize : 360 / pathContextMenu.children.length,
     radius : 70,
@@ -8,10 +12,10 @@ const acm = {
     yOffset : -10
 };
 
-document.getElementById('acm-connect').addEventListener('mousedown', (e) => {
+document.getElementById('acm-connect')!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-document.getElementById('acm-connect').addEventListener('mouseup', (e) => {
+document.getElementById('acm-connect')!.addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -21,10 +25,10 @@ document.getElementById('acm-connect').addEventListener('mouseup', (e) => {
     openPathConnectionContextMenu(true);
 });
 
-document.getElementById('acm-disconnect').addEventListener('mousedown', (e) => {
+document.getElementById('acm-disconnect')!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-document.getElementById('acm-disconnect').addEventListener('mouseup', (e) => {
+document.getElementById('acm-disconnect')!.addEventListener('mouseup', (e) => {
     e.stopPropagation();
     console.log('acm-disconnect');
 
@@ -35,17 +39,17 @@ document.getElementById('acm-disconnect').addEventListener('mouseup', (e) => {
     openPathConnectionContextMenu(false);
 });
 
-document.getElementById('acm-delete').addEventListener('mousedown', (e) => {
+document.getElementById('acm-delete')!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-document.getElementById('acm-delete').addEventListener('mouseup', (e) => {
+document.getElementById('acm-delete')!.addEventListener('mouseup', (e) => {
     e.stopPropagation();
     
     if(e.button === 2){
         return;
     }
 
-    deletePathByID(selectedPath.ID);
+    deletePathByID(selectedPath!.ID);
 
     turnOffContextMenu();
 });

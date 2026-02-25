@@ -25,11 +25,11 @@ export function copy(element){
     navigator.clipboard.writeText(elementID)
 }
 
-async function readWandererClipboard(){
+export async function readWandererClipboard(){
     return await navigator.clipboard.readText()
 }
 
-function parseClipboardElement(clipboardContent){
+export function parseClipboardElement(clipboardContent){
     if(copiedElements.has(clipboardContent))
         return {isHTML: true, element: copiedElements.get(clipboardContent)}
     return {isHTML: false, element: null}

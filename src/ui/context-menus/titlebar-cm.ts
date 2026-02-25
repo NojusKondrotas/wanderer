@@ -1,5 +1,9 @@
-const titlebarContextMenu = document.getElementById('titlebar-context-menu');
-const tcm = {
+import { closeWindow } from "../../main/whiteboard-renderer.js";
+import { displayConfigs } from "../configs-menu/configs.js";
+import { titlebarToggleFullScreen, titlebarToggleMaximized, titlebarToggleMinimized } from "../titlebars/titlebar.js";
+
+const titlebarContextMenu = document.getElementById('titlebar-context-menu')!
+export const tcm = {
     blueprint : titlebarContextMenu,
     angleSize : 360 / titlebarContextMenu.children.length,
     radius : 85,
@@ -16,10 +20,10 @@ const tcmOpts = [
     document.getElementById('tcm-global-config-menu')
 ];
 
-tcmOpts[0].addEventListener('mousedown', (e) => {
+tcmOpts[0]!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-tcmOpts[0].addEventListener('mouseup', (e) => {
+tcmOpts[0]!.addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -29,10 +33,10 @@ tcmOpts[0].addEventListener('mouseup', (e) => {
     titlebarToggleFullScreen();
 });
 
-tcmOpts[1].addEventListener('mousedown', (e) => {
+tcmOpts[1]!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-tcmOpts[1].addEventListener('mouseup', (e) => {
+tcmOpts[1]!.addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -42,10 +46,10 @@ tcmOpts[1].addEventListener('mouseup', (e) => {
     titlebarToggleMaximized();
 });
 
-tcmOpts[2].addEventListener('mousedown', (e) => {
+tcmOpts[2]!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-tcmOpts[2].addEventListener('mouseup', (e) => {
+tcmOpts[2]!.addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -55,10 +59,10 @@ tcmOpts[2].addEventListener('mouseup', (e) => {
     titlebarToggleMinimized();
 });
 
-tcmOpts[3].addEventListener('mousedown', (e) => {
+tcmOpts[3]!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-tcmOpts[3].addEventListener('mouseup', (e) => {
+tcmOpts[3]!.addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
@@ -68,15 +72,15 @@ tcmOpts[3].addEventListener('mouseup', (e) => {
     closeWindow();
 });
 
-tcmOpts[4].addEventListener('mousedown', (e) => {
+tcmOpts[4]!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
 });
-tcmOpts[4].addEventListener('mouseup', (e) => {
+tcmOpts[4]!.addEventListener('mouseup', (e) => {
     e.stopPropagation();
 
     if(e.button === 2){
         return;
     }
 
-    displayConfigs();
+    displayConfigs(1, 1);
 });
