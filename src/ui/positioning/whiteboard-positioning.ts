@@ -352,16 +352,16 @@ function updateComponentPositions(){
     })
 }
 
-function genMouseDown_WhiteboardMoveHandler(e){
+export function genMouseDown_WhiteboardMoveHandler(e){
     if(isCombo(keybinds[KeybindIndices.windowDragKeybind])) WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.moveWindow)
     else if(isCombo(keybinds[KeybindIndices.windowResizeKeybind])) WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.resizeWindow)
     else WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.moveBoard)
 }
 
-function genMouseMove_WhiteboardMoveHandler(e){
+export function genMouseMove_WhiteboardMoveHandler(e){
     WhiteboardPositioningHandler.update(e)
 }
 
-function genMouseUp_WhiteboardMoveHandler(e){
+export function genMouseUp_WhiteboardMoveHandler(e){
     WhiteboardPositioningHandler.endDrag(e)
 }

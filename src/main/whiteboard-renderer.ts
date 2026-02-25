@@ -1,40 +1,59 @@
-let isWindowClosing = false
+import { allElementConnections, configureAllElements, configureAllPaths, elementPositions, largestElementID, reinstateAllBorders, selectedElement, setAllElementConnections, setElementPositions, setLargestElID, setUnusedElIDs, unusedElementIDs } from "../instantiable-components/component-handler.js";
+import { elementHierarchy, setElementHierarchy } from "../instantiable-components/hierarchy-handler.js";
+import { allNotes, largestNoteContainerID, reinstateAllNotesContents, saveAllNotesContents, setAllNotes, setLargestNoteContainerID, setUnusedNoteContainerIDs, toggleWritingMode, unusedNoteContainerIDs } from "../instantiable-components/note.js";
+import { allPaths, largestPathID, setAllPaths, setLargestPathID, setUnusedPathIDs, terminatePathDrawing, unusedPathIDs } from "../instantiable-components/path.js";
+import { logMessage } from "../runtime/logger.js";
+import { AppStates } from "../runtime/states-handler.js";
+import { genMouseMove_ContextMenuHandler, openNewContextMenu } from "../ui/context-menus/handler-context-menu.js";
+import { tcm } from "../ui/context-menus/titlebar-cm.js";
+import { gcm } from "../ui/context-menus/whiteboard/general-cm.js";
+import { handleKeybindGuideAppearance } from "../ui/keybind-guide.js";
+import { pressedKeys } from "../ui/keybinds.js";
+import { wbZoom } from "../ui/parent-whiteboard-handler.js";
+import { genMouseDown_WhiteboardMoveHandler, genMouseMove_WhiteboardMoveHandler, genMouseUp_WhiteboardMoveHandler, setWBOffset, updateComponentPositionsByOffset, wbOffset } from "../ui/positioning/whiteboard-positioning.js";
+import { closeTabsMenu, openTabsMenu } from "../ui/tabs-menu-handler.js";
+import { initTitlebar } from "../ui/titlebars/titlebar.js";
+import { setWindowComponentID, setWindowComponentIDEl, windowComponentID, windowComponentIDEl } from "../ui/window-component-id-handler.js";
+import { boardOffset, setBoardOffset, setZoomFactor, zoomFactor, zoomWhiteboard } from "../ui/zoom-whiteboard.js";
+import { WBSave } from "./types/wb-state.js";
 
-let scrollLastX = window.scrollX, scrollLastY = window.scrollY;
-let scrollIsChanging = false;
+export let isWindowClosing = false;
+
+export let scrollLastX = window.scrollX, scrollLastY = window.scrollY;
+export let scrollIsChanging = false;
 
 window.addEventListener('DOMContentLoaded', async () => {
-    StatesHandler.isComponentWhiteboard = true
+    AppStates.isComponentWhiteboard = true
 
-    windowComponentID = await window.wandererAPI.getWindowComponentID()
-    windowComponentIDEl = document.getElementById('window-component-id')
+    setWindowComponentID(await window.wandererAPI.getWindowComponentID())
+    setWindowComponentIDEl(document.getElementById('window-component-id'))
     windowComponentIDEl.textContent = windowComponentID
     
-    const stateObj = await window.wandererAPI.loadWhiteboardState()
+    const stateObj = await window.wandererAPI.loadWhiteboardState() as WBSave
 
     if (stateObj && Object.keys(stateObj).length > 0){
-        largestElementID = stateObj.largestElementID
-        unusedElementIDs = stateObj.unusedElementIDs
-        largestPathID = stateObj.largestPathID
-        unusedPathIDs = stateObj.unusedPathIDs
-        largestNoteContainerID = stateObj.largestNoteContainerID
-        unusedNoteContainerIDs = stateObj.unusedNoteContainerIDs
+        setLargestElID(stateObj.largestElementID)
+        setUnusedElIDs(stateObj.unusedElementIDs)
+        setLargestPathID(stateObj.largestPathID)
+        setUnusedPathIDs(stateObj.unusedPathIDs)
+        setLargestNoteContainerID(stateObj.largestNoteContainerID)
+        setUnusedNoteContainerIDs(stateObj.unusedNoteContainerIDs)
 
-        elementPositions = new Map(stateObj.elementPositions)
-        elementHierarchy = new Map(stateObj.elementHierarchy)
+        setElementPositions(new Map(stateObj.elementPositions))
+        setElementHierarchy(new Map(stateObj.elementHierarchy))
         const values = elementHierarchy.values();
         for(const v of values){
             v[0] = new Set(v[0]);
             v[1] = new Set(v[1]);
         }
-        allPaths = new Map(stateObj.allPaths)
-        allNotes = new Map(stateObj.allNotes)
-        allElementConnections = new Map(stateObj.allElementConnections.map(([elID, paths_arr]) => [elID, new Set(paths_arr)]));
+        setAllPaths(new Map(stateObj.allPaths))
+        setAllNotes(new Map(stateObj.allNotes))
+        setAllElementConnections(new Map(stateObj.allElementConnections.map(([elID, paths_arr]) => [elID, new Set(paths_arr)])))
 
-        StatesHandler.isTitlebarLocked = stateObj.isTitlebarLocked
-        zoomFactor = stateObj.zoomFactor
-        boardOffset = stateObj.boardOffset
-        wbOffset = stateObj.wbOffset
+        AppStates.isTitlebarLocked = stateObj.isTitlebarLocked
+        setZoomFactor(stateObj.zoomFactor)
+        setBoardOffset(stateObj.boardOffset)
+        setWBOffset(stateObj.wbOffset)
 
         configureAllElements(wbZoom.children)
         configureAllPaths(allPaths)
@@ -54,7 +73,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(allPaths)
         console.log(allNotes)
         console.log(allElementConnections)
-        console.log(StatesHandler.isTitlebarLocked)
+        console.log(AppStates.isTitlebarLocked)
         console.log(zoomFactor)
         console.log(boardOffset)
         console.log(wbOffset)
@@ -70,8 +89,8 @@ window.addEventListener('mousemove', (e) => {
 })
 
 window.addEventListener('contextmenu', (e) => {
-    if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id);
-    if(StatesHandler.isDrawingPath){
+    if(AppStates.isWritingElement) toggleWritingMode(false, selectedElement!.id);
+    if(AppStates.isDrawingPath){
         terminatePathDrawing(e, null);
     }
 
@@ -136,14 +155,14 @@ async function save(){
         allPaths: allPathsArr,
         allNotes: allNotesArr,
         allElementConnections: allElementConnectionsArr,
-        isTitlebarLocked: StatesHandler.isTitlebarLocked,
+        isTitlebarLocked: AppStates.isTitlebarLocked,
         zoomFactor,
         boardOffset,
         wbOffset
     })
 }
 
-function closeWindow(){
+export function closeWindow(){
     isWindowClosing = true
     window.wandererAPI.closeWindow()
 }

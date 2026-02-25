@@ -1,0 +1,17 @@
+export type WBSave = {
+    largestElementID,
+    unusedElementIDs,
+    largestPathID,
+    unusedPathIDs,
+    largestNoteContainerID,
+    unusedNoteContainerIDs,
+    elementPositions,
+    elementHierarchy,
+    allPaths,
+    allNotes,
+    allElementConnections,
+    isTitlebarLocked,
+    zoomFactor,
+    boardOffset,
+    wbOffset,
+}

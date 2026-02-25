@@ -92,7 +92,7 @@ export function openNewContextMenu(centerX, centerY, { blueprint, angleSize, rad
     generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset })
 }
 
-function genMouseMove_ContextMenuHandler(e){
+export function genMouseMove_ContextMenuHandler(e){
     if (!AppStates.isContextMenuOpen || !activeContextMenu) return
 
     Array.from(activeContextMenu.children).forEach(ctrl => {
