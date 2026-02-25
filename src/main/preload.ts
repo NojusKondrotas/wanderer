@@ -1,4 +1,5 @@
-const { contextBridge, ipcRenderer } = require('electron');
+import { contextBridge, ipcRenderer } from 'electron';
+import { WandererAPI } from './types/wanderer-api.js';
 
 contextBridge.exposeInMainWorld('wandererAPI', {
   logMessage: (message) => ipcRenderer.send('log-message', message),
@@ -60,4 +61,4 @@ contextBridge.exposeInMainWorld('wandererAPI', {
 
   saveEditorContents: (contents) => ipcRenderer.invoke('save-editor-contents', contents),
   loadEditorContents: () => ipcRenderer.invoke('load-editor-contents'),
-})
+} satisfies WandererAPI)

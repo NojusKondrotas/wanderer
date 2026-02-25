@@ -5,5 +5,5 @@
     "moduleResolution": "node",
     "outDir": "dist"
   },
-  "include": ["src/main/preload.js"]
+  "include": ["src/main/preload.ts"]
 }
