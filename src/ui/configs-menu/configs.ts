@@ -1,5 +1,11 @@
-const configsMenu = document.getElementById('configs');
-const configscm = {
+import { generateCircularLayout, generateLadderLayout } from "../../runtime/layout.js";
+import { generateRandom, Vector2D } from "../../runtime/numerics.js";
+import { concealContextMenuChildren, contextMenuCenter, setContextMenuCenter, timeoutCM } from "../context-menus/handler-context-menu.js";
+import { toggleConfigAbstract } from "./config-abstract.js";
+import { toggleConfigInfoTag } from "./config-info-tag.js";
+
+const configsMenu = document.getElementById('configs')!
+export const configscm = {
     blueprint : configsMenu,
     angleSize : 360 / configsMenu.children.length,
     radius : 200,
@@ -7,7 +13,7 @@ const configscm = {
     xOffset : -10,
     yOffset : -10
 };
-const sections = [
+export const sections = [
     document.getElementById('cfg-templates'),
     document.getElementById('cfg-n'),
     document.getElementById('cfg-w'),
@@ -17,8 +23,9 @@ const sections = [
 const sectionsBorderColor = { opaque: "rgb(10, 10, 10)", transparent: "transparent" };
 const sectionsColor = { opaque: "rgb(10, 10, 10)", transparent: "transparent" };
 const timeoutCfg = 100;
-let activeSectionIdx = -1;
-const menusLadders = [
+export let activeSectionIdx = -1;
+export const setActiveSectionIdx = (idx) => activeSectionIdx = idx;
+export const menusLadders = [
     {
         blueprint: document.getElementById('cfg-menu-templates'),
         gapSize: 10
@@ -40,7 +47,7 @@ const menusLadders = [
         gapSize: 10
     }
 ];
-let activeMenuLadder = null;
+let activeMenuLadder;
 
 (function addConfigsEventListeners() {
     sections.forEach((section, i) => {
@@ -55,7 +62,7 @@ let activeMenuLadder = null;
     });
 })();
 
-function hideConfigMenu() {
+export function hideConfigMenu() {
     if(activeMenuLadder == null) return;
     concealContextMenuChildren(activeMenuLadder.blueprint);
     setTimeout((currActiveMenu) => {
@@ -67,7 +74,7 @@ function hideConfigMenu() {
     activeMenuLadder = null;
 }
 
-function displayConfigMenu(menu) {
+export function displayConfigMenu(menu) {
     if(activeMenuLadder != null){
         hideConfigMenu();
     }
@@ -77,26 +84,26 @@ function displayConfigMenu(menu) {
 }
 
 function hideConfigs() {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
         sections.forEach(section => {
             const offsetX = generateRandom(-50, 50);
             const offsetY = generateRandom(-50, 50);
-            section.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-            section.style.borderColor = sectionsBorderColor.transparent;
-            section.style.color = sectionsColor.transparent;
+            section!.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+            section!.style.borderColor = sectionsBorderColor.transparent;
+            section!.style.color = sectionsColor.transparent;
         });
         setTimeout(() => {
-            configsDiv.style.display = 'none';
+            // configsDiv.style.display = 'none';
             resolve();
         }, timeoutCfg)
-        cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
+        // cfgBlur.style.backdropFilter = 'blur(4px) opacity(0)';
         toggleConfigAbstract(false);
         toggleConfigInfoTag(false);
     });
 }
 
-function displayConfigs(x, y) {
+export function displayConfigs(x, y) {
     configscm.blueprint.style.display = 'block'
-    contextMenuCenter = { x, y }
+    setContextMenuCenter(new Vector2D(x, y))
     generateCircularLayout(x, y, configscm);
 }

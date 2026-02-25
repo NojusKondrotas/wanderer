@@ -1,18 +1,20 @@
-const abstracts = [
+import { concealCMChild, contextMenuCenter, showCMChild, timeoutCM } from "../context-menus/handler-context-menu.js";
+
+export const abstracts = [
     document.getElementById('cfg-abst-templates'),
     document.getElementById('cfg-abst-n'),
     document.getElementById('cfg-abst-w'),
     document.getElementById('cfg-abst-p'),
     document.getElementById('cfg-abst-internal')
 ];
-let activeAbstract = null;
+export let activeAbstract;
 const abstractZIndex = 20;
 
-function toggleConfigAbstract(flag, abstract = null) {
+export function toggleConfigAbstract(flag, abstract: HTMLElement | null = null) {
     if (flag) {
-        abstract.style.display = 'block';
-        abstract.style.zIndex = abstractZIndex + 1;
-        showCMChild(contextMenuCenter.x, contextMenuCenter.y, abstract);
+        abstract!.style.display = 'block';
+        abstract!.style.zIndex = `${abstractZIndex + 1}`;
+        showCMChild(contextMenuCenter.x, contextMenuCenter.y, abstract!);
         activeAbstract = abstract;
     } else {
         if(activeAbstract == null) return;

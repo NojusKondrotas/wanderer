@@ -1,5 +1,8 @@
-const configsInfoTag = document.getElementById('cfg-itag');
-const configsInfoTagField = document.getElementById('cfg-itag-field');
+import { abstracts, toggleConfigAbstract } from "./config-abstract.js";
+import { activeSectionIdx, displayConfigMenu, hideConfigMenu, menusLadders, sections, setActiveSectionIdx } from "./configs.js";
+
+const configsInfoTag = document.getElementById('cfg-itag')!
+const configsInfoTagField = document.getElementById('cfg-itag-field')!;
 
 (function addConfigsInfoTagListeners() {
     configsInfoTag.addEventListener('click', (e) => {
@@ -12,7 +15,7 @@ const configsInfoTagField = document.getElementById('cfg-itag-field');
         toggleConfigInfoTag(false);
         hideConfigMenu();
         toggleConfigAbstract(false);
-        activeSectionIdx = -1;
+        setActiveSectionIdx(-1)
     });
     configsInfoTagField.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -37,7 +40,7 @@ const configsInfoTagField = document.getElementById('cfg-itag-field');
     });
     configsInfoTagField.addEventListener('mouseleave', () => {
         toggleConfigInfoTag(false);
-        activeSectionIdx = -1;
+        setActiveSectionIdx(-1)
     });
 })();
 
@@ -56,7 +59,7 @@ function placeConfigInfoTag(element) {
     configsInfoTagField.style.height = `${rect.height + 22}px`;
 }
 
-function toggleConfigInfoTag(flag, section=null) {
+export function toggleConfigInfoTag(flag, section: HTMLElement | null =null) {
     if (flag) {
         configsInfoTag.style.display = 'block';
         configsInfoTagField.style.display = 'block';
