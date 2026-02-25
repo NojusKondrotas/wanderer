@@ -1,6 +1,12 @@
-let elementHierarchy = new Map()
+import { toggleWritingMode } from "./note.js";
 
-function instantiateHierarchy(n_id, parent_ids = new Set(), child_ids = new Set()){
+export let elementHierarchy = new Map()
+
+export function setElementHierarchy(map) {
+    elementHierarchy = map
+}
+
+export function instantiateHierarchy(n_id, parent_ids = new Set(), child_ids = new Set()){
     elementHierarchy.set(n_id, [parent_ids,child_ids])
     for(let p_id of parent_ids){
         addNoteChild(p_id, n_id);
@@ -10,7 +16,7 @@ function instantiateHierarchy(n_id, parent_ids = new Set(), child_ids = new Set(
     }
 }
 
-function deleteFromHierarchy(n_id){
+export function deleteFromHierarchy(n_id){
     let hierarchy = elementHierarchy.get(n_id);
     if(!hierarchy) return;
     
@@ -51,21 +57,21 @@ function removeNoteChild(n_id, c_id){
     c_parents.delete(n_id);
 }
 
-function switchFocusToChild(n_id){
+export function switchFocusToChild(n_id){
     let [parents, children] = elementHierarchy.get(n_id);
     if(children.size > 0){
         switchFocus(n_id, children.values().next().value);
     }
 }
 
-function switchFocusToParent(n_id){
+export function switchFocusToParent(n_id){
     let [parents, children] = elementHierarchy.get(n_id);
     if(parents.size > 0){
         switchFocus(n_id, parents.values().next().value);
     }
 }
 
-function switchFocus(from_id, to_id){
+export function switchFocus(from_id, to_id){
     toggleWritingMode(false, from_id);
     toggleWritingMode(true, to_id);
 }

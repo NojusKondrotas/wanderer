@@ -1,9 +1,41 @@
-let largestPathID = 0
+import { allElementConnections, configurePath, deleteComponentByID, getElementID, selectedElement, setSelectedElement } from "./component-handler.js"
+import { Vector2D } from "../runtime/numerics.js"
+import { convertToWhiteboardSpace } from "../ui/zoom-whiteboard.js"
+import { AppStates } from "../runtime/states-handler.js"
+import { wbZoom } from "../ui/parent-whiteboard-handler.js"
+import { toggleWritingMode } from "./note.js"
+import { openNewContextMenu } from "../ui/context-menus/handler-context-menu.js"
+import { acm } from "../ui/context-menus/path-cm.js"
 
-let allPaths = new Map(), unusedPathIDs = new Array()
-let selectedPath = null
+export let largestPathID = 0
+export const setLargestPathID = (id) => largestPathID = id;
 
-const pathVisualShape = 'line', pathVisualWidth = '2'
+export let allPaths = new Map(), unusedPathIDs = new Array()
+export const setAllPaths = (map) => allPaths = map;
+export const setUnusedPathIDs = (map) => unusedPathIDs = map;
+
+export let selectedPath: Path | null = null
+
+export function setSelectedPath(path: Path | null) {
+    selectedPath = path;
+}
+
+const pathVisualShape = 'line', pathVisualWidth = 2
+
+export class Path {
+    constructor(public ID: string,
+        public pathVisualID: string,
+        public hitPathID: string,
+        public startNoteID: string | null = null,
+        public endNoteID: string | null = null,
+        public originStartPos: Vector2D,
+        public originEndPos: Vector2D,
+        public startPosition: Vector2D,
+        public endPosition: Vector2D,
+        public isHierarchicalStart: boolean = false,
+        public isHierarchicalEnd: boolean = false,
+        public shape: string) { }
+}
 
 function getPathID(){
     if(unusedPathIDs.length !== 0)
@@ -14,7 +46,8 @@ function getPathID(){
     }
 }
 
-function createPath(container, startPos, endPos, startElement_id = null, endElement_id = null, isDrawing = false, isHierarchicalStart = false, isHierarchicalEnd = false){
+export function createPath(container: HTMLElement, startPos: Vector2D, endPos: Vector2D,
+    startElement_id: string | null = null, endElement_id: string | null = null, isDrawing = false, isHierarchicalStart = false, isHierarchicalEnd = false){
     const div = document.createElement('div')
     div.classList.add('path-container')
 
@@ -26,14 +59,14 @@ function createPath(container, startPos, endPos, startElement_id = null, endElem
     const pathVisual = document.createElementNS("http://www.w3.org/2000/svg", 'path')
     pathVisual.classList.add('path')
     pathVisual.setAttribute("stroke", "#626464ff")
-    pathVisual.setAttribute("stroke-width", pathVisualWidth)
+    pathVisual.setAttribute("stroke-width", `${pathVisualWidth}`)
     pathVisual.setAttribute("fill", "none")
     pathVisual.style.pointerEvents = 'none'
     pathVisual.setAttribute("id", `${getPathID()}`)
 
     const hitPath = document.createElementNS("http://www.w3.org/2000/svg", 'path')
     hitPath.setAttribute("stroke", "transparent")
-    hitPath.setAttribute("stroke-width", pathVisualWidth * 8)
+    hitPath.setAttribute("stroke-width", `${pathVisualWidth * 8}`)
     hitPath.setAttribute("fill", "none")
     hitPath.style.pointerEvents = 'stroke'
     hitPath.setAttribute("id", `${getPathID()}`)
@@ -45,51 +78,51 @@ function createPath(container, startPos, endPos, startElement_id = null, endElem
     div.id = `${getElementID()}`
     div.style.visibility = 'visible'
 
-    const path = {
-        ID: div.id,
-        pathVisualID: pathVisual.id,
-        hitPathID: hitPath.id,
-        startNoteID: startElement_id,
-        endNoteID: endElement_id,
-        originStartPos: { ...boardSpaceStartPos },
-        originEndPos: { ...boardSpaceEndPos },
-        startPosition: { ...boardSpaceStartPos },
-        endPosition: { ...boardSpaceEndPos },
+    const path = new Path(
+        div.id,
+        pathVisual.id,
+        hitPath.id,
+        startElement_id,
+        endElement_id,
+        { ...boardSpaceStartPos },
+        { ...boardSpaceEndPos },
+        { ...boardSpaceStartPos },
+        { ...boardSpaceEndPos },
         isHierarchicalStart,
         isHierarchicalEnd,
-        shape: pathVisualShape
-    }
-    configurePath(path, startElement_id, endElement_id)
+        pathVisualShape
+    )
+    configurePath(path, { startID: startElement_id, endID: endElement_id} )
     allPaths.set(div.id, path)
     selectedPath = path
-    StatesHandler.isDrawingPath = isDrawing
-    StatesHandler.isDrawingPathEnd = isDrawing
+    AppStates.isDrawingPath = isDrawing
+    AppStates.isDrawingPathEnd = isDrawing
     updatePathPosition(path, path.startPosition, path.endPosition)
     return path
 }
 
-function addPathListeners(path){
-    document.getElementById(path.hitPathID).addEventListener('contextmenu', (e) => {
+export function addPathListeners(path){
+    document.getElementById(path.hitPathID)!.addEventListener('contextmenu', (e) => {
         e.preventDefault()
-        if(StatesHandler.isDrawingPath){
+        if(AppStates.isDrawingPath){
             return;
         }
         e.stopPropagation()
         console.log('right clicked on hitPath')
-        if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id)
+        if(AppStates.isWritingElement) toggleWritingMode(false, selectedElement!.id)
 
         selectedPath = path
         openNewContextMenu(e.clientX, e.clientY, acm)
     })
 }
 
-function getPathMiddle(path) {
-    const pathEl = document.getElementById(path.pathVisualID);
-    const len = pathEl.getTotalLength();
-    return pathEl.getPointAtLength(len / 2);
+export function getPathMiddle(path: Path) {
+    const pathEl = document.getElementById(path.pathVisualID) as SVGPathElement | null;
+    const len = pathEl!.getTotalLength();
+    return pathEl!.getPointAtLength(len / 2);
 }
 
-function addPathArrows(x1, y1, x2, y2){
+function addPathArrows(x1: number, y1: number, x2: number, y2: number): string {
     const angle = Math.atan2(y2 - y1, x2 - x1)
     const size = 8
     const a1 = angle + Math.PI / 6
@@ -105,8 +138,8 @@ function addPathArrows(x1, y1, x2, y2){
     return arrow
 }
 
-function updatePathData(x1, y1, x2, y2, isStartPoint = false, isEndPoint = false, shape = 'line') {
-    let pathData, startPrevX, startPrevY, endPrevX, endPrevY
+function updatePathData(x1: number, y1: number, x2: number, y2: number, isStartPoint = false, isEndPoint = false, shape = 'line') {
+    let pathData: string = "", startPrevX: number, startPrevY: number, endPrevX: number, endPrevY: number
     switch(shape){
         case 'line':
             pathData = `M ${x1} ${y1} L ${x2} ${y2}`
@@ -130,32 +163,37 @@ function updatePathData(x1, y1, x2, y2, isStartPoint = false, isEndPoint = false
             startPrevX = midX, startPrevY = y1
             endPrevX = midX, endPrevY = y2
             break
+        default:
+            return pathData;
     }
 
-    let arrowStart, arrowEnd
+    let arrowStart: string | null = null, arrowEnd: string | null = null
     if(isStartPoint)
         arrowStart = addPathArrows(x1, y1, startPrevX, startPrevY)
     if(isEndPoint)
         arrowEnd = addPathArrows(x2, y2, endPrevX, endPrevY)
 
-    if(arrowStart == null){
-        if(arrowEnd == null)
+    if(!arrowStart){
+        if(!arrowEnd)
             return pathData
         return pathData + arrowEnd
         }
-    if(arrowEnd == null)
+    if(!arrowEnd)
         return pathData + arrowStart
     return pathData + arrowStart + arrowEnd
 }
 
-function updatePathPosition(path, startPosition, endPosition){
+export function updatePathPosition(path: Path, startPosition: Vector2D, endPosition: Vector2D){
     const updatedPath = updatePathData(startPosition.x, startPosition.y, endPosition.x, endPosition.y, path.isHierarchicalStart, path.isHierarchicalEnd, path.shape)
-    document.getElementById(path.pathVisualID).setAttribute('d', updatedPath)
-    document.getElementById(path.hitPathID).setAttribute('d', updatedPath)
+    document.getElementById(path.pathVisualID)!.setAttribute('d', updatedPath)
+    document.getElementById(path.hitPathID)!.setAttribute('d', updatedPath)
 }
 
-function terminatePathDrawing(ev, elID){
-    if(StatesHandler.isDrawingPathEnd){
+export function terminatePathDrawing(ev: MouseEvent, elID: string | null){
+    if(!selectedPath) {
+        return;
+    }
+    if(AppStates.isDrawingPathEnd){
         selectedPath.endNoteID = elID;
         allElementConnections.get(elID)?.add(selectedPath.ID);
         selectedPath.endPosition = convertToWhiteboardSpace(ev.clientX, ev.clientY);
@@ -167,11 +205,11 @@ function terminatePathDrawing(ev, elID){
         selectedPath.originStartPos = convertToWhiteboardSpace(ev.clientX, ev.clientY);
     }
 
-    StatesHandler.isDrawingPath = false
+    AppStates.isDrawingPath = false
     selectedPath = null
 }
 
-function deletePathByID(pathToRemoveID){
+export function deletePathByID(pathToRemoveID: string){
     if(allPaths.has(pathToRemoveID)){
         const pathToRemove = allPaths.get(pathToRemoveID)
         allPaths.delete(pathToRemoveID)
@@ -181,8 +219,8 @@ function deletePathByID(pathToRemoveID){
         unusedPathIDs.push(pathToRemove.pathVisualID)
         unusedPathIDs.push(pathToRemove.hitPathID)
 
-        const pathVisual = document.getElementById(pathToRemove.pathVisualID)
-        const hitPath = document.getElementById(pathToRemove.hitPathID)
+        const pathVisual = document.getElementById(pathToRemove.pathVisualID)!
+        const hitPath = document.getElementById(pathToRemove.hitPathID)!
         pathVisual.remove()
         hitPath.remove()
         deleteComponentByID(wbZoom, pathToRemoveID, [pathToRemoveID]);

@@ -1,23 +1,32 @@
-let largestElementID = 0, unusedElementIDs = new Array()
+import { AppStates } from "../runtime/states-handler.js";
+import { updateElementPositionByID, WhiteboardPositioningHandler } from "../ui/positioning/whiteboard-positioning.js";
+import { convertToWhiteboardSpace } from "../ui/zoom-whiteboard.js";
+import { deleteFromHierarchy } from "./hierarchy-handler.js";
+import { addNoteListeners, setActiveBorder, toggleWritingMode } from "./note.js";
+import { addNotepadListeners } from "./notepad.js";
+import { disconnectConnectedPaths } from "./path-connection-handler.js";
+import { addPathListeners, Path } from "./path.js";
+import { addWhiteboardListeners } from "./whiteboard.js";
 
-let selectedElement = null
+export let largestElementID = 0, unusedElementIDs = new Array()
+export const setLargestElID = (id) => largestElementID = id;
+export const setUnusedElIDs = (ids) => unusedElementIDs = ids;
 
-let elementPositions = new Map()
+export let selectedElement: HTMLElement | null = null;
+export const setSelectedElement = (el: HTMLElement | null) => selectedElement = el;
+export let elementPositions = new Map();
+export const setElementPositions = (map) => elementPositions = map;
+export let allElementConnections = new Map();
+export const setAllElementConnections = (map) => allElementConnections = map;
 
-let allElementConnections = new Map();
+export enum ComponentTypes {
+    NOTE,
+    NOTEPAD,
+    WHITEBOARD,
+    PATH,
+};
 
-function isSupportedComponent(componentType) {
-    return componentType in componentTypes;
-}
-
-const componentTypes = Object.freeze({
-    NOTE: Symbol("Note"),
-    NOTEPAD: Symbol("Notepad"),
-    WHITEBOARD: Symbol("Whiteboard"),
-    PATH: Symbol("Path"),
-});
-
-function getElementID(){
+export function getElementID(){
     if(unusedElementIDs.length !== 0)
         return unusedElementIDs.pop()
     else{
@@ -26,7 +35,7 @@ function getElementID(){
     }
 }
 
-function instantiateResizingBorders(el){
+export function instantiateResizingBorders(el){
     const borders = ['right', 'left'];
     borders.forEach(border => {
         const borderDiv = document.createElement('div');
@@ -34,25 +43,24 @@ function instantiateResizingBorders(el){
         el.appendChild(borderDiv);
 
         borderDiv.addEventListener('mouseenter', () => {
-            if(!StatesHandler.isDragging) {
+            if(!AppStates.isDragging) {
                 document.body.style.cursor = 'ew-resize';
             }
         });
 
         borderDiv.addEventListener('mouseleave', () => {
-            if(!StatesHandler.isDragging) {
+            if(!AppStates.isDragging) {
                 document.body.style.cursor = 'default';
             }
         });
 
         borderDiv.addEventListener('mousedown', function(e) {
             e.stopPropagation();
-            if(StatesHandler.isWritingElement) {
-                toggleWritingMode(false, selectedElement.id);
+            if(AppStates.isWritingElement) {
+                toggleWritingMode(false, selectedElement!.id);
             }
-            this.isResizing = true;
-            activeBorder = border;
-            selectedElement = el;
+            setActiveBorder(border);
+            setSelectedElement(el);
             WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.resizeElement);
             document.body.style.cursor = 'ew-resize';
         });
@@ -64,7 +72,7 @@ function instantiateResizingBorders(el){
     })
 }
 
-function reinstateAllBorders(elements){
+export function reinstateAllBorders(elements){
     const keys = elements.keys();
     for(const k of keys){
         const el = document.getElementById(k);
@@ -82,19 +90,19 @@ function configureElement(element){
     }
 }
 
-function configureAllElements(elements){
+export function configureAllElements(elements){
     for(let element of elements){
         configureElement(element)
     }
 }
 
-function configurePath(path, startID, endID){
+export function configurePath(path: Path, options?: { startID?: string | null, endID?: string | null }){
     addPathListeners(path)
-    allElementConnections.get(startID)?.add(path.ID);
-    allElementConnections.get(endID)?.add(path.ID);
+    allElementConnections.get(options?.startID)?.add(path.ID);
+    allElementConnections.get(options?.endID)?.add(path.ID);
 }
 
-function configureAllPaths(paths){
+export function configureAllPaths(paths){
     const values = paths.values()
     for(let v of values)
         configurePath(v)
@@ -114,7 +122,7 @@ function addElementToPositioningLeftAlignment(el, offsetX = 0, offsetY = 0){
     updateElementPositionByID(el.id);
 }
 
-function createNewElement(container, el, id, centerX = 0, centerY = 0){
+export function createNewElement(container, el, id, centerX = 0, centerY = 0){
     container.appendChild(el)
     el.style.transition = 'none'
     el.style.visibility = 'hidden'
@@ -131,7 +139,7 @@ function createNewElement(container, el, id, centerX = 0, centerY = 0){
     allElementConnections.set(id, new Set())
 }
 
-function createNewElementLeftAlignment(container, el, id, offsetX = 0, offsetY = 0){
+export function createNewElementLeftAlignment(container, el, id, offsetX = 0, offsetY = 0){
     container.appendChild(el)
     el.style.transition = 'none'
     el.style.visibility = 'hidden'
@@ -149,7 +157,7 @@ function createNewElementLeftAlignment(container, el, id, offsetX = 0, offsetY =
     allElementConnections.set(id, new Set())
 }
 
-function deleteComponentByID(container, elID, idsPush){
+export function deleteComponentByID(container, elID, idsPush){
     container.removeChild(document.getElementById(elID))
     for(let id of idsPush) unusedElementIDs.push(id);
 

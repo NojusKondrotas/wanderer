@@ -1,21 +1,27 @@
-const pathStartPoint = document.getElementById('path-end-0')
-const pathMiddlePoint = document.getElementById('path-end-1')
-const pathEndPoint = document.getElementById('path-end-2')
-const pathStartPointInner = document.getElementById('path-end-inner-0')
-const pathMiddlePointInner = document.getElementById('path-end-inner-1')
-const pathEndPointInner = document.getElementById('path-end-inner-2')
+import { AppStates } from "../runtime/states-handler.js"
+import { forgetContextMenus } from "../ui/context-menus/handler-context-menu.js"
+import { convertFromWhiteboardSpace } from "../ui/zoom-whiteboard.js"
+import { allElementConnections } from "./component-handler.js"
+import { allPaths, getPathMiddle, selectedPath, setSelectedPath } from "./path.js"
+
+const pathStartPoint = document.getElementById('path-end-0')!
+const pathMiddlePoint = document.getElementById('path-end-1')!
+const pathEndPoint = document.getElementById('path-end-2')!
+const pathStartPointInner = document.getElementById('path-end-inner-0')!
+const pathMiddlePointInner = document.getElementById('path-end-inner-1')!
+const pathEndPointInner = document.getElementById('path-end-inner-2')!
 const timeoutACCM = 40;
 
 function connectPathStart(path){
-    StatesHandler.isDrawingPath = true
-    selectedPath = path
-    StatesHandler.isDrawingPathEnd = false
+    AppStates.isDrawingPath = true
+    setSelectedPath(path)
+    AppStates.isDrawingPathEnd = false
 }
 
 function connectPathEnd(path){
-    StatesHandler.isDrawingPath = true
-    selectedPath = path
-    StatesHandler.isDrawingPathEnd = true
+    AppStates.isDrawingPath = true
+    setSelectedPath(path)
+    AppStates.isDrawingPathEnd = true
 }
 
 function disconnectPathStart(path){
@@ -33,11 +39,8 @@ pathStartPoint.addEventListener('mousedown', (e) => {
 });
 pathStartPoint.addEventListener('mouseup', (e) => {
     e.stopPropagation();
-});
-pathStartPoint.addEventListener('click', (e) => {
-    e.stopPropagation()
 
-    if(StatesHandler.isConnecting) connectPathStart(selectedPath)
+    if(AppStates.isConnecting) connectPathStart(selectedPath)
     else disconnectPathStart(selectedPath)
     closePathConnectionContextMenu()
 })
@@ -47,9 +50,6 @@ pathMiddlePoint.addEventListener('mousedown', (e) => {
 });
 pathMiddlePoint.addEventListener('mouseup', (e) => {
     e.stopPropagation();
-});
-pathMiddlePoint.addEventListener('click', (e) => {
-    e.stopPropagation()
     
     disconnectPathStart(selectedPath)
     disconnectPathEnd(selectedPath)
@@ -61,16 +61,13 @@ pathEndPoint.addEventListener('mousedown', (e) => {
 });
 pathEndPoint.addEventListener('mouseup', (e) => {
     e.stopPropagation();
-});
-pathEndPoint.addEventListener('click', (e) => {
-    e.stopPropagation()
     
-    if(StatesHandler.isConnecting) connectPathEnd(selectedPath)
+    if(AppStates.isConnecting) connectPathEnd(selectedPath)
     else disconnectPathEnd(selectedPath)
     closePathConnectionContextMenu()
 })
 
-function disconnectConnectedPaths(elID){
+export function disconnectConnectedPaths(elID){
     const paths = allElementConnections.get(elID);
     if(paths) {
         for(const pathID of paths){
@@ -85,14 +82,14 @@ function disconnectConnectedPaths(elID){
     }
 }
 
-function openPathConnectionContextMenu(isConnecting = false){
+export function openPathConnectionContextMenu(isConnecting = false){
     forgetContextMenus()
 
-    const startPos = convertFromWhiteboardSpace(selectedPath.startPosition.x, selectedPath.startPosition.y)
-    const pathMiddle = getPathMiddle(selectedPath);
+    const startPos = convertFromWhiteboardSpace(selectedPath!.startPosition.x, selectedPath!.startPosition.y)
+    const pathMiddle = getPathMiddle(selectedPath!);
     console.log(pathMiddle)
     const middlePos = convertFromWhiteboardSpace(pathMiddle.x, pathMiddle.y)
-    const endPos = convertFromWhiteboardSpace(selectedPath.endPosition.x, selectedPath.endPosition.y)
+    const endPos = convertFromWhiteboardSpace(selectedPath!.endPosition.x, selectedPath!.endPosition.y)
     pathStartPoint.style.left = `${startPos.x}px`
     pathStartPoint.style.top = `${startPos.y}px`
     pathEndPoint.style.left = `${endPos.x}px`
@@ -116,11 +113,11 @@ function openPathConnectionContextMenu(isConnecting = false){
         }
     });
 
-    StatesHandler.isContextMenuOpen = true
-    StatesHandler.isConnecting = isConnecting
+    AppStates.isContextMenuOpen = true
+    AppStates.isConnecting = isConnecting
 }
 
-function closePathConnectionContextMenu(){
+export function closePathConnectionContextMenu(){
     pathStartPoint.style.transform = 'translate(-50%, -50%) scale(0)'
     pathMiddlePoint.style.transform = 'translate(-50%, -50%) scale(0)';
     pathEndPoint.style.transform = 'translate(-50%, -50%) scale(0)'
@@ -133,6 +130,6 @@ function closePathConnectionContextMenu(){
         pathEndPoint.style.display = 'none'
     }, timeoutACCM);
 
-    StatesHandler.isContextMenuOpen = false
-    StatesHandler.isConnecting = false
+    AppStates.isContextMenuOpen = false
+    AppStates.isConnecting = false
 }

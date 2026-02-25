@@ -1,10 +1,17 @@
-function addNotepadListeners(notepad){
+import { AppStates } from "../runtime/states-handler.js"
+import { openNewContextMenu } from "../ui/context-menus/handler-context-menu.js"
+import { ecm } from "../ui/context-menus/whiteboard/element-cm.js"
+import { WhiteboardPositioningHandler } from "../ui/positioning/whiteboard-positioning.js"
+import { createNewElement, deleteComponentByID, instantiateResizingBorders, selectedElement, setSelectedElement } from "./component-handler.js"
+import { toggleWritingMode } from "./note.js"
+
+export function addNotepadListeners(notepad){
     notepad.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id)
+        if(AppStates.isWritingElement) toggleWritingMode(false, selectedElement!.id)
         
-        selectedElement = notepad
+        setSelectedElement(notepad)
 
         openNewContextMenu(e.clientX, e.clientY, ecm)
     })
@@ -20,14 +27,14 @@ function addNotepadListeners(notepad){
     })
 
     notepad.addEventListener('dblclick', (e) => {
-        if(StatesHandler.isWritingElement) return
+        if(AppStates.isWritingElement) return
 
         window.wandererAPI.openNotepad(notepad.id)
     })
 }
 
-async function createNewNotepad(container, xOffset = 0, yOffset = 0){
-    const id = await window.wandererAPI.addNotepad()
+export async function createNewNotepad(container, xOffset = 0, yOffset = 0){
+    const id = await window.wandererAPI.addNotepad() as string
     
     const newNotepad = document.createElement('div')
     newNotepad.classList.add('notepad')
@@ -38,6 +45,6 @@ async function createNewNotepad(container, xOffset = 0, yOffset = 0){
     instantiateResizingBorders(newNotepad);
 }
 
-function deleteNotepadByID(container, notepadID){
+export function deleteNotepadByID(container, notepadID){
     deleteComponentByID(container, notepadID, []);
 }

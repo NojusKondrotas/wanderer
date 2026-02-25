@@ -1,10 +1,17 @@
-function addWhiteboardListeners(whiteboard){
+import { AppStates } from "../runtime/states-handler.js"
+import { openNewContextMenu } from "../ui/context-menus/handler-context-menu.js"
+import { ecm } from "../ui/context-menus/whiteboard/element-cm.js"
+import { WhiteboardPositioningHandler } from "../ui/positioning/whiteboard-positioning.js"
+import { createNewElement, deleteComponentByID, instantiateResizingBorders, selectedElement, setSelectedElement } from "./component-handler.js"
+import { toggleWritingMode } from "./note.js"
+
+export function addWhiteboardListeners(whiteboard){
     whiteboard.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if(StatesHandler.isWritingElement) toggleWritingMode(false, selectedElement.id)
+        if(AppStates.isWritingElement) toggleWritingMode(false, selectedElement!.id)
         
-        selectedElement = whiteboard
+        setSelectedElement(whiteboard)
 
         openNewContextMenu(e.clientX, e.clientY, ecm)
     })
@@ -20,14 +27,14 @@ function addWhiteboardListeners(whiteboard){
     })
 
     whiteboard.addEventListener('dblclick', (e) => {
-        if(StatesHandler.isWritingElement) return
+        if(AppStates.isWritingElement) return
 
         window.wandererAPI.openWhiteboard(whiteboard.id)
     })
 }
 
-async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
-    const id = await window.wandererAPI.addWhiteboard()
+export async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
+    const id = await window.wandererAPI.addWhiteboard() as string
 
     const newWhiteboard = document.createElement('div')
     newWhiteboard.classList.add('whiteboard')
@@ -38,6 +45,6 @@ async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
     instantiateResizingBorders(newWhiteboard);
 }
 
-function deleteWhiteboardByID(container, whiteboardID){
+export function deleteWhiteboardByID(container, whiteboardID){
     deleteComponentByID(container, whiteboardID, []);
 }
