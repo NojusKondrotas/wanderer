@@ -1,4 +1,7 @@
-class MouseDragHandler {
+import { AppStates } from "../../runtime/states-handler.js"
+import { convertToZoomSpace } from "../zoom-whiteboard.js"
+
+export class MouseDragHandler {
     static dragStart = { x: 0, y: 0 }
     static dragDiff = { x: 0, y: 0 }
     static dragTotalStart = { x: 0, y: 0 }
@@ -7,7 +10,7 @@ class MouseDragHandler {
 
     static resetMouseDrag(ev){
         let boardSpace = { x: ev.screenX, y: ev.screenY }
-        if (StatesHandler.isComponentWhiteboard) {
+        if (AppStates.isComponentWhiteboard) {
             boardSpace = convertToZoomSpace(ev.screenX, ev.screenY)
         }
 
@@ -20,7 +23,7 @@ class MouseDragHandler {
 
     static updateMouseDrag(ev){
         let boardSpace = { x: ev.screenX, y: ev.screenY }
-        if (StatesHandler.isComponentWhiteboard) {
+        if (AppStates.isComponentWhiteboard) {
             boardSpace = convertToZoomSpace(ev.screenX, ev.screenY)
         }
 

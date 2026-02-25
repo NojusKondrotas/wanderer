@@ -1,22 +1,26 @@
-class LinkPositioningHandler {
-    static cover = document.getElementById('cover')
+import { isCombo, KeybindIndices, keybinds } from "../keybinds.js"
+import { MouseDragHandler } from "./mouse-drag-calc.js"
+import { WindowPositioningHandler } from "./window-positioning.js"
+
+export class LinkPositioningHandler {
+    static cover = document.getElementById('cover')!
 
     static startDrag(ev, isDraggingWin, isResizingWin){
         MouseDragHandler.resetMouseDrag(ev)
-        resetWindowDrag(ev)
+        WindowPositioningHandler.resetWindowDrag(ev)
         this.cover.style.display = 'inline-block'
         if(isDraggingWin){
-            isDraggingWindow = true
+            WindowPositioningHandler.isDraggingWindow = true
         }else if(isResizingWin){
-            isResizingWindow = true
+            WindowPositioningHandler.isResizingWindow = true
         }
     }
 
     static update(ev){
         MouseDragHandler.updateMouseDrag(ev)
-        if(isDraggingWindow){
+        if(WindowPositioningHandler.isDraggingWindow){
             WindowPositioningHandler.moveWindow()
-        }else if(isResizingWindow){
+        }else if(WindowPositioningHandler.isResizingWindow){
             WindowPositioningHandler.resizeWindow()
         }
     }
@@ -29,8 +33,8 @@ class LinkPositioningHandler {
 }
 
 function mouseDown_LinkMoveHandler(e){
-    const isDragWin = isCombo(keybinds[windowDragKeybind])
-    const isResizeWin = isCombo(keybinds[windowResizeKeybind])
+    const isDragWin = isCombo(keybinds[KeybindIndices.windowDragKeybind])
+    const isResizeWin = isCombo(keybinds[KeybindIndices.windowResizeKeybind])
 
     if(isDragWin) LinkPositioningHandler.startDrag(e, true, false)
     else if(isResizeWin) LinkPositioningHandler.startDrag(e, false, true)

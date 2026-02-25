@@ -1,11 +1,27 @@
-let wbOffset = { x: 0, y: 0 }
+import { allElementConnections, elementPositions, selectedElement, setSelectedElement } from "../../instantiable-components/component-handler.js"
+import { activeBorder, toggleWritingMode } from "../../instantiable-components/note.js"
+import { closePathConnectionContextMenu } from "../../instantiable-components/path-connection-handler.js"
+import { allPaths, deletePathByID, selectedPath, terminatePathDrawing, updatePathPosition } from "../../instantiable-components/path.js"
+import { Vector2D } from "../../runtime/numerics.js"
+import { AppStates } from "../../runtime/states-handler.js"
+import { turnOffContextMenu } from "../context-menus/handler-context-menu.js"
+import { handleKeybindGuideAppearance } from "../keybind-guide.js"
+import { isCombo, KeybindIndices, keybinds } from "../keybinds.js"
+import { wbMovement } from "../parent-whiteboard-handler.js"
+import { titlebar, toggleTitlebar, toggleTitlebarVisualHover } from "../titlebars/titlebar.js"
+import { convertToWhiteboardSpace, zoomFactor } from "../zoom-whiteboard.js"
+import { MouseDragHandler } from "./mouse-drag-calc.js"
+import { WindowPositioningHandler } from "./window-positioning.js"
 
-class WhiteboardPositioningHandler{
+export let wbOffset = new Vector2D(0, 0)
+export const setWBOffset = (offset: Vector2D) => wbOffset = offset
+
+export class WhiteboardPositioningHandler{
     static isDraggingBoard = false
     static isDraggingElement = false
     static isResizingElement = false
 
-    static elementResizeStart = null
+    static elementResizeStart
 
     static dragStates = Object.freeze({
         moveBoard: 'move-board',
@@ -20,21 +36,21 @@ class WhiteboardPositioningHandler{
         const dxResizeBoard = dxResizeScreen / zoomFactor;
 
         if (activeBorder === 'right') {
-            selectedElement.style.width = Math.max(this.elementResizeStart.width + dxResizeBoard, 22) + 'px';
+            selectedElement!.style.width = Math.max(this.elementResizeStart.width + dxResizeBoard, 22) + 'px';
         } else if (activeBorder === 'left') {
             const newWidth = Math.max(this.elementResizeStart.width - dxResizeBoard, 22);
             if(newWidth === 22 && dxResizeBoard >= 0) return;
 
-            selectedElement.style.width = newWidth + 'px';
-            selectedElement.style.left = (this.elementResizeStart.offsetLeft + dxResizeBoard) + 'px';
+            selectedElement!.style.width = newWidth + 'px';
+            selectedElement!.style.left = (this.elementResizeStart.offsetLeft + dxResizeBoard) + 'px';
         }
     }
 
     static element_MouseDown(ev, el){
         if(ev.button !== 2){
             ev.stopPropagation()
-            if(StatesHandler.isWritingElement) return toggleWritingMode(false, selectedElement.id)
-            if(StatesHandler.isContextMenuOpen){
+            if(AppStates.isWritingElement) return toggleWritingMode(false, selectedElement!.id)
+            if(AppStates.isContextMenuOpen){
                 turnOffContextMenu()
                 return
             }
@@ -43,29 +59,29 @@ class WhiteboardPositioningHandler{
             
             if(el.classList.contains('.note')) toggleWritingMode(false, el.id)
 
-            selectedElement = el
+            setSelectedElement(el)
         }
     }
 
     static element_MouseUp(ev, el){
-        if(StatesHandler.isWritingElement) return
+        if(AppStates.isWritingElement) return
 
         let draggedEnough = MouseDragHandler.checkIfDraggedEnough();
         if(draggedEnough) {
-            StatesHandler.willNotWrite = true;
+            AppStates.willNotWrite = true;
         } else {
-            StatesHandler.willNotWrite = false;
+            AppStates.willNotWrite = false;
         }
 
         if(el.classList.contains('note-container')) {
             document.body.style.cursor = 'text';
         }
 
-        if(StatesHandler.isDrawingPath){
+        if(AppStates.isDrawingPath){
             if(!draggedEnough){
                 this.isDraggingElement = false;
-                if(el.id === selectedPath.startNoteID){
-                    deletePathByID(selectedPath.id)
+                if(el.id === selectedPath!.startNoteID){
+                    deletePathByID(selectedPath!.ID)
                     return this.endDrag(ev)
                 }
                 terminatePathDrawing(ev, el.id)
@@ -90,19 +106,19 @@ class WhiteboardPositioningHandler{
         }else if (WindowPositioningHandler.isResizingWindow) {
             WindowPositioningHandler.resizeWindow()
         }else if(this.isDraggingElement){
-            updateElementPositionByID(selectedElement.id)
-            const paths = allElementConnections.get(selectedElement.id);
+            updateElementPositionByID(selectedElement!.id)
+            const paths = allElementConnections.get(selectedElement!.id);
             if(paths) {
                 for(const pathID of paths) {
                     const path = allPaths.get(pathID);
                     let hasUpdated = false
-                    if(path.startNoteID === selectedElement.id){
+                    if(path.startNoteID === selectedElement!.id){
                         path.startPosition.x -= MouseDragHandler.dragDiff.x
                         path.startPosition.y -= MouseDragHandler.dragDiff.y
                         path.originStartPos.x -= MouseDragHandler.dragDiff.x
                         path.originStartPos.y -= MouseDragHandler.dragDiff.y
                         hasUpdated = true
-                    }else if(path.endNoteID === selectedElement.id){
+                    }else if(path.endNoteID === selectedElement!.id){
                         path.endPosition.x -= MouseDragHandler.dragDiff.x
                         path.endPosition.y -= MouseDragHandler.dragDiff.y
                         path.originEndPos.x -= MouseDragHandler.dragDiff.x
@@ -113,12 +129,12 @@ class WhiteboardPositioningHandler{
                     if(hasUpdated){
                         const mousePos = convertToWhiteboardSpace(ev.clientX, ev.clientY)
                         let startPoint, endPoint
-                        if(StatesHandler.isDrawingPathEnd){
+                        if(AppStates.isDrawingPathEnd){
                             startPoint = {
                                 x: path.startPosition.x,
                                 y: path.startPosition.y
                             }
-                            if(StatesHandler.isDrawingPath && path === selectedPath){
+                            if(AppStates.isDrawingPath && path === selectedPath){
                                 endPoint = mousePos
                             }else{
                                 endPoint = {
@@ -131,7 +147,7 @@ class WhiteboardPositioningHandler{
                                 x: path.endPosition.x,
                                 y: path.endPosition.y
                             }
-                            if(StatesHandler.isDrawingPath && path === selectedPath){
+                            if(AppStates.isDrawingPath && path === selectedPath){
                                 startPoint = mousePos
                             }else{
                                 startPoint = {
@@ -146,41 +162,41 @@ class WhiteboardPositioningHandler{
             }
         }
         
-        if(StatesHandler.isDrawingPath){
+        if(AppStates.isDrawingPath){
             const mousePos = convertToWhiteboardSpace(ev.clientX, ev.clientY)
             toggleTitlebar(false)
-            if(StatesHandler.isDrawingPathEnd)
-                updatePathPosition(selectedPath, selectedPath.startPosition, mousePos)
+            if(AppStates.isDrawingPathEnd)
+                updatePathPosition(selectedPath!, selectedPath!.startPosition, mousePos)
             else
-                updatePathPosition(selectedPath, mousePos, selectedPath.endPosition)
+                updatePathPosition(selectedPath!, mousePos, selectedPath!.endPosition)
         }
     }
 
     static startResize(ev) {
-        const rect = selectedElement.getBoundingClientRect();
+        const rect = selectedElement!.getBoundingClientRect();
 
         this.elementResizeStart = {
             dx: ev.clientX,
-            width: parseFloat(selectedElement.style.width) || rect.width,
-            offsetLeft: selectedElement.offsetLeft
+            width: parseFloat(selectedElement!.style.width) || rect.width,
+            offsetLeft: selectedElement!.offsetLeft
         };
     }
 
     static startDrag(ev, dragState){
         if(ev.button === 2) return;
 
-        if(StatesHandler.isContextMenuOpen){
+        if(AppStates.isContextMenuOpen){
             turnOffContextMenu()
             closePathConnectionContextMenu()
             return
         }
-        if(StatesHandler.isWritingElement){
-            toggleWritingMode(false, selectedElement.id)
+        if(AppStates.isWritingElement){
+            toggleWritingMode(false, selectedElement!.id)
             return
         }
 
         document.querySelectorAll('.note-editor').forEach((noteEditor) => {
-            document.getElementById(noteEditor.id).contentEditable = 'false'
+            document.getElementById(noteEditor.id)!.contentEditable = 'false'
         })
 
         MouseDragHandler.resetMouseDrag(ev)
@@ -197,14 +213,14 @@ class WhiteboardPositioningHandler{
         toggleTitlebar(false)
         handleKeybindGuideAppearance(false)
 
-        StatesHandler.isDragging = true;
+        AppStates.isDragging = true;
         document.body.style.cursor = 'default';
     }
 
     static endDrag(ev){
         if(ev.button === 2) return;
 
-        if(StatesHandler.isContextMenuOpen){
+        if(AppStates.isContextMenuOpen){
             turnOffContextMenu()
             closePathConnectionContextMenu()
         }
@@ -212,11 +228,11 @@ class WhiteboardPositioningHandler{
             this.isResizingElement = false
             document.body.style.cursor = 'default'
         }
-        if(StatesHandler.isWritingElement){
-            toggleWritingMode(false, selectedElement.id)
+        if(AppStates.isWritingElement){
+            toggleWritingMode(false, selectedElement!.id)
             return
         }
-        if(StatesHandler.isDrawingPath){
+        if(AppStates.isDrawingPath){
             if(!MouseDragHandler.checkIfDraggedEnough()){
                 terminatePathDrawing(ev, null)
             }
@@ -233,14 +249,14 @@ class WhiteboardPositioningHandler{
         MouseDragHandler.resetMouseDrag(ev)
         WindowPositioningHandler.resetWindowDrag(ev);
 
-        selectedElement = null;
+        setSelectedElement(null)
         handleKeybindGuideAppearance(true)
 
-        StatesHandler.isDragging = false;
+        AppStates.isDragging = false;
     }
 }
 
-function getAbsolutePosition(el) {
+export function getAbsolutePosition(el) {
     const rect = el.getBoundingClientRect();
     const style = window.getComputedStyle(el);
     const marginTop = parseFloat(style.marginTop) || 0;
@@ -254,47 +270,47 @@ function getAbsolutePosition(el) {
     };
 }
 
-function setElementLeftPos(elID, x) {
+export function setElementLeftPos(elID, x) {
     const elPos = elementPositions.get(elID);
 
     const offsetX = x;
     const offsetY = elPos.y;
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
-    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
+    document.getElementById(elID)!.style.transform = `translate(${offsetX}px, ${offsetY}px)`
 }
 
-function setElementTopPos(elID, y) {
+export function setElementTopPos(elID, y) {
     const elPos = elementPositions.get(elID);
 
     const offsetX = elPos.x;
     const offsetY = y;
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
-    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
+    document.getElementById(elID)!.style.transform = `translate(${offsetX}px, ${offsetY}px)`
 }
 
-function updateElementPositionByIDByOffset(elID, x, y) {
+export function updateElementPositionByIDByOffset(elID, x, y) {
     const elPos = elementPositions.get(elID)
 
     const offsetX = elPos.x - x
     const offsetY = elPos.y - y
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
-    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
+    document.getElementById(elID)!.style.transform = `translate(${offsetX}px, ${offsetY}px)`
 }
 
-function updateElementPositionByID(elID) {
+export function updateElementPositionByID(elID) {
     const elPos = elementPositions.get(elID)
 
     const offsetX = elPos.x - MouseDragHandler.dragDiff.x
     const offsetY = elPos.y - MouseDragHandler.dragDiff.y
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
-    document.getElementById(elID).style.transform = `translate(${offsetX}px, ${offsetY}px)`
+    document.getElementById(elID)!.style.transform = `translate(${offsetX}px, ${offsetY}px)`
 }
 
-function updateComponentPositionsByOffset(x, y){
+export function updateComponentPositionsByOffset(x, y){
     const keys = elementPositions.keys();
     for (const k of keys){
         updateElementPositionByIDByOffset(k, x, y)
@@ -337,8 +353,8 @@ function updateComponentPositions(){
 }
 
 function genMouseDown_WhiteboardMoveHandler(e){
-    if(isCombo(keybinds[windowDragKeybind])) WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.moveWindow)
-    else if(isCombo(keybinds[windowResizeKeybind])) WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.resizeWindow)
+    if(isCombo(keybinds[KeybindIndices.windowDragKeybind])) WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.moveWindow)
+    else if(isCombo(keybinds[KeybindIndices.windowResizeKeybind])) WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.resizeWindow)
     else WhiteboardPositioningHandler.startDrag(e, WhiteboardPositioningHandler.dragStates.moveBoard)
 }
 

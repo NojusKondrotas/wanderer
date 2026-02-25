@@ -1,4 +1,6 @@
-class WindowPositioningHandler {
+import { MouseDragHandler } from "./mouse-drag-calc.js"
+
+export class WindowPositioningHandler {
     static isDraggingWindow = false
     static isResizingWindow = false
     static windowDimensions = { width: 0, height: 0 }
