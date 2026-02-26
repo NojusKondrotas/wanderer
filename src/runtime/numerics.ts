@@ -1,6 +1,7 @@
+import { Vector2DLike } from "../main/types/vector-2d.js";
 import { CopiedElement } from "./clipboard.js";
 
-export class Vector2D {
+export class Vector2D implements Vector2DLike {
     x: number;
     y: number;
 

@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { WandererAPI } from './types/wanderer-api.js';
+import { Vector2DLike } from './types/vector-2d.js';
 
 contextBridge.exposeInMainWorld('wandererAPI', {
   logMessage: (message) => ipcRenderer.send('log-message', message),
@@ -43,8 +44,8 @@ contextBridge.exposeInMainWorld('wandererAPI', {
     () => callback()
   ),
   closeTabMenuDone: () => ipcRenderer.send('close-tab-menu-done'),
-  setMousePosition: (x, y) => {
-    ipcRenderer.invoke('set-mouse-position', x, y)
+  setMousePosition: (pos: Vector2DLike) => {
+    ipcRenderer.invoke('set-mouse-position', pos.x, pos.y)
   },
   moveWindow: (x, y, width, height) => ipcRenderer.invoke('move-window', { x, y, width, height }),
   zoomInWindow: (callback) => ipcRenderer.on('zoom-in-window',
