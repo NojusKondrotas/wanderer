@@ -32,7 +32,7 @@ export class LinkPositioningHandler {
     }
 }
 
-function mouseDown_LinkMoveHandler(e){
+export function mouseDown_LinkMoveHandler(e){
     const isDragWin = isCombo(keybinds[KeybindIndices.windowDragKeybind])
     const isResizeWin = isCombo(keybinds[KeybindIndices.windowResizeKeybind])
 
@@ -40,10 +40,10 @@ function mouseDown_LinkMoveHandler(e){
     else if(isResizeWin) LinkPositioningHandler.startDrag(e, false, true)
 }
 
-function mouseMove_LinkMoveHandler(e){
+export function mouseMove_LinkMoveHandler(e){
     LinkPositioningHandler.update(e)
 }
 
-function mouseUp_LinkMoveHandler(e){
+export function mouseUp_LinkMoveHandler(e){
     LinkPositioningHandler.endDrag(e)
 }

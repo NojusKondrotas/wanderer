@@ -1,5 +1,8 @@
-StatesHandler.isPromptLink = true;
-isWindowClosing = false;
+import { AppStates } from "../../../runtime/states-handler.js";
+import { LinkPositioningHandler, mouseDown_LinkMoveHandler, mouseMove_LinkMoveHandler, mouseUp_LinkMoveHandler } from "../../../ui/positioning/link-positioning.js";
+
+AppStates.isPromptLink = true;
+let isWindowClosing = false;
 
 (async () => {
   async function getWebviewLink() {
@@ -7,7 +10,7 @@ isWindowClosing = false;
   }
 
   const link = await getWebviewLink()
-  document.getElementById('webview').setAttribute('src', link)
+  document.getElementById('webview')!.setAttribute('src', link)
 })()
 
 LinkPositioningHandler.cover.addEventListener('mousemove', (e) => {

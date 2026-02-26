@@ -1,3 +1,6 @@
+import { displayConfigs } from "../../../ui/configs-menu/configs.js";
+import { initTitlebar } from "../../../ui/titlebars/titlebar.js";
+
 initTitlebar();
 
 function closeWindow(){

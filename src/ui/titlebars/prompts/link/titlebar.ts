@@ -1,29 +1,34 @@
+import { closeWindow } from "../../../../main/whiteboard-renderer.js"
+import { AppStates } from "../../../../runtime/states-handler.js"
+import { turnOffContextMenu } from "../../../context-menus/handler-context-menu.js"
+import { mouseDown_LinkMoveHandler } from "../../../positioning/link-positioning.js"
+
 const titlebarVisual = document.getElementById('titlebar-visual')
 
-const titlebarFullScreenCtrlFrame = document.getElementById('frame-fullscreen-window')
-const titlebarMaximizeCtrlFrame = document.getElementById('frame-maximize-window')
-const titlebarMinimizeCtrlFrame = document.getElementById('frame-minimize-window')
-const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')
-const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')
+const titlebarFullScreenCtrlFrame = document.getElementById('frame-fullscreen-window')!
+const titlebarMaximizeCtrlFrame = document.getElementById('frame-maximize-window')!
+const titlebarMinimizeCtrlFrame = document.getElementById('frame-minimize-window')!
+const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')!
+const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')!
 
-const titlebarMoverCtrlFrame = document.getElementById('frame-mover-titlebar')
+const titlebarMoverCtrlFrame = document.getElementById('frame-mover-titlebar')!
 
 function titlebarToggleFullScreen(){
     window.wandererAPI.setFullScreen()
-    if(!StatesHandler.isPromptFirstTime ||
-        !StatesHandler.isPromptLink) turnOffContextMenu()
+    if(!AppStates.isPromptFirstTime ||
+        !AppStates.isPromptLink) turnOffContextMenu()
 }
 
 function titlebarToggleMaximized(){
     window.wandererAPI.setMaximized()
-    if(!StatesHandler.isPromptFirstTime ||
-        !StatesHandler.isPromptLink) turnOffContextMenu()
+    if(!AppStates.isPromptFirstTime ||
+        !AppStates.isPromptLink) turnOffContextMenu()
 }
 
 function titlebarToggleMinimized(){
     window.wandererAPI.setMinimized()
-    if(!StatesHandler.isPromptFirstTime ||
-        !StatesHandler.isPromptLink) turnOffContextMenu()
+    if(!AppStates.isPromptFirstTime ||
+        !AppStates.isPromptLink) turnOffContextMenu()
 }
 
 titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
