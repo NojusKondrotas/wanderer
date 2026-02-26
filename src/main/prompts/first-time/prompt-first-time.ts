@@ -1,3 +1,7 @@
+import '../../../runtime/states-handler.js'
+import '../../../ui/titlebars/titlebar.js'
+import '../../../ui/titlebars/prompts/first-time/lock.js'
+
 import { AppStates } from '../../../runtime/states-handler.js';
 import * as Titlebar from '../../../ui/titlebars/titlebar.js'
 

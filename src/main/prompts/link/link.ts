@@ -1,3 +1,11 @@
+import "../../../runtime/states-handler.js"
+import "../../../ui/titlebars/prompts/link/titlebar.js"
+import "../../../ui/keybinds.js"
+import "../../../ui/zoom-whiteboard.js"
+import "../../../ui/positioning/mouse-drag-calc.js"
+import "../../../ui/positioning/window-positioning.js"
+import "../../../ui/positioning/link-positioning.js"
+
 import { AppStates } from "../../../runtime/states-handler.js";
 import { LinkPositioningHandler, mouseDown_LinkMoveHandler, mouseMove_LinkMoveHandler, mouseUp_LinkMoveHandler } from "../../../ui/positioning/link-positioning.js";
 

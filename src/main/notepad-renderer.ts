@@ -1,3 +1,5 @@
+import "../runtime/states-handler.js"
+
 import { AppStates } from "../runtime/states-handler.js"
 
 let editor, editorContents
