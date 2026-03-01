@@ -9,9 +9,62 @@ export const borderColorCM = { opaque: "rgb(10, 10, 10)", transparent: "rgba(10,
 export const colorCM = { opaque: "rgb(10, 10, 10)", transparent: "rgba(10, 10, 10, 0)" }
 export const timeoutCM = 170
 
-export let activeContextMenu: HTMLElement | null = null, contextMenuCenter = new Vector2D(0, 0);
+export let activeContextMenu: IContextMenuLinear | IContextMenuCircular | null = null, contextMenuCenter = new Vector2D(0, 0);
 export const setActiveContextMenu = (cm) => activeContextMenu = cm;
-export const setContextMenuCenter = (pos: Vector2D) => contextMenuCenter = pos; 
+export const setContextMenuCenter = (pos: Vector2D) => contextMenuCenter = pos;
+
+export interface IContextMenu {
+    container: HTMLElement,
+    options: HTMLCollection,
+    xOffset: number,
+    yOffset: number
+}
+
+interface IContextMenuLinear extends IContextMenu {
+    gapSize: number
+}
+
+interface IContextMenuCircular extends IContextMenu {
+    angleSize: number,
+    radius: number,
+    angleOffset: number
+}
+
+export function createContextMenuLinear(cm: IContextMenu, gapSize: number): IContextMenuLinear {
+    return {
+        ...cm,
+        gapSize
+    } satisfies IContextMenuLinear;
+}
+
+export function createContextMenuCircular(cm: IContextMenu, angleSize: number, radius: number, angleOffset: number): IContextMenuCircular {
+    return {
+        ...cm,
+        angleSize,
+        radius,
+        angleOffset
+    } satisfies IContextMenuCircular;
+}
+
+export class ContextMenuRegister implements Iterable<IContextMenu> {
+    static menus: Map<string, IContextMenu> = new Map();
+
+    static registerContextMenu(identifier: string, cm: IContextMenu) {
+        this.menus.set(identifier, cm);
+    }
+
+    static unregisterContextMenu(identifier: string) {
+        this.menus.delete(identifier);
+    }
+
+    static getContextMenu(identifier: string) {
+        return this.menus.get(identifier);
+    }
+
+    [Symbol.iterator](): Iterator<IContextMenu> {
+        return ContextMenuRegister.menus.values();
+    }
+}
 
 export function showCMChild(x: number, y: number, option: HTMLElement){
     const offsetX = generateRandom(-50, 50);
@@ -79,8 +132,8 @@ export function turnOffContextMenu(){
     forgetContextMenuSelection()
 }
 
-export function openNewContextMenu(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
-    if(activeContextMenu === blueprint){
+export function openNewContextMenu(centerX, centerY, cm: IContextMenuLinear | IContextMenuCircular){
+    if(activeContextMenu === cm){
         setContextMenuCenter(new Vector2D(centerX, centerY))
         return moveContextMenu(centerX, centerY, blueprint);
     }
