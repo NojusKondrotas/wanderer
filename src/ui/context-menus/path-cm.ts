@@ -1,16 +1,27 @@
 import { openPathConnectionContextMenu } from "../../instantiable-components/path-connection-handler.js";
 import { deletePathByID, selectedPath } from "../../instantiable-components/path.js";
-import { turnOffContextMenu } from "./handler-context-menu.js";
+import { ContextMenuRegister, createContextMenu, createContextMenuCircular, turnOffContextMenu } from "./handler-context-menu.js";
 
-const pathContextMenu = document.getElementById('path-context-menu')!
-export const acm = {
-    blueprint : pathContextMenu,
-    angleSize : 360 / pathContextMenu.children.length,
-    radius : 70,
-    angleOffset : 90,
-    xOffset : 0,
-    yOffset : -10
-};
+export const acm: string = "acm";
+
+export function registerPathCM(identifier: string) {
+    const pathContextMenu = document.getElementById('path-context-menu');
+
+    if(pathContextMenu)
+        return ContextMenuRegister.registerContextMenu(identifier, 
+            createContextMenuCircular(
+                createContextMenu(
+                    pathContextMenu,
+                    (pathContextMenu.children) as HTMLCollectionOf<HTMLElement>,
+                    0,
+                    -10
+                ),
+                360 / pathContextMenu.children.length,
+                70,
+                90,
+            )
+        );
+}
 
 document.getElementById('acm-connect')!.addEventListener('mousedown', (e) => {
     e.stopPropagation();

@@ -1,18 +1,30 @@
 import { generateCircularLayout, generateLadderLayout } from "../../runtime/layout.js";
 import { generateRandom, Vector2D } from "../../runtime/numerics.js";
-import { concealContextMenuChildren, contextMenuCenter, setContextMenuCenter, timeoutCM } from "../context-menus/handler-context-menu.js";
+import { concealContextMenuChildren, contextMenuCenter, ContextMenuRegister, createContextMenu, createContextMenuCircular, IContextMenu, IContextMenuCircular, setContextMenuCenter, timeoutCM } from "../context-menus/handler-context-menu.js";
 import { toggleConfigAbstract } from "./config-abstract.js";
 import { toggleConfigInfoTag } from "./config-info-tag.js";
 
-const configsMenu = document.getElementById('configs')!
-export const configscm = {
-    blueprint : configsMenu,
-    angleSize : 360 / configsMenu.children.length,
-    radius : 200,
-    angleOffset : 162,
-    xOffset : -10,
-    yOffset : -10
-};
+export const configscm: string = "cfg";
+
+export function registerConfigsCM(identifier: string) {
+    const configsMenu = document.getElementById('configs');
+
+    if(configsMenu)
+        return ContextMenuRegister.registerContextMenu(
+            identifier,
+            createContextMenuCircular(
+                createContextMenu(
+                    configsMenu,
+                    (configsMenu.children) as HTMLCollectionOf<HTMLElement>,
+                    -10, -10
+                ),
+                360 / configsMenu.children.length,
+                200,
+                162
+            )
+        );
+}
+
 export const sections = [
     document.getElementById('cfg-templates'),
     document.getElementById('cfg-n'),
@@ -103,7 +115,8 @@ function hideConfigs() {
 }
 
 export function displayConfigs(x, y) {
-    configscm.blueprint.style.display = 'block'
+    const cm = ContextMenuRegister.getContextMenu(configscm)!;
+    cm.container.style.display = 'block'
     setContextMenuCenter(new Vector2D(x, y))
-    generateCircularLayout(x, y, configscm);
+    generateCircularLayout(x, y, cm as IContextMenuCircular);
 }
