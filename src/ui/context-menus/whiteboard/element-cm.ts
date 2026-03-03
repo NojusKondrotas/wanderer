@@ -30,87 +30,101 @@ export function registerElementCM(identifier: string) {
         );
 }
 
-document.getElementById('ecm-copy')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('ecm-copy')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    
-    if(e.button === 2){
-        return;
-    }
-    
-    copy(selectedElement);
+export function initElementCMOptions() {
+    const COPY = document.getElementById('ecm-copy');
+    const CUT = document.getElementById('ecm-cut');
+    const DELETE = document.getElementById('ecm-delete');
+    const CONNECT = document.getElementById('ecm-connect');
+    const DISCONNECT = document.getElementById('ecm-disconnect');
 
-    turnOffContextMenu();
-});
-
-document.getElementById('ecm-cut')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('ecm-cut')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    
-    if(e.button === 2){
-        return;
-    }
-    
-    copy(selectedElement);
-    
-    deleteComponentByID(wbZoom, selectedElement!.id, selectedElement!.id);
-
-    turnOffContextMenu();
-});
-
-document.getElementById('ecm-delete')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('ecm-delete')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    
-    if(e.button === 2){
-        return;
+    if(!COPY || !CUT || !DELETE
+        || !CONNECT || !DISCONNECT
+    ) {
+        throw new Error("Some options of element context menu not found, cannot proceed");
     }
 
-    if(selectedElement!.classList.contains('note-container')) {
-        deleteNoteByID(wbZoom, selectedElement!.id);
-    } else if(selectedElement!.classList.contains('notepad')) {
-        deleteNotepadByID(wbZoom, selectedElement!.id);
-    } else {
-        deleteWhiteboardByID(wbZoom, selectedElement!.id);
-    }
+    COPY.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    COPY.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+        
+        if(e.button === 2){
+            return;
+        }
+        
+        copy(selectedElement);
 
-    turnOffContextMenu();
-});
+        turnOffContextMenu();
+    });
 
-document.getElementById('ecm-connect')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('ecm-connect')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    
-    if(e.button === 2){
-        return;
-    }
+    CUT.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    CUT.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+        
+        if(e.button === 2){
+            return;
+        }
+        
+        copy(selectedElement);
+        
+        deleteComponentByID(wbZoom, selectedElement!.id, selectedElement!.id);
 
-    forgetContextMenus();
-    if (!selectedElement) return;
+        turnOffContextMenu();
+    });
 
-    createPath(wbZoom, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, selectedElement.id, null, true);
-    console.log('path created');
-});
+    DELETE.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    DELETE.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+        
+        if(e.button === 2){
+            return;
+        }
 
-document.getElementById('ecm-disconnect')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('ecm-disconnect')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    
-    if(e.button === 2){
-        return;
-    }
+        if(selectedElement!.classList.contains('note-container')) {
+            deleteNoteByID(wbZoom, selectedElement!.id);
+        } else if(selectedElement!.classList.contains('notepad')) {
+            deleteNotepadByID(wbZoom, selectedElement!.id);
+        } else {
+            deleteWhiteboardByID(wbZoom, selectedElement!.id);
+        }
 
-    disconnectConnectedPaths(selectedElement!.id);
+        turnOffContextMenu();
+    });
 
-    turnOffContextMenu();
-});
+    CONNECT.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    CONNECT.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+        
+        if(e.button === 2){
+            return;
+        }
+
+        forgetContextMenus();
+        if (!selectedElement) return;
+
+        createPath(wbZoom, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, selectedElement.id, null, true);
+        console.log('path created');
+    });
+
+    DISCONNECT.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    DISCONNECT.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+        
+        if(e.button === 2){
+            return;
+        }
+
+        disconnectConnectedPaths(selectedElement!.id);
+
+        turnOffContextMenu();
+    });
+}

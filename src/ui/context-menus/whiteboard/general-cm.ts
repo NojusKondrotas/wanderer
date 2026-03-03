@@ -28,81 +28,95 @@ export function registerGeneralCM(identifier) {
         );
 }
 
-document.getElementById('gcm-new-note')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('gcm-new-note')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+export function initGeneralCMOptions() {
+    const NEW_NOTE = document.getElementById('gcm-new-note');
+    const NEW_NOTEPAD = document.getElementById('gcm-new-notepad');
+    const NEW_WHITEBOARD = document.getElementById('gcm-new-whiteboard');
+    const NEW_CONNECTION = document.getElementById('gcm-new-connection');
+    const PASTE = document.getElementById('gcm-paste');
 
-    if(e.button === 2){
-        return;
+    if(!NEW_NOTE || !NEW_NOTEPAD || !NEW_WHITEBOARD
+        || !NEW_CONNECTION || !PASTE
+    ) {
+        throw new Error("Some options of general context menu not found, cannot proceed");
     }
 
-    createNewNote(wbZoom, '', new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
+    NEW_NOTE.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    NEW_NOTE.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-    turnOffContextMenu();
-});
+        if(e.button === 2){
+            return;
+        }
 
-document.getElementById('gcm-new-notepad')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('gcm-new-notepad')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+        createNewNote(wbZoom, '', new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
 
-    if(e.button === 2){
-        return;
-    }
+        turnOffContextMenu();
+    });
 
-    createNewNotepad(wbZoom, contextMenuCenter.x, contextMenuCenter.y);
+    NEW_NOTEPAD.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    NEW_NOTEPAD.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-    turnOffContextMenu();
-});
+        if(e.button === 2){
+            return;
+        }
 
-document.getElementById('gcm-new-whiteboard')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('gcm-new-whiteboard')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+        createNewNotepad(wbZoom, contextMenuCenter.x, contextMenuCenter.y);
 
-    if(e.button === 2){
-        return;
-    }
+        turnOffContextMenu();
+    });
 
-    createNewWhiteboard(wbZoom, contextMenuCenter.x, contextMenuCenter.y);
+    NEW_WHITEBOARD.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    NEW_WHITEBOARD.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-    turnOffContextMenu();
-});
+        if(e.button === 2){
+            return;
+        }
 
-document.getElementById('gcm-new-connection')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('gcm-new-connection')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+        createNewWhiteboard(wbZoom, contextMenuCenter.x, contextMenuCenter.y);
 
-    if(e.button === 2){
-        return;
-    }
+        turnOffContextMenu();
+    });
 
-    createPath(wbZoom, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, null, null, true);
+    NEW_CONNECTION.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    NEW_CONNECTION.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-    forgetContextMenus();
-});
+        if(e.button === 2){
+            return;
+        }
 
-document.getElementById('gcm-paste')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('gcm-paste')!.addEventListener('mouseup', async (e) => {
-    e.stopPropagation();
+        createPath(wbZoom, { x: contextMenuCenter.x, y: contextMenuCenter.y }, { x: e.clientX, y: e.clientY }, null, null, true);
 
-    if(e.button === 2){
-        return;
-    }
+        forgetContextMenus();
+    });
 
-    let clipboardContent = await readWandererClipboard();
-    let {isHTML, element} = parseClipboardElement(clipboardContent);
-    if(!isHTML) return createNewNote(wbZoom, clipboardContent, new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
+    PASTE.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    PASTE.addEventListener('mouseup', async (e) => {
+        e.stopPropagation();
 
-    if(element.type === 'n'){
-        return createNewNote(wbZoom, element.content, new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
-    }
-});
+        if(e.button === 2){
+            return;
+        }
+
+        let clipboardContent = await readWandererClipboard();
+        let {isHTML, element} = parseClipboardElement(clipboardContent);
+        if(!isHTML) return createNewNote(wbZoom, clipboardContent, new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
+
+        if(element.type === 'n'){
+            return createNewNote(wbZoom, element.content, new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
+        }
+    });
+}

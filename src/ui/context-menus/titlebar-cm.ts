@@ -25,75 +25,81 @@ export function registerTitlebarCM(identifier: string) {
         );
 }
 
-const tcmOpts = [
-    document.getElementById('tcm-fullscreen-window'),
-    document.getElementById('tcm-maximize-window'),
-    document.getElementById('tcm-minimize-window'),
-    document.getElementById('tcm-close-window'),
-    document.getElementById('tcm-global-config-menu')
-];
+export function initTitlebarCMOptions() {
+    const FULLSCREEN = document.getElementById('tcm-fullscreen-window');
+    const MAXIMIZE = document.getElementById('tcm-maximize-window');
+    const MINIMIZE = document.getElementById('tcm-minimize-window');
+    const CLOSE = document.getElementById('tcm-close-window');
+    const CONFIG = document.getElementById('tcm-global-config-menu');
 
-tcmOpts[0]!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-tcmOpts[0]!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-
-    if(e.button === 2){
-        return;
+    if(!FULLSCREEN || !MAXIMIZE || !MINIMIZE
+        || !CLOSE || !CONFIG
+    ) {
+        throw new Error("Some options of titlebar context menu not found, cannot proceed");
     }
 
-    titlebarToggleFullScreen();
-});
+    FULLSCREEN.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    FULLSCREEN.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-tcmOpts[1]!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-tcmOpts[1]!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+        if(e.button === 2){
+            return;
+        }
 
-    if(e.button === 2){
-        return;
-    }
+        titlebarToggleFullScreen();
+    });
 
-    titlebarToggleMaximized();
-});
+    MAXIMIZE.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    MAXIMIZE.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-tcmOpts[2]!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-tcmOpts[2]!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+        if(e.button === 2){
+            return;
+        }
 
-    if(e.button === 2){
-        return;
-    }
+        titlebarToggleMaximized();
+    });
 
-    titlebarToggleMinimized();
-});
+    MINIMIZE.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    MINIMIZE.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-tcmOpts[3]!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-tcmOpts[3]!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+        if(e.button === 2){
+            return;
+        }
 
-    if(e.button === 2){
-        return;
-    }
+        titlebarToggleMinimized();
+    });
 
-    closeWindow();
-});
+    CLOSE.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    CLOSE.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-tcmOpts[4]!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-tcmOpts[4]!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+        if(e.button === 2){
+            return;
+        }
 
-    if(e.button === 2){
-        return;
-    }
+        closeWindow();
+    });
 
-    displayConfigs(1, 1);
-});
+    CONFIG.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    CONFIG.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+
+        if(e.button === 2){
+            return;
+        }
+
+        displayConfigs(1, 1);
+    });
+}

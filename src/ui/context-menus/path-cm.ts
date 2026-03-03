@@ -23,44 +23,55 @@ export function registerPathCM(identifier: string) {
         );
 }
 
-document.getElementById('acm-connect')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('acm-connect')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+export function initPathCMOptions() {
+    const CONNECT = document.getElementById('acm-connect');
+    const DISCONNECT = document.getElementById('acm-disconnect');
+    const DELETE = document.getElementById('acm-delete');
 
-    if(e.button === 2){
-        return;
+    if(!CONNECT || !DISCONNECT || !DELETE) {
+        throw new Error("Some options of path context menu not found, cannot proceed");
     }
 
-    openPathConnectionContextMenu(true);
-});
 
-document.getElementById('acm-disconnect')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('acm-disconnect')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    console.log('acm-disconnect');
+    CONNECT.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    CONNECT.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-    if(e.button === 2){
-        return;
-    }
+        if(e.button === 2){
+            return;
+        }
 
-    openPathConnectionContextMenu(false);
-});
+        openPathConnectionContextMenu(true);
+    });
 
-document.getElementById('acm-delete')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-document.getElementById('acm-delete')!.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    
-    if(e.button === 2){
-        return;
-    }
+    DISCONNECT.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    DISCONNECT.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+        console.log('acm-disconnect');
 
-    deletePathByID(selectedPath!.ID);
+        if(e.button === 2){
+            return;
+        }
 
-    turnOffContextMenu();
-});
+        openPathConnectionContextMenu(false);
+    });
+
+    DELETE.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    DELETE.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+        
+        if(e.button === 2){
+            return;
+        }
+
+        deletePathByID(selectedPath!.ID);
+
+        turnOffContextMenu();
+    });
+}
