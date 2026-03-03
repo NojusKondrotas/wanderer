@@ -140,7 +140,11 @@ export function turnOffContextMenu(){
     forgetContextMenuSelection()
 }
 
-export function openNewContextMenu(centerX, centerY, cm: IContextMenu){
+export function openNewContextMenu(centerX, centerY, identifier: string){
+    const cm = ContextMenuRegister.getContextMenu(identifier);
+    if(!cm) {
+        throw new Error("context menu that's ought to be open must be registered");
+    }
     if(activeContextMenu === cm){
         setContextMenuCenter(new Vector2D(centerX, centerY))
         return moveContextMenu(centerX, centerY, cm);
