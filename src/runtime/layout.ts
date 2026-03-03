@@ -1,6 +1,6 @@
 import { createNewElement, elementPositions } from "../instantiable-components/component-handler.js";
 import { createPath } from "../instantiable-components/path.js";
-import { borderColorCM, colorCM } from "../ui/context-menus/handler-context-menu.js";
+import { borderColorCM, colorCM, IContextMenuCircular } from "../ui/context-menus/handler-context-menu.js";
 import { wbZoom } from "../ui/parent-whiteboard-handler.js";
 import { generateRandom } from "./numerics.js";
 
@@ -25,13 +25,13 @@ export function situateAppearanceSingular(el: HTMLElement, x: number, y: number)
     })
 }
 
-export function offsetAppearanceCircular(els: Array<HTMLElement>, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }) {
-    els.forEach((option, i) => {
-        const angleDeg = angleOffset + i * angleSize
+export function offsetAppearanceCircular(els: HTMLCollectionOf<HTMLElement>, cm: IContextMenuCircular) {
+    Array.from(els).forEach((option, i) => {
+        const angleDeg = cm.angleOffset + i * cm.angleSize
         const angleRad = angleDeg * Math.PI / 180
 
-        let x = radius * Math.cos(angleRad) + xOffset
-        let y = radius * Math.sin(angleRad) + yOffset
+        let x = cm.radius * Math.cos(angleRad) + cm.xOffset
+        let y = cm.radius * Math.sin(angleRad) + cm.yOffset
 
         const offsetX = generateRandom(-50, 50)
         const offsetY = generateRandom(-50, 50)
@@ -41,14 +41,14 @@ export function offsetAppearanceCircular(els: Array<HTMLElement>, { blueprint, a
     })
 }
 
-export function situateAppearanceCircular(els: Array<HTMLElement>, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }) {
+export function situateAppearanceCircular(els: HTMLCollectionOf<HTMLElement>, cm: IContextMenuCircular) {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            els.forEach((option, i) => {
-                const angleDeg = angleOffset + i * angleSize
+            Array.from(els).forEach((option, i) => {
+                const angleDeg = cm.angleOffset + i * cm.angleSize
                 const angleRad = angleDeg * Math.PI / 180
-                const x = radius * Math.cos(angleRad) + xOffset
-                const y = radius * Math.sin(angleRad) + yOffset
+                const x = cm.radius * Math.cos(angleRad) + cm.xOffset
+                const y = cm.radius * Math.sin(angleRad) + cm.yOffset
 
                 option.style.left = `${x}px`
                 option.style.top = `${y}px`
@@ -61,15 +61,15 @@ export function situateAppearanceCircular(els: Array<HTMLElement>, { blueprint, 
     })
 }
 
-export function generateCircularLayout(centerX: number, centerY: number, { blueprint, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0 }){
-    blueprint.style.left = `${centerX}px`
-    blueprint.style.top = `${centerY}px`
+export function generateCircularLayout(centerX: number, centerY: number, cm: IContextMenuCircular){
+    cm.container.style.left = `${centerX}px`
+    cm.container.style.top = `${centerY}px`
 
-    const children: Array<HTMLElement> = Array.from(blueprint.children);
+    const children: HTMLCollectionOf<HTMLElement> = cm.options;
 
-    offsetAppearanceCircular(children, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset });
+    offsetAppearanceCircular(children, cm);
 
-    situateAppearanceCircular(children, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset });
+    situateAppearanceCircular(children, cm);
 }
 
 export function generateLadderLayout(originX: number, originY: number, { blueprint, gapSize }, xOffset = -145, yOffset = -100){

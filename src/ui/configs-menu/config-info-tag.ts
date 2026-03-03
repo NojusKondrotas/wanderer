@@ -4,7 +4,7 @@ import { activeSectionIdx, displayConfigMenu, hideConfigMenu, menusLadders, sect
 const configsInfoTag = document.getElementById('cfg-itag')!
 const configsInfoTagField = document.getElementById('cfg-itag-field')!;
 
-(function addConfigsInfoTagListeners() {
+function addConfigsInfoTagListeners() {
     configsInfoTag.addEventListener('click', (e) => {
         e.stopPropagation();
         hideConfigMenu();
@@ -42,7 +42,7 @@ const configsInfoTagField = document.getElementById('cfg-itag-field')!;
         toggleConfigInfoTag(false);
         setActiveSectionIdx(-1)
     });
-})();
+}
 
 function placeConfigInfoTag(element) {
     const configsInfoTagRect = configsInfoTag.getBoundingClientRect();
