@@ -1,5 +1,5 @@
-import { closeWindow } from "../../../../main/whiteboard-renderer.js"
 import { AppStates } from "../../../../runtime/states-handler.js"
+import { closeWindow } from "../../../../utils/close-window.js"
 import { turnOffContextMenu } from "../../../context-menus/handler-context-menu.js"
 import { mouseDown_LinkMoveHandler } from "../../../positioning/link-positioning.js"
 
@@ -50,8 +50,8 @@ titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
 })
 
 titlebarCloseCtrlFrame.addEventListener('click', (e) => {
-    e.stopPropagation()
-    closeWindow()
+    e.stopPropagation();
+    closeWindow();
 })
 
 titlebarMoverCtrlFrame.addEventListener('mousedown', (e) => {

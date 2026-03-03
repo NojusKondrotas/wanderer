@@ -8,9 +8,9 @@ import "../../../ui/positioning/link-positioning.js"
 
 import { AppStates } from "../../../runtime/states-handler.js";
 import { LinkPositioningHandler, mouseDown_LinkMoveHandler, mouseMove_LinkMoveHandler, mouseUp_LinkMoveHandler } from "../../../ui/positioning/link-positioning.js";
+import { closeWindow, isWindowClosing } from "../../../utils/close-window.js"
 
 AppStates.isPromptLink = true;
-let isWindowClosing = false;
 
 (async () => {
   async function getWebviewLink() {
@@ -35,11 +35,6 @@ LinkPositioningHandler.cover.addEventListener('mouseup', (e) => {
 })
 
 LinkPositioningHandler.cover.style.display = 'none'
-
-function closeWindow(){
-    isWindowClosing = true
-    window.wandererAPI.closeWindow()
-}
 
 window.addEventListener("beforeunload", () => {
     if(!isWindowClosing) closeWindow()

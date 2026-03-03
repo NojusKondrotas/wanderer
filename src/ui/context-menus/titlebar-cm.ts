@@ -1,4 +1,4 @@
-import { closeWindow } from "../../main/whiteboard-renderer.js";
+import { closeWindow } from "../../utils/close-window.js";
 import { displayConfigs } from "../configs-menu/configs.js";
 import { titlebarToggleFullScreen, titlebarToggleMaximized, titlebarToggleMinimized } from "../titlebars/titlebar.js";
 import { ContextMenuRegister, createContextMenu, createContextMenuCircular } from "./handler-context-menu.js";

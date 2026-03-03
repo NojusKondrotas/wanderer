@@ -27,6 +27,7 @@ import "../ui/zoom-whiteboard.js"
 import "../ui/positioning/mouse-drag-calc.js"
 import "../ui/positioning/window-positioning.js"
 import "../ui/positioning/whiteboard-positioning.js"
+import "../utils/close-window.js"
 
 import { allElementConnections, configureAllElements, configureAllPaths, elementPositions, largestElementID, reinstateAllBorders, selectedElement, setAllElementConnections, setElementPositions, setLargestElID, setUnusedElIDs, unusedElementIDs } from "../instantiable-components/component-handler.js";
 import { elementHierarchy, setElementHierarchy } from "../instantiable-components/hierarchy-handler.js";
@@ -48,8 +49,7 @@ import { boardOffset, setBoardOffset, setZoomFactor, zoomFactor, zoomWhiteboard 
 import { WBSave } from "./types/wb-state.js";
 import { ecm, initElementCMOptions, registerElementCM } from "../ui/context-menus/whiteboard/element-cm.js"
 import { acm, initPathCMOptions, registerPathCM } from "../ui/context-menus/path-cm.js"
-
-export let isWindowClosing = false;
+import { isWindowClosing, setIsWindowClosing } from "../utils/close-window.js"
 
 export let scrollLastX = window.scrollX, scrollLastY = window.scrollY;
 export let scrollIsChanging = false;
@@ -207,13 +207,8 @@ async function save(){
     })
 }
 
-export function closeWindow(){
-    isWindowClosing = true
-    window.wandererAPI.closeWindow()
-}
-
 window.wandererAPI.onTerminateWindow(() => {
-    isWindowClosing = true
+    setIsWindowClosing(true);
 })
 
 window.wandererAPI.onSaveComponent(async () => {

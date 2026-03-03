@@ -1,7 +1,7 @@
 import { selectedElement } from "../../instantiable-components/component-handler.js"
 import { toggleWritingMode } from "../../instantiable-components/note.js"
-import { closeWindow } from "../../main/whiteboard-renderer.js"
 import { AppStates } from "../../runtime/states-handler.js"
+import { closeWindow } from "../../utils/close-window.js"
 import { turnOffContextMenu } from "../context-menus/handler-context-menu.js"
 
 export const titlebar = document.getElementById('titlebar')!
@@ -107,8 +107,8 @@ titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
 })
 
 titlebarCloseCtrlFrame.addEventListener('click', (e) => {
-    e.stopPropagation()
-    closeWindow()
+    e.stopPropagation();
+    closeWindow();
 })
 
 titlebarGlobalConfigurationFrame.addEventListener('click', (e) => {
