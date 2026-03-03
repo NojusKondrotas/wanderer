@@ -35,9 +35,9 @@ import { allPaths, largestPathID, setAllPaths, setLargestPathID, setUnusedPathID
 import { logMessage } from "../runtime/logger.js";
 import { AppStates } from "../runtime/states-handler.js";
 import { genMouseMove_ContextMenuHandler, openNewContextMenu } from "../ui/context-menus/handler-context-menu.js";
-import { tcm } from "../ui/context-menus/titlebar-cm.js";
-import { gcm } from "../ui/context-menus/whiteboard/general-cm.js";
-import { handleKeybindGuideAppearance } from "../ui/keybind-guide.js";
+import { initTitlebarCMOptions, registerTitlebarCM, tcm } from "../ui/context-menus/titlebar-cm.js";
+import { gcm, initGeneralCMOptions, registerGeneralCM } from "../ui/context-menus/whiteboard/general-cm.js";
+import { handleKeybindGuideAppearance, initKeybindGuide } from "../ui/keybind-guide.js";
 import { pressedKeys } from "../ui/keybinds.js";
 import { wbZoom } from "../ui/parent-whiteboard-handler.js";
 import { genMouseDown_WhiteboardMoveHandler, genMouseMove_WhiteboardMoveHandler, genMouseUp_WhiteboardMoveHandler, setWBOffset, updateComponentPositionsByOffset, wbOffset } from "../ui/positioning/whiteboard-positioning.js";
@@ -46,6 +46,8 @@ import { initTitlebar } from "../ui/titlebars/titlebar.js";
 import { setWindowComponentID, setWindowComponentIDEl, windowComponentID, windowComponentIDEl } from "../ui/window-component-id-handler.js";
 import { boardOffset, setBoardOffset, setZoomFactor, zoomFactor, zoomWhiteboard } from "../ui/zoom-whiteboard.js";
 import { WBSave } from "./types/wb-state.js";
+import { ecm, initElementCMOptions, registerElementCM } from "../ui/context-menus/whiteboard/element-cm.js"
+import { acm, initPathCMOptions, registerPathCM } from "../ui/context-menus/path-cm.js"
 
 export let isWindowClosing = false;
 
@@ -109,6 +111,19 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.log(wbOffset)
     }
 
+    registerGeneralCM(gcm)
+    initGeneralCMOptions()
+
+    registerElementCM(ecm)
+    initElementCMOptions()
+
+    registerPathCM(acm)
+    initPathCMOptions()
+
+    registerTitlebarCM(tcm)
+    initTitlebarCMOptions()
+
+    initKeybindGuide()
     handleKeybindGuideAppearance(true)
     initTitlebar()
 })
