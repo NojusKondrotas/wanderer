@@ -34,38 +34,40 @@ function disconnectPathEnd(path){
     path.endNoteID = null;
 }
 
-pathStartPoint.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-pathStartPoint.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
+export function initPathConnectionPointsSettings() {
+    pathStartPoint.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    pathStartPoint.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
 
-    if(AppStates.isConnecting) connectPathStart(selectedPath)
-    else disconnectPathStart(selectedPath)
-    closePathConnectionContextMenu()
-})
+        if(AppStates.isConnecting) connectPathStart(selectedPath)
+        else disconnectPathStart(selectedPath)
+        closePathConnectionContextMenu()
+    })
 
-pathMiddlePoint.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-pathMiddlePoint.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    
-    disconnectPathStart(selectedPath)
-    disconnectPathEnd(selectedPath)
-    closePathConnectionContextMenu()
-})
+    pathMiddlePoint.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    pathMiddlePoint.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+        
+        disconnectPathStart(selectedPath)
+        disconnectPathEnd(selectedPath)
+        closePathConnectionContextMenu()
+    })
 
-pathEndPoint.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-});
-pathEndPoint.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    
-    if(AppStates.isConnecting) connectPathEnd(selectedPath)
-    else disconnectPathEnd(selectedPath)
-    closePathConnectionContextMenu()
-})
+    pathEndPoint.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+    });
+    pathEndPoint.addEventListener('mouseup', (e) => {
+        e.stopPropagation();
+        
+        if(AppStates.isConnecting) connectPathEnd(selectedPath)
+        else disconnectPathEnd(selectedPath)
+        closePathConnectionContextMenu()
+    })
+}
 
 export function disconnectConnectedPaths(elID){
     const paths = allElementConnections.get(elID);
