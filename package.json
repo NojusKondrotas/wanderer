@@ -17,6 +17,7 @@
     "start-bst": "npm run bt && npm run c-sass && electron .",
     "fresh-bs": "npm run c-sass && npm run fresh",
     "fresh-be": "npm run be && npm run fresh",
+    "fresh-bt": "npm run bt && npm run fresh",
     "fresh-bet": "npm run bt && npm run fresh-be",
     "fresh-bes": "npm run be && npm run fresh-bs",
     "fresh-best": "npm run bt && npm run fresh-bes",
