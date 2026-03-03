@@ -6,17 +6,29 @@ import { createPath } from "../../../instantiable-components/path.js";
 import { deleteWhiteboardByID } from "../../../instantiable-components/whiteboard.js";
 import { copy } from "../../../runtime/clipboard.js";
 import { wbZoom } from "../../parent-whiteboard-handler.js";
-import { contextMenuCenter, forgetContextMenus, turnOffContextMenu } from "../handler-context-menu.js";
+import { contextMenuCenter, ContextMenuRegister, createContextMenu, createContextMenuCircular, forgetContextMenus, turnOffContextMenu } from "../handler-context-menu.js";
 
-const elementContextMenu = document.getElementById('element-context-menu')!
-export const ecm = {
-    blueprint : elementContextMenu,
-    angleSize : 360 / elementContextMenu.children.length,
-    radius : 90,
-    angleOffset : 0,
-    xOffset : 0,
-    yOffset : -10
-};
+export const ecm: string = "ecm";
+
+export function registerElementCM(identifier: string) {
+    const elementCM = document.getElementById('element-context-menu');
+
+    if(elementCM)
+        return ContextMenuRegister.registerContextMenu(
+            identifier,
+            createContextMenuCircular(
+                createContextMenu(
+                    elementCM,
+                    (elementCM.children) as HTMLCollectionOf<HTMLElement>,
+                    0,
+                    -10
+                ),
+                360 / elementCM.children.length,
+                90,
+                0
+            )
+        );
+}
 
 document.getElementById('ecm-copy')!.addEventListener('mousedown', (e) => {
     e.stopPropagation();

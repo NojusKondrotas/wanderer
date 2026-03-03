@@ -1,16 +1,29 @@
 import { closeWindow } from "../../main/whiteboard-renderer.js";
 import { displayConfigs } from "../configs-menu/configs.js";
 import { titlebarToggleFullScreen, titlebarToggleMaximized, titlebarToggleMinimized } from "../titlebars/titlebar.js";
+import { ContextMenuRegister, createContextMenu, createContextMenuCircular } from "./handler-context-menu.js";
 
-const titlebarContextMenu = document.getElementById('titlebar-context-menu')!
-export const tcm = {
-    blueprint : titlebarContextMenu,
-    angleSize : 360 / titlebarContextMenu.children.length,
-    radius : 85,
-    angleOffset : 234,
-    xOffset : -10,
-    yOffset : -10
-};
+export const tcm: string = "tcm";
+
+export function registerTitlebarCM(identifier: string) {
+    const titlebarCM = document.getElementById('titlebar-context-menu');
+
+    if(titlebarCM)
+        return ContextMenuRegister.registerContextMenu(
+            identifier,
+            createContextMenuCircular(
+                createContextMenu(
+                    titlebarCM,
+                    (titlebarCM.children) as HTMLCollectionOf<HTMLElement>,
+                    -10,
+                    -10
+                ),
+                360 / titlebarCM.children.length,
+                85,
+                234
+            )
+        );
+}
 
 const tcmOpts = [
     document.getElementById('tcm-fullscreen-window'),

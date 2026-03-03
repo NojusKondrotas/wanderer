@@ -4,17 +4,29 @@ import { createPath } from "../../../instantiable-components/path.js";
 import { createNewWhiteboard } from "../../../instantiable-components/whiteboard.js";
 import { parseClipboardElement, readWandererClipboard } from "../../../runtime/clipboard.js";
 import { wbZoom } from "../../parent-whiteboard-handler.js";
-import { contextMenuCenter, forgetContextMenus, turnOffContextMenu } from "../handler-context-menu.js";
+import { contextMenuCenter, ContextMenuRegister, createContextMenu, createContextMenuCircular, forgetContextMenus, turnOffContextMenu } from "../handler-context-menu.js";
 
-const generalContextMenu = document.getElementById('general-context-menu')!
-export const gcm = {
-    blueprint : generalContextMenu,
-    angleSize : 360 / generalContextMenu.children.length,
-    radius : 85,
-    angleOffset : 162,
-    xOffset : -10,
-    yOffset : -10
-};
+export const gcm: string = "gcm";
+
+export function registerGeneralCM(identifier) {
+    const generalCM = document.getElementById('general-context-menu');
+
+    if(generalCM)
+        return ContextMenuRegister.registerContextMenu(
+            identifier,
+            createContextMenuCircular(
+                createContextMenu(
+                    generalCM,
+                    (generalCM.children) as HTMLCollectionOf<HTMLElement>,
+                    -10,
+                    -10
+                ),
+                360 / generalCM.children.length,
+                85,
+                162
+            )
+        );
+}
 
 document.getElementById('gcm-new-note')!.addEventListener('mousedown', (e) => {
     e.stopPropagation();
