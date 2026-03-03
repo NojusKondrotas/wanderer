@@ -1,8 +1,33 @@
-const keybindGuide = document.getElementById('keybind-guide')!
-const keybindGuideCloseCtrl = document.getElementById('keybind-guide-close')!
-const keybindGuideCloseImg = document.getElementById('kbn-gd-cl-img')!
-const keybindContainer = document.getElementById('keybind-container')!
-const keybindContainerChildren = keybindContainer.children
+let keybindGuide: HTMLElement;
+let keybindGuideCloseCtrl: HTMLElement;
+let keybindGuideCloseImg: HTMLElement;
+let keybindContainer: HTMLElement;
+let keybindContainerChildren: HTMLCollection;
+
+export function initKeybindGuide() {
+    const keybindGuideTmp = document.getElementById('keybind-guide');
+    const keybindGuideCloseCtrlTmp = document.getElementById('keybind-guide-close')
+    const keybindGuideCloseImgTmp = document.getElementById('kbn-gd-cl-img')
+    const keybindContainerTmp = document.getElementById('keybind-container')
+
+    if(!keybindGuideTmp || !keybindGuideCloseCtrlTmp || !keybindGuideCloseImgTmp || !keybindContainerTmp) {
+        throw new Error("Some keybind dom elements not found, cannot proceed");
+    }
+
+    const keybindContainerChildrenTmp = keybindContainerTmp.children;
+
+    keybindGuide = keybindGuideTmp;
+    keybindGuideCloseCtrl = keybindGuideCloseCtrlTmp;
+    keybindGuideCloseImg = keybindGuideCloseImgTmp;
+    keybindContainer = keybindContainerTmp;
+    keybindContainerChildren = keybindContainerChildrenTmp;
+
+    document.getElementById('keybind-guide-close')!.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+        handleKeybindGuideAppearance(false);
+        keybindGuide.style.display = 'none';
+    })
+}
 
 function keybindGuide_MouseOverHandler(){
     for(let child of Array.from(keybindContainerChildren as HTMLCollectionOf<HTMLElement>)) {
@@ -39,9 +64,3 @@ export function handleKeybindGuideAppearance(flag){
         keybindGuide.removeEventListener('mouseout', keybindGuide_MouseOutHandler);
     }
 }
-
-document.getElementById('keybind-guide-close')!.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-    handleKeybindGuideAppearance(false);
-    keybindGuide.style.display = 'none';
-})
