@@ -9,25 +9,32 @@ export const borderColorCM = { opaque: "rgb(10, 10, 10)", transparent: "rgba(10,
 export const colorCM = { opaque: "rgb(10, 10, 10)", transparent: "rgba(10, 10, 10, 0)" }
 export const timeoutCM = 170
 
-export let activeContextMenu: IContextMenuLinear | IContextMenuCircular | null = null, contextMenuCenter = new Vector2D(0, 0);
+export let activeContextMenu: IContextMenu | null = null, contextMenuCenter = new Vector2D(0, 0);
 export const setActiveContextMenu = (cm) => activeContextMenu = cm;
 export const setContextMenuCenter = (pos: Vector2D) => contextMenuCenter = pos;
 
 export interface IContextMenu {
     container: HTMLElement,
-    options: HTMLCollection,
+    options: HTMLCollectionOf<HTMLElement>,
     xOffset: number,
     yOffset: number
 }
 
-interface IContextMenuLinear extends IContextMenu {
+export interface IContextMenuLinear extends IContextMenu {
     gapSize: number
 }
 
-interface IContextMenuCircular extends IContextMenu {
+export interface IContextMenuCircular extends IContextMenu {
     angleSize: number,
     radius: number,
     angleOffset: number
+}
+
+export function createContextMenu(container: HTMLElement, options: HTMLCollectionOf<HTMLElement>,
+    xOffset: number, yOffset: number) {
+    return {
+        container, options, xOffset, yOffset
+    } satisfies IContextMenu;
 }
 
 export function createContextMenuLinear(cm: IContextMenu, gapSize: number): IContextMenuLinear {
@@ -85,9 +92,9 @@ export function showCMChild(x: number, y: number, option: HTMLElement){
     })
 }
 
-function moveContextMenu(centerX: number, centerY: number, blueprint: HTMLElement){
-    blueprint.style.left = `${centerX}px`
-    blueprint.style.top = `${centerY}px`
+function moveContextMenu(centerX: number, centerY: number, cm: IContextMenu){
+    cm.container.style.left = `${centerX}px`
+    cm.container.style.top = `${centerY}px`
 }
 
 export function concealCMChild(option: HTMLElement, { x_lower = -50, x_higher = 50 } = {}, { y_lower = -50, y_higher = -50 } = {}){
@@ -109,10 +116,11 @@ export function concealContextMenuChildren(cm: HTMLElement){
 
 function concealContextMenu(){
     for(let cm of allContextMenus){
-        if(cm !== activeContextMenu){
-            concealContextMenuChildren(cm as HTMLElement)
-            setTimeout(() => (cm as HTMLElement).style.display = 'none', timeoutCM)
-        }
+        // if(cm !== activeContextMenu){
+        //     concealContextMenuChildren(cm as HTMLElement)
+        //     setTimeout(() => (cm as HTMLElement).style.display = 'none', timeoutCM)
+        // }
+        throw new Error("Unimplemented method");
     }
 }
 
@@ -132,23 +140,25 @@ export function turnOffContextMenu(){
     forgetContextMenuSelection()
 }
 
-export function openNewContextMenu(centerX, centerY, cm: IContextMenuLinear | IContextMenuCircular){
+export function openNewContextMenu(centerX, centerY, cm: IContextMenu){
     if(activeContextMenu === cm){
         setContextMenuCenter(new Vector2D(centerX, centerY))
-        return moveContextMenu(centerX, centerY, blueprint);
+        return moveContextMenu(centerX, centerY, cm);
     }
-    activeContextMenu = blueprint
+    activeContextMenu = cm
     concealContextMenu()
-    blueprint.style.display = 'block'
+    cm.container.style.display = 'block'
     AppStates.isContextMenuOpen = true
     setContextMenuCenter(new Vector2D(centerX, centerY))
-    generateCircularLayout(centerX, centerY, { blueprint, angleSize, radius, angleOffset, xOffset, yOffset })
+    if(cm['angleSize']) {
+        generateCircularLayout(centerX, centerY, cm as IContextMenuCircular);
+    }
 }
 
 export function genMouseMove_ContextMenuHandler(e){
     if (!AppStates.isContextMenuOpen || !activeContextMenu) return
 
-    Array.from(activeContextMenu.children).forEach(ctrl => {
+    Array.from(activeContextMenu.options).forEach(ctrl => {
         const rect = ctrl.getBoundingClientRect()
         const centerX = rect.left + rect.width / 2
         const centerY = rect.top + rect.height / 2
