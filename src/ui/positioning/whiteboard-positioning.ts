@@ -177,7 +177,7 @@ export class WhiteboardPositioningHandler{
 
         this.elementResizeStart = {
             dx: ev.clientX,
-            width: parseFloat(selectedElement!.style.width) || rect.width,
+            width: rect.width / zoomFactor,
             offsetLeft: selectedElement!.offsetLeft
         };
     }
