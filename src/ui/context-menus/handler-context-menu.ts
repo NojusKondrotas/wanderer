@@ -54,7 +54,7 @@ export function createContextMenuCircular(cm: IContextMenu, angleSize: number, r
 }
 
 export class ContextMenuRegister implements Iterable<IContextMenu> {
-    static menus: Map<string, IContextMenu> = new Map();
+    private static menus: Map<string, IContextMenu> = new Map();
 
     static registerContextMenu(identifier: string, cm: IContextMenu) {
         this.menus.set(identifier, cm);
@@ -70,6 +70,15 @@ export class ContextMenuRegister implements Iterable<IContextMenu> {
 
     [Symbol.iterator](): Iterator<IContextMenu> {
         return ContextMenuRegister.menus.values();
+    }
+
+    static concealContextMenus() {
+        for(const [id, cm] of this.menus){
+            if(cm !== activeContextMenu){
+                concealContextMenuChildren(cm.options)
+                setTimeout(() => (cm.container).style.display = 'none', timeoutCM)
+            }
+        }
     }
 }
 
@@ -108,20 +117,10 @@ export function concealCMChild(option: HTMLElement, { x_lower = -50, x_higher = 
     option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0)';
 }
 
-export function concealContextMenuChildren(cm: HTMLElement){
-    Array.from(cm.children as HTMLCollectionOf<HTMLElement>).forEach((option) => {
+export function concealContextMenuChildren(children: HTMLCollectionOf<HTMLElement>){
+    Array.from(children).forEach((option) => {
         concealCMChild(option);
     });
-}
-
-function concealContextMenu(){
-    for(let cm of allContextMenus){
-        // if(cm !== activeContextMenu){
-        //     concealContextMenuChildren(cm as HTMLElement)
-        //     setTimeout(() => (cm as HTMLElement).style.display = 'none', timeoutCM)
-        // }
-        throw new Error("Unimplemented method");
-    }
 }
 
 function forgetContextMenuSelection(){
@@ -131,7 +130,7 @@ function forgetContextMenuSelection(){
 
 export function forgetContextMenus(){
     activeContextMenu = null
-    concealContextMenu()
+    ContextMenuRegister.concealContextMenus()
     AppStates.isContextMenuOpen = false
 }
 
@@ -150,7 +149,7 @@ export function openNewContextMenu(centerX, centerY, identifier: string){
         return moveContextMenu(centerX, centerY, cm);
     }
     activeContextMenu = cm
-    concealContextMenu()
+    ContextMenuRegister.concealContextMenus()
     cm.container.style.display = 'block'
     AppStates.isContextMenuOpen = true
     setContextMenuCenter(new Vector2D(centerX, centerY))
