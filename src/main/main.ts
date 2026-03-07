@@ -314,6 +314,7 @@ class WindowHandler{
         let { x, y, width, height } = this.getWindowDimensions(window);
 
         this.allWindows.set(symbolicWindowID, {
+            symbolicWindowID,
             trueWindowID,
             x,
             y,
@@ -480,10 +481,9 @@ async function initialiseApp(){
     const allWindowObj = JSON.parse(await readFile(saved.allWindowsPath, 'utf-8'));
     if(Array.isArray(allWindowObj) && allWindowObj.length > 0){
         allWindowObj.forEach(winData => {
-            const id = WindowHandler.getWindowID(null);
-            WindowHandler.allWindows.set(id, winData);
+            WindowHandler.allWindows.set(winData.symbolicWindowID, winData);
             if(winData.componentID != null) {
-                WindowHandler.componentToWindowMapping.set(winData.componentID, id);
+                WindowHandler.componentToWindowMapping.set(winData.componentID, winData.symbolicWindowID);
             }
         });
     }
@@ -491,27 +491,33 @@ async function initialiseApp(){
     console.log(openWindowsObj);
     if(Array.isArray(openWindowsObj) && openWindowsObj.length > 0){
         const windowPromises = openWindowsObj.map(async (winData) => {
+            const allWinData = WindowHandler.allWindows.get(winData.symbolicWindowID);
+
+            if(!allWinData) {
+                throw new Error("winData not found, unnable to proceed");
+            }
+
             let win: BrowserWindow | null = null;
             switch(winData.windowType){
                 case WindowTypes.whiteboard:
-                    win = await WindowHandler.createWindow(WindowTypes.whiteboard, winData.componentID,
-                        winData.isMinimized, winData.isMaximized, winData.isFullScreen,
-                        winData.width, winData.height, winData.x, winData.y);
+                    win = await WindowHandler.createWindow(WindowTypes.whiteboard, allWinData.componentID,
+                        allWinData.isMinimized, allWinData.isMaximized, allWinData.isFullScreen,
+                        allWinData.width, allWinData.height, allWinData.x, allWinData.y);
                     break;
                 case WindowTypes.notepad:
-                    win = await WindowHandler.createWindow(WindowTypes.notepad, winData.componentID,
-                        winData.isMinimized, winData.isMaximized, winData.isFullScreen,
-                        winData.width, winData.height, winData.x, winData.y);
+                    win = await WindowHandler.createWindow(WindowTypes.notepad, allWinData.componentID,
+                        allWinData.isMinimized, allWinData.isMaximized, allWinData.isFullScreen,
+                        allWinData.width, allWinData.height, allWinData.x, allWinData.y);
                     break;
                 case WindowTypes.link:
-                    win = await WindowHandler.createWindow(WindowTypes.link, winData.componentID,
-                        winData.isMinimized, winData.isMaximized, winData.isFullScreen,
-                        winData.width, winData.height, winData.x, winData.y);
+                    win = await WindowHandler.createWindow(WindowTypes.link, allWinData.componentID,
+                        allWinData.isMinimized, allWinData.isMaximized, allWinData.isFullScreen,
+                        allWinData.width, allWinData.height, allWinData.x, allWinData.y);
                     break;
             }
 
             if(win) {
-                WindowHandler.initialiseWindow(win.id, winData.windowType, winData.componentID, winData.parentWindowID);
+                WindowHandler.initialiseWindow(win.id, allWinData.windowType, allWinData.componentID, allWinData.parentWindowID);
             }
         });
 

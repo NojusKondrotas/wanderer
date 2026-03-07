@@ -1,6 +1,7 @@
 import { WindowTypes } from "../main.js"
 
 export type WandererWindow = {
+    symbolicWindowID: string
     trueWindowID: number
     x: number
     y: number
