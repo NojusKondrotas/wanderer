@@ -33,7 +33,7 @@ import { allElementConnections, configureAllElements, configureAllPaths, element
 import { elementHierarchy, setElementHierarchy } from "../instantiable-components/hierarchy-handler.js";
 import { allNotes, largestNoteContainerID, reinstateAllNotesContents, saveAllNotesContents, setAllNotes, setLargestNoteContainerID, setUnusedNoteContainerIDs, toggleWritingMode, unusedNoteContainerIDs } from "../instantiable-components/note.js";
 import { allPaths, largestPathID, setAllPaths, setLargestPathID, setUnusedPathIDs, terminatePathDrawing, unusedPathIDs } from "../instantiable-components/path.js";
-import { logMessage } from "../runtime/logger.js";
+import { logMessage, writeMessages } from "../runtime/logger.js";
 import { AppStates } from "../runtime/states-handler.js";
 import { genMouseMove_ContextMenuHandler, openNewContextMenu } from "../ui/context-menus/handler-context-menu.js";
 import { initTitlebarCMOptions, registerTitlebarCM, tcm } from "../ui/context-menus/titlebar-cm.js";
@@ -94,21 +94,21 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         document.body.style.cursor = 'default'
 
-        console.log(largestElementID)
-        console.log(unusedElementIDs)
-        console.log(largestPathID)
-        console.log(unusedPathIDs)
-        console.log(largestNoteContainerID)
-        console.log(unusedNoteContainerIDs)
-        console.log(elementPositions)
-        console.log(elementHierarchy)
-        console.log(allPaths)
-        console.log(allNotes)
-        console.log(allElementConnections)
-        console.log(AppStates.isTitlebarLocked)
-        console.log(zoomFactor)
-        console.log(boardOffset)
-        console.log(wbOffset)
+        writeMessages('largestElementID:', JSON.stringify(largestElementID))
+        writeMessages('unusedElementIDs:', JSON.stringify(unusedElementIDs))
+        writeMessages('largestPathID:', JSON.stringify(largestPathID))
+        writeMessages('unusedPathIDs:', JSON.stringify(unusedPathIDs))
+        writeMessages('largestNoteContainerID:', JSON.stringify(largestNoteContainerID))
+        writeMessages('unusedNoteContainerIDs:', JSON.stringify(unusedNoteContainerIDs))
+        writeMessages('elementPositions:', JSON.stringify(elementPositions))
+        writeMessages('elementHierarchy:', JSON.stringify(elementHierarchy))
+        writeMessages('allPaths:', JSON.stringify(allPaths))
+        writeMessages('allNotes:', JSON.stringify(allNotes))
+        writeMessages('allElementConnections:', JSON.stringify(allElementConnections))
+        writeMessages('AppStates.isTitlebarLocked:', JSON.stringify(AppStates.isTitlebarLocked))
+        writeMessages('zoomFactor:', JSON.stringify(zoomFactor))
+        writeMessages('boardOffset:', JSON.stringify(boardOffset))
+        writeMessages('wbOffset:', JSON.stringify(wbOffset))
     }
 
     registerGeneralCM(gcm)
