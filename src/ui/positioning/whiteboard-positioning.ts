@@ -39,10 +39,13 @@ export class WhiteboardPositioningHandler{
             selectedElement!.style.width = Math.max(this.elementResizeStart.width + dxResizeBoard, 22) + 'px';
         } else if (activeBorder === 'left') {
             const newWidth = Math.max(this.elementResizeStart.width - dxResizeBoard, 22);
-            if(newWidth === 22 && dxResizeBoard >= 0) return;
-
             selectedElement!.style.width = newWidth + 'px';
-            selectedElement!.style.left = (this.elementResizeStart.offsetLeft + dxResizeBoard) + 'px';
+
+            if(newWidth === 22) {
+                selectedElement!.style.left = (this.elementResizeStart.offsetRight - 22) + 'px';
+            } else {
+                selectedElement!.style.left = (this.elementResizeStart.offsetLeft + dxResizeBoard) + 'px';
+            }
         }
     }
 
@@ -178,7 +181,8 @@ export class WhiteboardPositioningHandler{
         this.elementResizeStart = {
             dx: ev.clientX,
             width: rect.width / zoomFactor,
-            offsetLeft: selectedElement!.offsetLeft
+            offsetLeft: selectedElement!.offsetLeft,
+            offsetRight: selectedElement!.offsetLeft + rect.width / zoomFactor
         };
     }
 
