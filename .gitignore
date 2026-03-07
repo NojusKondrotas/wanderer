@@ -2,7 +2,7 @@ node_modules/
 
 dist/
 
-src/saves/
+saves/
 
 src/main/**/*.css
 src/main/**/*.css.map

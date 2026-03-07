@@ -8,20 +8,20 @@ async function writeHTML(src, dest){
 }
 
 async function build() {
-    const mainDir = './dist/main';
+    const mainDir = path.join('saves', 'defaults');
     const srcs = [
-        path.join('./src/dev/', 'notepad-index.ejs'),
-        path.join('./src/dev/', 'whiteboard-index.ejs'),
-        path.join('./src/dev/prompts/', 'prompt-first-time.ejs'),
-        path.join('./src/dev/prompts/', 'prompt-link.ejs'),
-        path.join('./src/dev/prompts/', 'configs.ejs')
+        path.join('src', 'dev', 'notepad-index.ejs'),
+        path.join('src', 'dev', 'whiteboard-index.ejs'),
+        path.join('src', 'dev', 'prompts', 'prompt-first-time.ejs'),
+        path.join('src', 'dev', 'prompts', 'prompt-link.ejs'),
+        path.join('src', 'dev', 'prompts', 'configs.ejs')
     ];
     const dests = [
         path.join(mainDir, 'notepad-index.html'),
         path.join(mainDir, 'whiteboard-index.html'),
-        path.join(mainDir, 'prompts/first-time', 'prompt-first-time.html'),
-        path.join(mainDir, 'prompts/link', 'prompt-link.html'),
-        path.join(mainDir, 'prompts/configs', 'configs.html')
+        path.join(mainDir, 'prompts', 'first-time', 'prompt-first-time.html'),
+        path.join(mainDir, 'prompts', 'link', 'prompt-link.html'),
+        path.join(mainDir, 'prompts', 'configs', 'configs.html')
     ];
 
     for(let i = 0; i < srcs.length; ++i) {
