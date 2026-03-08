@@ -10,7 +10,7 @@ export class MouseDragHandler {
 
     static resetMouseDrag(ev){
         let boardSpace = { x: ev.screenX, y: ev.screenY }
-        if (AppStates.isComponentWhiteboard) {
+        if (AppStates.isComponentWhiteboard || AppStates.isPromptConfigs) {
             boardSpace = convertToZoomSpace(ev.screenX, ev.screenY)
         }
 
@@ -23,7 +23,7 @@ export class MouseDragHandler {
 
     static updateMouseDrag(ev){
         let boardSpace = { x: ev.screenX, y: ev.screenY }
-        if (AppStates.isComponentWhiteboard) {
+        if (AppStates.isComponentWhiteboard || AppStates.isPromptConfigs) {
             boardSpace = convertToZoomSpace(ev.screenX, ev.screenY)
         }
 
