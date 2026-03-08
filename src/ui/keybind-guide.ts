@@ -1,3 +1,5 @@
+import { AppStates } from "../runtime/states-handler.js";
+
 let keybindGuide: HTMLElement;
 let keybindGuideCloseCtrl: HTMLElement;
 let keybindGuideCloseImg: HTMLElement;
@@ -44,6 +46,8 @@ function keybindGuide_MouseOutHandler(){
 }
 
 export function handleKeybindGuideAppearance(flag){
+    if(AppStates.isPromptConfigs) return;
+    
     if(flag){
         keybindGuide.style.pointerEvents = "auto";
         keybindGuideCloseImg.style.color = '0';

@@ -13,12 +13,12 @@ import "../../../ui/zoom-whiteboard.js"
 import "../../../ui/positioning/mouse-drag-calc.js"
 import "../../../ui/positioning/window-positioning.js"
 import "../../../ui/positioning/whiteboard-positioning.js"
-import "../../../ui/configs-menu/config-abstract.js"
-import "../../../ui/configs-menu/config-info-tag.js"
 import "../../../ui/configs-menu/configs.js"
 
-import { displayConfigs } from "../../../ui/configs-menu/configs.js";
+import { displayConfigs, initConfigsContainer, } from "../../../ui/configs-menu/configs.js";
 import { initTitlebar } from "../../../ui/titlebars/titlebar.js";
+import { initWhiteboardMovement } from "../../../utils/whiteboard-movement.js"
+import { AppStates } from "../../../runtime/states-handler.js"
 
 initTitlebar();
 
@@ -31,6 +31,11 @@ window.wandererAPI.onSaveComponent(async () => {
 });
 
 (async () => {
+    AppStates.isPromptConfigs = true;
+
     const center = await window.wandererAPI.getWindowCenter();
+    initConfigsContainer();
     displayConfigs(center.x, center.y);
+
+    initWhiteboardMovement();
 })();

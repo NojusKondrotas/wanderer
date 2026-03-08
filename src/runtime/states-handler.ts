@@ -16,6 +16,7 @@ class StatesHandler{
 
     ////////////////////////////////
 
+    isPromptConfigs = false
     isPromptFirstTime = false
     isPromptLink = false
     isComponentNotepad = false

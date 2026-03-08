@@ -26,6 +26,11 @@ export function situateAppearanceSingular(el: HTMLElement, v: Vector2D) {
     })
 }
 
+export function placeAppearanceSingular(el: HTMLElement, v: Vector2D) {
+    offsetAppearanceSingular(el, v);
+    situateAppearanceSingular(el, v);
+}
+
 export function offsetAppearanceCircular(els: HTMLCollectionOf<HTMLElement>, cm: IContextMenuCircular) {
     Array.from(els).forEach((option, i) => {
         const angleDeg = cm.angleOffset + i * cm.angleSize
