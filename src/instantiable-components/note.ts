@@ -54,6 +54,8 @@ export function toggleWritingMode(toggle = false, editableElContainerID){
     else{
         editableEl.contentEditable = 'false'
         editableEl.style.userSelect = 'none'
+
+        editableEl.toggleAttribute('data-empty', editableEl.textContent.trim() === "");
         
         AppStates.isWritingElement = false
         setSelectedElement(null)

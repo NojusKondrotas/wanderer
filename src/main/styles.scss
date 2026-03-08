@@ -326,7 +326,9 @@ body {
 }
 
 .note-container:has(.note:empty)::before,
-.note-container:has(.note:empty)::after {
+.note-container:has(.note:empty)::after,
+.note-container:has(.note[data-empty])::before,
+.note-container:has(.note[data-empty])::after {
     clip-path: inset(0 0 0 0);
 }
 
