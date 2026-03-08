@@ -40,7 +40,7 @@ import { initTitlebarCMOptions, registerTitlebarCM, tcm } from "../ui/context-me
 import { gcm, initGeneralCMOptions, registerGeneralCM } from "../ui/context-menus/whiteboard/general-cm.js";
 import { handleKeybindGuideAppearance, initKeybindGuide } from "../ui/keybind-guide.js";
 import { pressedKeys } from "../ui/keybinds.js";
-import { wbZoom } from "../ui/parent-whiteboard-handler.js";
+import { initWhiteboards, wbZoom } from "../ui/parent-whiteboard-handler.js";
 import { genMouseDown_WhiteboardMoveHandler, genMouseMove_WhiteboardMoveHandler, genMouseUp_WhiteboardMoveHandler, setWBOffset, updateComponentPositionsByOffset, wbOffset } from "../ui/positioning/whiteboard-positioning.js";
 import { closeTabsMenu, openTabsMenu } from "../ui/tabs-menu-handler.js";
 import { initTitlebar } from "../ui/titlebars/titlebar.js";
@@ -50,6 +50,7 @@ import { WBSave } from "./types/wb-state.js";
 import { ecm, initElementCMOptions, registerElementCM } from "../ui/context-menus/whiteboard/element-cm.js"
 import { acm, initPathCMOptions, registerPathCM } from "../ui/context-menus/path-cm.js"
 import { isWindowClosing, setIsWindowClosing } from "../utils/close-window.js"
+import { initPathConnectionCMOptions } from "../instantiable-components/path-connection-handler.js"
 
 export let scrollLastX = window.scrollX, scrollLastY = window.scrollY;
 export let scrollIsChanging = false;
@@ -60,6 +61,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     setWindowComponentID(await window.wandererAPI.getWindowComponentID())
     setWindowComponentIDEl(document.getElementById('window-component-id'))
     windowComponentIDEl.textContent = windowComponentID
+
+    initWhiteboards();
     
     const stateObj = await window.wandererAPI.loadWhiteboardState() as WBSave
 
@@ -122,6 +125,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     registerTitlebarCM(tcm)
     initTitlebarCMOptions()
+
+    initPathConnectionCMOptions();
 
     initKeybindGuide()
     handleKeybindGuideAppearance(true)

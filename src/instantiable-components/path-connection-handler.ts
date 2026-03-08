@@ -4,37 +4,36 @@ import { convertFromWhiteboardSpace } from "../ui/zoom-whiteboard.js"
 import { allElementConnections } from "./component-handler.js"
 import { allPaths, getPathMiddle, selectedPath, setSelectedPath } from "./path.js"
 
-const pathStartPoint = document.getElementById('path-end-0')!
-const pathMiddlePoint = document.getElementById('path-end-1')!
-const pathEndPoint = document.getElementById('path-end-2')!
-const pathStartPointInner = document.getElementById('path-end-inner-0')!
-const pathMiddlePointInner = document.getElementById('path-end-inner-1')!
-const pathEndPointInner = document.getElementById('path-end-inner-2')!
+let pathStartPoint: HTMLElement;
+let pathMiddlePoint: HTMLElement;
+let pathEndPoint: HTMLElement;
+let pathStartPointInner: HTMLElement;
+let pathMiddlePointInner: HTMLElement;
+let pathEndPointInner: HTMLElement;
+
 const timeoutACCM = 40;
 
-function connectPathStart(path){
-    AppStates.isDrawingPath = true
-    setSelectedPath(path)
-    AppStates.isDrawingPathEnd = false
-}
+export function initPathConnectionCMOptions() {
+    const StartPoint = document.getElementById('path-end-0');
+    const MiddlePoint = document.getElementById('path-end-1');
+    const EndPoint = document.getElementById('path-end-2');
+    const StartPointInner = document.getElementById('path-end-inner-0');
+    const MiddlePointInner = document.getElementById('path-end-inner-1');
+    const EndPointInner = document.getElementById('path-end-inner-2');
 
-function connectPathEnd(path){
-    AppStates.isDrawingPath = true
-    setSelectedPath(path)
-    AppStates.isDrawingPathEnd = true
-}
+    if(!StartPoint || !MiddlePoint || !EndPoint
+        || !StartPointInner || !MiddlePointInner || !EndPointInner
+    ) {
+        throw new Error("Some options of path connection context menu not found, cannot proceed");
+    }
 
-function disconnectPathStart(path){
-    allElementConnections.get(path.startNoteID).delete(path.ID);
-    path.startNoteID = null;
-}
+    pathStartPoint = StartPoint;
+    pathMiddlePoint = MiddlePoint;
+    pathEndPoint = EndPoint;
+    pathStartPointInner = StartPointInner;
+    pathMiddlePointInner = MiddlePointInner;
+    pathEndPointInner = EndPointInner;
 
-function disconnectPathEnd(path){
-    allElementConnections.get(path.endNoteID).delete(path.ID);
-    path.endNoteID = null;
-}
-
-export function initPathConnectionPointsSettings() {
     pathStartPoint.addEventListener('mousedown', (e) => {
         e.stopPropagation();
     });
@@ -67,6 +66,28 @@ export function initPathConnectionPointsSettings() {
         else disconnectPathEnd(selectedPath)
         closePathConnectionContextMenu()
     })
+}
+
+function connectPathStart(path){
+    AppStates.isDrawingPath = true
+    setSelectedPath(path)
+    AppStates.isDrawingPathEnd = false
+}
+
+function connectPathEnd(path){
+    AppStates.isDrawingPath = true
+    setSelectedPath(path)
+    AppStates.isDrawingPathEnd = true
+}
+
+function disconnectPathStart(path){
+    allElementConnections.get(path.startNoteID).delete(path.ID);
+    path.startNoteID = null;
+}
+
+function disconnectPathEnd(path){
+    allElementConnections.get(path.endNoteID).delete(path.ID);
+    path.endNoteID = null;
 }
 
 export function disconnectConnectedPaths(elID){
