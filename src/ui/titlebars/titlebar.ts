@@ -4,14 +4,92 @@ import { AppStates } from "../../runtime/states-handler.js"
 import { closeWindow } from "../../utils/close-window.js"
 import { turnOffContextMenu } from "../context-menus/handler-context-menu.js"
 
-export const titlebar = document.getElementById('titlebar')!
-const titlebarVisual = document.getElementById('titlebar-visual')!
+export let titlebar: HTMLElement;
+let titlebarVisual: HTMLElement;
 
-const titlebarFullScreenCtrlFrame = document.getElementById('frame-fullscreen-window')!
-const titlebarMaximizeCtrlFrame = document.getElementById('frame-maximize-window')!
-const titlebarMinimizeCtrlFrame = document.getElementById('frame-minimize-window')!
-const titlebarCloseCtrlFrame = document.getElementById('frame-close-window')!
-const titlebarGlobalConfigurationFrame = document.getElementById('frame-global-config-menu')!
+let titlebarFullScreenCtrlFrame: HTMLElement;
+let titlebarMaximizeCtrlFrame: HTMLElement;
+let titlebarMinimizeCtrlFrame: HTMLElement;
+let titlebarCloseCtrlFrame: HTMLElement;
+let titlebarGlobalConfigurationFrame: HTMLElement;
+
+export function initTitlebar() {
+    const titlebarLocal = document.getElementById('titlebar')
+    const titlebarVisualLocal = document.getElementById('titlebar-visual')
+
+    const titlebarFullScreenCtrlFrameLocal = document.getElementById('frame-fullscreen-window')
+    const titlebarMaximizeCtrlFrameLocal = document.getElementById('frame-maximize-window')
+    const titlebarMinimizeCtrlFrameLocal = document.getElementById('frame-minimize-window')
+    const titlebarCloseCtrlFrameLocal = document.getElementById('frame-close-window')
+    const titlebarGlobalConfigurationFrameLocal = document.getElementById('frame-global-config-menu')
+
+    if(!titlebarLocal || !titlebarVisualLocal
+        || !titlebarFullScreenCtrlFrameLocal || !titlebarMaximizeCtrlFrameLocal
+        || !titlebarMinimizeCtrlFrameLocal || !titlebarCloseCtrlFrameLocal
+        || !titlebarGlobalConfigurationFrameLocal
+    ) {
+        throw new Error("Some titlebar DOM elements not found, cannot proceed");
+    }
+
+    titlebar = titlebarLocal
+    titlebarVisual = titlebarVisualLocal
+
+    titlebarFullScreenCtrlFrame = titlebarFullScreenCtrlFrameLocal
+    titlebarMaximizeCtrlFrame = titlebarMaximizeCtrlFrameLocal
+    titlebarMinimizeCtrlFrame = titlebarMinimizeCtrlFrameLocal
+    titlebarCloseCtrlFrame = titlebarCloseCtrlFrameLocal
+    titlebarGlobalConfigurationFrame = titlebarGlobalConfigurationFrameLocal
+
+    if(AppStates.isTitlebarLocked){
+        titlebarVisual.style.transform = 'translateY(0px)'
+        toggleTitlebarVisualHover(false)
+    }else{
+        titlebarVisual.style.transform = 'translateY(-80px)'
+        toggleTitlebarVisualHover(true)
+    }
+
+    titlebar.addEventListener('mouseleave', () => {
+        if(!AppStates.isTitlebarLocked){
+            toggleTitlebarVisualHover(true)
+            titlebarVisual.style.transform = 'translateY(-80px)'
+        }
+    })
+
+    titlebarVisual.addEventListener('mousedown', (e) => {
+        e.stopPropagation()
+
+        if(AppStates.isWritingElement) toggleWritingMode(false, selectedElement!.id)
+    })
+
+    titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
+        e.stopPropagation()
+        titlebarFullScreenCtrlFrame.blur()
+        titlebarToggleFullScreen()
+    })
+
+    titlebarMaximizeCtrlFrame.addEventListener('click', (e) => {
+        e.stopPropagation()
+        titlebarMaximizeCtrlFrame.blur()
+        titlebarToggleMaximized()
+    })
+
+    titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
+        e.stopPropagation()
+        titlebarMinimizeCtrlFrame.blur()
+        titlebarToggleMinimized()
+    })
+
+    titlebarCloseCtrlFrame.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeWindow();
+    })
+
+    titlebarGlobalConfigurationFrame.addEventListener('click', (e) => {
+        e.stopPropagation();
+        titlebarGlobalConfigurationFrame.blur();
+        window.wandererAPI.openConfigs();
+    })
+}
 
 export function toggleTitlebar(flag: boolean){
     if(flag){
@@ -27,23 +105,6 @@ export function toggleTitlebarVisualHover(flag: boolean){
     }else{
         titlebar.removeEventListener('mouseover', mouseOver_Titlebar)
     }
-}
-
-export function initTitlebar(){
-    if(AppStates.isTitlebarLocked){
-        titlebarVisual.style.transform = 'translateY(0px)'
-        toggleTitlebarVisualHover(false)
-    }else{
-        titlebarVisual.style.transform = 'translateY(-80px)'
-        toggleTitlebarVisualHover(true)
-    }
-
-    titlebar.addEventListener('mouseleave', () => {
-        if(!AppStates.isTitlebarLocked){
-            toggleTitlebarVisualHover(true)
-            titlebarVisual.style.transform = 'translateY(-80px)'
-        }
-    })
 }
 
 function mouseOver_Titlebar(){
@@ -81,38 +142,3 @@ export function titlebarToggleTitlebarLock(){
 
     if(!AppStates.isPromptFirstTime) turnOffContextMenu()
 }
-
-titlebarVisual.addEventListener('mousedown', (e) => {
-    e.stopPropagation()
-
-    if(AppStates.isWritingElement) toggleWritingMode(false, selectedElement!.id)
-})
-
-titlebarFullScreenCtrlFrame.addEventListener('click', (e) => {
-    e.stopPropagation()
-    titlebarFullScreenCtrlFrame.blur()
-    titlebarToggleFullScreen()
-})
-
-titlebarMaximizeCtrlFrame.addEventListener('click', (e) => {
-    e.stopPropagation()
-    titlebarMaximizeCtrlFrame.blur()
-    titlebarToggleMaximized()
-})
-
-titlebarMinimizeCtrlFrame.addEventListener('click', (e) => {
-    e.stopPropagation()
-    titlebarMinimizeCtrlFrame.blur()
-    titlebarToggleMinimized()
-})
-
-titlebarCloseCtrlFrame.addEventListener('click', (e) => {
-    e.stopPropagation();
-    closeWindow();
-})
-
-titlebarGlobalConfigurationFrame.addEventListener('click', (e) => {
-    e.stopPropagation();
-    titlebarGlobalConfigurationFrame.blur();
-    window.wandererAPI.openConfigs();
-})

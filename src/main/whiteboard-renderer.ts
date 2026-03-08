@@ -35,13 +35,13 @@ import { allNotes, largestNoteContainerID, reinstateAllNotesContents, saveAllNot
 import { allPaths, largestPathID, setAllPaths, setLargestPathID, setUnusedPathIDs, terminatePathDrawing, unusedPathIDs } from "../instantiable-components/path.js";
 import { logMessage, writeMessages } from "../runtime/logger.js";
 import { AppStates } from "../runtime/states-handler.js";
-import { genMouseMove_ContextMenuHandler, openNewContextMenu } from "../ui/context-menus/handler-context-menu.js";
+import { openNewContextMenu } from "../ui/context-menus/handler-context-menu.js";
 import { initTitlebarCMOptions, registerTitlebarCM, tcm } from "../ui/context-menus/titlebar-cm.js";
 import { gcm, initGeneralCMOptions, registerGeneralCM } from "../ui/context-menus/whiteboard/general-cm.js";
 import { handleKeybindGuideAppearance, initKeybindGuide } from "../ui/keybind-guide.js";
 import { pressedKeys } from "../ui/keybinds.js";
 import { initWhiteboards, wbZoom } from "../ui/parent-whiteboard-handler.js";
-import { genMouseDown_WhiteboardMoveHandler, genMouseMove_WhiteboardMoveHandler, genMouseUp_WhiteboardMoveHandler, setWBOffset, updateComponentPositionsByOffset, wbOffset } from "../ui/positioning/whiteboard-positioning.js";
+import { setWBOffset, updateComponentPositionsByOffset, wbOffset } from "../ui/positioning/whiteboard-positioning.js";
 import { closeTabsMenu, openTabsMenu } from "../ui/tabs-menu-handler.js";
 import { initTitlebar } from "../ui/titlebars/titlebar.js";
 import { setWindowComponentID, setWindowComponentIDEl, windowComponentID, windowComponentIDEl } from "../ui/window-component-id-handler.js";
@@ -52,6 +52,7 @@ import { acm, initPathCMOptions, registerPathCM } from "../ui/context-menus/path
 import { isWindowClosing, setIsWindowClosing } from "../utils/close-window.js"
 import { initPathConnectionCMOptions } from "../instantiable-components/path-connection-handler.js"
 import { initWhiteboardMovement } from "../utils/whiteboard-movement.js"
+import { initWindowZoom } from "../utils/window-zoom.js"
 
 export let scrollLastX = window.scrollX, scrollLastY = window.scrollY;
 export let scrollIsChanging = false;
@@ -62,6 +63,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     setWindowComponentID(await window.wandererAPI.getWindowComponentID())
     setWindowComponentIDEl(document.getElementById('window-component-id'))
     windowComponentIDEl.textContent = windowComponentID
+
+    initWhiteboards();
     
     const stateObj = await window.wandererAPI.loadWhiteboardState() as WBSave
 
@@ -132,6 +135,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     initTitlebar()
 
     initWhiteboardMovement();
+    initWindowZoom();
 })
 
 window.addEventListener('contextmenu', (e) => {
@@ -162,12 +166,6 @@ window.addEventListener("scroll", () => {
         scrollIsChanging = true;
     } else scrollIsChanging = false;
 });
-
-window.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const zoomIn = e.deltaY < 0;
-    zoomWhiteboard({ x: e.clientX, y: e.clientY }, zoomIn);
-}, { passive: false });
 
 async function save(){
     closeTabsMenu();
