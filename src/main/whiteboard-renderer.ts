@@ -51,6 +51,7 @@ import { ecm, initElementCMOptions, registerElementCM } from "../ui/context-menu
 import { acm, initPathCMOptions, registerPathCM } from "../ui/context-menus/path-cm.js"
 import { isWindowClosing, setIsWindowClosing } from "../utils/close-window.js"
 import { initPathConnectionCMOptions } from "../instantiable-components/path-connection-handler.js"
+import { initWhiteboardMovement } from "../utils/whiteboard-movement.js"
 
 export let scrollLastX = window.scrollX, scrollLastY = window.scrollY;
 export let scrollIsChanging = false;
@@ -61,8 +62,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     setWindowComponentID(await window.wandererAPI.getWindowComponentID())
     setWindowComponentIDEl(document.getElementById('window-component-id'))
     windowComponentIDEl.textContent = windowComponentID
-
-    initWhiteboards();
     
     const stateObj = await window.wandererAPI.loadWhiteboardState() as WBSave
 
@@ -131,11 +130,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     initKeybindGuide()
     handleKeybindGuideAppearance(true)
     initTitlebar()
-})
 
-window.addEventListener('mousemove', (e) => {
-    genMouseMove_WhiteboardMoveHandler(e)
-    genMouseMove_ContextMenuHandler(e)
+    initWhiteboardMovement();
 })
 
 window.addEventListener('contextmenu', (e) => {
@@ -145,15 +141,6 @@ window.addEventListener('contextmenu', (e) => {
     }
 
     openNewContextMenu(e.clientX, e.clientY, gcm)
-})
-
-window.addEventListener('mousedown', (e) => {
-    closeTabsMenu()
-    genMouseDown_WhiteboardMoveHandler(e)
-})
-
-window.addEventListener('mouseup', (e) => {
-    genMouseUp_WhiteboardMoveHandler(e)
 })
 
 window.addEventListener('keydown', (e) => {
