@@ -380,7 +380,8 @@ class WindowHandler{
             writeFile(saved.allWindowsPath, JSON.stringify(allWindowsMap, null, 2), 'utf-8'),
             writeFile(saved.windowsIDsPath, JSON.stringify({
                 largestNotepadID, largestWhiteboardID, unusedNotepadIDs, unusedWhiteboardIDs,
-                allNotepads: Array.from(allNotepads), allWhiteboards: Array.from(allWhiteboards)
+                allNotepads: Array.from(allNotepads), allWhiteboards: Array.from(allWhiteboards),
+                largestWindowID: WindowHandler.largestWindowID, unusedWindowIDs: WindowHandler.unusedWindowIDs
             }, null, 2), 'utf-8')
         ]);
     }
@@ -476,7 +477,9 @@ async function initialiseApp(){
         unusedNotepadIDs = stateWindowsIDs.unusedNotepadIDs
         unusedWhiteboardIDs = stateWindowsIDs.unusedWhiteboardIDs
         allNotepads = new Set(stateWindowsIDs.allNotepads)
-        allWhiteboards = new Set(stateWindowsIDs.allWhiteboards)
+        allWhiteboards = new Set(stateWindowsIDs.allWhiteboards),
+        WindowHandler.largestWindowID = stateWindowsIDs.largestWindowID,
+        WindowHandler.unusedWindowIDs = stateWindowsIDs.unusedWindowIDs
     }
     const allWindowObj = JSON.parse(await readFile(saved.allWindowsPath, 'utf-8'));
     if(Array.isArray(allWindowObj) && allWindowObj.length > 0){
