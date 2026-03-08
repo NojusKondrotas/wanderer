@@ -23,7 +23,7 @@
     "fresh-bet": "npm run bt && npm run fresh-be",
     "fresh-bes": "npm run be && npm run fresh-bs",
     "fresh-best": "npm run bt && npm run fresh-bes",
-    "c-sass": "sass ./src/main/styles.scss ./dist/main/styles.css && sass ./src/main/titlebar-style.scss ./dist/main/titlebar-style.css && sass ./src/dev/titlebars/prompts/link/titlebar-style.scss ./dist/dev/titlebars/prompts/link/titlebar-style.css && sass ./src/main/prompts/configs/configs.scss ./dist/main/prompts/configs/configs.css && npm run c-css",
+    "c-sass": "sass ./src/main/styles.scss ./dist/main/styles.css && sass ./src/main/utilities.scss ./dist/main/utilities.css && sass ./src/main/titlebar-style.scss ./dist/main/titlebar-style.css && sass ./src/dev/titlebars/prompts/link/titlebar-style.scss ./dist/dev/titlebars/prompts/link/titlebar-style.css && sass ./src/main/prompts/configs/configs.scss ./dist/main/prompts/configs/configs.css && npm run c-css",
     "c-css": "cpy **/*.css ../../dist/main --cwd=src/main"
   },
   "keywords": [],

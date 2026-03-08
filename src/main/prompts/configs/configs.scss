@@ -78,33 +78,6 @@ $index-30: 30;
     z-index: $index-20;
 }
 
-#cfg-itag, #cfg-itag-field {
-    display: none;
-    position: absolute;
-    transform: translateY(-50%);
-}
-
-#cfg-itag-field {
-    z-index: $index-25;
-}
-
-#cfg-itag {
-    background: transparent;
-    border: transparent;
-
-    pointer-events: auto;
-    z-index: $index-30;
-}
-
-#cfg-itag:hover {
-    cursor: pointer;   
-}
-
-#cfg-itag > img, .cfg-abst-exit > img {
-    width: 16px;
-    height: auto;
-}
-
 .cfg-menus {
     display: none;
     position: relative;

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>wanderer-configs</title>
+    <link rel="stylesheet" href="../../../../dist/main/utilities.css">
     <link rel="stylesheet" href="../../../../dist/main/titlebar-style.css">
     <link rel="stylesheet" href="../../../../dist/main/styles.css">
     <link rel="stylesheet" href="../../../../dist/main/prompts/configs/configs.css">
@@ -11,85 +12,75 @@
 <body>
     <%- include('../titlebars/prompts/first-time/lock') %>
 
-    <div id="cfg-itag-field">
-        <button id="cfg-itag"><img src="../../../../res/info-tag-mvboli.png"></button>
-    </div>
+    <div id="wb-movement">
+        <div id="wb-zoom">
+            <div id="configs" class="context-menu-container">
+                <!-- CFG-F -->
+                <div id="cfg-sect-f" class="absolute dimensionless">
+                    <button id="cfg-f" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                        functional
+                    </button>
+                    <div id="f-menu" class="absolute dimensionless">
+                        <button id="f-theme" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                            Theme
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- CFG-N -->
+                <div id="cfg-sect-n" class="absolute dimensionless">
+                    <button id="cfg-n" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                        notes
+                    </button>
+                </div>
 
-    <div id="configs" class="context-menu-container">
-        <button id="cfg-templates" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
-            templates
-        </button>
-        <button id="cfg-n" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
-            notes
-        </button>
-        <button id="cfg-w" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
-            whiteboards
-        </button>
-        <button id="cfg-p" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
-            notepads
-        </button>
-        <button id="cfg-internal" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
-            internal
-        </button>
-    </div>
-    
-    <p id="cfg-abst-templates" class="option-control-style option-control-layout option-control-trans-short margin-0 padding-0 cfg-abst">
-        Configurations' layouts and unsaved deviations from the active layout.
-    </p>
-    <p id="cfg-abst-n" class="option-control-style option-control-layout option-control-trans-short margin-0 padding-0 cfg-abst">
-        Styling of notes.
-    </p>
-    <p id="cfg-abst-w" class="option-control-style option-control-layout option-control-trans-short margin-0 padding-0 cfg-abst">
-        Styling of whiteboards.
-    </p>
-    <p id="cfg-abst-p" class="option-control-style option-control-layout option-control-trans-short margin-0 padding-0 cfg-abst">
-        Styling of notepads.
-    </p>
-    <p id="cfg-abst-internal" class="option-control-style option-control-layout option-control-trans-short margin-0 padding-0 cfg-abst">
-        Configurations related to the state of the application and unrelated to style. For example, paths of saves and keybinds.
-        Any layout encapsulates these changes, too.
-    </p>
+                <!-- CFG-W -->
+                <div id="cfg-sect-w" class="absolute dimensionless">
+                    <button id="cfg-w" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                        whiteboards
+                    </button>
+                    <div id="w-menu" class="absolute dimensionless">
+                        <button id="w-keybinds-guide" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                            Keybinds guide
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- CFG-P -->
+                <div id="cfg-sect-p" class="absolute dimensionless">
+                    <button id="cfg-p" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                        notepads
+                    </button>
+                    <div id="p-menu" class="absolute dimensionless">
+                        <button id="p-keybinds-guide" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                            Keybinds guide
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- CFG-I -->
+                <div id="cfg-sect-i" class="absolute dimensionless">
+                    <button id="cfg-i" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                        internal
+                    </button>
+                    <div id="i-menu" class="absolute dimensionless">
+                        <button id="i-saves-path" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                            Saves path
+                        </button>
+                        <div id="i-keybinds-menu" class="absolute dimensionless">
+                            <button id="i-keybinds" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                                Keybinds
+                            </button>
+                            <button id="i-keybinds-opt1" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                                Show number of direct parents
+                            </button>
+                            <button id="i-keybinds-opt2" class="option-control-style option-control-trans-long text-large option-control-layout cfg-sect">
+                                Show number of direct children
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-    <div id="cfg-menu-templates" class="cfg-menus">
-        <div class="cfg-menu-opt-style option-control-layout option-control-trans-short margin-0 padding-0">
-            Keybinds guide
-            <button>On/Off</button>
-        </div>
-        
-        <div class="cfg-menu-opt-style option-control-layout option-control-trans-short margin-0 padding-0">
-            Theme
-            <button>Light</button>
-            <button>Dark</button>
-        </div>
-    </div>
-    <div id="cfg-menu-n" class="cfg-menus">
-        <div class="cfg-menu-opt-style option-control-layout option-control-trans-short margin-0 padding-0">
-            You caught me! Haven't decided on the configurations for this element yet, tho check out others! You might find some configs idkkk.
-        </div>
-    </div>
-    <div id="cfg-menu-w" class="cfg-menus">
-        <div class="cfg-menu-opt-style option-control-layout option-control-trans-short margin-0 padding-0">
-            To configure or not to configure? Always configure, it is your own.
-        </div>
-    </div>
-    <div id="cfg-menu-p" class="cfg-menus">
-        <div class="cfg-menu-opt-style option-control-layout option-control-trans-short margin-0 padding-0">
-            I had some configurations in mind but now, I have forgor.
-        </div>
-    </div>
-    <div id="cfg-menu-internal" class="cfg-menus">
-        <div class="cfg-menu-opt-style option-control-layout option-control-trans-short margin-0 padding-0">
-            Saves path
-            <div>path</div>
-        </div>
-
-        <div class="cfg-menu-opt-style option-control-layout option-control-trans-short margin-0 padding-0">
-            Keybinds
-            <div>Show number of direct parents
-                <button>x</button>
-            </div>
-            <div>Show number of direct children
-                <button>y</button>
             </div>
         </div>
     </div>
