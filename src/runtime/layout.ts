@@ -3,20 +3,21 @@ import { createPath } from "../instantiable-components/path.js";
 import { borderColorCM, colorCM, IContextMenuCircular } from "../ui/context-menus/handler-context-menu.js";
 import { wbZoom } from "../ui/parent-whiteboard-handler.js";
 import { generateRandom } from "./numerics.js";
+import { Vector2D } from "./vector-2d.js";
 
-export function offsetAppearanceSingular(el: HTMLElement, x: number, y: number) {
+export function offsetAppearanceSingular(el: HTMLElement, v: Vector2D) {
     const offsetX = generateRandom(-50, 50)
     const offsetY = generateRandom(-50, 50)
     
-    el.style.left = `${x + offsetX}px`
-    el.style.top = `${y + offsetY}px`
+    el.style.left = `${v.x + offsetX}px`
+    el.style.top = `${v.y + offsetY}px`
 }
 
-export function situateAppearanceSingular(el: HTMLElement, x: number, y: number) {
+export function situateAppearanceSingular(el: HTMLElement, v: Vector2D) {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            el.style.left = `${x}px`
-            el.style.top = `${y}px`
+            el.style.left = `${v.x}px`
+            el.style.top = `${v.y}px`
             el.style.borderColor = borderColorCM.opaque
             el.style.color = colorCM.opaque
             el.style.backdropFilter = 'blur(2px) opacity(1)';
@@ -61,9 +62,9 @@ export function situateAppearanceCircular(els: HTMLCollectionOf<HTMLElement>, cm
     })
 }
 
-export function generateCircularLayout(centerX: number, centerY: number, cm: IContextMenuCircular){
-    cm.container.style.left = `${centerX}px`
-    cm.container.style.top = `${centerY}px`
+export function generateCircularLayout(center: Vector2D, cm: IContextMenuCircular){
+    cm.container.style.left = `${center.x}px`
+    cm.container.style.top = `${center.y}px`
 
     const children: HTMLCollectionOf<HTMLElement> = cm.options;
 
@@ -72,9 +73,9 @@ export function generateCircularLayout(centerX: number, centerY: number, cm: ICo
     situateAppearanceCircular(children, cm);
 }
 
-export function generateLadderLayout(originX: number, originY: number, { blueprint, gapSize }, xOffset = -145, yOffset = -100){
-    blueprint.style.left = `${originX}px`
-    blueprint.style.top = `${originY}px`
+export function generateLadderLayout(origin: Vector2D, { blueprint, gapSize }, xOffset = -145, yOffset = -100){
+    blueprint.style.left = `${origin.x}px`
+    blueprint.style.top = `${origin.y}px`
 
     let prevChild: HTMLElement | null = null;
     let totalY = blueprint.offsetTop + yOffset;
@@ -136,7 +137,7 @@ function getMultiCircularCaps(amount: number){
     return res
 }
 
-async function generateSingleMultiCircularLayoutCircle(centerX: number, centerY: number, amount: number,
+async function generateSingleMultiCircularLayoutCircle(center: Vector2D, amount: number,
     angleSize: number, radius: number, angleOffset: number,
     xOffset = 0, yOffset = 0, windows, previews, winIdx){
     for(let i = 0; i < amount; ++i){
@@ -158,8 +159,8 @@ async function generateSingleMultiCircularLayoutCircle(centerX: number, centerY:
         const angleDeg = angleOffset + i * angleSize
         const angleRad = angleDeg * Math.PI / 180
 
-        let x = centerX + radius * Math.cos(angleRad) + xOffset
-        let y = centerY + radius * Math.sin(angleRad) + yOffset
+        let x = center.x + radius * Math.cos(angleRad) + xOffset
+        let y = center.y + radius * Math.sin(angleRad) + yOffset
 
         createNewElement(wbZoom, option, `${windows[winIdx].componentID}-tab`, x, y)
 
@@ -176,12 +177,12 @@ async function generateSingleMultiCircularLayoutCircle(centerX: number, centerY:
     }
 }
 
-export function generateMultiCircularLayout(centerX, centerY, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, previews){
+export function generateMultiCircularLayout(center: Vector2D, amount, angleSize, radius, angleOffset, xOffset = 0, yOffset = 0, windows, previews){
     const circleCaps = getMultiCircularCaps(amount)
 
     let radiusExt = 0, angleOffsetExt = 0, i = 0
     circleCaps.forEach(cap => {
-        generateSingleMultiCircularLayoutCircle(centerX, centerY, cap, 360 / cap, radius + radiusExt, angleOffset + angleOffsetExt, xOffset, yOffset, windows, previews, i)
+        generateSingleMultiCircularLayoutCircle(center, cap, 360 / cap, radius + radiusExt, angleOffset + angleOffsetExt, xOffset, yOffset, windows, previews, i)
         radiusExt += 250
         angleOffsetExt += 45
         i += cap

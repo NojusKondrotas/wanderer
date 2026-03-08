@@ -1,6 +1,6 @@
 import { wbOffset } from "./positioning/whiteboard-positioning.js"
 import { wbZoom } from "./parent-whiteboard-handler.js"
-import { Vector2D } from "../runtime/numerics.js"
+import { Vector2D } from "../runtime/vector-2d.js";
 
 export let zoomFactor = 1.0;
 export const setZoomFactor = (factor: number) => zoomFactor = factor;

@@ -1,11 +1,11 @@
 import { allElementConnections, configurePath, deleteComponentByID, getElementID, selectedElement, setSelectedElement } from "./component-handler.js"
-import { Vector2D } from "../runtime/numerics.js"
 import { convertToWhiteboardSpace } from "../ui/zoom-whiteboard.js"
 import { AppStates } from "../runtime/states-handler.js"
 import { wbZoom } from "../ui/parent-whiteboard-handler.js"
 import { toggleWritingMode } from "./note.js"
 import { openNewContextMenu } from "../ui/context-menus/handler-context-menu.js"
 import { acm } from "../ui/context-menus/path-cm.js"
+import { Vector2D } from "../runtime/vector-2d.js"
 
 export let largestPathID = 0
 export const setLargestPathID = (id) => largestPathID = id;

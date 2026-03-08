@@ -1,16 +1,16 @@
 import { setSelectedElement } from "../../instantiable-components/component-handler.js";
 import { setSelectedPath } from "../../instantiable-components/path.js";
 import { generateCircularLayout } from "../../runtime/layout.js";
-import { generateRandom, Vector2D } from "../../runtime/numerics.js";
+import { generateRandom } from "../../runtime/numerics.js";
 import { AppStates } from "../../runtime/states-handler.js";
+import { Vector2D } from "../../runtime/vector-2d.js";
 
-const allContextMenus = Array.from(document.getElementsByClassName('cm-logic'));
 export const borderColorCM = { opaque: "rgb(10, 10, 10)", transparent: "rgba(10, 10, 10, 0)" }
 export const colorCM = { opaque: "rgb(10, 10, 10)", transparent: "rgba(10, 10, 10, 0)" }
 export const timeoutCM = 170
 
 export let activeContextMenu: IContextMenu | null = null, contextMenuCenter = new Vector2D(0, 0);
-export const setActiveContextMenu = (cm) => activeContextMenu = cm;
+export const setActiveContextMenu = (cm: IContextMenu) => activeContextMenu = cm;
 export const setContextMenuCenter = (pos: Vector2D) => contextMenuCenter = pos;
 
 export interface IContextMenu {
@@ -154,7 +154,7 @@ export function openNewContextMenu(centerX, centerY, identifier: string){
     AppStates.isContextMenuOpen = true
     setContextMenuCenter(new Vector2D(centerX, centerY))
     if(cm['angleSize']) {
-        generateCircularLayout(centerX, centerY, cm as IContextMenuCircular);
+        generateCircularLayout(new Vector2D(centerX, centerY), cm as IContextMenuCircular);
     }
 }
 

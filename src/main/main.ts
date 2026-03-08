@@ -4,9 +4,9 @@ import { fileURLToPath } from 'url'
 import { access, constants, stat, readFile, writeFile, mkdir } from 'fs/promises'
 import robot from '@hurdlegroup/robotjs'
 import { WBSave } from './types/wb-state.js'
-import { Vector2D } from '../runtime/numerics.js'
 import { createOpenWindow, OpenWindow } from './types/open-window.js'
 import { WandererWindow } from './types/wanderer-window.js'
+import { Vector2D } from '../runtime/vector-2d.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

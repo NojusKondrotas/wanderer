@@ -1,6 +1,7 @@
 import { elementPositions } from "../instantiable-components/component-handler.js";
 import { generateMultiCircularLayout } from "../runtime/layout.js";
 import { AppStates } from "../runtime/states-handler.js";
+import { Vector2D } from "../runtime/vector-2d.js";
 import { turnOffContextMenu } from "./context-menus/handler-context-menu.js";
 import { wbZoom } from "./parent-whiteboard-handler.js";
 
@@ -17,7 +18,7 @@ function toggleChildrenFilter(container, cssFunction){
 export function openTabsMenu(mousePos, windows, previews){
     turnOffContextMenu()
     toggleChildrenFilter(wbZoom, 'blur(3px)')
-    generateMultiCircularLayout(mousePos.x, mousePos.y, windows.length, 162, 250, 0, 0, -10, windows, previews)
+    generateMultiCircularLayout(new Vector2D(mousePos.x, mousePos.y), windows.length, 162, 250, 0, 0, -10, windows, previews)
     windows.forEach(w => {
         // console.log(w, windows.length)
     })
