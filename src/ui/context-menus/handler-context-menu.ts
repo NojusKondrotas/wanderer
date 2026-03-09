@@ -1,6 +1,6 @@
 import { setSelectedElement } from "../../instantiable-components/component-handler.js";
 import { setSelectedPath } from "../../instantiable-components/path.js";
-import { generateCircularLayout } from "../../runtime/layout.js";
+import { generateCircularLayout, styleClosedCMOpt } from "../../runtime/layout.js";
 import { generateRandom } from "../../runtime/numerics.js";
 import { AppStates } from "../../runtime/states-handler.js";
 import { Vector2D } from "../../runtime/vector-2d.js";
@@ -154,7 +154,7 @@ export function openNewContextMenu(centerX, centerY, identifier: string){
     AppStates.isContextMenuOpen = true
     setContextMenuCenter(new Vector2D(centerX, centerY))
     if(cm['angleSize']) {
-        generateCircularLayout(new Vector2D(centerX, centerY), cm as IContextMenuCircular);
+        generateCircularLayout(new Vector2D(centerX, centerY), cm as IContextMenuCircular, styleClosedCMOpt);
     }
 }
 

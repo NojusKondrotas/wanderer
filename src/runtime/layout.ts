@@ -5,6 +5,23 @@ import { wbZoom } from "../ui/parent-whiteboard-handler.js";
 import { generateRandom } from "./numerics.js";
 import { Vector2D } from "./vector-2d.js";
 
+export function styleClosedCMOpt(el: HTMLElement, v: Vector2D): void {
+    el.style.left = `${v.x}px`
+    el.style.top = `${v.y}px`
+    el.style.borderColor = borderColorCM.opaque
+    el.style.color = colorCM.opaque
+    el.style.backdropFilter = 'blur(2px) opacity(1)'
+    el.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0.77)'
+}
+
+export function styleOpenCMOpt(el: HTMLElement, v: Vector2D): void {
+    el.style.left = `${v.x}px`
+    el.style.top = `${v.y}px`
+    el.style.borderColor = borderColorCM.opaque
+    el.style.color = colorCM.opaque
+    el.style.backdropFilter = 'blur(2px) opacity(1)'
+}
+
 export function offsetAppearanceSingular(el: HTMLElement, v: Vector2D) {
     const offsetX = generateRandom(-50, 50)
     const offsetY = generateRandom(-50, 50)
@@ -13,22 +30,15 @@ export function offsetAppearanceSingular(el: HTMLElement, v: Vector2D) {
     el.style.top = `${v.y + offsetY}px`
 }
 
-export function situateAppearanceSingular(el: HTMLElement, v: Vector2D) {
+export function situateAppearanceSingular(el: HTMLElement, v: Vector2D, fn: (el: HTMLElement, v: Vector2D) => void) {
     requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            el.style.left = `${v.x}px`
-            el.style.top = `${v.y}px`
-            el.style.borderColor = borderColorCM.opaque
-            el.style.color = colorCM.opaque
-            el.style.backdropFilter = 'blur(2px) opacity(1)';
-            el.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0.77)';
-        })
+        requestAnimationFrame(() => fn(el, v));
     })
 }
 
-export function placeAppearanceSingular(el: HTMLElement, v: Vector2D) {
+export function placeAppearanceSingular(el: HTMLElement, v: Vector2D, fn: (el: HTMLElement, v: Vector2D) => void) {
     offsetAppearanceSingular(el, v);
-    situateAppearanceSingular(el, v);
+    situateAppearanceSingular(el, v, fn);
 }
 
 export function offsetAppearanceCircular(els: HTMLCollectionOf<HTMLElement>, cm: IContextMenuCircular) {
@@ -47,7 +57,8 @@ export function offsetAppearanceCircular(els: HTMLCollectionOf<HTMLElement>, cm:
     })
 }
 
-export function situateAppearanceCircular(els: HTMLCollectionOf<HTMLElement>, cm: IContextMenuCircular) {
+export function situateAppearanceCircular(els: HTMLCollectionOf<HTMLElement>, cm: IContextMenuCircular,
+    fn: (el: HTMLElement, v: Vector2D) => void) {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             Array.from(els).forEach((option, i) => {
@@ -56,18 +67,14 @@ export function situateAppearanceCircular(els: HTMLCollectionOf<HTMLElement>, cm
                 const x = cm.radius * Math.cos(angleRad) + cm.xOffset
                 const y = cm.radius * Math.sin(angleRad) + cm.yOffset
 
-                option.style.left = `${x}px`
-                option.style.top = `${y}px`
-                option.style.borderColor = borderColorCM.opaque
-                option.style.color = colorCM.opaque
-                option.style.backdropFilter = 'blur(2px) opacity(1)';
-                option.style.boxShadow = '0px 0px 15px -8px rgba(0, 0, 0, 0.77)';
+                fn(option, new Vector2D(x, y));
             })
         })
     })
 }
 
-export function generateCircularLayout(center: Vector2D, cm: IContextMenuCircular){
+export function generateCircularLayout(center: Vector2D, cm: IContextMenuCircular,
+    fn: (el: HTMLElement, v: Vector2D) => void){
     cm.container.style.left = `${center.x}px`
     cm.container.style.top = `${center.y}px`
 
@@ -75,7 +82,7 @@ export function generateCircularLayout(center: Vector2D, cm: IContextMenuCircula
 
     offsetAppearanceCircular(children, cm);
 
-    situateAppearanceCircular(children, cm);
+    situateAppearanceCircular(children, cm, fn);
 }
 
 export function generateLadderLayout(origin: Vector2D, { blueprint, gapSize }, xOffset = -145, yOffset = -100){
