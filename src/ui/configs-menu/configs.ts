@@ -1,7 +1,9 @@
+import { addElementToPositioningLeftAlignment } from "../../instantiable-components/component-handler.js";
 import { generateCircularLayout, placeAppearanceSingular, styleOpenCMOpt } from "../../runtime/layout.js";
 import { generateRandom, translateToElementMiddle } from "../../runtime/numerics.js";
 import { Vector2D } from "../../runtime/vector-2d.js";
 import { ContextMenuRegister, createContextMenu, createContextMenuCircular, IContextMenuCircular, setContextMenuCenter } from "../context-menus/handler-context-menu.js";
+import { WhiteboardPositioningHandler } from "../positioning/whiteboard-positioning.js";
 
 let configsDiv: HTMLElement, configsSections: HTMLElement[];
 
@@ -13,6 +15,26 @@ export const cfgwcm = "cfgwcm";
 export const cfgpcm = "cfgpcm";
 export const cfgacm = "cfgacm";
 export const cfgicm = "cfgicm";
+
+function shortenTransTransform(el: HTMLElement) {
+    el.style.transition = "transform 20ms ease"
+}
+
+function lenghtenTransTransform(el: HTMLElement) {
+    el.style.transition = "transform 370ms ease"
+}
+
+function addDrag(opt: HTMLElement) {
+    opt.addEventListener('mousedown', (e) => {
+        e.stopPropagation()
+        WhiteboardPositioningHandler.element_MouseDown(e, opt)
+    })
+
+    opt.addEventListener('mouseup', (e) => {
+        e.stopPropagation()
+        WhiteboardPositioningHandler.element_MouseUp(e, opt)
+    })
+}
 
 export function initConfigsContainer() {
     const configsDivLocal = document.getElementById('configs');
@@ -51,6 +73,25 @@ export function initConfigsContainer() {
     configsSections = sections as HTMLElement[];
 
     [functionalMenu, noteMenu, whiteboardMenu, notepadMenu, pathMenu, internalMenu] = menus as HTMLElement[];
+
+    sections.forEach(sect => {
+        const rect = (sect as HTMLElement).getBoundingClientRect();
+        addElementToPositioningLeftAlignment(sect as HTMLElement, new Vector2D(rect.left, rect.top));
+        addDrag(sect as HTMLElement);
+        shortenTransTransform(sect as HTMLElement); // TEMP SOLUTION
+    })
+
+    menus.forEach(menu => {
+        const children = (menu as HTMLElement).getElementsByTagName('button');
+        const len = children.length;
+
+        for(let i = 0; i < len; ++i) {
+            const rect = children[i].getBoundingClientRect();
+            addElementToPositioningLeftAlignment(children[i], new Vector2D(rect.left, rect.top));
+            addDrag(children[i]);
+            shortenTransTransform(children[i]); // TEMP SOLUTION
+        }
+    })
 }
 
 export function registerConfigsFunctionalCM(identifier: string) {

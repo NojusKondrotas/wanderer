@@ -109,14 +109,14 @@ export function configureAllPaths(paths){
         configurePath(v)
 }
 
-export function addElementToPositioning(el, center: Vector2D = new Vector2D(0, 0)){
+export function addElementToPositioning(el: HTMLElement, center: Vector2D = new Vector2D(0, 0)){
     const rect = el.getBoundingClientRect()
     const boardSpace = convertToWhiteboardSpace(center.x - rect.width / 2, center.y - rect.height / 2)
     elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y })
     updateElementPositionByID(el.id)
 }
 
-function addElementToPositioningLeftAlignment(el, offset: Vector2D = new Vector2D(0, 0)){
+export function addElementToPositioningLeftAlignment(el: HTMLElement, offset: Vector2D = new Vector2D(0, 0)){
     const boardSpace = convertToWhiteboardSpace(offset.x, offset.y);
 
     elementPositions.set(el.id, new Vector2D(boardSpace.x, boardSpace.y));
