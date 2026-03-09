@@ -1,13 +1,16 @@
+import { prependListener } from "node:cluster";
 import { addElementToPositioningLeftAlignment } from "../../instantiable-components/component-handler.js";
+import { createPath } from "../../instantiable-components/path.js";
 import { generateCircularLayout, placeAppearanceSingular, styleOpenCMOpt } from "../../runtime/layout.js";
 import { generateRandom, translateToElementMiddle } from "../../runtime/numerics.js";
 import { Vector2D } from "../../runtime/vector-2d.js";
 import { ContextMenuRegister, createContextMenu, createContextMenuCircular, IContextMenuCircular, setContextMenuCenter } from "../context-menus/handler-context-menu.js";
+import { wbZoom } from "../parent-whiteboard-handler.js";
 import { WhiteboardPositioningHandler } from "../positioning/whiteboard-positioning.js";
 
 let configsDiv: HTMLElement, configsSections: HTMLElement[];
 
-let functionalMenu: HTMLElement, noteMenu: HTMLElement, whiteboardMenu: HTMLElement, notepadMenu: HTMLElement, pathMenu: HTMLElement, internalMenu: HTMLElement;
+let allMenus: HTMLElement[], functionalMenu: HTMLElement, noteMenu: HTMLElement, whiteboardMenu: HTMLElement, notepadMenu: HTMLElement, pathMenu: HTMLElement, internalMenu: HTMLElement;
 
 export const cfgfcm = "cfgfcm";
 export const cfgncm = "cfgncm";
@@ -17,7 +20,7 @@ export const cfgacm = "cfgacm";
 export const cfgicm = "cfgicm";
 
 function shortenTransTransform(el: HTMLElement) {
-    el.style.transition = "transform 20ms ease"
+    el.style.transition = "none" // TEMP SOLUTION FOR DEMONSTRATIVE PURPOSES
 }
 
 function lenghtenTransTransform(el: HTMLElement) {
@@ -33,6 +36,31 @@ function addDrag(opt: HTMLElement) {
     opt.addEventListener('mouseup', (e) => {
         e.stopPropagation()
         WhiteboardPositioningHandler.element_MouseUp(e, opt)
+    })
+}
+
+function positionCfgButtons(btns: HTMLElement[]) {
+    btns.forEach(btns => {
+        const rect = (btns as HTMLElement).getBoundingClientRect();
+        addElementToPositioningLeftAlignment(btns as HTMLElement, new Vector2D(rect.left, rect.top));
+        addDrag(btns as HTMLElement);
+        shortenTransTransform(btns as HTMLElement); // TEMP SOLUTION FOR DEMONSTRATIVE PURPOSES
+    })
+}
+
+function joinSectOpts(sect: HTMLElement, opts: HTMLElement[]) {
+    const pRect = sect.getBoundingClientRect();
+
+    opts.forEach ((opt) => {
+        const cRect = opt.getBoundingClientRect();
+        console.log(JSON.stringify(new Vector2D(pRect.left + pRect.width / 2, pRect.top + pRect.height / 2)), JSON.stringify(new Vector2D(cRect.left + cRect.width / 2, cRect.top + cRect.height / 2)));
+
+        createPath(wbZoom,
+            new Vector2D(pRect.left + pRect.width / 2, pRect.top + pRect.height / 2),
+            new Vector2D(cRect.left + cRect.width / 2, cRect.top + cRect.height / 2),
+            sect.id,
+            opt.id
+        )
     })
 }
 
@@ -72,26 +100,8 @@ export function initConfigsContainer() {
     configsDiv = configsDivLocal;
     configsSections = sections as HTMLElement[];
 
+    allMenus = menus as HTMLElement[];
     [functionalMenu, noteMenu, whiteboardMenu, notepadMenu, pathMenu, internalMenu] = menus as HTMLElement[];
-
-    sections.forEach(sect => {
-        const rect = (sect as HTMLElement).getBoundingClientRect();
-        addElementToPositioningLeftAlignment(sect as HTMLElement, new Vector2D(rect.left, rect.top));
-        addDrag(sect as HTMLElement);
-        shortenTransTransform(sect as HTMLElement); // TEMP SOLUTION
-    })
-
-    menus.forEach(menu => {
-        const children = (menu as HTMLElement).getElementsByTagName('button');
-        const len = children.length;
-
-        for(let i = 0; i < len; ++i) {
-            const rect = children[i].getBoundingClientRect();
-            addElementToPositioningLeftAlignment(children[i], new Vector2D(rect.left, rect.top));
-            addDrag(children[i]);
-            shortenTransTransform(children[i]); // TEMP SOLUTION
-        }
-    })
 }
 
 export function registerConfigsFunctionalCM(identifier: string) {
@@ -250,4 +260,14 @@ export function displayConfigs(v: Vector2D) {
     for(let [k, v] of coords) {
         generateCircularLayout(v, ContextMenuRegister.getContextMenu(k) as IContextMenuCircular, styleOpenCMOpt);
     }
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            positionCfgButtons(configsSections);
+            allMenus.forEach(menu => positionCfgButtons(Array.from(menu.children as HTMLCollectionOf<HTMLElement>)));
+            configsSections.forEach((sect, idx) => {
+                joinSectOpts(sect, Array.from(allMenus[idx].children as HTMLCollectionOf<HTMLElement>));
+            })
+        })
+    }) // TEMP SOLUTION FOR DEMONSTRATIVE PURPOSES
 }
