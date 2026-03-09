@@ -1,9 +1,18 @@
-import { generateCircularLayout, generateLadderLayout, offsetAppearanceSingular, placeAppearanceSingular, situateAppearanceSingular } from "../../runtime/layout.js";
+import { generateCircularLayout, placeAppearanceSingular, styleOpenCMOpt } from "../../runtime/layout.js";
 import { generateRandom, translateToElementMiddle } from "../../runtime/numerics.js";
 import { Vector2D } from "../../runtime/vector-2d.js";
-import { concealContextMenuChildren, contextMenuCenter, ContextMenuRegister, createContextMenu, createContextMenuCircular, IContextMenu, IContextMenuCircular, setContextMenuCenter, timeoutCM } from "../context-menus/handler-context-menu.js";
+import { ContextMenuRegister, createContextMenu, createContextMenuCircular, IContextMenuCircular, setContextMenuCenter } from "../context-menus/handler-context-menu.js";
 
 let configsDiv: HTMLElement, configsSections: HTMLElement[];
+
+let functionalMenu: HTMLElement, noteMenu: HTMLElement, whiteboardMenu: HTMLElement, notepadMenu: HTMLElement, pathMenu: HTMLElement, internalMenu: HTMLElement;
+
+export const cfgfcm = "cfgfcm";
+export const cfgncm = "cfgncm";
+export const cfgwcm = "cfgwcm";
+export const cfgpcm = "cfgpcm";
+export const cfgacm = "cfgacm";
+export const cfgicm = "cfgicm";
 
 export function initConfigsContainer() {
     const configsDivLocal = document.getElementById('configs');
@@ -17,34 +26,133 @@ export function initConfigsContainer() {
         document.getElementById('cfg-n'),
         document.getElementById('cfg-w'),
         document.getElementById('cfg-p'),
+        document.getElementById('cfg-a'),
         document.getElementById('cfg-i')
     ];
 
-    if(sections.some((v) => !v)) {
+    if(sections.some(v => !v)) {
         throw new Error("Some section(s) not found, cannot proceed");
+    }
+
+    const menus = [
+        document.getElementById('f-menu'),
+        document.getElementById('n-menu'),
+        document.getElementById('w-menu'),
+        document.getElementById('p-menu'),
+        document.getElementById('a-menu'),
+        document.getElementById('i-menu')
+    ];
+
+    if(menus.some(v => !v)) {
+        throw new Error("Some section menu(s) not found, cannot proceed");
     }
 
     configsDiv = configsDivLocal;
     configsSections = sections as HTMLElement[];
+
+    [functionalMenu, noteMenu, whiteboardMenu, notepadMenu, pathMenu, internalMenu] = menus as HTMLElement[];
 }
 
 export function registerConfigsFunctionalCM(identifier: string) {
-    const cm = document.getElementById('configs');
+    const opts = functionalMenu.getElementsByTagName('button');
+    return ContextMenuRegister.registerContextMenu(
+        identifier,
+        createContextMenuCircular(
+            createContextMenu(
+                functionalMenu,
+                opts,
+                -10, -10
+            ),
+            360 / opts.length,
+            150,
+            0
+        )
+    );
+}
 
-    if(cm)
-        return ContextMenuRegister.registerContextMenu(
-            identifier,
-            createContextMenuCircular(
-                createContextMenu(
-                    cm,
-                    (cm.children) as HTMLCollectionOf<HTMLElement>,
-                    -10, -10
-                ),
-                360 / cm.children.length,
-                200,
-                162
-            )
-        );
+export function registerConfigsNoteCM(identifier: string) {
+    const opts = noteMenu.getElementsByTagName('button');
+    return ContextMenuRegister.registerContextMenu(
+        identifier,
+        createContextMenuCircular(
+            createContextMenu(
+                noteMenu,
+                opts,
+                -10, -10
+            ),
+            360 / opts.length,
+            200,
+            0
+        )
+    );
+}
+
+export function registerConfigsWhiteboardCM(identifier: string) {
+    const opts = whiteboardMenu.getElementsByTagName('button');
+    return ContextMenuRegister.registerContextMenu(
+        identifier,
+        createContextMenuCircular(
+            createContextMenu(
+                whiteboardMenu,
+                opts,
+                -10, -10
+            ),
+            360 / opts.length,
+            200,
+            0
+        )
+    );
+}
+
+export function registerConfigsNotepadCM(identifier: string) {
+    const opts = notepadMenu.getElementsByTagName('button');
+    return ContextMenuRegister.registerContextMenu(
+        identifier,
+        createContextMenuCircular(
+            createContextMenu(
+                notepadMenu,
+                opts,
+                -10, -10
+            ),
+            360 / opts.length,
+            200,
+            0
+        )
+    );
+}
+
+export function registerConfigsPathCM(identifier: string) {
+    const opts = pathMenu.getElementsByTagName('button');
+    return ContextMenuRegister.registerContextMenu(
+        identifier,
+        createContextMenuCircular(
+            createContextMenu(
+                pathMenu,
+                opts,
+                -10, -10
+            ),
+            360 / opts.length,
+            200,
+            0
+        )
+    );
+}
+
+export function registerConfigsInternalCM(identifier: string) {
+    const opts = internalMenu.getElementsByTagName('button');
+    return ContextMenuRegister.registerContextMenu(
+        identifier,
+        createContextMenuCircular(
+            createContextMenu(
+                internalMenu,
+                opts,
+                -10, -10
+            ),
+            360 / opts.length,
+            200,
+            135
+        )
+    );
 }
 
 const sectionsBorderColor = { opaque: "rgb(10, 10, 10)", transparent: "transparent" };
@@ -67,22 +175,38 @@ function hideConfigs() {
     });
 }
 
-export function displayConfigs(x, y) {
+export function displayConfigs(v: Vector2D) {
     configsDiv.style.display = 'block';
-    setContextMenuCenter(new Vector2D(x, y))
-    const coords = [
-        translateToElementMiddle(configsSections[0], new Vector2D(x - 800, y - 600)),
-        translateToElementMiddle(configsSections[1], new Vector2D(x - 400, y - 300)),
-        translateToElementMiddle(configsSections[2], new Vector2D(x, y)),
-        translateToElementMiddle(configsSections[3], new Vector2D(x + 400, y + 300)),
-        translateToElementMiddle(configsSections[4], new Vector2D(x + 800, y + 600)),
-    ]
+    setContextMenuCenter(v)
+    const coords = {
+        cfgfcm: translateToElementMiddle(configsSections[0], new Vector2D(v.x - 800, v.y - 600)),
+        cfgncm: translateToElementMiddle(configsSections[1], new Vector2D(v.x - 400, v.y - 300)),
+        cfgwcm: translateToElementMiddle(configsSections[2], new Vector2D(v.x, v.y)),
+        cfgpcm: translateToElementMiddle(configsSections[3], new Vector2D(v.x + 400, v.y + 300)),
+        cfgacm: translateToElementMiddle(configsSections[4], new Vector2D(v.x + 800, v.y + 600)),
+        cfgicm: translateToElementMiddle(configsSections[4], new Vector2D(v.x + 1200, v.y + 900)),
 
-    placeAppearanceSingular(configsSections[0], coords[0]);
-    placeAppearanceSingular(configsSections[1], coords[1]);
-    placeAppearanceSingular(configsSections[2], coords[2]);
-    placeAppearanceSingular(configsSections[3], coords[3]);
-    placeAppearanceSingular(configsSections[4], coords[4]);
+        [Symbol.iterator](): Iterator<[string, Vector2D]> {
+            const entries = Object.entries(this).filter(([k]) =>
+                k !== Symbol.iterator.toString()) as [string, Vector2D][];
 
-    // generateCircularLayout(coords[0], )
+            let i = 0;
+            return {
+                next(): IteratorResult<[string, Vector2D]> {
+                    return i < entries.length
+                        ? { value: entries[i++], done: false }
+                        : { value: undefined as any, done: true }
+                }
+            }
+        }
+    };
+
+    let i = 0;
+    for(let [k, v] of coords) {
+        placeAppearanceSingular(configsSections[i++], v, styleOpenCMOpt);
+    }
+
+    for(let [k, v] of coords) {
+        generateCircularLayout(v, ContextMenuRegister.getContextMenu(k) as IContextMenuCircular, styleOpenCMOpt);
+    }
 }
