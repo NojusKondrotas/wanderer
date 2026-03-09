@@ -1,4 +1,5 @@
 import { AppStates } from "../runtime/states-handler.js";
+import { Vector2D } from "../runtime/vector-2d.js";
 import { updateElementPositionByID, WhiteboardPositioningHandler } from "../ui/positioning/whiteboard-positioning.js";
 import { convertToWhiteboardSpace } from "../ui/zoom-whiteboard.js";
 import { deleteFromHierarchy } from "./hierarchy-handler.js";
@@ -108,21 +109,21 @@ export function configureAllPaths(paths){
         configurePath(v)
 }
 
-function addElementToPositioning(el, centerX = 0, centerY = 0){
+export function addElementToPositioning(el, center: Vector2D = new Vector2D(0, 0)){
     const rect = el.getBoundingClientRect()
-    const boardSpace = convertToWhiteboardSpace(centerX - rect.width / 2, centerY - rect.height / 2)
+    const boardSpace = convertToWhiteboardSpace(center.x - rect.width / 2, center.y - rect.height / 2)
     elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y })
     updateElementPositionByID(el.id)
 }
 
-function addElementToPositioningLeftAlignment(el, offsetX = 0, offsetY = 0){
-    const boardSpace = convertToWhiteboardSpace(offsetX, offsetY);
+function addElementToPositioningLeftAlignment(el, offset: Vector2D = new Vector2D(0, 0)){
+    const boardSpace = convertToWhiteboardSpace(offset.x, offset.y);
 
-    elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y });
+    elementPositions.set(el.id, new Vector2D(boardSpace.x, boardSpace.y));
     updateElementPositionByID(el.id);
 }
 
-export function createNewElement(container, el, id, centerX = 0, centerY = 0){
+export function createNewElement(container, el, id, center: Vector2D = new Vector2D(0, 0)){
     container.appendChild(el)
     el.style.transition = 'none'
     el.style.visibility = 'hidden'
@@ -130,7 +131,7 @@ export function createNewElement(container, el, id, centerX = 0, centerY = 0){
     el.id = id
     el.classList.add('component-text')
 
-    addElementToPositioning(el, centerX, centerY)
+    addElementToPositioning(el, center)
     setTimeout(() => {
         el.style.transition = ''
     }, 20);
@@ -139,7 +140,7 @@ export function createNewElement(container, el, id, centerX = 0, centerY = 0){
     allElementConnections.set(id, new Set())
 }
 
-export function createNewElementLeftAlignment(container, el, id, offsetX = 0, offsetY = 0){
+export function createNewElementLeftAlignment(container, el, id, offset: Vector2D = new Vector2D(0, 0)){
     container.appendChild(el)
     el.style.transition = 'none'
     el.style.visibility = 'hidden'
@@ -147,7 +148,7 @@ export function createNewElementLeftAlignment(container, el, id, offsetX = 0, of
     el.id = id
     el.classList.add('component-text')
 
-    addElementToPositioningLeftAlignment(el, offsetX, offsetY)
+    addElementToPositioningLeftAlignment(el, offset)
 
     setTimeout(() => {
         el.style.transition = ''

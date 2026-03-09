@@ -1,3 +1,4 @@
+import { Vector2D } from "../../runtime/vector-2d.js";
 import { closeWindow } from "../../utils/close-window.js";
 import { displayConfigs } from "../configs-menu/configs.js";
 import { titlebarToggleFullScreen, titlebarToggleMaximized, titlebarToggleMinimized } from "../titlebars/titlebar.js";
@@ -100,6 +101,6 @@ export function initTitlebarCMOptions() {
             return;
         }
 
-        displayConfigs(1, 1);
+        displayConfigs(new Vector2D(1, 1));
     });
 }

@@ -1,4 +1,5 @@
 import { AppStates } from "../runtime/states-handler.js"
+import { Vector2D } from "../runtime/vector-2d.js"
 import { openNewContextMenu } from "../ui/context-menus/handler-context-menu.js"
 import { ecm } from "../ui/context-menus/whiteboard/element-cm.js"
 import { WhiteboardPositioningHandler } from "../ui/positioning/whiteboard-positioning.js"
@@ -33,14 +34,14 @@ export function addWhiteboardListeners(whiteboard){
     })
 }
 
-export async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
+export async function createNewWhiteboard(container, offset: Vector2D = new Vector2D(0, 0)){
     const id = await window.wandererAPI.addWhiteboard() as string
 
     const newWhiteboard = document.createElement('div')
     newWhiteboard.classList.add('whiteboard', 'component')
     newWhiteboard.textContent = id
 
-    createNewElement(container, newWhiteboard, id, xOffset, yOffset)
+    createNewElement(container, newWhiteboard, id, offset)
     addWhiteboardListeners(newWhiteboard);
     instantiateResizingBorders(newWhiteboard);
 }

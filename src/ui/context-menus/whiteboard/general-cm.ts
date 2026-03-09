@@ -51,7 +51,7 @@ export function initGeneralCMOptions() {
             return;
         }
 
-        createNewNote(wbZoom, '', new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
+        createNewNote(wbZoom, '', new Set(), new Set(), contextMenuCenter);
 
         turnOffContextMenu();
     });
@@ -66,7 +66,7 @@ export function initGeneralCMOptions() {
             return;
         }
 
-        createNewNotepad(wbZoom, contextMenuCenter.x, contextMenuCenter.y);
+        createNewNotepad(wbZoom, contextMenuCenter);
 
         turnOffContextMenu();
     });
@@ -81,7 +81,7 @@ export function initGeneralCMOptions() {
             return;
         }
 
-        createNewWhiteboard(wbZoom, contextMenuCenter.x, contextMenuCenter.y);
+        createNewWhiteboard(wbZoom, contextMenuCenter);
 
         turnOffContextMenu();
     });
@@ -113,10 +113,10 @@ export function initGeneralCMOptions() {
 
         let clipboardContent = await readWandererClipboard();
         let {isHTML, element} = parseClipboardElement(clipboardContent);
-        if(!isHTML) return createNewNote(wbZoom, clipboardContent, new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
+        if(!isHTML) return createNewNote(wbZoom, clipboardContent, new Set(), new Set(), contextMenuCenter);
 
         if(element.type === 'n'){
-            return createNewNote(wbZoom, element.content, new Set(), new Set(), contextMenuCenter.x, contextMenuCenter.y);
+            return createNewNote(wbZoom, element.content, new Set(), new Set(), contextMenuCenter);
         }
     });
 }

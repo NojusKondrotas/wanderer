@@ -1,4 +1,5 @@
 import { AppStates } from "../runtime/states-handler.js"
+import { Vector2D } from "../runtime/vector-2d.js"
 import { openNewContextMenu } from "../ui/context-menus/handler-context-menu.js"
 import { ecm } from "../ui/context-menus/whiteboard/element-cm.js"
 import { isCombo, KeybindIndices, keybinds } from "../ui/keybinds.js"
@@ -147,7 +148,7 @@ export function addNoteListeners(newNote){
         if(e.key === 'Enter'){
             e.preventDefault();
             const posParent = getAbsolutePosition(newNote);
-            const childNote = createNewNoteLeftAlignment(wbZoom, '', new Set([newNote.id]), new Set(), posParent.left, posParent.top + posParent.height);
+            const childNote = createNewNoteLeftAlignment(wbZoom, '', new Set([newNote.id]), new Set(), new Vector2D(posParent.left, posParent.top + posParent.height));
             setElementLeftPos(childNote.id, convertToWhiteboardSpace(posParent.left, -1).x);
             setElementTopPos(childNote.id, Math.floor(convertToWhiteboardSpace(-1, posParent.top + posParent.height).y));
             const posChild = getAbsolutePosition(childNote);
@@ -160,7 +161,7 @@ export function addNoteListeners(newNote){
     })
 }
 
-export function createNewNote(container, content = '', parent_ids = new Set(), child_ids = new Set(), centerX = 0, centerY = 0){
+export function createNewNote(container, content = '', parent_ids = new Set(), child_ids = new Set(), center: Vector2D = new Vector2D(0, 0)){
     const newNote = document.createElement('div')
     const p = document.createElement('p')
     newNote.classList.add('note-container')
@@ -170,7 +171,7 @@ export function createNewNote(container, content = '', parent_ids = new Set(), c
     addNoteEditableListeners(p);
     newNote.appendChild(p)
 
-    createNewElement(container, newNote, getNoteContainerID(), centerX, centerY)
+    createNewElement(container, newNote, getNoteContainerID(), center)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
     instantiateResizingBorders(newNote)
@@ -182,7 +183,7 @@ export function createNewNote(container, content = '', parent_ids = new Set(), c
     return newNote;
 }
 
-function createNewNoteLeftAlignment(container, content = '', parent_ids = new Set(), child_ids = new Set(), offsetX = 0, offsetY = 0){
+function createNewNoteLeftAlignment(container, content = '', parent_ids = new Set(), child_ids = new Set(), offset: Vector2D = new Vector2D(0, 0)){
     const newNote = document.createElement('div')
     const p = document.createElement('p')
     newNote.classList.add('note-container')
@@ -192,7 +193,7 @@ function createNewNoteLeftAlignment(container, content = '', parent_ids = new Se
     addNoteEditableListeners(p);
     newNote.appendChild(p)
 
-    createNewElementLeftAlignment(container, newNote, getNoteContainerID(), offsetX, offsetY)
+    createNewElementLeftAlignment(container, newNote, getNoteContainerID(), offset)
     instantiateHierarchy(newNote.id, parent_ids, child_ids)
     addNoteListeners(newNote)
     instantiateResizingBorders(newNote);

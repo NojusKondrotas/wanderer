@@ -1,4 +1,5 @@
 import { AppStates } from "../runtime/states-handler.js"
+import { Vector2D } from "../runtime/vector-2d.js"
 import { openNewContextMenu } from "../ui/context-menus/handler-context-menu.js"
 import { ecm } from "../ui/context-menus/whiteboard/element-cm.js"
 import { WhiteboardPositioningHandler } from "../ui/positioning/whiteboard-positioning.js"
@@ -33,14 +34,14 @@ export function addNotepadListeners(notepad){
     })
 }
 
-export async function createNewNotepad(container, xOffset = 0, yOffset = 0){
+export async function createNewNotepad(container, offset: Vector2D = new Vector2D(0, 0)){
     const id = await window.wandererAPI.addNotepad() as string
     
     const newNotepad = document.createElement('div')
     newNotepad.classList.add('notepad', 'component')
     newNotepad.textContent = id
 
-    createNewElement(container, newNotepad, id, xOffset, yOffset)
+    createNewElement(container, newNotepad, id, offset)
     addNotepadListeners(newNotepad)
     instantiateResizingBorders(newNotepad);
 }

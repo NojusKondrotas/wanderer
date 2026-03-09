@@ -174,7 +174,7 @@ async function generateSingleMultiCircularLayoutCircle(center: Vector2D, amount:
         let x = center.x + radius * Math.cos(angleRad) + xOffset
         let y = center.y + radius * Math.sin(angleRad) + yOffset
 
-        createNewElement(wbZoom, option, `${windows[winIdx].componentID}-tab`, x, y)
+        createNewElement(wbZoom, option, `${windows[winIdx].componentID}-tab`, new Vector2D(x, y))
 
         option.addEventListener('mouseover', () => {
             const pos = elementPositions.get(option.id)
