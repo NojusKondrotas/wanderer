@@ -1,4 +1,4 @@
-import { titlebarToggleTitlebarLock } from "../../titlebar.js"
+import { titlebarToggleTitlebarLock } from "./titlebar.js"
 
 const titlebarLockCtrlFrame = document.getElementById('frame-lock-titlebar')!
 
