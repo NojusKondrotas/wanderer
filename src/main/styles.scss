@@ -183,6 +183,21 @@ body {
     padding: 5px 10px;
 }
 
+.component {
+    width: fit-content;
+    height: fit-content;
+    min-width: 20px;
+    min-height: 20px;
+    padding: 2px;
+
+    background-color: $whiteboard-color;
+
+    border-left: 1px solid $rich-black;
+    border-right: 1px solid $rich-black;
+    border-top: none;
+    border-bottom: none;
+}
+
 .notepad, .whiteboard, .note, .path-container {
     transition: filter 230ms ease-out;
 }
@@ -202,19 +217,10 @@ body {
 }
 
 .notepad, .whiteboard {
-    width: fit-content;
-    height: fit-content;
-    min-width: 20px;
-    min-height: 20px;
-    padding: 2px;
-
-    border-left: 1px solid $rich-black;
-    border-right: 1px solid $rich-black;
-
     word-break: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
-
+    
     z-index: $index-10;
 }
 

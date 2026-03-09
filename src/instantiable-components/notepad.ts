@@ -37,7 +37,7 @@ export async function createNewNotepad(container, xOffset = 0, yOffset = 0){
     const id = await window.wandererAPI.addNotepad() as string
     
     const newNotepad = document.createElement('div')
-    newNotepad.classList.add('notepad')
+    newNotepad.classList.add('notepad', 'component')
     newNotepad.textContent = id
 
     createNewElement(container, newNotepad, id, xOffset, yOffset)

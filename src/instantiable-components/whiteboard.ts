@@ -37,7 +37,7 @@ export async function createNewWhiteboard(container, xOffset = 0, yOffset = 0){
     const id = await window.wandererAPI.addWhiteboard() as string
 
     const newWhiteboard = document.createElement('div')
-    newWhiteboard.classList.add('whiteboard')
+    newWhiteboard.classList.add('whiteboard', 'component')
     newWhiteboard.textContent = id
 
     createNewElement(container, newWhiteboard, id, xOffset, yOffset)

@@ -26,61 +26,10 @@ $index-30: 30;
     z-index: $index-15;
 }
 
-#configs > button {
-    pointer-events: all;
+.cfg-sect {
+    font-size: 1.35rem;
 }
 
-#configs > button:hover {
-    cursor: pointer;
-}
-
-.cfg-sect-layout {
-    position: absolute;
-    width: fit-content;
-    height: fit-content;
-    padding: 5px 10px;
-}
-
-.cfg-menu-opt-style {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-    width: 250px;
-    
-    background-color: transparent;
-    border: 1px solid;
-    border-color: rgb(97, 97, 97);
-
-    user-select: none;
-
-    backdrop-filter: blur(2px) opacity(0);
-
-    box-shadow: 0px 0px 15px -8px rgba(0, 0, 0, 0.77);
-
-    z-index: $index-20;
-}
-
-.cfg-style {
-    padding: 10px;
-    background-color: $whiteboard-color;
-    border: 1px double;
-    border-color: $rich-black;
-
-    transition:  transform 100ms ease, color 100ms ease-out, border-color 100ms ease-out;
-}
-
-.cfg-abst {
-    overflow-wrap: break-word;
-
-    padding: 10px;
-
-    z-index: $index-20;
-}
-
-.cfg-menus {
-    display: none;
-    position: relative;
-    width: 0;
-    height: 0;
+.cfg-opt {
+    font-size: 0.85rem;
 }
