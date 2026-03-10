@@ -53,8 +53,7 @@ function joinSectOpts(sect: HTMLElement, opts: HTMLElement[]) {
 
     opts.forEach ((opt) => {
         const cRect = opt.getBoundingClientRect();
-        console.log(JSON.stringify(new Vector2D(pRect.left + pRect.width / 2, pRect.top + pRect.height / 2)), JSON.stringify(new Vector2D(cRect.left + cRect.width / 2, cRect.top + cRect.height / 2)));
-
+        
         createPath(wbZoom,
             new Vector2D(pRect.left + pRect.width / 2, pRect.top + pRect.height / 2),
             new Vector2D(cRect.left + cRect.width / 2, cRect.top + cRect.height / 2),

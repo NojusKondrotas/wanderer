@@ -112,8 +112,10 @@ export function configureAllPaths(paths){
 export function addElementToPositioning(el: HTMLElement, center: Vector2D = new Vector2D(0, 0)){
     const rect = el.getBoundingClientRect()
     const boardSpace = convertToWhiteboardSpace(center.x - rect.width / 2, center.y - rect.height / 2)
+
     elementPositions.set(el.id, { x: boardSpace.x, y: boardSpace.y })
     updateElementPositionByID(el.id)
+    allElementConnections.set(el.id, new Set())
 }
 
 export function addElementToPositioningLeftAlignment(el: HTMLElement, offset: Vector2D = new Vector2D(0, 0)){
@@ -121,6 +123,7 @@ export function addElementToPositioningLeftAlignment(el: HTMLElement, offset: Ve
 
     elementPositions.set(el.id, new Vector2D(boardSpace.x, boardSpace.y));
     updateElementPositionByID(el.id);
+    allElementConnections.set(el.id, new Set())
 }
 
 export function createNewElement(container, el, id, center: Vector2D = new Vector2D(0, 0)){
@@ -136,8 +139,6 @@ export function createNewElement(container, el, id, center: Vector2D = new Vecto
         el.style.transition = ''
     }, 20);
     el.style.visibility = 'visible'
-
-    allElementConnections.set(id, new Set())
 }
 
 export function createNewElementLeftAlignment(container, el, id, offset: Vector2D = new Vector2D(0, 0)){
