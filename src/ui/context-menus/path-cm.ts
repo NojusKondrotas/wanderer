@@ -1,4 +1,4 @@
-import { openPathConnectionContextMenu } from "../../instantiable-components/path-connection-handler.js";
+import { openPathConnectionContextMenu, PathEditState } from "../../instantiable-components/path-connection-handler.js";
 import { deletePathByID, selectedPath } from "../../instantiable-components/path.js";
 import { ContextMenuRegister, createContextMenu, createContextMenuCircular, turnOffContextMenu } from "./handler-context-menu.js";
 
@@ -43,7 +43,7 @@ export function initPathCMOptions() {
             return;
         }
 
-        openPathConnectionContextMenu(true);
+        openPathConnectionContextMenu(PathEditState.CONNECT);
     });
 
     DISCONNECT.addEventListener('mousedown', (e) => {
@@ -57,7 +57,7 @@ export function initPathCMOptions() {
             return;
         }
 
-        openPathConnectionContextMenu(false);
+        openPathConnectionContextMenu(PathEditState.DISCONNECT);
     });
 
     DELETE.addEventListener('mousedown', (e) => {

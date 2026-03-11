@@ -2,7 +2,7 @@ import { AppStates } from "../runtime/states-handler.js"
 import { forgetContextMenus } from "../ui/context-menus/handler-context-menu.js"
 import { convertFromWhiteboardSpace } from "../ui/zoom-whiteboard.js"
 import { allElementConnections } from "./component-handler.js"
-import { allPaths, getPathMiddle, selectedPath, setSelectedPath } from "./path.js"
+import { allPaths, getPathMiddle, Path, selectedPath, setSelectedPath } from "./path.js"
 
 let pathStartPoint: HTMLElement;
 let pathMiddlePoint: HTMLElement;
@@ -12,6 +12,12 @@ let pathMiddlePointInner: HTMLElement;
 let pathEndPointInner: HTMLElement;
 
 const timeoutACCM = 40;
+
+export enum PathEditState {
+    CONNECT,
+    DISCONNECT,
+    EMPTY
+}
 
 export function initPathConnectionCMOptions() {
     const StartPoint = document.getElementById('path-end-0');
@@ -40,8 +46,12 @@ export function initPathConnectionCMOptions() {
     pathStartPoint.addEventListener('mouseup', (e) => {
         e.stopPropagation();
 
-        if(AppStates.isConnecting) connectPathStart(selectedPath)
-        else disconnectPathStart(selectedPath)
+        if(AppStates.pathEditState === PathEditState.CONNECT) {
+            connectPathStart(selectedPath)
+        } else if(AppStates.pathEditState === PathEditState.DISCONNECT) {
+            disconnectPathStart(selectedPath)
+        }
+        
         closePathConnectionContextMenu()
     })
 
@@ -51,8 +61,11 @@ export function initPathConnectionCMOptions() {
     pathMiddlePoint.addEventListener('mouseup', (e) => {
         e.stopPropagation();
         
-        disconnectPathStart(selectedPath)
-        disconnectPathEnd(selectedPath)
+        if(AppStates.pathEditState === PathEditState.DISCONNECT) {
+            disconnectPathStart(selectedPath)
+            disconnectPathEnd(selectedPath)
+        }
+
         closePathConnectionContextMenu()
     })
 
@@ -62,8 +75,12 @@ export function initPathConnectionCMOptions() {
     pathEndPoint.addEventListener('mouseup', (e) => {
         e.stopPropagation();
         
-        if(AppStates.isConnecting) connectPathEnd(selectedPath)
-        else disconnectPathEnd(selectedPath)
+        if(AppStates.pathEditState === PathEditState.CONNECT) {
+            connectPathEnd(selectedPath)
+        } else if(AppStates.pathEditState === PathEditState.DISCONNECT) {
+            disconnectPathEnd(selectedPath)
+        }
+
         closePathConnectionContextMenu()
     })
 }
@@ -81,12 +98,12 @@ function connectPathEnd(path){
 }
 
 function disconnectPathStart(path){
-    allElementConnections.get(path.startNoteID).delete(path.ID);
+    allElementConnections.get(path.startNoteID)?.delete(path.ID);
     path.startNoteID = null;
 }
 
 function disconnectPathEnd(path){
-    allElementConnections.get(path.endNoteID).delete(path.ID);
+    allElementConnections.get(path.endNoteID)?.delete(path.ID);
     path.endNoteID = null;
 }
 
@@ -105,12 +122,12 @@ export function disconnectConnectedPaths(elID){
     }
 }
 
-export function openPathConnectionContextMenu(isConnecting = false){
+export function openPathConnectionContextMenu(editState: PathEditState = PathEditState.DISCONNECT){
     forgetContextMenus()
 
     const startPos = convertFromWhiteboardSpace(selectedPath!.startPosition.x, selectedPath!.startPosition.y)
     const pathMiddle = getPathMiddle(selectedPath!);
-    console.log(pathMiddle)
+    
     const middlePos = convertFromWhiteboardSpace(pathMiddle.x, pathMiddle.y)
     const endPos = convertFromWhiteboardSpace(selectedPath!.endPosition.x, selectedPath!.endPosition.y)
     pathStartPoint.style.left = `${startPos.x}px`
@@ -119,7 +136,7 @@ export function openPathConnectionContextMenu(isConnecting = false){
     pathEndPoint.style.top = `${endPos.y}px`
     pathStartPoint.style.display = 'flex'
     pathEndPoint.style.display = 'flex'
-    if(!isConnecting){
+    if(editState === PathEditState.DISCONNECT){
         pathMiddlePoint.style.left = `${middlePos.x}px`
         pathMiddlePoint.style.top = `${middlePos.y}px`
         pathMiddlePoint.style.display = 'flex'
@@ -130,14 +147,14 @@ export function openPathConnectionContextMenu(isConnecting = false){
         pathEndPoint.style.transform = 'translate(-50%, -50%) scale(1)';
         pathStartPoint.style.opacity = '1'
         pathEndPoint.style.opacity = '1'
-        if(!isConnecting){
+        if(editState === PathEditState.DISCONNECT){
             pathMiddlePoint.style.transform = 'translate(-50%, -50%) scale(1)';
             pathMiddlePoint.style.opacity = '1'
         }
     });
 
     AppStates.isContextMenuOpen = true
-    AppStates.isConnecting = isConnecting
+    AppStates.pathEditState = editState
 }
 
 export function closePathConnectionContextMenu(){
@@ -154,5 +171,5 @@ export function closePathConnectionContextMenu(){
     }, timeoutACCM);
 
     AppStates.isContextMenuOpen = false
-    AppStates.isConnecting = false
+    AppStates.pathEditState = PathEditState.EMPTY
 }

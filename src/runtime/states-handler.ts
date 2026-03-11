@@ -1,10 +1,12 @@
+import { PathEditState } from "../instantiable-components/path-connection-handler.js"
+
 class StatesHandler{
     isWritingElement = false
     willNotWrite = false
 
     isDragging = false
 
-    isConnecting = false
+    pathEditState: PathEditState = PathEditState.EMPTY
     isDrawingPath = false
     isDrawingPathEnd = false
 
