@@ -1,7 +1,7 @@
 import { allElementConnections, elementPositions, selectedElement, setSelectedElement } from "../../instantiable-components/component-handler.js"
 import { activeBorder, toggleWritingMode } from "../../instantiable-components/note.js"
 import { closePathConnectionContextMenu } from "../../instantiable-components/path-connection-handler.js"
-import { allPaths, deletePathByID, selectedPath, terminatePathDrawing, updatePathPosition } from "../../instantiable-components/path.js"
+import { allPaths, deletePathByID, Path, selectedPath, setSelectedPath, terminatePathDrawing, updatePathPosition } from "../../instantiable-components/path.js"
 import { AppStates } from "../../runtime/states-handler.js"
 import { Vector2D } from "../../runtime/vector-2d.js"
 import { turnOffContextMenu } from "../context-menus/handler-context-menu.js"
@@ -49,7 +49,7 @@ export class WhiteboardPositioningHandler{
         }
     }
 
-    static element_MouseDown(ev, el){
+    static element_MouseDown(ev, el: HTMLElement | Path){
         if(ev.button !== 2){
             ev.stopPropagation()
             if(AppStates.isWritingElement) return toggleWritingMode(false, selectedElement!.id)
@@ -60,13 +60,15 @@ export class WhiteboardPositioningHandler{
 
             WhiteboardPositioningHandler.startDrag(ev, WhiteboardPositioningHandler.dragStates.moveElement)
             
-            if(el.classList.contains('.note')) toggleWritingMode(false, el.id)
-
-            setSelectedElement(el)
+            if(!AppStates.isDraggingPath) {
+                if((el as HTMLElement).classList.contains('.note'))
+                    toggleWritingMode(false, (el as HTMLElement).id);
+                setSelectedElement(el as HTMLElement);
+            } else setSelectedPath(el as Path);
         }
     }
 
-    static element_MouseUp(ev, el){
+    static element_MouseUp(ev, el: HTMLElement | Path){
         if(AppStates.isWritingElement) return
 
         let draggedEnough = MouseDragHandler.checkIfDraggedEnough();
@@ -76,25 +78,25 @@ export class WhiteboardPositioningHandler{
             AppStates.willNotWrite = false;
         }
 
-        if(el.classList.contains('note-container')) {
+        if(!AppStates.isDraggingPath && (el as HTMLElement).classList.contains('note-container')) {
             document.body.style.cursor = 'text';
         }
 
         if(AppStates.isDrawingPath){
             if(!draggedEnough){
                 this.isDraggingElement = false;
-                if(el.id === selectedPath!.startNoteID){
+                if((el as HTMLElement).id === selectedPath!.startNoteID){
                     deletePathByID(selectedPath!.ID)
                     return this.endDrag(ev)
                 }
-                terminatePathDrawing(ev, el.id)
+                terminatePathDrawing(ev, (el as HTMLElement).id)
                 return this.endDrag(ev)
             }
         }
         else this.endDrag(ev)
     }
 
-    static update(ev){
+    static update(ev: MouseEvent){
         MouseDragHandler.updateMouseDrag(ev)
         
         if (this.isResizingElement){
@@ -109,6 +111,8 @@ export class WhiteboardPositioningHandler{
         }else if (WindowPositioningHandler.isResizingWindow) {
             WindowPositioningHandler.resizeWindow()
         }else if(this.isDraggingElement){
+            if(AppStates.isDraggingPath) return calculateUpdatedPathPosition(ev, selectedPath!);
+
             updateElementPositionByID(selectedElement!.id)
             const paths = allElementConnections.get(selectedElement!.id);
             if(paths) {
@@ -254,6 +258,7 @@ export class WhiteboardPositioningHandler{
         WindowPositioningHandler.resetWindowDrag(ev);
 
         setSelectedElement(null)
+        setSelectedPath(null)
         handleKeybindGuideAppearance(true)
 
         AppStates.isDragging = false;
@@ -292,6 +297,96 @@ export function setElementTopPos(elID, y) {
     elementPositions.set(elID, { x: offsetX, y: offsetY})
 
     document.getElementById(elID)!.style.transform = `translate(${offsetX}px, ${offsetY}px)`
+}
+
+function updateSinglePathPosition(path: Path) {
+    path.startPosition.x -= MouseDragHandler.dragDiff.x
+    path.startPosition.y -= MouseDragHandler.dragDiff.y
+    path.originStartPos.x -= MouseDragHandler.dragDiff.x
+    path.originStartPos.y -= MouseDragHandler.dragDiff.y
+    
+    path.endPosition.x -= MouseDragHandler.dragDiff.x
+    path.endPosition.y -= MouseDragHandler.dragDiff.y
+    path.originEndPos.x -= MouseDragHandler.dragDiff.x
+    path.originEndPos.y -= MouseDragHandler.dragDiff.y
+    
+    updatePathPosition(path, path.startPosition, path.endPosition)
+}
+
+export function calculateUpdatedPathPosition(ev: MouseEvent, path: Path) {
+    updateSinglePathPosition(path);
+
+    if(path.startNoteID) {
+        const startEl = document.getElementById(path.startNoteID);
+        if(startEl) {
+            updateElementPositionByID(startEl.id);
+            const paths = allElementConnections.get(startEl.id);
+            if(paths) {
+                for(const pathID of paths) {
+                    if(pathID === path.ID) continue;
+                    const otherPath = allPaths.get(pathID);
+                    let hasUpdated = false
+                    if(otherPath.startNoteID === startEl.id){
+                        otherPath.startPosition.x -= MouseDragHandler.dragDiff.x
+                        otherPath.startPosition.y -= MouseDragHandler.dragDiff.y
+                        otherPath.originStartPos.x -= MouseDragHandler.dragDiff.x
+                        otherPath.originStartPos.y -= MouseDragHandler.dragDiff.y
+                        hasUpdated = true
+                    }else if(otherPath.endNoteID === startEl.id){
+                        otherPath.endPosition.x -= MouseDragHandler.dragDiff.x
+                        otherPath.endPosition.y -= MouseDragHandler.dragDiff.y
+                        otherPath.originEndPos.x -= MouseDragHandler.dragDiff.x
+                        otherPath.originEndPos.y -= MouseDragHandler.dragDiff.y
+                        hasUpdated = true
+                    }
+
+                    if(hasUpdated){
+                        updatePathPosition(otherPath, otherPath.startPosition, otherPath.endPosition)
+                    }
+                }
+            }
+        }
+    }
+    if(path.endNoteID) {
+        const endEl = document.getElementById(path.endNoteID);
+        if(endEl) {
+            updateElementPositionByID(endEl.id);
+            const paths = allElementConnections.get(endEl.id);
+            if(paths) {
+                for(const pathID of paths) {
+                    if(pathID === path.ID) continue;
+                    const otherPath = allPaths.get(pathID);
+                    let hasUpdated = false
+                    if(otherPath.startNoteID === endEl.id){
+                        otherPath.startPosition.x -= MouseDragHandler.dragDiff.x
+                        otherPath.startPosition.y -= MouseDragHandler.dragDiff.y
+                        otherPath.originStartPos.x -= MouseDragHandler.dragDiff.x
+                        otherPath.originStartPos.y -= MouseDragHandler.dragDiff.y
+                        hasUpdated = true
+                    }else if(otherPath.endNoteID === endEl.id){
+                        otherPath.endPosition.x -= MouseDragHandler.dragDiff.x
+                        otherPath.endPosition.y -= MouseDragHandler.dragDiff.y
+                        otherPath.originEndPos.x -= MouseDragHandler.dragDiff.x
+                        otherPath.originEndPos.y -= MouseDragHandler.dragDiff.y
+                        hasUpdated = true
+                    }
+
+                    if(hasUpdated){
+                        updatePathPosition(otherPath, otherPath.startPosition, otherPath.endPosition)
+                    }
+                }
+            }
+        }
+        
+        if(AppStates.isDrawingPath){
+            const mousePos = convertToWhiteboardSpace(ev.clientX, ev.clientY)
+            toggleTitlebar(false)
+            if(AppStates.isDrawingPathEnd)
+                updatePathPosition(selectedPath!, selectedPath!.startPosition, mousePos)
+            else
+                updatePathPosition(selectedPath!, mousePos, selectedPath!.endPosition)
+        }
+    }
 }
 
 export function updateElementPositionByIDByOffset(elID, x, y) {

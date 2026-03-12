@@ -6,6 +6,7 @@ import { toggleWritingMode } from "./note.js"
 import { openNewContextMenu } from "../ui/context-menus/handler-context-menu.js"
 import { acm } from "../ui/context-menus/path-cm.js"
 import { Vector2D } from "../runtime/vector-2d.js"
+import { WhiteboardPositioningHandler } from "../ui/positioning/whiteboard-positioning.js"
 
 export let largestPathID = 0
 export const setLargestPathID = (id) => largestPathID = id;
@@ -102,7 +103,8 @@ export function createPath(container: HTMLElement, startPos: Vector2D, endPos: V
 }
 
 export function addPathListeners(path){
-    document.getElementById(path.hitPathID)!.addEventListener('contextmenu', (e) => {
+    const hitPath = document.getElementById(path.hitPathID)!
+    hitPath.addEventListener('contextmenu', (e) => {
         e.preventDefault()
         if(AppStates.isDrawingPath){
             return;
@@ -113,6 +115,18 @@ export function addPathListeners(path){
 
         selectedPath = path
         openNewContextMenu(e.clientX, e.clientY, acm)
+    })
+
+    hitPath.addEventListener('mousedown', (e) => {
+        e.stopPropagation()
+        AppStates.isDraggingPath = true
+        WhiteboardPositioningHandler.element_MouseDown(e, path)
+    })
+
+    hitPath.addEventListener('mouseup', (e) => {
+        e.stopPropagation()
+        WhiteboardPositioningHandler.element_MouseUp(e, path)
+        AppStates.isDraggingPath = false
     })
 }
 

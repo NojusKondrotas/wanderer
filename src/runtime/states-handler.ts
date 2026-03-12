@@ -9,6 +9,7 @@ class StatesHandler{
     pathEditState: PathEditState = PathEditState.EMPTY
     isDrawingPath = false
     isDrawingPathEnd = false
+    isDraggingPath = false
 
     isContextMenuOpen = false
 
