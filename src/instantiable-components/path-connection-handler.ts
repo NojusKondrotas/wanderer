@@ -1,5 +1,7 @@
+import { placeAppearanceSingular, styleClosedCMOpt } from "../runtime/layout.js"
 import { AppStates } from "../runtime/states-handler.js"
-import { forgetContextMenus } from "../ui/context-menus/handler-context-menu.js"
+import { Vector2D } from "../runtime/vector-2d.js"
+import { concealCMChild, forgetContextMenus, showCMChild } from "../ui/context-menus/handler-context-menu.js"
 import { convertFromWhiteboardSpace } from "../ui/zoom-whiteboard.js"
 import { allElementConnections } from "./component-handler.js"
 import { allPaths, getPathMiddle, Path, selectedPath, setSelectedPath } from "./path.js"
@@ -7,9 +9,6 @@ import { allPaths, getPathMiddle, Path, selectedPath, setSelectedPath } from "./
 let pathStartPoint: HTMLElement;
 let pathMiddlePoint: HTMLElement;
 let pathEndPoint: HTMLElement;
-let pathStartPointInner: HTMLElement;
-let pathMiddlePointInner: HTMLElement;
-let pathEndPointInner: HTMLElement;
 
 const timeoutACCM = 40;
 
@@ -23,22 +22,14 @@ export function initPathConnectionCMOptions() {
     const StartPoint = document.getElementById('path-end-0');
     const MiddlePoint = document.getElementById('path-end-1');
     const EndPoint = document.getElementById('path-end-2');
-    const StartPointInner = document.getElementById('path-end-inner-0');
-    const MiddlePointInner = document.getElementById('path-end-inner-1');
-    const EndPointInner = document.getElementById('path-end-inner-2');
 
-    if(!StartPoint || !MiddlePoint || !EndPoint
-        || !StartPointInner || !MiddlePointInner || !EndPointInner
-    ) {
+    if(!StartPoint || !MiddlePoint || !EndPoint) {
         throw new Error("Some options of path connection context menu not found, cannot proceed");
     }
 
     pathStartPoint = StartPoint;
     pathMiddlePoint = MiddlePoint;
     pathEndPoint = EndPoint;
-    pathStartPointInner = StartPointInner;
-    pathMiddlePointInner = MiddlePointInner;
-    pathEndPointInner = EndPointInner;
 
     pathStartPoint.addEventListener('mousedown', (e) => {
         e.stopPropagation();
@@ -127,48 +118,30 @@ export function openPathConnectionContextMenu(editState: PathEditState = PathEdi
 
     const startPos = convertFromWhiteboardSpace(selectedPath!.startPosition.x, selectedPath!.startPosition.y)
     const pathMiddle = getPathMiddle(selectedPath!);
-    
     const middlePos = convertFromWhiteboardSpace(pathMiddle.x, pathMiddle.y)
     const endPos = convertFromWhiteboardSpace(selectedPath!.endPosition.x, selectedPath!.endPosition.y)
-    pathStartPoint.style.left = `${startPos.x}px`
-    pathStartPoint.style.top = `${startPos.y}px`
-    pathEndPoint.style.left = `${endPos.x}px`
-    pathEndPoint.style.top = `${endPos.y}px`
-    pathStartPoint.style.display = 'flex'
-    pathEndPoint.style.display = 'flex'
+
+    pathStartPoint.style.display = 'block'
+    pathEndPoint.style.display = 'block'
     if(editState === PathEditState.DISCONNECT){
-        pathMiddlePoint.style.left = `${middlePos.x}px`
-        pathMiddlePoint.style.top = `${middlePos.y}px`
-        pathMiddlePoint.style.display = 'flex'
+        pathMiddlePoint.style.display = 'block'
     }
 
-    requestAnimationFrame(() => {
-        pathStartPoint.style.transform = 'translate(-50%, -50%) scale(1)';
-        pathEndPoint.style.transform = 'translate(-50%, -50%) scale(1)';
-        pathStartPoint.style.opacity = '1'
-        pathEndPoint.style.opacity = '1'
-        if(editState === PathEditState.DISCONNECT){
-            pathMiddlePoint.style.transform = 'translate(-50%, -50%) scale(1)';
-            pathMiddlePoint.style.opacity = '1'
-        }
-    });
+    const offsetRange = new Vector2D(-25, 25);
+    placeAppearanceSingular(pathStartPoint, startPos, styleClosedCMOpt, offsetRange);
+    placeAppearanceSingular(pathEndPoint, endPos, styleClosedCMOpt, offsetRange);
+    if(editState === PathEditState.DISCONNECT) {
+        placeAppearanceSingular(pathMiddlePoint, middlePos, styleClosedCMOpt, offsetRange);
+    }
 
     AppStates.isContextMenuOpen = true
     AppStates.pathEditState = editState
 }
 
 export function closePathConnectionContextMenu(){
-    pathStartPoint.style.transform = 'translate(-50%, -50%) scale(0)'
-    pathMiddlePoint.style.transform = 'translate(-50%, -50%) scale(0)';
-    pathEndPoint.style.transform = 'translate(-50%, -50%) scale(0)'
-    pathStartPoint.style.opacity = '0'
-    pathMiddlePoint.style.opacity = '0'
-    pathEndPoint.style.opacity = '0'
-    setTimeout(() => {
-        pathStartPoint.style.display = 'none'
-        pathMiddlePoint.style.display = 'none'
-        pathEndPoint.style.display = 'none'
-    }, timeoutACCM);
+    concealCMChild(pathStartPoint)
+    concealCMChild(pathMiddlePoint)
+    concealCMChild(pathEndPoint)
 
     AppStates.isContextMenuOpen = false
     AppStates.pathEditState = PathEditState.EMPTY

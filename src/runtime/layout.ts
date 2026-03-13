@@ -1,6 +1,6 @@
 import { createNewElement, elementPositions } from "../instantiable-components/component-handler.js";
 import { createPath } from "../instantiable-components/path.js";
-import { borderColorCM, colorCM, IContextMenuCircular } from "../ui/context-menus/handler-context-menu.js";
+import { borderColorCM, colorCM, IContextMenu, IContextMenuCircular } from "../ui/context-menus/handler-context-menu.js";
 import { wbZoom } from "../ui/parent-whiteboard-handler.js";
 import { generateRandom } from "./numerics.js";
 import { Vector2D } from "./vector-2d.js";
@@ -22,9 +22,9 @@ export function styleOpenCMOpt(el: HTMLElement, v: Vector2D): void {
     el.style.backdropFilter = 'blur(2px) opacity(1)'
 }
 
-export function offsetAppearanceSingular(el: HTMLElement, v: Vector2D) {
-    const offsetX = generateRandom(-50, 50)
-    const offsetY = generateRandom(-50, 50)
+export function offsetAppearanceSingular(el: HTMLElement, v: Vector2D, offsetRange: Vector2D = new Vector2D(-50, 50)) {
+    const offsetX = generateRandom(offsetRange.x, offsetRange.y)
+    const offsetY = generateRandom(offsetRange.x, offsetRange.y)
     
     el.style.left = `${v.x + offsetX}px`
     el.style.top = `${v.y + offsetY}px`
@@ -36,8 +36,8 @@ export function situateAppearanceSingular(el: HTMLElement, v: Vector2D, fn: (el:
     })
 }
 
-export function placeAppearanceSingular(el: HTMLElement, v: Vector2D, fn: (el: HTMLElement, v: Vector2D) => void) {
-    offsetAppearanceSingular(el, v);
+export function placeAppearanceSingular(el: HTMLElement, v: Vector2D, fn: (el: HTMLElement, v: Vector2D) => void, offsetRange: Vector2D = new Vector2D(-50, 50)) {
+    offsetAppearanceSingular(el, v, offsetRange);
     situateAppearanceSingular(el, v, fn);
 }
 
