@@ -1,4 +1,4 @@
-import { placeAppearanceSingular, styleClosedCMOpt } from "../runtime/layout.js"
+import { placeAppearanceSingular, styleClosedCMOpt, } from "../runtime/layout.js"
 import { AppStates } from "../runtime/states-handler.js"
 import { Vector2D } from "../runtime/vector-2d.js"
 import { concealCMChild, forgetContextMenus, showCMChild } from "../ui/context-menus/handler-context-menu.js"
@@ -120,6 +120,9 @@ export function openPathConnectionContextMenu(editState: PathEditState = PathEdi
     const pathMiddle = getPathMiddle(selectedPath!);
     const middlePos = convertFromWhiteboardSpace(pathMiddle.x, pathMiddle.y)
     const endPos = convertFromWhiteboardSpace(selectedPath!.endPosition.x, selectedPath!.endPosition.y)
+
+    pathStartPoint.style.display = 'block'
+    pathEndPoint.style.display = 'block'
 
     pathStartPoint.style.display = 'block'
     pathEndPoint.style.display = 'block'
