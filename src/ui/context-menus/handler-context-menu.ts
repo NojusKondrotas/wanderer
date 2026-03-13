@@ -1,4 +1,5 @@
 import { setSelectedElement } from "../../instantiable-components/component-handler.js";
+import { closePathConnectionContextMenu, PathEditState } from "../../instantiable-components/path-connection-handler.js";
 import { setSelectedPath } from "../../instantiable-components/path.js";
 import { generateCircularLayout, styleClosedCMOpt } from "../../runtime/layout.js";
 import { generateRandom } from "../../runtime/numerics.js";
@@ -150,6 +151,9 @@ export function openNewContextMenu(centerX, centerY, identifier: string){
     }
     activeContextMenu = cm
     ContextMenuRegister.concealContextMenus()
+    if(AppStates.pathEditState !== PathEditState.EMPTY) {
+        closePathConnectionContextMenu()
+    }
     cm.container.style.display = 'block'
     AppStates.isContextMenuOpen = true
     setContextMenuCenter(new Vector2D(centerX, centerY))
